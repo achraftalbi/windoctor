@@ -548,7 +548,7 @@
                     <url>jdbc:mysql://localhost:3306/windoctor</url>
                     <defaultSchemaName>windoctor</defaultSchemaName>
                     <username>root</username>
-                    <password></password>
+                    <password>root</password>
                     <referenceUrl>hibernate:spring:com.winbit.windoctor.domain?dialect=org.hibernate.dialect.MySQLInnoDBDialect</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>

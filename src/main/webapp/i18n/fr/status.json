@@ -1,0 +1,20 @@
+{
+    "windoctorApp": {
+        "status" : {
+            "home": {
+                "title": "Statuss",
+                "createLabel": "Créer un nouveau Status",
+                "createOrEditLabel": "Créer ou éditer un Status"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Status {{ id }} ?"
+            },
+            "detail": {
+                "title": "Status"
+            },
+            "description": "Description",
+            "eventStatus": "EventStatus"
+        }
+    }
+}
+

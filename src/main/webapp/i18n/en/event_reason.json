@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "event_reason" : {
+            "home": {
+                "title": "Event_reasons",
+                "createLabel": "Create a new Event_reason",
+                "createOrEditLabel": "Create or edit a Event_reason"
+            },
+            "created": "A new Event_reason is created with identifier {{ param }}",
+            "updated": "A Event_reason is updated with identifier {{ param }}",
+            "deleted": "A Event_reason is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Event_reason {{ id }}?"
+            },
+            "detail": {
+                "title": "Event_reason"
+            },
+            "description": "Description",
+            "eventReason": "EventReason"
+        }
+    }
+}

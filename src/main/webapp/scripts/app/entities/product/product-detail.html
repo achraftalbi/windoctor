@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="windoctorApp.product.detail.title">Product</span> {{product.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.product.name">Name</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{product.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.product.image">Image</span>
+                </td>
+                <td>
+                    <img data-ng-src="{{'data:image/*;base64,' + product.image}}" style="max-width: 100%;" ng-if="product.image"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.product.price">Price</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{product.price}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.product.amount">Amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{product.amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.product.product">product</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="category.detail({id:product.product.id})">{{product.product.name}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

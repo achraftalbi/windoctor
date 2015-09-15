@@ -1,0 +1,54 @@
+
+<div>
+    <h2><span translate="windoctorApp.event.detail.title">Event</span> {{event.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.event.event_date">Event_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{event.event_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.event.description">Description</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{event.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.event.eventStatus">eventStatus</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="status.detail({id:event.eventStatus.id})">{{event.eventStatus.description}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.event.eventReason">eventReason</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="event_reason.detail({id:event.eventReason.id})">{{event.eventReason.description}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

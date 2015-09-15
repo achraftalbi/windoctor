@@ -1,0 +1,20 @@
+{
+    "windoctorApp": {
+        "event_reason" : {
+            "home": {
+                "title": "Event_reasons",
+                "createLabel": "Créer un nouveau Event_reason",
+                "createOrEditLabel": "Créer ou éditer un Event_reason"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Event_reason {{ id }} ?"
+            },
+            "detail": {
+                "title": "Event_reason"
+            },
+            "description": "Description",
+            "eventReason": "EventReason"
+        }
+    }
+}
+
