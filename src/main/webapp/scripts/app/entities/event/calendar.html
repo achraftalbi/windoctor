@@ -1,0 +1,88 @@
+
+<div class="container-fluid">
+
+        <div class="row" id="demo">
+
+            <div class="col-md-8 col-md-offset-2">
+                <h2 class="text-center">{{ calendarTitle }}</h2>
+
+                <div class="row">
+
+                    <div class="col-md-6 text-center">
+                        <div class="btn-group">
+
+                            <button
+                                class="btn btn-primary"
+                                mwl-date-modifier
+                                date="calendarDay"
+                                decrement="calendarView">
+                                Previous
+                            </button>
+                            <button
+                                class="btn btn-default"
+                                mwl-date-modifier
+                                date="calendarDay"
+                                set-to-today>
+                                Today
+                            </button>
+                            <button
+                                class="btn btn-primary"
+                                mwl-date-modifier
+                                date="calendarDay"
+                                increment="calendarView">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+
+                    <br class="visible-xs visible-sm">
+
+                    <div class="col-md-6 text-center">
+                        <div class="btn-group">
+                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'year'">Year</label>
+                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'month'">Month</label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br>
+
+                <mwl-calendar
+                    events="events"
+                    view="calendarView"
+                    view-title="calendarTitle"
+                    current-day="calendarDay"
+                    on-event-times-changed="eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+                    edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+                    delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+                    on-edit-event-click="eventEdited(calendarEvent)"
+                    on-delete-event-click="eventDeleted(calendarEvent)"
+                    auto-open="true"
+                    on-timespan-click="cellClicked(calendarDate,event_reason.new)"
+                    day-view-start="06:00"
+                    day-view-end="22:00"
+                    day-view-split="30"
+                    cell-modifier="modifyCell(calendarCell)">
+                </mwl-calendar>
+                <br><br><br>
+
+                <script type="text/ng-template" id="modalContent.html">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Event action occurred!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>Action: <pre>{{ action }}</pre></p>
+                        <p>Event: <pre>{{ event | json }}</pre></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" ng-click="$close()">OK</button>
+                    </div>
+                </script>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

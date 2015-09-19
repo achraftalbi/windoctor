@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "calendar" : {
+            "home": {
+                "title": "Events",
+                "createLabel": "Créer un nouveau Event",
+                "createOrEditLabel": "Créer ou éditer un Event"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"
+            },
+            "detail": {
+                "title": "Event"
+            },
+            "event_date": "Event_date",
+            "description": "Description",
+            "eventStatus": "EventStatus",
+            "eventReason": "EventReason"
+        }
+    }
+}
+
