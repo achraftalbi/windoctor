@@ -1,0 +1,21 @@
+{
+    "windoctorApp": {
+        "entityTest1" : {
+            "home": {
+                "title": "EntityTest1s",
+                "createLabel": "Create a new EntityTest1",
+                "createOrEditLabel": "Create or edit a EntityTest1"
+            },
+            "created": "A new EntityTest1 is created with identifier {{ param }}",
+            "updated": "A EntityTest1 is updated with identifier {{ param }}",
+            "deleted": "A EntityTest1 is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete EntityTest1 {{ id }}?"
+            },
+            "detail": {
+                "title": "EntityTest1"
+            },
+            "description": "Description"
+        }
+    }
+}
