@@ -4,7 +4,7 @@
             "home": {
                 "title": "Events",
                 "createLabel": "Créer un nouveau Event",
-                "createOrEditLabel": "Créer ou éditer un Event"
+                "createOrEditLabel": "Créer ou éditer un rendez vous"
             },
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"

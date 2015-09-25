@@ -12,13 +12,13 @@ angular.module('windoctorApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/event/calendar.html',
+                        templateUrl: 'scripts/app/entities/calendar/calendar.html',
                         controller: 'CalendarController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('event_reason');
+                        $translatePartialLoader.addPart('calendar');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
@@ -49,13 +49,13 @@ angular.module('windoctorApp')
             })
             .state('calendar.new', {
                 parent: 'calendar',
-                url: '/events',
+                url: '/calendar-events',
                 data: {
                     roles: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/event/calendar-events.html',
+                        templateUrl: 'scripts/app/entities/calendar/calendar-events.html',
                         controller: 'CalendarEventsController',
                         size: 'lg',
                         resolve: {

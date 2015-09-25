@@ -3,8 +3,8 @@
         "calendar" : {
             "home": {
                 "title": "Events",
-                "createLabel": "Create a new Event",
-                "createOrEditLabel": "Create or edit a Event"
+                "createLabel": "Create a new appointment",
+                "createOrEditLabel": "Create or edit an appointment"
             },
             "created": "A new Event is created with identifier {{ param }}",
             "updated": "A Event is updated with identifier {{ param }}",
