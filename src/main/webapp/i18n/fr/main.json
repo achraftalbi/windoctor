@@ -1,11 +1,11 @@
 {
     "main": {
-        "title": "Bienvenue, Java Hipster !",
+        "title": "Bienvenue dans WinDoctor !",
         "subtitle": "Ceci est votre page d'accueil",
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\"."
         },
-        "question": "Si vous avez des questions à propos de JHipster:",
+        "question": "Si vous avez des questions à propos de WinDoctor contactez +212 6 08 08 08 08",
         "link": {
             "homepage": "Page d'accueil de JHipster",
             "stackoverflow": "JHipster sur Stack Overflow",

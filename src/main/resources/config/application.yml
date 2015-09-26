@@ -21,7 +21,7 @@ mail:
     protocol: smtp
     tls: false
     auth: false
-    from: windoctor@localhost
+    from: windoctor@team.com
 
 
 swagger:

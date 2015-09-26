@@ -70,12 +70,7 @@ public class Application {
         addDefaultProfile(app, source);
         addLiquibaseScanPackages();
         Environment env = app.run(args).getEnvironment();
-        log.info("Access URLs:\n----------------------------------------------------------\n\t" +
-            "Local: \t\thttp://127.0.0.1:{}\n\t" +
-            "External: \thttp://{}:{}\n----------------------------------------------------------",
-            env.getProperty("server.port"),
-            InetAddress.getLocalHost().getHostAddress(),
-            env.getProperty("server.port"));
+        log.info("WinDoctor is up and running on "+ env.getProperty("server.port"));
 
     }
 
