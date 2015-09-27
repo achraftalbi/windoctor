@@ -1,0 +1,28 @@
+{
+    "windoctorApp": {
+        "patient" : {
+            "home": {
+                "title": "Patients",
+                "createLabel": "Create a new Patient",
+                "createOrEditLabel": "Create or edit a Patient"
+            },
+            "created": "A new Patient is created with identifier {{ param }}",
+            "updated": "A Patient is updated with identifier {{ param }}",
+            "deleted": "A Patient is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Patient {{ id }}?"
+            },
+            "detail": {
+                "title": "Patient"
+            },
+            "login": "Login",
+            "password": "Password",
+            "firstName": "FirstName",
+            "lastName": "LastName",
+            "email": "Email",
+            "activated": "Activated",
+            "blocked": "Blocked",
+            "picture": "Picture"
+        }
+    }
+}

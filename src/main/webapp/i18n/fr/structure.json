@@ -1,0 +1,20 @@
+{
+    "windoctorApp": {
+        "structure" : {
+            "home": {
+                "title": "Structures",
+                "createLabel": "Créer un nouveau Structure",
+                "createOrEditLabel": "Créer ou éditer un Structure"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Structure {{ id }} ?"
+            },
+            "detail": {
+                "title": "Structure"
+            },
+            "name": "Name",
+            "patient": "Patient"
+        }
+    }
+}
+
