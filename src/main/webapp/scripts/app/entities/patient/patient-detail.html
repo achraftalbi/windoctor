@@ -1,0 +1,86 @@
+
+<div>
+    <h2><span translate="windoctorApp.patient.detail.title">Patient</span> {{patient.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.login">Login</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.login}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.password">Password</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.password}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.firstName">FirstName</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.firstName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.lastName">LastName</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.lastName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.email">Email</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.email}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.activated">Activated</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.activated}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.blocked">Blocked</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{patient.blocked}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.picture">Picture</span>
+                </td>
+                <td>
+                    <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-width: 100%;" ng-if="patient.picture"/>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

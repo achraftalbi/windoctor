@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "structure" : {
+            "home": {
+                "title": "Structures",
+                "createLabel": "Create a new Structure",
+                "createOrEditLabel": "Create or edit a Structure"
+            },
+            "created": "A new Structure is created with identifier {{ param }}",
+            "updated": "A Structure is updated with identifier {{ param }}",
+            "deleted": "A Structure is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Structure {{ id }}?"
+            },
+            "detail": {
+                "title": "Structure"
+            },
+            "name": "Name",
+            "patient": "Patient"
+        }
+    }
+}

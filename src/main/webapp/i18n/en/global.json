@@ -12,6 +12,8 @@
                 "event": "Event",
                 "event_reason": "Event_reason",
                 "entityTest1": "EntityTest1",
+                "structure": "Structure",
+                "patient": "Patient",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
