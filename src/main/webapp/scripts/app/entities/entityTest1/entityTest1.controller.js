@@ -5,7 +5,7 @@ angular.module('windoctorApp')
         $scope.entityTest1s = [];
         $scope.page = 1;
         $scope.loadAll = function() {
-            EntityTest1.query({page: $scope.page, per_page: 20}, function(result, headers) {
+            EntityTest1.query({page: $scope.page, per_page: 5}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.entityTest1s = result;
             });

@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.springframework.data.domain.Page;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -84,9 +86,13 @@ public class CategoryResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Category> getAll() {
-        log.debug("REST request to get all Categorys");
-        return categoryRepository.findAll();
+    public ResponseEntity<List<Category>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                                    @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get Categorys page per_page");
+        Page<Category> page = categoryRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/categorys", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

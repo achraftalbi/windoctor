@@ -47,9 +47,9 @@ angular.module('windoctorApp')
                     }]
                 }
             })
-            .state('calendar.new', {
+            .state('calendar.rows', {
                 parent: 'calendar',
-                url: '/calendar-events',
+                url: '/calendar-events/{currentDate}',
                 data: {
                     roles: ['ROLE_USER'],
                 },
@@ -64,9 +64,32 @@ angular.module('windoctorApp')
                             }
                         }
                     }).result.then(function(result) {
-                            $state.go('event_reason', null, { reload: true });
+                            $state.go('calendar', null, { reload: true });
                         }, function() {
-                            $state.go('event_reason');
+                            $state.go('calendar');
+                        })
+                }]
+            })
+            .state('calendar.newEvent', {
+                parent: 'calendar',
+                url: '/calendar-dialog',
+                data: {
+                    roles: ['ROLE_USER'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/calendar/calendar-dialog.html',
+                        controller: 'CalendarDialogController',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {event_date: null, description: null, id: null};
+                            }
+                        }
+                    }).result.then(function(result) {
+                            $state.go('calendar.rows', null, { reload: true });
+                        }, function() {
+                            $state.go('calendar.rows');
                         })
                 }]
             })
@@ -78,16 +101,16 @@ angular.module('windoctorApp')
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/event_reason/event_reason-dialog.html',
-                        controller: 'Event_reasonDialogController',
+                        templateUrl: 'scripts/app/entities/calendar/calendar-dialog.html',
+                        controller: 'CalendarDialogController',
                         size: 'lg',
                         resolve: {
-                            entity: ['Event_reason', function(Event_reason) {
-                                return Event_reason.get({id : $stateParams.id});
+                            entity: ['Event', function(Event) {
+                                return Event.get({id : $stateParams.id});
                             }]
                         }
                     }).result.then(function(result) {
-                            $state.go('event_reason', null, { reload: true });
+                            $state.go('calendar.rows', null, { reload: true });
                         }, function() {
                             $state.go('^');
                         })

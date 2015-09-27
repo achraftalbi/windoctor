@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.springframework.data.domain.Page;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -84,9 +86,13 @@ public class EventResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event> getAll() {
-        log.debug("REST request to get all Events");
-        return eventRepository.findAll();
+    public ResponseEntity<List<Event>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                                     @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get events page per_page");
+        Page<Event> page = eventRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

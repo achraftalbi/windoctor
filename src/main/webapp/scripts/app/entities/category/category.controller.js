@@ -1,17 +1,23 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CategoryController', function ($scope, Category, CategorySearch) {
+    .controller('CategoryController', function ($scope, Category, CategorySearch, ParseLinks) {
         $scope.categorys = [];
-        $scope.loadAll = function() {
-            Category.query(function(result) {
-               $scope.categorys = result;
+        $scope.page = 1;
+        $scope.loadAll = function () {
+            Category.query({page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.categorys = result;
             });
+        };
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            $scope.loadAll();
         };
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Category.get({id: id}, function(result) {
+            Category.get({id: id}, function (result) {
                 $scope.category = result;
                 $('#deleteCategoryConfirmation').modal('show');
             });
@@ -27,10 +33,10 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            CategorySearch.query({query: $scope.searchQuery}, function(result) {
+            CategorySearch.query({query: $scope.searchQuery}, function (result) {
                 $scope.categorys = result;
-            }, function(response) {
-                if(response.status === 404) {
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });

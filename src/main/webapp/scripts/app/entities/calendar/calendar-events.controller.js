@@ -1,17 +1,25 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarEventsController', function ($scope, Event, EventSearch) {
+    .controller('CalendarEventsController', function ($scope, $stateParams,$modalInstance, Event, EventSearch, ParseLinks) {
         $scope.events = [];
-        $scope.loadAll = function() {
-            Event.query(function(result) {
-               $scope.events = result;
+        $scope.page = 1;
+        $scope.loadAll = function () {
+            Event.query({page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.events = result;
             });
+            console.log('test'+$stateParams.currentDate)
         };
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            $scope.loadAll();
+        };
+
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Event.get({id: id}, function(result) {
+            Event.get({id: id}, function (result) {
                 $scope.event = result;
                 $('#deleteEventConfirmation').modal('show');
             });
@@ -27,10 +35,10 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            EventSearch.query({query: $scope.searchQuery}, function(result) {
+            EventSearch.query({query: $scope.searchQuery}, function (result) {
                 $scope.events = result;
-            }, function(response) {
-                if(response.status === 404) {
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });
@@ -43,5 +51,13 @@ angular.module('windoctorApp')
 
         $scope.clear = function () {
             $scope.event = {event_date: null, description: null, id: null};
+        };
+
+        $scope.cancelDelete = function () {
+            $scope.clear();
+        };
+
+        $scope.cancelEventRows = function () {
+            $modalInstance.dismiss('cancel');
         };
     });
