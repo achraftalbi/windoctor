@@ -1,5 +1,6 @@
 package com.winbit.windoctor.security;
 
+import com.winbit.windoctor.config.Constants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -21,6 +22,7 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication)
             throws IOException, ServletException {
+        request.getSession().removeAttribute(Constants.CURRENT_STRUCTURE);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

@@ -2,6 +2,8 @@ package com.winbit.windoctor.web.rest.dto;
 
 import org.hibernate.validator.constraints.Email;
 
+import javax.persistence.Column;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -36,7 +38,28 @@ public class UserDTO {
 
     private List<String> roles;
 
+    private Boolean blocked;
+
+    private Boolean activated;
+
+    @Size(max = 1000000)
+    private byte[] picture;
+
     public UserDTO() {
+    }
+
+    public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
+                   List<String> roles, Boolean blocked, byte[] picture, Boolean activated) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.langKey = langKey;
+        this.roles = roles;
+        this.blocked = blocked;
+        this.picture = picture;
+        this.activated = activated;
     }
 
     public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
@@ -48,6 +71,14 @@ public class UserDTO {
         this.email = email;
         this.langKey = langKey;
         this.roles = roles;
+    }
+
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
     }
 
     public String getPassword() {
@@ -76,6 +107,10 @@ public class UserDTO {
 
     public List<String> getRoles() {
         return roles;
+    }
+
+    public Boolean getActivated() {
+        return activated;
     }
 
     @Override

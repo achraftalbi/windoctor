@@ -28,23 +28,23 @@
                                 </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" ><a ui-sref="category"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" has-role="ROLE_USER"><a ui-sref="category"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.category">category</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="product"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" has-role="ROLE_USER"><a ui-sref="product"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.product">product</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="status"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" has-role="ROLE_USER"><a ui-sref="status"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.status">status</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="event"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.event">event</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="event_reason"><span class="glyphicon glyphicon-asterisk"></span>
+                        <li ui-sref-active="active" has-role="ROLE_USER"><a ui-sref="event_reason"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.event_reason">event_reason</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="calendar"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="entityTest1"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.entityTest1">entityTest1</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="structure"><span class="glyphicon glyphicon-th-large"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ADMIN"><a ui-sref="structure"><span class="glyphicon glyphicon-th-large"></span>
                         &#xA0;<span translate="global.menu.entities.structure">structure</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="patient"><span class="glyphicon glyphicon-user"></span>
+                        <li ui-sref-active="active" has-role="ROLE_USER"><a ui-sref="patient"><span class="glyphicon glyphicon-user"></span>
                         &#xA0;<span translate="global.menu.entities.patient">patient</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
@@ -64,7 +64,7 @@
                             &#xA0;<span translate="global.menu.account.settings">Settings</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password"><span class="glyphicon glyphicon-lock"></span>
                             &#xA0;<span translate="global.menu.account.password">Password</span></a></li>
-                        <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="sessions"><span class="glyphicon glyphicon-cloud"></span>
+                        <li ui-sref-active="active" ng-switch-when="true" has-role="ROLE_ADMIN"><a ui-sref="sessions"><span class="glyphicon glyphicon-cloud"></span>
                             &#xA0;<span translate="global.menu.account.sessions">Sessions</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a href="" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span>
                             &#xA0;<span translate="global.menu.account.logout">Log out</span></a></li>

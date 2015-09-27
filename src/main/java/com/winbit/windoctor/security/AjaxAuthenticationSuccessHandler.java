@@ -1,6 +1,8 @@
 package com.winbit.windoctor.security;
 
+import com.winbit.windoctor.config.Constants;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,8 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
                                         Authentication authentication)
             throws IOException, ServletException {
 
+        WinDoctorUserDetails user = (WinDoctorUserDetails)authentication.getPrincipal();
+        request.getSession().setAttribute(Constants.CURRENT_STRUCTURE, user.getStructure());
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

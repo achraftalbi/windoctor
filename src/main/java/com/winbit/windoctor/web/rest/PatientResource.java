@@ -1,9 +1,14 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Patient;
-import com.winbit.windoctor.repository.PatientRepository;
-import com.winbit.windoctor.repository.search.PatientSearchRepository;
+import com.winbit.windoctor.domain.Structure;
+import com.winbit.windoctor.domain.User;
+import com.winbit.windoctor.repository.UserRepository;
+import com.winbit.windoctor.repository.search.UserSearchRepository;
+import com.winbit.windoctor.service.UserService;
+import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -16,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,10 +43,13 @@ public class PatientResource {
     private final Logger log = LoggerFactory.getLogger(PatientResource.class);
 
     @Inject
-    private PatientRepository patientRepository;
+    private UserRepository userRepository;
 
     @Inject
-    private PatientSearchRepository patientSearchRepository;
+    private UserService userService;
+
+    @Inject
+    private UserSearchRepository userSearchRepository;
 
     /**
      * POST  /patients -> Create a new patient.
@@ -48,16 +58,21 @@ public class PatientResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Patient> create(@Valid @RequestBody Patient patient) throws URISyntaxException {
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
         log.debug("REST request to save Patient : {}", patient);
-        if (patient.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure", "A new patient cannot already have an ID").body(null);
-        }
-        Patient result = patientRepository.save(patient);
-        patientSearchRepository.save(result);
-        return ResponseEntity.created(new URI("/api/patients/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("patient", result.getId().toString()))
-                .body(result);
+        return userRepository.findOneByLogin(patient.getLogin())
+            .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
+            .orElseGet(() -> userRepository.findOneByEmail(patient.getEmail())
+                    .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
+                    .orElseGet(() -> {
+                        User user = userService.createPatientInformation(patient.getLogin(), patient.getPassword(),
+                            patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
+                            patient.getLangKey(),patient.getBlocked(), patient.getActivated(), patient.getPicture());
+                        userSearchRepository.save(user);
+
+                        return new ResponseEntity<>(HttpStatus.CREATED);
+                    })
+            );
     }
 
     /**
@@ -67,16 +82,15 @@ public class PatientResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Patient> update(@Valid @RequestBody Patient patient) throws URISyntaxException {
+    public ResponseEntity<?> update(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
         log.debug("REST request to update Patient : {}", patient);
-        if (patient.getId() == null) {
-            return create(patient);
-        }
-        Patient result = patientRepository.save(patient);
-        patientSearchRepository.save(patient);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("patient", patient.getId().toString()))
-                .body(result);
+        //TODO - mbf 27092015 - manage exception !
+        User user = userService.updatePatientInformation(patient.getLogin(), patient.getPassword(),
+            patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
+            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture());
+        userSearchRepository.save(user);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -86,10 +100,20 @@ public class PatientResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Patient>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit)
+    public ResponseEntity<List<User>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                  @RequestParam(value = "per_page", required = false) Integer limit, HttpSession session)
         throws URISyntaxException {
-        Page<Patient> page = patientRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<User> page;
+        Structure currentStructure = (Structure)session.getAttribute(Constants.CURRENT_STRUCTURE);
+        if(currentStructure == null){
+            page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        } else {
+            page = userRepository.findAllByStructure(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
+        }
+
+        //TODO - mbf-27092015 : be aware for perfomance here !!
+        userSearchRepository.save(page.getContent());
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/patients", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -101,9 +125,9 @@ public class PatientResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Patient> get(@PathVariable Long id) {
+    public ResponseEntity<User> get(@PathVariable Long id) {
         log.debug("REST request to get Patient : {}", id);
-        return Optional.ofNullable(patientRepository.findOne(id))
+        return Optional.ofNullable(userRepository.findOne(id))
             .map(patient -> new ResponseEntity<>(
                 patient,
                 HttpStatus.OK))
@@ -119,8 +143,8 @@ public class PatientResource {
     @Timed
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Patient : {}", id);
-        patientRepository.delete(id);
-        patientSearchRepository.delete(id);
+        userRepository.delete(id);
+        userSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("patient", id.toString())).build();
     }
 
@@ -132,9 +156,9 @@ public class PatientResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Patient> search(@PathVariable String query) {
+    public List<User> search(@PathVariable String query) {
         return StreamSupport
-            .stream(patientSearchRepository.search(queryString(query)).spliterator(), false)
+            .stream(userSearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
 }

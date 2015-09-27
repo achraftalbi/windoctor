@@ -9,6 +9,7 @@ import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.util.RandomUtil;
+import org.apache.commons.lang.BooleanUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -115,6 +116,76 @@ public class UserService {
         userSearchRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
+                                      String langKey, Boolean blocked, Boolean activated, byte [] picture) {
+
+        User patient = new User();
+        Authority authority = authorityRepository.findOne("ROLE_PATIENT");
+        Set<Authority> authorities = new HashSet<>();
+        String encryptedPassword = passwordEncoder.encode(password);
+        patient.setLogin(login);
+        // new user gets initially a generated password
+        patient.setPassword(encryptedPassword);
+        patient.setFirstName(firstName);
+        patient.setLastName(lastName);
+        patient.setEmail(email);
+        patient.setLangKey(langKey);
+        // new user is not active
+        if(activated==null || activated == false){
+            patient.setActivated(false);
+        } else {
+            patient.setActivated(true);
+        }
+
+        if(blocked==null || blocked == false){
+            patient.setBlocked(false);
+        } else {
+            patient.setBlocked(true);
+        }
+
+        // new user gets registration key
+        authorities.add(authority);
+        patient.setAuthorities(authorities);
+        patient.setPicture(picture);
+        userRepository.save(patient);
+        userSearchRepository.save(patient);
+        log.debug("Created Information for Patient: {}", patient);
+        return patient;
+    }
+
+    public User updatePatientInformation(String login, String password, String firstName, String lastName, String email,
+                                         String langKey, Boolean blocked, Boolean activated, byte [] picture) {
+
+        Optional<User> rst = userRepository.findOneByLogin(login);
+        User patient = rst.get();
+        String encryptedPassword = passwordEncoder.encode(password);
+        // new user gets initially a generated password
+        patient.setPassword(encryptedPassword);
+        patient.setFirstName(firstName);
+        patient.setLastName(lastName);
+        patient.setEmail(email);
+        patient.setLangKey(langKey);
+        // new user is not active
+        if(activated==null || activated == false){
+            patient.setActivated(false);
+        } else {
+            patient.setActivated(true);
+        }
+
+        if(blocked==null || blocked == false){
+            patient.setBlocked(false);
+        } else {
+            patient.setBlocked(true);
+        }
+
+        // new user gets registration key
+        patient.setPicture(picture);
+        userRepository.save(patient);
+        userSearchRepository.save(patient);
+        log.debug("Update Information for Patient: {}", patient);
+        return patient;
     }
 
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {

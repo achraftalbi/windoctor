@@ -1,5 +1,6 @@
 id;login;PASSWORD;first_name;last_name;email;activated;lang_key;created_by
-1;system;$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG;System;System;system@localhost;true;en;system
-2;anonymousUser;$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO;Anonymous;User;anonymous@localhost;true;en;system
-3;admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost;true;en;system
-4;user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost;true;en;system
+1;wd;$2a$10$c1/4/z7z.6eG3wnMh7EQauuBgKYQ4mFiuvKr.k1RMVa8oKD6uwNhK;windoctor;windoctor;windoctor@winbit.ma;true;en;wd
+2;achraft;$2a$10$c1/4/z7z.6eG3wnMh7EQauuBgKYQ4mFiuvKr.k1RMVa8oKD6uwNhK;Talbi;Achraf;achraft@winbit.ma;true;en;wd
+3;mohamedb;$2a$10$c1/4/z7z.6eG3wnMh7EQauuBgKYQ4mFiuvKr.k1RMVa8oKD6uwNhK;Boufnichel;Mohamed;mohamedb@winbit.ma;true;en;wd
+4;alaoui;$2a$10$LePkczMdvQBK4xsHyjU5xeFDIwsXsjFf7jtL86WDrtPX5.kQdIJxG;Alaoui;Hicham;alaoui@akhawayne.ma;true;en;wd
+5;azri;$2a$10$45gfpwV4igWZXNIpbo4w9.SJuWwh22N8SCw3bJj0EXZLGKaREru0a;Azri;Abdelghani;azri@gmail.com;true;en;wd

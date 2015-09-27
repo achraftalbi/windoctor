@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="MBoufnichel (generated)" id="1443367949528-1">
+      <addColumn tableName="JHI_USER">
+         <column name="blocked" type="bit"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="MBoufnichel (generated)" id="1443367949528-2">
+      <addColumn tableName="JHI_USER">
+         <column name="picture" type="blob"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="MBoufnichel (generated)" id="1443367949528-3">
+      <addColumn tableName="JHI_USER">
+         <column name="structure_id" type="bigint"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="MBoufnichel (generated)" id="1443367949528-4">
+      <addForeignKeyConstraint baseColumnNames="structure_id"
+                               baseTableName="JHI_USER"
+                               constraintName="FK_ew3b0w46grnnlg5emc195opi3"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="STRUCTURE"/>
+   </changeSet>
+</databaseChangeLog>

@@ -52,7 +52,6 @@
                 <tr>
                     <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.patient.login">Login</th>
-                    <th translate="windoctorApp.patient.password">Password</th>
                     <th translate="windoctorApp.patient.firstName">FirstName</th>
                     <th translate="windoctorApp.patient.lastName">LastName</th>
                     <th translate="windoctorApp.patient.email">Email</th>
@@ -66,7 +65,6 @@
                 <tr ng-repeat="patient in patients">
                     <td><a ui-sref="patient.detail({id:patient.id})">{{patient.id}}</a></td>
                     <td>{{patient.login}}</td>
-                    <td>{{patient.password}}</td>
                     <td>{{patient.firstName}}</td>
                     <td>{{patient.lastName}}</td>
                     <td>{{patient.email}}</td>
