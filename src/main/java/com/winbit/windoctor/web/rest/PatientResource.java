@@ -6,6 +6,7 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
+import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
@@ -48,6 +49,9 @@ public class PatientResource {
     @Inject
     private UserSearchRepository userSearchRepository;
 
+    @Inject
+    private SessionService sessionService;
+
     /**
      * POST  /patients -> Create a new patient.
      */
@@ -55,7 +59,7 @@ public class PatientResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient,HttpSession session) throws URISyntaxException {
         log.debug("REST request to save Patient : {}", patient);
         return userRepository.findOneByLogin(patient.getLogin())
             .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
@@ -64,7 +68,7 @@ public class PatientResource {
                     .orElseGet(() -> {
                         User user = userService.createPatientInformation(patient.getLogin(), patient.getPassword(),
                             patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
-                            patient.getLangKey(),patient.getBlocked(), patient.getActivated(), patient.getPicture());
+                            patient.getLangKey(),patient.getBlocked(), patient.getActivated(), patient.getPicture(),sessionService.getCurrentStructure(session));
                         userSearchRepository.save(user);
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -101,7 +105,7 @@ public class PatientResource {
                                   @RequestParam(value = "per_page", required = false) Integer limit, HttpSession session)
         throws URISyntaxException {
         Page<User> page;
-        Structure currentStructure = (Structure)session.getAttribute(Constants.CURRENT_STRUCTURE);
+        Structure currentStructure = sessionService.getCurrentStructure(session);
         if(currentStructure == null){
             page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         } else {

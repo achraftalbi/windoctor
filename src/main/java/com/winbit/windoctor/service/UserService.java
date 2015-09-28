@@ -1,7 +1,9 @@
 package com.winbit.windoctor.service;
 
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.PersistentToken;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -119,7 +122,7 @@ public class UserService {
     }
 
     public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
-                                      String langKey, Boolean blocked, Boolean activated, byte [] picture) {
+                                      String langKey, Boolean blocked, Boolean activated, byte [] picture,Structure structure) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
@@ -132,6 +135,9 @@ public class UserService {
         patient.setLastName(lastName);
         patient.setEmail(email);
         patient.setLangKey(langKey);
+        if(structure != null){
+            patient.setStructure(structure);
+        }
         // new user is not active
         if(activated==null || activated == false){
             patient.setActivated(false);
@@ -201,7 +207,7 @@ public class UserService {
     }
 
     public void changePassword(String password) {
-        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
@@ -227,7 +233,7 @@ public class UserService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
         LocalDate now = new LocalDate();
-        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
+        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token -> {
             log.debug("Deleting token {}", token.getSeries());
             User user = token.getUser();
             user.getPersistentTokens().remove(token);
