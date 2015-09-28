@@ -1,17 +1,23 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('StatusController', function ($scope, Status, StatusSearch) {
+    .controller('StatusController', function ($scope, Status, StatusSearch, ParseLinks) {
         $scope.statuss = [];
-        $scope.loadAll = function() {
-            Status.query(function(result) {
-               $scope.statuss = result;
+        $scope.page = 1;
+        $scope.loadAll = function () {
+            Status.query({page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.statuss = result;
             });
+        };
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            $scope.loadAll();
         };
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Status.get({id: id}, function(result) {
+            Status.get({id: id}, function (result) {
                 $scope.status = result;
                 $('#deleteStatusConfirmation').modal('show');
             });
@@ -27,10 +33,10 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            StatusSearch.query({query: $scope.searchQuery}, function(result) {
+            StatusSearch.query({query: $scope.searchQuery}, function (result) {
                 $scope.statuss = result;
-            }, function(response) {
-                if(response.status === 404) {
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });

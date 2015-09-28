@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.springframework.data.domain.Page;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -84,11 +86,15 @@ public class Event_reasonResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event_reason> getAll() {
-        log.debug("REST request to get all Event_reasons");
-        return event_reasonRepository.findAll();
+    public ResponseEntity<List<Event_reason>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                                 @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get event_reasons page per_page");
+        Page<Event_reason> page = event_reasonRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/event_reasons", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
+    
     /**
      * GET  /event_reasons/:id -> get the "id" event_reason.
      */

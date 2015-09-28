@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.springframework.data.domain.Page;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -84,9 +86,13 @@ public class ProductResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Product> getAll() {
-        log.debug("REST request to get all Products");
-        return productRepository.findAll();
+    public ResponseEntity<List<Product>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                              @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get products page per_page");
+        Page<Product> page = productRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
