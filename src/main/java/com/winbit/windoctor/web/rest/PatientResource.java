@@ -2,7 +2,6 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.config.Constants;
-import com.winbit.windoctor.domain.Patient;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
@@ -21,10 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
