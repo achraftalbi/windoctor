@@ -84,7 +84,7 @@ angular.module('windoctorApp')
         $scope.cellClicked = function(date,view) {
             // Show modal etc to add a new event. date is the start of the month, day, hour etc depending on which view you're on.
             //$('#deleteEvent_reasonConfirmation').modal('show');
-            $state.go(view, { currentDate: date });
+            $state.go(view, { selectedDate: date });
         };
         /*
          var currentYear = moment().year();

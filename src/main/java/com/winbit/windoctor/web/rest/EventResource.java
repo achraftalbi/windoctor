@@ -5,6 +5,7 @@ import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.repository.EventRepository;
 import com.winbit.windoctor.repository.search.EventSearchRepository;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,8 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +27,7 @@ import java.util.stream.StreamSupport;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.springframework.data.domain.Page;
 
+import static com.winbit.windoctor.web.rest.util.FunctionsUtil.addDays;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
@@ -86,11 +90,17 @@ public class EventResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Event>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+    public ResponseEntity<List<Event>> getAll(@RequestParam(value = "selectedDate" , required = false) Date selectedDate,@RequestParam(value = "page" , required = false) Integer offset,
                                                      @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         log.debug("REST request to get events page per_page");
-        Page<Event> page = eventRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<Event> page =null;
+        if(selectedDate==null){
+            page = eventRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        }else{
+            log.debug("first date:"+new DateTime(selectedDate)+" segond date:"+new DateTime(addDays(selectedDate,1)));
+            page = eventRepository.findAll(new DateTime(selectedDate),new DateTime(addDays(selectedDate,1)),PaginationUtil.generatePageRequest(offset, limit));
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

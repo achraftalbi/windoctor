@@ -49,7 +49,7 @@ angular.module('windoctorApp')
             })
             .state('calendar.rows', {
                 parent: 'calendar',
-                url: '/calendar-events/{currentDate}',
+                url: '/calendar-events/{selectedDate}',
                 data: {
                     roles: ['ROLE_USER'],
                 },

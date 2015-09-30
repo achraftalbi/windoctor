@@ -5,11 +5,12 @@ angular.module('windoctorApp')
         $scope.events = [];
         $scope.page = 1;
         $scope.loadAll = function () {
-            Event.query({page: $scope.page, per_page: 5}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.events = result;
-            });
-            console.log('test'+$stateParams.currentDate)
+                Event.query({selectedDate:$stateParams.selectedDate, page: $scope.page, per_page: 5}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.events = result;
+                });
+
+            console.log('test'+$stateParams.selectedDate)
         };
         $scope.loadPage = function (page) {
             $scope.page = page;
