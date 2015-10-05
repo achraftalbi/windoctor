@@ -60,6 +60,7 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
+                                console.log("selectedDate 2 "+$stateParams.selectedDate);
                                 return {description: null, id: null};
                             }
                         }
@@ -72,7 +73,7 @@ angular.module('windoctorApp')
             })
             .state('calendar.newEvent', {
                 parent: 'calendar',
-                url: '/calendar-dialog',
+                url: '/calendar-dialog/{selectedDate}',
                 data: {
                     roles: ['ROLE_USER'],
                 },
@@ -83,19 +84,20 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {event_date: null, description: null, id: null};
+                                console.log("selectedDate 3-3 "+$stateParams.selectedDate);
+                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null};
                             }
                         }
                     }).result.then(function(result) {
-                            $state.go('calendar.rows', null, { reload: true });
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
                         }, function() {
-                            $state.go('calendar.rows');
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
                         })
                 }]
             })
             .state('calendar.edit', {
                 parent: 'calendar',
-                url: '/{id}/edit',
+                url: '/{id}/edit/{selectedDate}',
                 data: {
                     roles: ['ROLE_USER'],
                 },
@@ -110,9 +112,9 @@ angular.module('windoctorApp')
                             }]
                         }
                     }).result.then(function(result) {
-                            $state.go('calendar.rows', null, { reload: true });
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
                         }, function() {
-                            $state.go('^');
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
                         })
                 }]
             });

@@ -15,7 +15,6 @@ angular.module('windoctorApp')
             $scope.loadAll();
         };
         $scope.loadAll();
-
         $scope.delete = function (id) {
             Event.get({id: id}, function (result) {
                 $scope.event = result;

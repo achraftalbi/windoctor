@@ -1,24 +1,36 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarController', function ($scope, Event_reason, Event_reasonSearch, $modal, moment,$state, $translate) {
-        $scope.event_reasons = [];
+    .controller('CalendarController', function ($scope, Event, EventSearch, $modal, moment,$state, $translate,$filter) {
+        $scope.calendarEvts= [];
         $scope.loadAll = function() {
-            Event_reason.query(function(result) {
-                $scope.event_reasons = result;
+            Event.query(function(result) {
+                $scope.calendarEvts = result;
+                for (var i = 0; i < $scope.calendarEvts.length; i++) {
+                    var start = $scope.calendarEvts[i].event_date;
+                    $scope.events.push({
+                        title: angular.isUndefined($scope.calendarEvts[i].eventReason)
+                        ||$scope.calendarEvts[i].eventReason==null?'':$scope.calendarEvts[i].eventReason.description,
+                        type:'info',
+                            //angular.isUndefined($scope.calendarEvts[i].eventStatus)
+                        //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
+                        startsAt: start,
+                        endsAt: moment(start).add(0.5, 'hours').toDate()
+                    })
+                }
             });
         };
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Event_reason.get({id: id}, function(result) {
-                $scope.event_reason = result;
+            Event.get({id: id}, function(result) {
+                $scope.calendarEvts = result;
                 $('#deleteEvent_reasonConfirmation').modal('show');
             });
         };
 
         $scope.confirmDelete = function (id) {
-            Event_reason.delete({id: id},
+            Event.delete({id: id},
                 function () {
                     $scope.loadAll();
                     $('#deleteEvent_reasonConfirmation').modal('hide');
@@ -27,8 +39,8 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            Event_reasonSearch.query({query: $scope.searchQuery}, function(result) {
-                $scope.event_reasons = result;
+            Event.query({query: $scope.searchQuery}, function(result) {
+                $scope.calendarEvts = result;
             }, function(response) {
                 if(response.status === 404) {
                     $scope.loadAll();
@@ -42,7 +54,7 @@ angular.module('windoctorApp')
         };
 
         $scope.clear = function () {
-            $scope.event_reason = {description: null, id: null};
+            $scope.calendarEvts = {description: null, id: null};
         };
 
 
@@ -51,7 +63,7 @@ angular.module('windoctorApp')
         //These variables MUST be set as a minimum for the calendar to work
         $scope.calendarView = 'month';
         $scope.calendarDay = new Date();
-        $scope.events = [
+/*        $scope.events = [
             {
                 title: 'An event',
                 type: 'warning',
@@ -75,7 +87,7 @@ angular.module('windoctorApp')
                 draggable: false,
                 resizable: false
             }
-        ];
+        ];*/
         moment.locale($translate.use(), {
             week : {
                 dow : 1 // Monday is the first day of the week
@@ -91,42 +103,7 @@ angular.module('windoctorApp')
          var currentMonth = moment().month();
          function random(min, max) {
          return Math.floor((Math.random() * max) + min);
-         }
-         for (var i = 0; i < 1000; i++) {
-         var start = new Date(currentYear,random(0, 11),random(1, 28),random(0, 24),random(0, 59));
-         vm.events.push({
-         title: 'Event ' + i,
-         type: 'warning',
-         startsAt: start,
-         endsAt: moment(start).add(2, 'hours').toDate()
-         })
          }*/
-
-        function showPopup(action, event) {
-            //$modal.open({
-            //    templateUrl: 'modalContent.html',
-            //    controller: function() {
-            //        var vm = this;
-            //        vm.action = action;
-            //        vm.event = event;
-            //    },
-            //    controllerAs: 'vm'
-            //});
-            $modal.open({
-                templateUrl: 'scripts/app/entities/event_reason/event_reason-dialog.html',
-                controller: 'Event_reasonDialogController',
-                size: 'lg',
-                resolve: {
-                    entity: ['Event_reason', function(Event_reason) {
-                        return Event_reason.get({id : $stateParams.id});
-                    }]
-                }
-            }).result.then(function(result) {
-                    $state.go('event_reason', null, { reload: true });
-                }, function() {
-                    $state.go('^');
-                });
-        }
 
         function showModal(action, event) {
             $modal.open({
@@ -140,8 +117,10 @@ angular.module('windoctorApp')
             });
         }
 
-        $scope.eventClicked = function(event) {
-            showModal('Clicked', event);
+        $scope.eventClicked = function($event) {
+            //showModal('Clicked', event);
+            $event.preventDefault();
+
         };
 
         $scope.eventEdited = function(event) {
