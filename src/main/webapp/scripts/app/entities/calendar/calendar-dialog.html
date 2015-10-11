@@ -1,32 +1,33 @@
-
 <form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
-        <h4 class="modal-title" id="myEventLabel" translate="windoctorApp.calendar.home.createOrEditLabel">Create or edit a Event</h4>
+        <h4 class="modal-title" id="myEventLabel" translate="windoctorApp.calendar.home.createOrEditLabel">Create or
+            edit a Event</h4>
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
         <div class="form-group">
             <label for="id" translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                    ng-model="event.id" readonly>
+                   ng-model="event.id" readonly>
         </div>
 
         <div class="form-group">
             <label translate="windoctorApp.calendar.event_date" for="field_event_date">Event_date</label>
             <input type="datetime-local" class="form-control" name="event_date" id="field_event_date"
-                    ng-model="event.event_date" ng-model-options="{timezone: '+0100'}"
-                    required>
+                   ng-model="event.event_date" ng-model-options="{timezone: '+0100'}"
+                   required>
 
             <div ng-show="editForm.event_date.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.event_date.$error.required" translate="entity.validation.required">
+                   ng-show="editForm.event_date.$error.required" translate="entity.validation.required">
                     This field is required.
                 </p>
+
                 <p class="help-block"
-                    ng-show="editForm.event_date.$error.datetimelocal" translate="entity.validation.datetimelocal">
+                   ng-show="editForm.event_date.$error.datetimelocal" translate="entity.validation.datetimelocal">
                     This field should be a date and time.
                 </p>
             </div>
@@ -34,19 +35,22 @@
         <div class="form-group">
             <label translate="windoctorApp.calendar.description" for="field_description">Description</label>
             <input type="text" class="form-control" name="description" id="field_description"
-                    ng-model="event.description"
-                    ng-maxlength="1000">
+                   ng-model="event.description"
+                   ng-maxlength="1000">
 
             <div ng-show="editForm.description.$invalid">
+
                 <p class="help-block"
-                    ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="1000">
+                   ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
+                   translate-value-max="1000">
                     This field cannot be longer than 1000 characters.
                 </p>
             </div>
         </div>
         <div class="form-group">
             <label translate="windoctorApp.calendar.eventStatus" for="field_eventStatus">eventStatus</label>
-            <select class="form-control" id="field_eventStatus" name="eventStatus" ng-model="event.eventStatus" ng-options="status as status.description for status in statuss track by status.id">
+            <select class="form-control" id="field_eventStatus" name="eventStatus" ng-model="event.eventStatus"
+                    ng-options="status as status.description for status in statuss track by status.id">
                 <option value=""></option>
             </select>
 
@@ -54,15 +58,126 @@
         <div class="form-group">
             <label translate="windoctorApp.calendar.eventReason" for="field_eventReason">eventReason</label>
 
-            <select class="form-control" id="field_eventReason" name="eventReason" ng-model="event.eventReason" ng-options="event_reason as event_reason.description for event_reason in event_reasons track by event_reason.id">
+            <select class="form-control" id="field_eventReason" name="eventReason" ng-model="event.eventReason" required
+                    ng-options="event_reason as event_reason.description for event_reason in event_reasons track by event_reason.id">
                 <option value=""></option>
             </select>
 
         </div>
+        <div class="form-group">
+            <label translate="windoctorApp.calendar.patient" for="field_patient">Patient</label>
+
+            <div>
+                <input type="text" class="form-control" name="patient" id="field_patient"
+                       ng-model="event.user.firstName" required ng-hide="true">
+
+                <div>
+                    {{event.user.firstName}} {{event.user.lastName}}
+                    <a ng-show="event.user && !showListPatients" class="btn btn-primary btn-sm"
+                       translate="windoctorApp.calendar.changePatient"
+                       ng-click="displayListPatients()">Change Patient</a>
+                    <a ng-show="!event.user && !showListPatients" class="btn btn-primary btn-sm"
+                       translate="windoctorApp.calendar.addPatient"
+                       ng-click="displayListPatients()">Add Patient</a>
+                </div>
+            </div>
+            <div ng-show="editForm.patient.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.patient.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
     </div>
+    <div ng-show="showListPatients" style="padding: 15px;">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Choise patient</h3>
+            </div>
+            <div class="panel-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" ng-model="searchQueryPatient"
+                                                   id="searchQueryPatient" placeholder="queryPatient">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="padding: 20px;padding-bottom: 35px">
+
+                                            <ul class="btn btn-info" style="margin-right: 30px">
+                                                <li ng-click="searchPatient()">
+                                                    <span class="glyphicon glyphicon-search"> Search a Patient</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th translate="windoctorApp.patient.login">Login</th>
+                            <th translate="windoctorApp.patient.firstName">FirstName</th>
+                            <th translate="windoctorApp.patient.lastName">LastName</th>
+                            <th translate="windoctorApp.patient.picture">Picture</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="patient in patients">
+                            <td>{{patient.login}}</td>
+                            <td>{{patient.firstName}}</td>
+                            <td>{{patient.lastName}}</td>
+                            <td>
+                                <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}"
+                                     style="max-height: 30px;"
+                                     ng-if="patient.picture"/>
+                                {{byteSize(patient.picture)}}
+                            </td>
+                            <td>
+                                <a ng-click="setPatient(patient)"
+                                   class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
+                                    translate="entity.action.select"> Select
+                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <nav>
+                        <ul class="pagination">
+                            <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                            <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                            <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                            <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                            <li class="active"><a>{{page}}</a></li>
+                            <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                            <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a>
+                            </li>
+                            <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                            <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+            translate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>

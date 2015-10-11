@@ -14,6 +14,8 @@
                 "entityTest1": "EntityTest1",
                 "structure": "Structure",
                 "patient": "Patient",
+                "testEntity2": "TestEntity2",
+                "testEntity3": "TestEntity3",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -87,6 +89,7 @@
             "back": "Retour",
             "cancel": "Annuler",
             "edit": "Editer",
+            "select": "Séléctionner",
             "delete": "Supprimer",
             "save": "Sauvegarder",
             "view": "Voir"

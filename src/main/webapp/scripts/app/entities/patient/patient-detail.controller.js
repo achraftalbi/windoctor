@@ -8,6 +8,7 @@ angular.module('windoctorApp')
                 $scope.patient = result;
             });
         };
+        console.log("$scope.patient.events "+$scope.patient.events);
         $rootScope.$on('windoctorApp:patientUpdate', function(event, result) {
             $scope.patient = result;
         });

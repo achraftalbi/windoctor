@@ -49,6 +49,9 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
+        $rootScope.isUndefinedOrNull = function(val) {
+            return angular.isUndefined(val) || val === null;
+        }
     })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
 

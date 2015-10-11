@@ -19,6 +19,7 @@ angular.module('windoctorApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('calendar');
+                        $translatePartialLoader.addPart('patient');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
@@ -70,6 +71,29 @@ angular.module('windoctorApp')
                             $state.go('calendar');
                         })
                 }]
+            })
+            .state('calendar.patientDetail', {
+                parent: 'calendar',
+                url: '/patient/{id}/{selectedDate}',
+                data: {
+                    roles: ['ROLE_USER'],
+                    pageTitle: 'windoctorApp.patient.detail.title'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/patient/patient-detail.html',
+                        controller: 'PatientDetailController'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('patient');
+                        return $translate.refresh();
+                    }],
+                    entity: ['$stateParams', 'Patient', function($stateParams, Patient) {
+                        return Patient.get({id : $stateParams.id});
+                    }]
+                }
             })
             .state('calendar.newEvent', {
                 parent: 'calendar',

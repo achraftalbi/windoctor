@@ -1,6 +1,7 @@
 package com.winbit.windoctor.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.winbit.windoctor.domain.util.BooleanToStringConverter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
@@ -100,6 +101,32 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     @ManyToOne
     private Structure structure;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Event> events = new HashSet<>();
+
+    //@Type(type= "org.hibernate.type.NumericBooleanType")
+    //@Column(name = "NO_EVENTS")
+    @Column(name = "NO_EVENTS")
+    private Boolean noEvents;
+
+    public Boolean getNoEvents() {
+        return noEvents;
+    }
+
+    public void setNoEvents(Boolean noEvents) {
+        this.noEvents = noEvents;
+    }
+
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(Set<Event> events) {
+        this.events = events;
+    }
 
     public Long getId() {
         return id;

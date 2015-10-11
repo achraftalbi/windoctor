@@ -15,6 +15,9 @@
             "detail": {
                 "title": "Event"
             },
+            "patient": "Name of patient",
+            "changePatient": "Change patient",
+            "addPatient": "Add patient",
             "event_date": "Event_date",
             "description": "Description",
             "eventStatus": "EventStatus",

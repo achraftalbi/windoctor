@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('PatientController', function ($scope, Patient, PatientSearch, ParseLinks) {
+    .controller('PatientController', function ($scope,$rootScope, Patient, PatientSearch, ParseLinks) {
         $scope.patients = [];
         $scope.page = 1;
         $scope.loadAll = function() {
             Patient.query({page: $scope.page, per_page: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.patients = result;
+                console.log("username "+$rootScope.username);
             });
         };
         $scope.loadPage = function(page) {
@@ -86,4 +87,13 @@ angular.module('windoctorApp')
 
             return formatAsBytes(size(base64String));
         };
+        $scope.isUndefinedOrNull = function(val) {
+            var test=$rootScope.isUndefinedOrNull(val);
+            return test;
+        }
+        $scope.hideDeleteButton = function(val) {
+            console.log("first"+(val===true));
+            console.log("segond"+(val==='true'));
+            return val===true;
+        }
     });

@@ -1,5 +1,6 @@
 package com.winbit.windoctor.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.winbit.windoctor.domain.util.CustomDateTimeDeserializer;
@@ -30,16 +31,16 @@ public class Event implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
 
-    @NotNull        
+
+    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "event_date", nullable = false)
     private DateTime event_date;
 
-    @Size(max = 1000)        
+    @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
 
@@ -48,6 +49,10 @@ public class Event implements Serializable {
 
     @ManyToOne
     private Event_reason eventReason;
+
+    @ManyToOne
+    private User user;
+
 
     public Long getId() {
         return id;
@@ -87,6 +92,14 @@ public class Event implements Serializable {
 
     public void setEventReason(Event_reason event_reason) {
         this.eventReason = event_reason;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

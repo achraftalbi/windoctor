@@ -113,8 +113,12 @@ public class PatientResource {
         }
 
         //TODO - mbf-27092015 : be aware for perfomance here !!
-        userSearchRepository.save(page.getContent());
-
+        // Boufnichel i don't un derstand this part of code, i commented it, i need more explications.
+        //userSearchRepository.save(page.getContent());
+        for (User user:((List<User>)page.getContent())){
+            user.setNoEvents(user.getEvents()==null || user.getEvents().size()==0);
+            log.debug("user.getNoEvents"+user.getNoEvents()+" user getEvents "+user.getEvents());
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/patients", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
