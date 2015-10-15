@@ -1,0 +1,38 @@
+
+<div>
+    <h2><span translate="windoctorApp.testEntity5.detail.title">TestEntity5</span> {{testEntity5.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.testEntity5.description5">Description5</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{testEntity5.description5}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.testEntity5.testEntity4">testEntity4</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="testEntity4.detail({id:testEntity5.testEntity4.id})">{{testEntity5.testEntity4.description}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

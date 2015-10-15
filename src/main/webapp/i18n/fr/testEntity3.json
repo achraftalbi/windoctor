@@ -1,0 +1,20 @@
+{
+    "windoctorApp": {
+        "testEntity3" : {
+            "home": {
+                "title": "TestEntity3s",
+                "createLabel": "Créer un nouveau TestEntity3",
+                "createOrEditLabel": "Créer ou éditer un TestEntity3"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le TestEntity3 {{ id }} ?"
+            },
+            "detail": {
+                "title": "TestEntity3"
+            },
+            "description": "Description",
+            "testEntity2": "TestEntity2"
+        }
+    }
+}
+

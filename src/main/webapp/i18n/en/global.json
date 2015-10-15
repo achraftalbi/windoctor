@@ -16,6 +16,8 @@
                 "patient": "Patient",
                 "testEntity2": "TestEntity2",
                 "testEntity3": "TestEntity3",
+                "testEntity4": "TestEntity4",
+                "testEntity5": "TestEntity5",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

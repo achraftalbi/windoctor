@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "testEntity5" : {
+            "home": {
+                "title": "TestEntity5s",
+                "createLabel": "Create a new TestEntity5",
+                "createOrEditLabel": "Create or edit a TestEntity5"
+            },
+            "created": "A new TestEntity5 is created with identifier {{ param }}",
+            "updated": "A TestEntity5 is updated with identifier {{ param }}",
+            "deleted": "A TestEntity5 is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete TestEntity5 {{ id }}?"
+            },
+            "detail": {
+                "title": "TestEntity5"
+            },
+            "description5": "Description5",
+            "testEntity4": "TestEntity4"
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "testEntity4",
+            "otherEntityName": "testEntity4",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "description",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "testEntity5"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "description5",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20151013075558",
+    "dto": "no",
+    "pagination": "pagination"
+}
