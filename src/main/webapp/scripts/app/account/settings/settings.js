@@ -7,7 +7,7 @@ angular.module('windoctorApp')
                 parent: 'account',
                 url: '/settings',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'global.menu.account.settings'
                 },
                 views: {

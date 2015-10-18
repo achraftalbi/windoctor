@@ -107,11 +107,7 @@ public class PatientResource {
         throws URISyntaxException {
         Page<User> page;
         Long currentStructure = sessionService.getCurrentStructure(session);
-        if(currentStructure == null){
-            page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        } else {
-            page = userRepository.findAll(AuthoritiesConstants.PATIENT, currentStructure, PaginationUtil.generatePageRequest(offset, limit));
-        }
+        page = userService.findAllPatients(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
 
         //TODO - mbf-27092015 : be aware for perfomance here !!
         // Boufnichel i don't un derstand this part of code, i commented it, i need more explications.

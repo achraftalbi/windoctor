@@ -42,6 +42,9 @@ public class UserDTO {
 
     private Boolean activated;
 
+    @NotNull
+    private StructureDTO structure;
+
     @Size(max = 1000000)
     private byte[] picture;
 
@@ -111,6 +114,14 @@ public class UserDTO {
 
     public Boolean getActivated() {
         return activated;
+    }
+
+    public StructureDTO getStructure() {
+        return structure;
+    }
+
+    public void setStructure(StructureDTO structure) {
+        this.structure = structure;
     }
 
     @Override

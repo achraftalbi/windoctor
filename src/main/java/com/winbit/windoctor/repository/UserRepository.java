@@ -30,6 +30,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2")
     Page<User> findAll(String role, Long id, Pageable var1);
 
+    @Query("select u from User u join u.authorities a where a.name= ?1")
+    Page<User> findAll(String role, Pageable var1);
+
+
     @Override
     void delete(User t);
 
