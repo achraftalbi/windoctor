@@ -1,0 +1,117 @@
+<div>
+
+    <h2 translate="windoctorApp.doctor.home.title">Doctors</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ui-sref="doctor.new">
+                    <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.doctor.home.createLabel">Create a new Doctor</span>
+                </button>
+            </div>
+            <div class="col-md-8">
+                <form name="searchForm" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                    </div>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a Doctor</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteDoctorConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(doctor.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="windoctorApp.doctor.delete.question" translate-values="{id: '{{doctor.id}}'}">Are you sure you want to delete this Doctor?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="global.field.id">ID</th>
+                    <th translate="windoctorApp.doctor.login">Login</th>
+                    <th translate="windoctorApp.doctor.password">Password</th>
+                    <th translate="windoctorApp.doctor.firstName">FirstName</th>
+                    <th translate="windoctorApp.doctor.lastName">LastName</th>
+                    <th translate="windoctorApp.doctor.email">Email</th>
+                    <th translate="windoctorApp.doctor.activated">Activated</th>
+                    <th translate="windoctorApp.doctor.blocked">Blocked</th>
+                    <th translate="windoctorApp.doctor.picture">Picture</th>
+                    <th translate="windoctorApp.doctor.structure">structure</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="doctor in doctors">
+                    <td><a ui-sref="doctor.detail({id:doctor.id})">{{doctor.id}}</a></td>
+                    <td>{{doctor.login}}</td>
+                    <td>{{doctor.password}}</td>
+                    <td>{{doctor.firstName}}</td>
+                    <td>{{doctor.lastName}}</td>
+                    <td>{{doctor.email}}</td>
+                    <td>{{doctor.activated}}</td>
+                    <td>{{doctor.blocked}}</td>
+                    <td>
+                        <img data-ng-src="{{'data:image/*;base64,' + doctor.picture}}" style="max-height: 30px;" ng-if="doctor.picture"/>
+                        {{byteSize(doctor.picture)}}
+                    </td>
+                    <td>
+                        <a ui-sref="structure.detail({id:doctor.structure.id})">{{doctor.structure.name}}</a>
+                    </td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="doctor.detail({id:doctor.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="doctor.edit({id:doctor.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(doctor.id)"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                <li class="active"><a>{{page}}</a></li>
+                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
