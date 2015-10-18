@@ -29,8 +29,9 @@ public class AjaxAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
             throws IOException, ServletException {
 
         WinDoctorUserDetails user = (WinDoctorUserDetails)authentication.getPrincipal();
-        if(user.getStructure() != null){
-            sessionService.setCurrentStructure(user.getStructure(), request.getSession());
+        if(user.getStructureId() != null){
+            sessionService.setCurrentStructure(user.getStructureId(), request.getSession());
+            sessionService.setCurrentUserLogin(user.getLogin(), request.getSession());
         }
 
         response.setStatus(HttpServletResponse.SC_OK);

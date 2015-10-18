@@ -7,25 +7,26 @@ import org.springframework.security.core.userdetails.User;
 import java.util.Collection;
 
 /**
- * TODO - Donne moi une petite description stp 8)
+ * WinDoctor user details
  *
  * @author MBoufnichel
  */
 public class WinDoctorUserDetails extends User {
 
-    private Structure structure;
+    private Long structureId;
+    private String login;
 
-    public WinDoctorUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities,Structure structure) {
+    public WinDoctorUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities,Long structureId, String login) {
         super(username, password, true, true, true, true, authorities);
-        this.structure = structure;
+        this.structureId = structureId;
+        this.login = login;
     }
 
-
-    public Structure getStructure() {
-        return structure;
+    public Long getStructureId() {
+        return structureId;
     }
 
-    public void setStructure(Structure structure) {
-        this.structure = structure;
+    public String getLogin() {
+        return login;
     }
 }

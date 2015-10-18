@@ -2,6 +2,7 @@ package com.winbit.windoctor.security;
 
 import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.User;
+import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,9 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Inject
     private UserRepository userRepository;
 
+    @Inject
+    private AuthorityRepository authorityRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
@@ -41,12 +45,16 @@ public class UserDetailsService implements org.springframework.security.core.use
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
+            if(user.getAuthorities() == null && user.getAuthorities().isEmpty()){
+                throw new UserWithoutRoleException("User " + lowercaseLogin + " has no role, please fix the configuration issue, normaly a user must have a role!");
+            }
+            List<Authority> authorities = authorityRepository.findAllUnderPriority(user.getAuthorities().iterator().next().getPriority());
+            List<GrantedAuthority> grantedAuthorities = authorities.stream()
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                     .collect(Collectors.toList());
             return new WinDoctorUserDetails(lowercaseLogin,
                     user.getPassword(),
-                    grantedAuthorities, user.getStructure());
+                    grantedAuthorities, (user.getStructure()!=null)?user.getStructure().getId():null, user.getLogin());
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
     }
 }

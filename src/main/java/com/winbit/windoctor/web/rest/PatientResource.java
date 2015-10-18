@@ -6,6 +6,7 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
@@ -109,7 +110,7 @@ public class PatientResource {
         if(currentStructure == null){
             page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         } else {
-            page = userRepository.findAllByStructure(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
+            page = userRepository.findAll(AuthoritiesConstants.PATIENT, currentStructure.getId(), PaginationUtil.generatePageRequest(offset, limit));
         }
 
         //TODO - mbf-27092015 : be aware for perfomance here !!

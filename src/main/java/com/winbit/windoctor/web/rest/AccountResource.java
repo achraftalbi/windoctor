@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.PersistentToken;
 import com.winbit.windoctor.domain.User;
+import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.security.SecurityUtils;
@@ -47,6 +48,9 @@ public class AccountResource {
 
     @Inject
     private MailService mailService;
+
+    @Inject
+    private AuthorityRepository authorityRepository;
 
     /**
      * POST  /register -> register the user.
@@ -119,7 +123,7 @@ public class AccountResource {
                         user.getLastName(),
                         user.getEmail(),
                         user.getLangKey(),
-                        user.getAuthorities().stream().map(Authority::getName)
+                        authorityRepository.findAllUnderPriority(user.getAuthorities().iterator().next().getPriority()).stream().map(Authority::getName)
                             .collect(Collectors.toList())),
                 HttpStatus.OK);
             })

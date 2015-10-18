@@ -18,7 +18,7 @@ public class SessionService {
         return (Structure) session.getAttribute(Constants.CURRENT_STRUCTURE);
     }
 
-    public void setCurrentStructure(Structure structure, HttpSession session){
+    public void setCurrentStructure(Long structure, HttpSession session){
         session.setAttribute(Constants.CURRENT_STRUCTURE, structure);
     }
 
@@ -30,5 +30,23 @@ public class SessionService {
 
     public boolean hasCurrentSession(HttpSession session){
         return session.getAttribute(Constants.CURRENT_STRUCTURE) != null;
+    }
+
+    public Structure getCurrentUserLogin(HttpSession session){
+        return (Structure) session.getAttribute(Constants.CURRENT_USER_LOGIN);
+    }
+
+    public void setCurrentUserLogin(String login, HttpSession session){
+        session.setAttribute(Constants.CURRENT_USER_LOGIN, login);
+    }
+
+    public void clearCurrentUserLogin(HttpSession session){
+        if(hasCurrentUserLogin(session)){
+            session.removeAttribute(Constants.CURRENT_USER_LOGIN);
+        }
+    }
+
+    public boolean hasCurrentUserLogin(HttpSession session){
+        return session.getAttribute(Constants.CURRENT_USER_LOGIN) != null;
     }
 }

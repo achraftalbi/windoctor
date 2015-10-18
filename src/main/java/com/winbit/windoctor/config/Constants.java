@@ -18,6 +18,8 @@ public final class Constants {
 
     public static final String CURRENT_STRUCTURE = "current_structure";
 
+    public static final String CURRENT_USER_LOGIN = "current_user_login";
+
     private Constants() {
     }
 }
