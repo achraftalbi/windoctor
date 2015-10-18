@@ -14,8 +14,8 @@ import javax.servlet.http.HttpSession;
 @Service
 public class SessionService {
 
-    public Structure getCurrentStructure(HttpSession session){
-        return (Structure) session.getAttribute(Constants.CURRENT_STRUCTURE);
+    public Long getCurrentStructure(HttpSession session){
+        return (Long) session.getAttribute(Constants.CURRENT_STRUCTURE);
     }
 
     public void setCurrentStructure(Long structure, HttpSession session){
@@ -32,8 +32,8 @@ public class SessionService {
         return session.getAttribute(Constants.CURRENT_STRUCTURE) != null;
     }
 
-    public Structure getCurrentUserLogin(HttpSession session){
-        return (Structure) session.getAttribute(Constants.CURRENT_USER_LOGIN);
+    public String getCurrentUserLogin(HttpSession session){
+        return (String) session.getAttribute(Constants.CURRENT_USER_LOGIN);
     }
 
     public void setCurrentUserLogin(String login, HttpSession session){

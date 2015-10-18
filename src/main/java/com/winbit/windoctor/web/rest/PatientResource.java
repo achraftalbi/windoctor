@@ -106,11 +106,11 @@ public class PatientResource {
                                   @RequestParam(value = "per_page", required = false) Integer limit, HttpSession session)
         throws URISyntaxException {
         Page<User> page;
-        Structure currentStructure = sessionService.getCurrentStructure(session);
+        Long currentStructure = sessionService.getCurrentStructure(session);
         if(currentStructure == null){
             page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         } else {
-            page = userRepository.findAll(AuthoritiesConstants.PATIENT, currentStructure.getId(), PaginationUtil.generatePageRequest(offset, limit));
+            page = userRepository.findAll(AuthoritiesConstants.PATIENT, currentStructure, PaginationUtil.generatePageRequest(offset, limit));
         }
 
         //TODO - mbf-27092015 : be aware for perfomance here !!

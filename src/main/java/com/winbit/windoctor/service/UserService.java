@@ -7,6 +7,7 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
+import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
@@ -51,6 +52,9 @@ public class UserService {
 
     @Inject
     private AuthorityRepository authorityRepository;
+
+    @Inject
+    private StructureRepository structureRepository;
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -122,7 +126,7 @@ public class UserService {
     }
 
     public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
-                                      String langKey, Boolean blocked, Boolean activated, byte [] picture,Structure structure) {
+                                      String langKey, Boolean blocked, Boolean activated, byte [] picture,Long structureId) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
@@ -135,8 +139,8 @@ public class UserService {
         patient.setLastName(lastName);
         patient.setEmail(email);
         patient.setLangKey(langKey);
-        if(structure != null){
-            patient.setStructure(structure);
+        if(structureId != null){
+            patient.setStructure(structureRepository.findOneById(structureId));
         }
         // new user is not active
         if(activated==null || activated == false){
@@ -151,7 +155,6 @@ public class UserService {
             patient.setBlocked(true);
         }
 
-        // new user gets registration key
         authorities.add(authority);
         patient.setAuthorities(authorities);
         patient.setPicture(picture);
