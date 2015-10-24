@@ -3,7 +3,7 @@
 angular.module('windoctorApp').controller('PatientDialogController',
     ['$scope', '$stateParams', '$modalInstance', 'entity', 'Patient',
         function($scope, $stateParams, $modalInstance, entity, Patient) {
-
+        $scope.doNotMatch = null;
         $scope.patient = entity;
         $scope.load = function(id) {
             Patient.get({id : id}, function(result) {
@@ -17,10 +17,14 @@ angular.module('windoctorApp').controller('PatientDialogController',
         };
 
         $scope.save = function () {
-            if ($scope.patient.id != null) {
-                Patient.update($scope.patient, onSaveFinished);
+            if ($scope.patient.password !== $scope.confirmPassword) {
+                $scope.doNotMatch = 'ERROR';
             } else {
-                Patient.save($scope.patient, onSaveFinished);
+                if ($scope.patient.id != null) {
+                    Patient.update($scope.patient, onSaveFinished);
+                } else {
+                    Patient.save($scope.patient, onSaveFinished);
+                }
             }
         };
 

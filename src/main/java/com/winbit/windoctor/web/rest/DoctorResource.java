@@ -8,6 +8,7 @@ import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.DoctorSearchRepository;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
+import com.winbit.windoctor.web.rest.dto.DoctorDTO;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
@@ -60,7 +61,7 @@ public class DoctorResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO doctor,HttpSession session) throws URISyntaxException {
+    public ResponseEntity<?> create(@Valid @RequestBody DoctorDTO doctor,HttpSession session) throws URISyntaxException {
         log.debug("REST request to save Doctor : {}", doctor);
 
         return userRepository.findOneByLogin(doctor.getLogin())
@@ -84,7 +85,7 @@ public class DoctorResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Doctor> update(@Valid @RequestBody UserDTO doctor) throws URISyntaxException {
+    public ResponseEntity<Doctor> update(@Valid @RequestBody DoctorDTO doctor) throws URISyntaxException {
         log.debug("REST request to update Doctor : {}", doctor);
         User user = userService.updateDoctorInformation(doctor.getLogin(), doctor.getPassword(),
             doctor.getFirstName(), doctor.getLastName(), doctor.getEmail().toLowerCase(),
