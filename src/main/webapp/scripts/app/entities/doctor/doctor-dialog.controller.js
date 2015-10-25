@@ -4,6 +4,7 @@ angular.module('windoctorApp').controller('DoctorDialogController',
     ['$scope', '$stateParams', '$modalInstance', '$q', 'entity', 'Doctor', 'Structure',
         function($scope, $stateParams, $modalInstance, $q, entity, Doctor, Structure) {
 
+        $scope.doNotMatch = null;
         $scope.doctor = entity;
         $scope.structures = Structure.query({filter: 'doctor-is-null'});
         $q.all([$scope.doctor.$promise, $scope.structures.$promise]).then(function() {
@@ -26,10 +27,14 @@ angular.module('windoctorApp').controller('DoctorDialogController',
         };
 
         $scope.save = function () {
-            if ($scope.doctor.id != null) {
-                Doctor.update($scope.doctor, onSaveFinished);
+            if ($scope.doctor.password !== $scope.confirmPassword) {
+                $scope.doNotMatch = 'ERROR';
             } else {
-                Doctor.save($scope.doctor, onSaveFinished);
+                if ($scope.doctor.id != null) {
+                    Doctor.update($scope.doctor, onSaveFinished);
+                } else {
+                    Doctor.save($scope.doctor, onSaveFinished);
+                }
             }
         };
 

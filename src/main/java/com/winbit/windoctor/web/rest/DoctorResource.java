@@ -102,10 +102,10 @@ public class DoctorResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<User>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit, HttpSession session)
+                                  @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page;
-        Long currentStructure = sessionService.getCurrentStructure(session);
+        Long currentStructure = sessionService.getCurrentStructure();
         page = userService.findAllDoctors(PaginationUtil.generatePageRequest(offset, limit));
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/doctors", offset, limit);

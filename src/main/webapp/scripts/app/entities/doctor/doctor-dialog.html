@@ -5,14 +5,12 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
         <h4 class="modal-title" id="myDoctorLabel" translate="windoctorApp.doctor.home.createOrEditLabel">Create or edit a Doctor</h4>
+        <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
+            The password and its confirmation do not match!
+        </div>
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-        <div class="form-group">
-            <label for="id" translate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                    ng-model="doctor.id" readonly>
-        </div>
 
         <div class="form-group">
             <label translate="windoctorApp.doctor.login" for="field_login">Login</label>
@@ -41,7 +39,7 @@
         </div>
         <div class="form-group">
             <label translate="windoctorApp.doctor.password" for="field_password">Password</label>
-            <input type="text" class="form-control" name="password" id="field_password"
+            <input type="password" class="form-control" name="password" id="field_password"
                     ng-model="doctor.password"
                     required ng-minlength="8" ng-maxlength="100">
 
@@ -57,6 +55,26 @@
                 <p class="help-block"
                     ng-show="editForm.password.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="100">
                     This field cannot be longer than 100 characters.
+                </p>
+            </div>
+            <password-strength-bar password-to-check="doctor.password"></password-strength-bar>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                   ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
+            <div ng-show="editForm.confirmPassword.$dirty && form.confirmPassword.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.required" translate="global.messages.validate.confirmpassword.required">
+                    Your confirmation password is required.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
+                    Your confirmation password is required to be at least 5 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
+                    Your confirmation password cannot be longer than 50 characters.
                 </p>
             </div>
         </div>
@@ -88,14 +106,22 @@
         </div>
         <div class="form-group">
             <label translate="windoctorApp.doctor.email" for="field_email">Email</label>
-            <input type="text" class="form-control" name="email" id="field_email"
+            <input type="email" class="form-control" name="email" id="field_email"
                     ng-model="doctor.email"
-                    ng-maxlength="100">
+                    ng-maxlength="100" ng-minlength="5" required>
 
-            <div ng-show="editForm.email.$invalid">
+            <div ng-show="editForm.email.$dirty && editForm.email.$invalid">
                 <p class="help-block"
                     ng-show="editForm.email.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="100">
                     This field cannot be longer than 100 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.email.$error.email" translate="global.messages.validate.email.invalid">
+                    Your e-mail is invalid.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.email.$error.minlength" translate="global.messages.validate.email.minlength">
+                    Your e-mail is required to be at least 5 characters.
                 </p>
             </div>
         </div>

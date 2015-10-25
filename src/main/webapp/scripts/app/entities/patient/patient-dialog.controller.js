@@ -4,6 +4,9 @@ angular.module('windoctorApp').controller('PatientDialogController',
     ['$scope', '$stateParams', '$modalInstance', 'entity', 'Patient',
         function($scope, $stateParams, $modalInstance, entity, Patient) {
         $scope.doNotMatch = null;
+        $scope.error = null;
+        $scope.errorUserExists = null;
+        $scope.errorEmailExists = null;
         $scope.patient = entity;
         $scope.load = function(id) {
             Patient.get({id : id}, function(result) {
@@ -15,15 +18,25 @@ angular.module('windoctorApp').controller('PatientDialogController',
             $scope.$emit('windoctorApp:patientUpdate', result);
             $modalInstance.close(result);
         };
+        var onSaveFailed = function (response) {
+            if (response.status === 400 && response.data.code === 'U-02') {
+                $scope.errorUserExists = 'ERROR';
+            } else if (response.status === 400 && response.data.code === 'U-01') {
+                $scope.errorEmailExists = 'ERROR';
+            } else {
+                $scope.error = 'ERROR';
+            }
+        };
+
 
         $scope.save = function () {
             if ($scope.patient.password !== $scope.confirmPassword) {
                 $scope.doNotMatch = 'ERROR';
             } else {
                 if ($scope.patient.id != null) {
-                    Patient.update($scope.patient, onSaveFinished);
+                    Patient.update($scope.patient, onSaveFinished, onSaveFailed);
                 } else {
-                    Patient.save($scope.patient, onSaveFinished);
+                    Patient.save($scope.patient, onSaveFinished, onSaveFailed);
                 }
             }
         };
