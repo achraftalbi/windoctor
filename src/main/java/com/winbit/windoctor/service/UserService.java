@@ -7,15 +7,20 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
+import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.util.RandomUtil;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.apache.commons.lang.BooleanUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,6 +56,9 @@ public class UserService {
 
     @Inject
     private AuthorityRepository authorityRepository;
+
+    @Inject
+    private StructureRepository structureRepository;
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -99,7 +107,7 @@ public class UserService {
                                       String langKey) {
 
         User newUser = new User();
-        Authority authority = authorityRepository.findOne("ROLE_USER");
+        Authority authority = authorityRepository.findOne("ROLE_DOCTOR");
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
@@ -122,7 +130,7 @@ public class UserService {
     }
 
     public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
-                                      String langKey, Boolean blocked, Boolean activated, byte [] picture,Structure structure) {
+                                         String langKey, Boolean blocked, Boolean activated, byte [] picture,Long structureId) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
@@ -135,8 +143,8 @@ public class UserService {
         patient.setLastName(lastName);
         patient.setEmail(email);
         patient.setLangKey(langKey);
-        if(structure != null){
-            patient.setStructure(structure);
+        if(structureId != null){
+            patient.setStructure(structureRepository.findOneById(structureId));
         }
         // new user is not active
         if(activated==null || activated == false){
@@ -151,7 +159,6 @@ public class UserService {
             patient.setBlocked(true);
         }
 
-        // new user gets registration key
         authorities.add(authority);
         patient.setAuthorities(authorities);
         patient.setPicture(picture);
@@ -159,6 +166,45 @@ public class UserService {
         userSearchRepository.save(patient);
         log.debug("Created Information for Patient: {}", patient);
         return patient;
+    }
+
+    public User createDoctorInformation(String login, String password, String firstName, String lastName, String email,
+                                      String langKey, Boolean blocked, Boolean activated, byte [] picture,Long structureId) {
+
+        User doctor = new User();
+        Authority authority = authorityRepository.findOne("ROLE_DOCTOR");
+        Set<Authority> authorities = new HashSet<>();
+        String encryptedPassword = passwordEncoder.encode(password);
+        doctor.setLogin(login);
+        // new user gets initially a generated password
+        doctor.setPassword(encryptedPassword);
+        doctor.setFirstName(firstName);
+        doctor.setLastName(lastName);
+        doctor.setEmail(email);
+        doctor.setLangKey(langKey);
+        if(structureId != null){
+            doctor.setStructure(structureRepository.findOneById(structureId));
+        }
+        // new user is not active
+        if(activated==null || activated == false){
+            doctor.setActivated(false);
+        } else {
+            doctor.setActivated(true);
+        }
+
+        if(blocked==null || blocked == false){
+            doctor.setBlocked(false);
+        } else {
+            doctor.setBlocked(true);
+        }
+
+        authorities.add(authority);
+        doctor.setAuthorities(authorities);
+        doctor.setPicture(picture);
+        userRepository.save(doctor);
+        userSearchRepository.save(doctor);
+        log.debug("Created Information for Doctor: {}", doctor);
+        return doctor;
     }
 
     public User updatePatientInformation(String login, String password, String firstName, String lastName, String email,
@@ -192,6 +238,43 @@ public class UserService {
         userSearchRepository.save(patient);
         log.debug("Update Information for Patient: {}", patient);
         return patient;
+    }
+
+    public User updateDoctorInformation(String login, String password, String firstName, String lastName, String email,
+                                         String langKey, Boolean blocked, Boolean activated, byte [] picture,Long structureId) {
+
+        Optional<User> rst = userRepository.findOneByLogin(login);
+        User doctor = rst.get();
+        String encryptedPassword = passwordEncoder.encode(password);
+        // new user gets initially a generated password
+        doctor.setPassword(encryptedPassword);
+        doctor.setFirstName(firstName);
+        doctor.setLastName(lastName);
+        doctor.setEmail(email);
+        doctor.setLangKey(langKey);
+        // new user is not active
+        if(activated==null || activated == false){
+            doctor.setActivated(false);
+        } else {
+            doctor.setActivated(true);
+        }
+
+        if(blocked==null || blocked == false){
+            doctor.setBlocked(false);
+        } else {
+            doctor.setBlocked(true);
+        }
+
+        if(structureId != null){
+            doctor.setStructure(structureRepository.findOneById(structureId));
+        }
+
+        // new user gets registration key
+        doctor.setPicture(picture);
+        userRepository.save(doctor);
+        userSearchRepository.save(doctor);
+        log.debug("Update Information for Doctor: {}", doctor);
+        return doctor;
     }
 
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
@@ -257,5 +340,19 @@ public class UserService {
             userRepository.delete(user);
             userSearchRepository.delete(user);
         }
+    }
+
+    /**
+     * Find all patient of the current structure
+     * @param structureId - current structure id
+     * @param pageable
+     * @return patients list
+     */
+    public Page<User> findAllPatients(Long structureId, Pageable pageable){
+        return userRepository.findAll(AuthoritiesConstants.PATIENT, structureId, pageable);
+    }
+
+    public Page<User> findAllDoctors(Pageable pageable){
+        return userRepository.findAll(AuthoritiesConstants.DOCTOR, pageable);
     }
 }

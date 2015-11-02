@@ -7,7 +7,7 @@ angular.module('windoctorApp')
                 parent: 'entity',
                 url: '/categorys',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.category.home.title'
                 },
                 views: {
@@ -28,7 +28,7 @@ angular.module('windoctorApp')
                 parent: 'entity',
                 url: '/category/{id}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.category.detail.title'
                 },
                 views: {
@@ -51,7 +51,7 @@ angular.module('windoctorApp')
                 parent: 'category',
                 url: '/new',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
@@ -74,7 +74,7 @@ angular.module('windoctorApp')
                 parent: 'category',
                 url: '/{id}/edit',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({

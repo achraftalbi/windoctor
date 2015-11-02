@@ -6,9 +6,11 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
+import com.winbit.windoctor.web.rest.util.ErrorCodes;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -59,16 +61,16 @@ public class PatientResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient,HttpSession session) throws URISyntaxException {
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
         log.debug("REST request to save Patient : {}", patient);
         return userRepository.findOneByLogin(patient.getLogin())
-            .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
+            .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(patient.getEmail())
-                    .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
+                    .map(user -> new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED, HttpStatus.BAD_REQUEST))
                     .orElseGet(() -> {
                         User user = userService.createPatientInformation(patient.getLogin(), patient.getPassword(),
                             patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
-                            patient.getLangKey(),patient.getBlocked(), patient.getActivated(), patient.getPicture(),sessionService.getCurrentStructure(session));
+                            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture(), sessionService.getCurrentStructure());
                         userSearchRepository.save(user);
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -102,19 +104,12 @@ public class PatientResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<User>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit, HttpSession session)
+                                  @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page;
-        Structure currentStructure = sessionService.getCurrentStructure(session);
-        if(currentStructure == null){
-            page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        } else {
-            page = userRepository.findAllByStructure(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
-        }
+        Long currentStructure = sessionService.getCurrentStructure();
+        page = userService.findAllPatients(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
 
-        //TODO - mbf-27092015 : be aware for perfomance here !!
-        // Boufnichel i don't un derstand this part of code, i commented it, i need more explications.
-        //userSearchRepository.save(page.getContent());
         for (User user:((List<User>)page.getContent())){
             user.setNoEvents(user.getEvents()==null || user.getEvents().size()==0);
             log.debug("user.getNoEvents"+user.getNoEvents()+" user getEvents "+user.getEvents());

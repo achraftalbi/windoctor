@@ -36,6 +36,20 @@ public final class SecurityUtils {
         return userName;
     }
 
+    public static Long getCurrerntStructure(){
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        WinDoctorUserDetails springSecurityUser = null;
+        Long structureId = null;
+        if(authentication != null) {
+            if (authentication.getPrincipal() instanceof UserDetails) {
+                springSecurityUser = (WinDoctorUserDetails) authentication.getPrincipal();
+                structureId = springSecurityUser.getStructureId();
+            }
+        }
+        return structureId;
+    }
+
     /**
      * Check if a user is authenticated.
      *

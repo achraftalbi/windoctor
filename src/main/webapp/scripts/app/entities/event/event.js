@@ -7,7 +7,7 @@ angular.module('windoctorApp')
                 parent: 'entity',
                 url: '/events',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.event.home.title'
                 },
                 views: {
@@ -28,7 +28,7 @@ angular.module('windoctorApp')
                 parent: 'entity',
                 url: '/event/{id}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.event.detail.title'
                 },
                 views: {
@@ -51,7 +51,7 @@ angular.module('windoctorApp')
                 parent: 'event',
                 url: '/new',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
@@ -74,7 +74,7 @@ angular.module('windoctorApp')
                 parent: 'event',
                 url: '/{id}/edit',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({

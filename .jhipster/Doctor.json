@@ -1,0 +1,91 @@
+{
+    "relationships": [
+		{
+            "relationshipId": 1,
+            "relationshipName": "structure",
+            "otherEntityName": "structure",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "name",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "doctor"
+        }
+	],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "login",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength",
+                "pattern"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "50",
+            "fieldValidateRulesPattern": "^[a-z0-9]*$"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "password",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "8",
+            "fieldValidateRulesMaxlength": 100
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "firstName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "lastName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "activated",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "blocked",
+            "fieldType": "Boolean"
+        },
+		{
+            "fieldId": 8,
+            "fieldName": "picture",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image",
+            "fieldValidateRules": [
+                "maxbytes"
+            ],
+            "fieldValidateRulesMaxbytes": "1000000"
+        }
+    ],
+    "changelogDate": "20151018174600",
+    "dto": "no",
+    "pagination": "pagination"
+}

@@ -7,7 +7,7 @@ angular.module('windoctorApp')
                 parent: 'entity',
                 url: '/calendar',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.calendar.home.title'
                 },
                 views: {
@@ -29,7 +29,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/event_reason/{id}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.event_reason.detail.title'
                 },
                 views: {
@@ -52,7 +52,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/calendar-events/{selectedDate}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal','$filter', function($stateParams, $state, $modal,$filter) {
                     $modal.open({
@@ -77,7 +77,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/patient/{id}/{selectedDate}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.patient.detail.title'
                 },
                 views: {
@@ -131,7 +131,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/calendar-dialog/{selectedDate}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
@@ -155,7 +155,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/{id}/edit/{selectedDate}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({

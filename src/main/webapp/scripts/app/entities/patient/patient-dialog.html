@@ -5,6 +5,10 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
         <h4 class="modal-title" id="myPatientLabel" translate="windoctorApp.patient.home.createOrEditLabel">Create or edit a Patient</h4>
+        <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
+            The password and its confirmation do not match!
+        </div>
+
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
@@ -52,6 +56,26 @@
                 <p class="help-block"
                     ng-show="editForm.password.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="20">
                     This field cannot be longer than 20 characters.
+                </p>
+            </div>
+            <password-strength-bar password-to-check="patient.password"></password-strength-bar>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
+            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                   ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
+            <div ng-show="editForm.confirmPassword.$dirty && form.confirmPassword.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.required" translate="global.messages.validate.confirmpassword.required">
+                    Your confirmation password is required.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
+                    Your confirmation password is required to be at least 5 characters.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
+                    Your confirmation password cannot be longer than 50 characters.
                 </p>
             </div>
         </div>
@@ -134,7 +158,7 @@
             <label translate="windoctorApp.patient.activated" for="field_activated">Activated</label>
             <input type="checkbox" class="form-control" name="activated" id="field_activated"
                     ng-model="patient.activated"
-                    >
+                >
 
         </div>
         <div class="form-group">

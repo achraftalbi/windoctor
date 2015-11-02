@@ -29,7 +29,6 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
                                 Authentication authentication)
             throws IOException, ServletException {
 
-        sessionService.clearCurrentStructure(request.getSession());
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

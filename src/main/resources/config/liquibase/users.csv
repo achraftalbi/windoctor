@@ -4,3 +4,5 @@ id;login;PASSWORD;first_name;last_name;email;activated;lang_key;created_by
 3;mohamedb;$2a$10$c1/4/z7z.6eG3wnMh7EQauuBgKYQ4mFiuvKr.k1RMVa8oKD6uwNhK;Boufnichel;Mohamed;mohamedb@winbit.ma;true;en;wd
 4;alaoui;$2a$10$LePkczMdvQBK4xsHyjU5xeFDIwsXsjFf7jtL86WDrtPX5.kQdIJxG;Alaoui;Hicham;alaoui@akhawayne.ma;true;en;wd
 5;azri;$2a$10$45gfpwV4igWZXNIpbo4w9.SJuWwh22N8SCw3bJj0EXZLGKaREru0a;Azri;Abdelghani;azri@gmail.com;true;en;wd
+6;ikrame;$2a$10$foUdXzOfFHHKXaLtLQeDg.5c/s3oKuEcR18TABEGKoGgzv2GXQWx2;Ikrame;Sahel;ikrame@akhawayne.ma;true;en;wd
+7;zaki;$2a$10$DUjXFx1Tkgaeshmp3SYv.ex2BdmFhNKRKKM.TXbAnVCncQKhEHbHa;Zaki;Boutahar;zakib@gmail.com;true;en;wd

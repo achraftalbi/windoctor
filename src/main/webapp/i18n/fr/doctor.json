@@ -1,0 +1,27 @@
+{
+    "windoctorApp": {
+        "doctor" : {
+            "home": {
+                "title": "Doctors",
+                "createLabel": "Créer un nouveau Doctor",
+                "createOrEditLabel": "Créer ou éditer un Doctor"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Doctor {{ id }} ?"
+            },
+            "detail": {
+                "title": "Doctor"
+            },
+            "login": "Login",
+            "password": "Password",
+            "firstName": "FirstName",
+            "lastName": "LastName",
+            "email": "Email",
+            "activated": "Activated",
+            "blocked": "Blocked",
+            "picture": "Picture",
+            "structure": "Structure"
+        }
+    }
+}
+
