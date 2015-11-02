@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('windoctorApp').controller('Event_reasonDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event_reason', 'Event',
-        function($scope, $stateParams, $modalInstance, entity, Event_reason, Event) {
+    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event_reason', 'Event', 'Treatment',
+        function($scope, $stateParams, $modalInstance, entity, Event_reason, Event, Treatment) {
 
         $scope.event_reason = entity;
         $scope.events = Event.query();
+        $scope.treatments = Treatment.query();
         $scope.load = function(id) {
             Event_reason.get({id : id}, function(result) {
                 $scope.event_reason = result;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('Event_reasonDetailController', function ($scope, $rootScope, $stateParams, entity, Event_reason, Event) {
+    .controller('Event_reasonDetailController', function ($scope, $rootScope, $stateParams, entity, Event_reason, Event, Treatment) {
         $scope.event_reason = entity;
         $scope.load = function (id) {
             Event_reason.get({id: id}, function(result) {

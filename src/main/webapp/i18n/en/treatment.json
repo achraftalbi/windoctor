@@ -1,0 +1,30 @@
+{
+    "windoctorApp": {
+        "treatment" : {
+            "home": {
+                "title": "Treatments",
+                "createLabel": "Create a new Treatment",
+                "createOrEditLabel": "Create or edit a Treatment",
+                "displayAllPatientTreatments": "Display all patient treatments",
+                "displayPatientTreatmentsEvent": "Display treatments related to the current appointment"
+            },
+            "created": "A new Treatment is created with identifier {{ param }}",
+            "updated": "A Treatment is updated with identifier {{ param }}",
+            "deleted": "A Treatment is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Treatment {{ id }}?"
+            },
+            "detail": {
+                "title": "Treatment"
+            },
+            "treatment_date": "Treatment_date",
+            "chooseReason": "Choose a reason",
+            "description": "Description",
+            "price": "Price",
+            "defaultPrice": "Proposed price",
+            "paid_price": "Paid_price",
+            "attachment": "Attachment",
+            "eventReason": "EventReason"
+        }
+    }
+}

@@ -35,6 +35,36 @@
                 </p>
             </div>
         </div>
+        <div class="form-group">
+            <label translate="windoctorApp.event_reason.price" for="field_price">Price</label>
+            <input type="number" class="form-control" name="price" id="field_price"
+                   ng-model="event_reason.price"
+                   required min="0" max="10000000">
+
+            <div ng-show="editForm.price.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.price.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+
+                <p class="help-block"
+                   ng-show="editForm.price.$error.min" translate="entity.validation.min"
+                   translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+
+                <p class="help-block"
+                   ng-show="editForm.price.$error.max" translate="entity.validation.max"
+                   translate-value-max="10000000">
+                    This field cannot be more than 10000000.
+                </p>
+
+                <p class="help-block"
+                   ng-show="editForm.price.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">

@@ -1,0 +1,28 @@
+{
+    "windoctorApp": {
+        "treatment" : {
+            "home": {
+                "title": "Treatments",
+                "createLabel": "Créer un nouveau Treatment",
+                "createOrEditLabel": "Créer ou éditer un Treatment",
+                "displayAllPatientTreatments": "Afficher tout les traiements du patient",
+                "displayPatientTreatmentsEvent": "Afficher les traiements du patient liés au rendez vous"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Treatment {{ id }} ?"
+            },
+            "detail": {
+                "title": "Treatment"
+            },
+            "treatment_date": "Treatment_date",
+            "chooseReason": "Choisissez une raison",
+            "description": "Description",
+            "price": "Price",
+            "defaultPrice": "Prix proposer",
+            "paid_price": "Paid_price",
+            "attachment": "Attachment",
+            "eventReason": "EventReason"
+        }
+    }
+}
+

@@ -1,0 +1,64 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "attachment",
+            "otherEntityName": "attachment",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "treatment"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "eventReason",
+            "otherEntityName": "event_reason",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "description"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "treatment_date",
+            "fieldType": "DateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "price",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": 0,
+            "fieldValidateRulesMax": "10000000"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "paid_price",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": 0,
+            "fieldValidateRulesMax": "10000000"
+        }
+    ],
+    "changelogDate": "20151017091708",
+    "dto": "no",
+    "pagination": "pagination"
+}

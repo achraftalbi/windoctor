@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -25,10 +26,10 @@ public class Event_reason implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 
     @NotNull
-    @Size(min = 1, max = 200)        
+    @Size(min = 1, max = 200)
     @Column(name = "description", length = 200, nullable = false)
     private String description;
 
@@ -36,6 +37,27 @@ public class Event_reason implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> eventReasons = new HashSet<>();
+
+    @OneToMany(mappedBy = "eventReason")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Treatment> treatments = new HashSet<>();
+
+    @NotNull
+
+    @Min(value = 0)
+    @Max(value = 10000000)
+    @Column(name = "price", precision=10, scale=2, nullable = false)
+    private BigDecimal price;
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
 
     public Long getId() {
         return id;
@@ -59,6 +81,14 @@ public class Event_reason implements Serializable {
 
     public void setEventReasons(Set<Event> events) {
         this.eventReasons = events;
+    }
+
+    public Set<Treatment> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(Set<Treatment> treatments) {
+        this.treatments = treatments;
     }
 
     @Override

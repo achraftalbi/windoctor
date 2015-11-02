@@ -1,0 +1,46 @@
+
+<div>
+    <h2><span translate="windoctorApp.attachment.detail.title">Attachment</span> {{attachment.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.attachment.description">Description</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{attachment.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.attachment.image">Image</span>
+                </td>
+                <td>
+                    <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" style="max-width: 100%;" ng-if="attachment.image"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.attachment.treatment">treatment</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="treatment.detail({id:attachment.treatment.id})">{{attachment.treatment.id}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

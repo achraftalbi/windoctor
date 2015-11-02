@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="achraftalbi (generated)" id="1445157086644-1">
+        <addColumn tableName="TREATMENT">
+            <column name="event_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="achraftalbi (generated)" id="1445157086644-2">
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="TREATMENT"
+                                 constraintName="FK_treatment_event_id"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 referencedColumnNames="id"
+                                 referencedTableName="EVENT"/>
+    </changeSet>
+</databaseChangeLog>

@@ -52,6 +52,7 @@
                 <tr>
                     <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.event_reason.description">Description</th>
+                    <th translate="windoctorApp.event_reason.price">Price</th>
                     <th></th>
                 </tr>
             </thead>
@@ -59,6 +60,7 @@
                 <tr ng-repeat="event_reason in event_reasons">
                     <td><a ui-sref="event_reason.detail({id:event_reason.id})">{{event_reason.id}}</a></td>
                     <td>{{event_reason.description}}</td>
+                    <td>{{event_reason.price}}</td>
                     <td>
                         <button type="submit"
                                 ui-sref="event_reason.detail({id:event_reason.id})"
@@ -79,18 +81,5 @@
                 </tr>
             </tbody>
         </table>
-        <nav>
-            <ul class="pagination">
-                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
-                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
-                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
-                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
-                <li class="active"><a>{{page}}</a></li>
-                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
-                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
-                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
-                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
-            </ul>
-        </nav>
     </div>
 </div>

@@ -107,10 +107,21 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> events = new HashSet<>();
 
-    //@Type(type= "org.hibernate.type.NumericBooleanType")
-    //@Column(name = "NO_EVENTS")
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "doctor")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Treatment> doctorTreatments = new HashSet<>();
+
     @Column(name = "NO_EVENTS")
     private Boolean noEvents;
+
+    public Set<Treatment> getDoctorTreatments() {
+        return doctorTreatments;
+    }
+
+    public void setDoctorTreatments(Set<Treatment> doctorTreatments) {
+        this.doctorTreatments = doctorTreatments;
+    }
 
     public Boolean getNoEvents() {
         return noEvents;

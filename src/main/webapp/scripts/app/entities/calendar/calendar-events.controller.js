@@ -7,12 +7,11 @@ angular.module('windoctorApp')
         $scope.selectedDate= null;
         $scope.loadAll = function () {
                 Event.query({selectedDate:$stateParams.selectedDate, page: $scope.page, per_page: 5}, function (result, headers) {
-                    console.log("selectedDate0 "+$stateParams.selectedDate);
                     $scope.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
                     $scope.links = ParseLinks.parse(headers('link'));
                     $scope.events = result;
                 });
-            };
+        };
         $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();

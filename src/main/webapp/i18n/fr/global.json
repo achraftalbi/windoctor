@@ -18,6 +18,8 @@
                 "testEntity3": "TestEntity3",
                 "testEntity4": "TestEntity4",
                 "testEntity5": "TestEntity5",
+                "treatment": "Treatment",
+                "attachment": "Attachment",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -93,6 +95,7 @@
             "edit": "Editer",
             "select": "Séléctionner",
             "delete": "Supprimer",
+            "saveAndClose": "Sauvegarder et fermer",
             "save": "Sauvegarder",
             "view": "Voir"
         },

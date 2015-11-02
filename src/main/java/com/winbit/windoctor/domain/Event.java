@@ -53,6 +53,18 @@ public class Event implements Serializable {
     @ManyToOne
     private User user;
 
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Treatment> treatments = new HashSet<>();
+
+    public Set<Treatment> getTreatments() {
+        return treatments;
+    }
+
+    public void setTreatments(Set<Treatment> treatments) {
+        this.treatments = treatments;
+    }
 
     public Long getId() {
         return id;

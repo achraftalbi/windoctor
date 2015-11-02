@@ -1,0 +1,178 @@
+<div ng-show="displayTreatments">
+    <div>
+        <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
+            <form name="displayTreatmentForm" role="form" novalidate show-validation>
+                <h2 translate="windoctorApp.treatment.home.title">Treatments</h2>
+                <jh-alert></jh-alert>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div>
+                                <button class="btn btn-primary" ng-click="addNewTreatment()">
+                                    <span class="glyphicon glyphicon-flash"></span> <span
+                                    translate="windoctorApp.treatment.home.createLabel">Create a new Treatment</span>
+                                </button>
+                            </div>
+                            <div style="padding-top: 35px">
+                                <button class="btn btn-primary" ng-show="!displayAllPatientTreatments"
+                                        ng-click="displayAllPatientTreatmentsFunction()">
+                                    <span class="glyphicon glyphicon-flash"></span> <span
+                                    translate="windoctorApp.treatment.home.displayAllPatientTreatments">Display all patient treatments</span>
+                                </button>
+                                <button class="btn btn-primary" ng-show="displayAllPatientTreatments"
+                                        ng-click="displayPatientTreatmentsEventFunction()">
+                                    <span class="glyphicon glyphicon-flash"></span> <span
+                                    translate="windoctorApp.treatment.home.displayPatientTreatmentsEvent">Display patient treatments event</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <form name="searchForm" class="form-inline">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" ng-model="searchQuery"
+                                                       id="searchQuery"
+                                                       placeholder="query">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="padding: 20px;padding-bottom: 35px">
+                                                <button class="btn btn-info" ng-click="search()"><span
+                                                    class="glyphicon glyphicon-search"></span>
+                                                    <span>Search a   Treatment</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="center-block">
+
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p class="text-center font-bold" translate="windoctorApp.patient.picture">
+                                                Picture</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img data-ng-src="{{'data:image/*;base64,' + product.image}}"
+                                                 style="max-width: 100%;" ng-if="product.image"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="text-center">{{event.user.firstName}} {{event.user.lastName}}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th translate="global.field.id">ID</th>
+                            <th translate="windoctorApp.treatment.treatment_date">Treatment_date</th>
+                            <th translate="windoctorApp.treatment.description">Description</th>
+                            <th translate="windoctorApp.treatment.price">Price</th>
+                            <th translate="windoctorApp.treatment.paid_price">Paid_price</th>
+                            <th translate="windoctorApp.treatment.eventReason">eventReason</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="treatment in treatments">
+                            <td><a ui-sref="treatment.detail({id:treatment.id})">{{treatment.id}}</a></td>
+                            <td>{{treatment.treatment_date}}</td>
+                            <td>{{treatment.description}}</td>
+                            <td>{{treatment.price}}</td>
+                            <td>{{treatment.paid_price}}</td>
+                            <td>
+                                <a ui-sref="event_reason.detail({id:treatment.eventReason.id})">{{treatment.eventReason.description}}</a>
+                            </td>
+                            <td>
+                                <button ng-click="viewTreatmentDetail(treatment)"
+                                        class="btn btn-info btn-sm">
+                                    <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span
+                                    translate="entity.action.view"> View</span>
+                                </button>
+                                <button ng-click="editTreatment(treatment)"
+                                        class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
+                                    translate="entity.action.edit"> Edit</span>
+                                </button>
+                                <button ng-click="delete(treatment.id)"
+                                        class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
+                                    translate="entity.action.delete"> Delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <nav>
+                        <ul class="pagination">
+                            <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                            <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                            <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                            <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                            <li class="active"><a>{{page}}</a></li>
+                            <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                            <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a>
+                            </li>
+                            <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                            <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelTreatmentRows()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                        translate="entity.action.cancel">Cancel</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<div ng-show="displayTreatmentToDelete">
+    <div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        ng-click="clear()">&times;</button>
+                <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+            </div>
+            <div class="modal-body">
+                <p translate="windoctorApp.treatment.delete.question"
+                   translate-values="{id: '{{treatment.id}}'}">Are you sure you want to delete this
+                    Treatment?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearDeleteTreatment()">
+                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                    translate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="button" ng-click="confirmDelete(treatmentToDelete.id)" ng-disabled="deleteForm.$invalid"
+                        class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
+                    translate="entity.action.delete">Delete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-include src="'scripts/app/entities/calendar/calendar-treatments-dialog.html'"></ng-include>

@@ -21,6 +21,8 @@
             "event_date": "Event_date",
             "description": "Description",
             "eventStatus": "EventStatus",
+            "treatments": "Acts",
+            "manageTreatments": "Manage acts",
             "eventReason": "EventReason"
         }
     }

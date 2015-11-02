@@ -1,0 +1,79 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myAttachmentLabel" translate="windoctorApp.attachment.home.createOrEditLabel">Create or edit a Attachment</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="attachment.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label translate="windoctorApp.attachment.description" for="field_description">Description</label>
+            <input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="attachment.description"
+                    ng-maxlength="400">
+
+            <div ng-show="editForm.description.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="400">
+                    This field cannot be longer than 400 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group" ngf-drop ngf-change="setImage($files, attachment)" ngf-accept="'image/*'">
+            <label translate="windoctorApp.attachment.image" for="field_image">Image</label>
+            <div>
+                <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" style="max-height: 100px;" ng-if="attachment.image"/>
+                <div class="help-block clearfix">
+                    <span class="pull-left">{{byteSize(attachment.image)}}</span>
+                    <button ng-click="attachment.image=null"
+                            ng-if="attachment.image"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="file" ngf-select class="btn btn-default btn-block"
+                        ngf-change="setImage($files, attachment)" accept="image/*" translate="entity.action.addimage">
+                    Add image
+                </button>
+            </div>
+            <input type="hidden" class="form-control" name="image" id="field_image"
+                    ng-model="attachment.image"
+                    required maxbytes="1000000">
+
+            <div ng-show="editForm.image.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.image.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                   ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="1000000">
+                    This field cannot be more than 1000000.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.attachment.treatment" for="field_treatment">treatment</label>
+            
+            <select class="form-control" id="field_treatment" name="treatment" ng-model="attachment.treatment" ng-options="treatment as treatment.id for treatment in treatments track by treatment.id">
+                <option value=""></option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1445167488834-1">
+      <addColumn tableName="TREATMENT">
+         <column name="doctor_id" type="bigint"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1445167488834-2">
+      <addForeignKeyConstraint baseColumnNames="doctor_id"
+                               baseTableName="TREATMENT"
+                               constraintName="FK_o257nok6463qmc7o3beqyuwln"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="JHI_USER"/>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1445167488834-3">
+      <dropUniqueConstraint constraintName="testentity4_id" tableName="TESTENTITY5"/>
+   </changeSet>
+</databaseChangeLog>

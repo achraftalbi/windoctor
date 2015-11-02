@@ -1,23 +1,17 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('Event_reasonController', function ($scope, Event_reason, Event_reasonSearch, ParseLinks) {
+    .controller('Event_reasonController', function ($scope, Event_reason, Event_reasonSearch) {
         $scope.event_reasons = [];
-        $scope.page = 1;
-        $scope.loadAll = function () {
-            Event_reason.query({page: $scope.page, per_page: 5}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.event_reasons = result;
+        $scope.loadAll = function() {
+            Event_reason.query(function(result) {
+               $scope.event_reasons = result;
             });
-        };
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            $scope.loadAll();
         };
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Event_reason.get({id: id}, function (result) {
+            Event_reason.get({id: id}, function(result) {
                 $scope.event_reason = result;
                 $('#deleteEvent_reasonConfirmation').modal('show');
             });
@@ -33,10 +27,10 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            Event_reasonSearch.query({query: $scope.searchQuery}, function (result) {
+            Event_reasonSearch.query({query: $scope.searchQuery}, function(result) {
                 $scope.event_reasons = result;
-            }, function (response) {
-                if (response.status === 404) {
+            }, function(response) {
+                if(response.status === 404) {
                     $scope.loadAll();
                 }
             });

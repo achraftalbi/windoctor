@@ -1,0 +1,142 @@
+<div ng-show="displayAddEditViewPopup">
+    <form name="editForm" role="form" novalidate show-validation>
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                    ng-click="closeAddEditViewPopup()">&times;</button>
+            <h4 class="modal-title" id="myTreatmentLabel" translate="windoctorApp.treatment.home.createOrEditLabel">
+                Create or edit a Treatment</h4>
+        </div>
+        <div class="modal-body">
+            <jh-alert-error></jh-alert-error>
+
+
+            <div class="form-group">
+                <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
+                <input type="text" class="form-control" name="description" id="field_description"
+                       ng-model="treatment.description"
+                       ng-maxlength="1000">
+
+                <div ng-show="editForm.description.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
+                       translate-value-max="1000">
+                        This field cannot be longer than 1000 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label translate="windoctorApp.treatment.eventReason"
+                           for="field_eventReason">eventReason</label>
+
+                    <select class="form-control" id="field_eventReason" name="eventReason"
+                            ng-change="valueChanged()" ng-show="!displayTreatmentView"
+                            ng-model="treatment.eventReason"
+                            ng-options="event_reason as event_reason.description for event_reason in event_reasons track by event_reason.id">
+                        <option value=""></option>
+                    </select>
+                    <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.eventReason.description}}</span>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label translate="windoctorApp.treatment.defaultPrice">Default price</label>
+                    <span ng-show="displayTreatmentView"
+                          class="form-control-static">{{treatment.eventReason.price}}</span>
+
+                    <div ng-show="eventReasonSelected && !displayTreatmentView">
+                        <span>{{treatment.eventReason.price}}</span></div>
+                    <div ng-show="!eventReasonSelected && !displayTreatmentView"><span
+                        translate="windoctorApp.treatment.chooseReason">Choose a reason</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label translate="windoctorApp.treatment.price" for="field_price">Price</label>
+                    <input type="number" class="form-control" name="price" id="field_price"
+                           ng-model="treatment.price" ng-show="!displayTreatmentView"
+                           required min="0" max="10000000">
+                    <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.price}}</span>
+
+                    <div ng-show="editForm.price.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.price.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.price.$error.min" translate="entity.validation.min"
+                           translate-value-min="0">
+                            This field should be more than 0.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.price.$error.max" translate="entity.validation.max"
+                           translate-value-max="10000000">
+                            This field cannot be more than 10000000.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.price.$error.number" translate="entity.validation.number">
+                            This field should be a number.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label translate="windoctorApp.treatment.paid_price" for="field_paid_price">Paid_price</label>
+                    <input type="number" class="form-control" name="paid_price" id="field_paid_price"
+                           ng-model="treatment.paid_price" ng-show="!displayTreatmentView"
+                           required min="0" max="10000000">
+                    <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.paid_price}}</span>
+
+                    <div ng-show="editForm.paid_price.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.paid_price.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.paid_price.$error.min" translate="entity.validation.min"
+                           translate-value-min="0">
+                            This field should be more than 0.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.paid_price.$error.max" translate="entity.validation.max"
+                           translate-value-max="10000000">
+                            This field cannot be more than 10000000.
+                        </p>
+
+                        <p class="help-block"
+                           ng-show="editForm.paid_price.$error.number" translate="entity.validation.number">
+                            This field should be a number.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <div ng-show="!treatment.id" class="alert alert-warning">
+                        <span>You must save before manage images radios</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeAddEditViewPopup()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="button" ng-click="saveTreatment()" ng-disabled="editForm.$invalid || editForm.$submitted"
+                    ng-show="!displayTreatmentView"
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+            </button>
+            <button type="button" ng-click="saveTreatmentAndClose()" ng-show="!displayTreatmentView"
+                    ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save and close</span>
+            </button>
+        </div>
+    </form>
+    <ng-include src="'scripts/app/entities/calendar/calendar-treatments-attachments.html'"></ng-include>
+</div>

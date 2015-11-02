@@ -6,6 +6,13 @@
             "otherEntityName": "event",
             "relationshipType": "one-to-many",
             "otherEntityRelationshipName": "eventReason"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "treatment",
+            "otherEntityName": "treatment",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "eventReason"
         }
     ],
     "fields": [

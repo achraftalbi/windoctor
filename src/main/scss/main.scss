@@ -149,4 +149,24 @@ ul#strength {
     padding: 0;
     margin: 0;
 }
+.font-bold {
+    font-weight: bold;
+}
 /* end of Custom alerts for notification */
+/* Custom panel */
+.panel-empty{
+    padding-left:15px;
+    padding-right:15px;
+    padding-top:0px;
+    padding-bottom:0px;
+    border:0px;
+    -webkit-box-shadow: 0 ;
+    box-shadow: 0 ;
+}
+
+.panel-empty .panel-heading{
+    border: 1px solid #dddddd;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* end of Custom panel*/

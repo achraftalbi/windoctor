@@ -18,6 +18,8 @@
             "event_date": "Event_date",
             "description": "Description",
             "eventStatus": "EventStatus",
+            "treatments": "Actes",
+            "manageTreatments": "Gestion des actes",
             "eventReason": "EventReason"
         }
     }

@@ -54,14 +54,15 @@ angular.module('windoctorApp')
                 data: {
                     roles: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                onEnter: ['$stateParams', '$state', '$modal','$filter', function($stateParams, $state, $modal,$filter) {
                     $modal.open({
                         templateUrl: 'scripts/app/entities/calendar/calendar-events.html',
                         controller: 'CalendarEventsController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                console.log("selectedDate 2 "+$stateParams.selectedDate);
+                                $stateParams.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
+                                console.log("selectedDate rows "+$stateParams.selectedDate);
                                 return {description: null, id: null};
                             }
                         }
@@ -94,6 +95,37 @@ angular.module('windoctorApp')
                         return Patient.get({id : $stateParams.id});
                     }]
                 }
+            })
+            .state('calendar.treatment', {
+                parent: 'calendar',
+                url: '/treatments/{eventId}/{selectedDate}',
+                data: {
+                    roles: ['ROLE_USER'],
+                    pageTitle: 'windoctorApp.treatment.home.title'
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/calendar/calendar-treatments.html',
+                        controller: 'CalendarTreatmentController',
+                        size: 'lg',
+                        resolve: {
+                            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                                $translatePartialLoader.addPart('treatment');
+                                $translatePartialLoader.addPart('attachment');
+                                $translatePartialLoader.addPart('global');
+                                return $translate.refresh();
+                            }],
+                            entity: function () {
+                                console.log("selectedDate 2 "+$stateParams.selectedDate);
+                                return {description: null, id: null};
+                            }
+                        }
+                    }).result.then(function(result) {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
+                        }, function() {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
+                        })
+                }]
             })
             .state('calendar.newEvent', {
                 parent: 'calendar',
