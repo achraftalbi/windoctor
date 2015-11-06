@@ -110,13 +110,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .disable()
         .and()
             .authorizeRequests()
-            .antMatchers("/api/register").permitAll()
-            .antMatchers("/api/activate").permitAll()
+            //public acess
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/account/reset_password/init").permitAll()
             .antMatchers("/api/account/reset_password/finish").permitAll()
+
+            .antMatchers("/api/account/sessions").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/register").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/activate").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/audits/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            //begin : windoctor security rules management
+            .antMatchers("/api/structures/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/attachments/**").hasAuthority(AuthoritiesConstants.DOCTOR)
+            .antMatchers("/api/categorys/**").hasAuthority(AuthoritiesConstants.DOCTOR)
+            .antMatchers("/api/products/**").hasAuthority(AuthoritiesConstants.DOCTOR)
+            .antMatchers("/api/users/**").hasAuthority(AuthoritiesConstants.DOCTOR)
+            .antMatchers("/api/patients/**").hasAuthority(AuthoritiesConstants.DOCTOR)
+            //end
             .antMatchers("/api/**").authenticated()
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)

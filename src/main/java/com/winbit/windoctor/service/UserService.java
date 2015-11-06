@@ -133,7 +133,7 @@ public class UserService {
     }
 
     public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
-                                         String langKey, Boolean blocked, Boolean activated, byte [] picture,Long structureId) {
+                                         String langKey, Boolean blocked, Boolean activated, byte [] picture) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
@@ -146,6 +146,7 @@ public class UserService {
         patient.setLastName(lastName);
         patient.setEmail(email);
         patient.setLangKey(langKey);
+        Long structureId = sessionService.getCurrentStructure();
         if(structureId != null){
             patient.setStructure(structureRepository.findOneById(structureId));
         }
@@ -347,22 +348,25 @@ public class UserService {
 
     /**
      * Find all patient of the current structure
-     * @param structureId - current structure id
      * @param pageable
      * @return patients list
      */
-    public Page<User> findAllPatients(Long structureId, Pageable pageable){
-        return userRepository.findAll(AuthoritiesConstants.PATIENT, structureId, pageable);
+    public Page<User> findAllPatients(Pageable pageable){
+        return getUsersByRole(AuthoritiesConstants.PATIENT, pageable);
     }
 
     public Page<User> findAllDoctors(Pageable pageable){
+        return getUsersByRole(AuthoritiesConstants.DOCTOR, pageable);
+    }
+
+    private Page<User> getUsersByRole(String role, Pageable pageable){
         Long structureId = sessionService.getCurrentStructure();
         if(structureId != null) {
-            // doctor case : get only doctors of the current structure
-            return userRepository.findAll(AuthoritiesConstants.DOCTOR, structureId, pageable);
+            // role case : get only doctors of the current structure
+            return userRepository.findAll(role, structureId, pageable);
         } else {
             // admin case : get all doctors
-            return userRepository.findAll(AuthoritiesConstants.DOCTOR, pageable);
+            return userRepository.findAll(role, pageable);
         }
     }
 

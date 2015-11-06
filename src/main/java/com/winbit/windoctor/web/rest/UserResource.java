@@ -27,6 +27,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
  */
 @RestController
 @RequestMapping("/api")
+@Deprecated
 public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);

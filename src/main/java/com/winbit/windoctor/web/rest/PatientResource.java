@@ -51,9 +51,6 @@ public class PatientResource {
     @Inject
     private UserSearchRepository userSearchRepository;
 
-    @Inject
-    private SessionService sessionService;
-
     /**
      * POST  /patients -> Create a new patient.
      */
@@ -70,7 +67,7 @@ public class PatientResource {
                     .orElseGet(() -> {
                         User user = userService.createPatientInformation(patient.getLogin(), patient.getPassword(),
                             patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
-                            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture(), sessionService.getCurrentStructure());
+                            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture());
                         userSearchRepository.save(user);
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -107,8 +104,7 @@ public class PatientResource {
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page;
-        Long currentStructure = sessionService.getCurrentStructure();
-        page = userService.findAllPatients(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
+        page = userService.findAllPatients(PaginationUtil.generatePageRequest(offset, limit));
 
         for (User user:((List<User>)page.getContent())){
             user.setNoEvents(user.getEvents()==null || user.getEvents().size()==0);
