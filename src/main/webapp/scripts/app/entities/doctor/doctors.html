@@ -80,7 +80,7 @@
                     <td>
                         <a ui-sref="structure.detail({id:doctor.structure.id})">{{doctor.structure.name}}</a>
                     </td>
-                    <td>
+                    <td has-role="ROLE_ADMIN">
                         <button type="submit"
                                 ui-sref="doctor.detail({id:doctor.id})"
                                 class="btn btn-info btn-sm">

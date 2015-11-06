@@ -60,6 +60,9 @@ public class UserService {
     @Inject
     private StructureRepository structureRepository;
 
+    @Inject
+    private SessionService sessionService;
+
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         userRepository.findOneByActivationKey(key)
@@ -353,6 +356,14 @@ public class UserService {
     }
 
     public Page<User> findAllDoctors(Pageable pageable){
-        return userRepository.findAll(AuthoritiesConstants.DOCTOR, pageable);
+        Long structureId = sessionService.getCurrentStructure();
+        if(structureId != null) {
+            // doctor case : get only doctors of the current structure
+            return userRepository.findAll(AuthoritiesConstants.DOCTOR, structureId, pageable);
+        } else {
+            // admin case : get all doctors
+            return userRepository.findAll(AuthoritiesConstants.DOCTOR, pageable);
+        }
     }
+
 }
