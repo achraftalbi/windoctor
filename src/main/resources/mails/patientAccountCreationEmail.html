@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.patient.creation.title}">Windoctor patient creation account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.patient.creation.greeting(${user.firstName}, ${user.lastName})}">
+    Dear
+</p>
+<p th:text="#{email.patient.creation.body(${structure.name})}">
+    Your WinDoctor account has been created by
+</p>
+
+<p>
+    <span th:text="#{email.footer.regards}">Regards, </span>
+    <br/>
+    <em th:text="#{email.footer.signature}">WinDoctor.</em>
+</p>
+</body>
+</html>

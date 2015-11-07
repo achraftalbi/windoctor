@@ -1,6 +1,9 @@
 package com.winbit.windoctor.service;
 
+import com.winbit.windoctor.domain.MailSetting;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
+import com.winbit.windoctor.repository.StructureRepository;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,12 @@ public class MailService {
 
     @Inject
     private SpringTemplateEngine templateEngine;
+
+    @Inject
+    private SessionService sessionService;
+
+    @Inject
+    private StructureRepository structureRepository;
 
     /**
      * System default email address that sends the e-mails.
@@ -94,5 +103,22 @@ public class MailService {
         String content = templateEngine.process("passwordResetEmail", context);
         String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendPatientCreationAccountEmail(User user,Structure structure) {
+        if(structure != null){
+            MailSetting ms = sessionService.getMailSetting(structure.getId());
+            if(ms != null && Boolean.TRUE.equals(ms.getPatientCreationAccountMail())){
+                log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
+                Locale locale = Locale.forLanguageTag("fr");
+                Context context = new Context(locale);
+                context.setVariable("user", user);
+                context.setVariable("structure", structure);
+                String content = templateEngine.process("patientAccountCreationEmail", context);
+                String subject = messageSource.getMessage("email.patient.creation.title", null, locale);
+                sendEmail(user.getEmail(), subject, content, false, true);
+            }
+        }
     }
 }

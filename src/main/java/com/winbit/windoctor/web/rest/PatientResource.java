@@ -7,6 +7,7 @@ import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
@@ -69,6 +70,7 @@ public class PatientResource {
                             patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
                             patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture());
                         userSearchRepository.save(user);
+
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
                     })

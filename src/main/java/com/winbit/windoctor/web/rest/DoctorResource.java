@@ -7,6 +7,7 @@ import com.winbit.windoctor.repository.DoctorRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.DoctorSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.DoctorDTO;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
@@ -57,6 +59,9 @@ public class DoctorResource {
     @Inject
     private SessionService sessionService;
 
+    @Inject
+    MailService mailService;
+
     /**
      * POST  /doctors -> Create a new doctor.
      */
@@ -65,7 +70,7 @@ public class DoctorResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<?> create(@Valid @RequestBody DoctorDTO doctor,HttpSession session) throws URISyntaxException {
+    public ResponseEntity<?> create(HttpServletRequest request, @Valid @RequestBody DoctorDTO doctor,HttpSession session) throws URISyntaxException {
         log.debug("REST request to save Doctor : {}", doctor);
 
         return userRepository.findOneByLogin(doctor.getLogin())
@@ -76,10 +81,18 @@ public class DoctorResource {
                         User user = userService.createDoctorInformation(doctor.getLogin(), doctor.getPassword(),
                             doctor.getFirstName(), doctor.getLastName(), doctor.getEmail().toLowerCase(),
                             doctor.getLangKey(), doctor.getBlocked(), doctor.getActivated(), doctor.getPicture(), doctor.getStructure().getId());
+                        String baseUrl = request.getScheme() + // "http"
+                            "://" +                                // "://"
+                            request.getServerName() +              // "myhost"
+                            ":" +                                  // ":"
+                            request.getServerPort();               // "80"
+
+                        mailService.sendActivationEmail(user, baseUrl);
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
                     })
             );
+
     }
 
     /**

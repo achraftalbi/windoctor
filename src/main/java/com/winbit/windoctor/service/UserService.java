@@ -63,6 +63,9 @@ public class UserService {
     @Inject
     private SessionService sessionService;
 
+    @Inject
+    private MailService mailService;
+
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         userRepository.findOneByActivationKey(key)
@@ -169,6 +172,8 @@ public class UserService {
         userRepository.save(patient);
         userSearchRepository.save(patient);
         log.debug("Created Information for Patient: {}", patient);
+        // send mail
+        mailService.sendPatientCreationAccountEmail(patient, patient.getStructure());
         return patient;
     }
 

@@ -21,6 +21,7 @@
                 "doctor": "Doctor",
                 "treatment": "Treatment",
                 "attachment": "Attachment",
+                "mailSetting": "MailSetting",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
