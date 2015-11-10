@@ -25,24 +25,25 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 
     @NotNull
-    @Size(min = 1, max = 100)        
+    @Size(min = 1, max = 100)
     @Column(name = "name", length = 100, nullable = false)
     private String name;
-    
+
+    @Size(max = 1000000)
     @Lob
     @Column(name = "image")
     private byte[] image;
 
     @NotNull
-    @Min(value = 0)        
+    @Min(value = 0)
     @Column(name = "price", precision=10, scale=2, nullable = false)
     private BigDecimal price;
 
     @NotNull
-    @Min(value = 0)        
+    @Min(value = 0)
     @Column(name = "amount", precision=10, scale=2, nullable = false)
     private BigDecimal amount;
 

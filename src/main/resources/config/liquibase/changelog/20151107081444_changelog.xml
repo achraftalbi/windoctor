@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1446884134339-1">
+       <addColumn tableName="STRUCTURE">
+           <column name="MAX_EVENTS_PATIENT_CAN_ADD" type="decimal(10)" defaultValue="3">
+               <constraints nullable="false" />
+           </column>
+       </addColumn>
+       <addColumn tableName="JHI_USER">
+           <column name="CURRENT_USER_PATIENT" type="bit"/>
+       </addColumn>
+       <addColumn tableName="JHI_USER">
+           <column name="MAX_EVENTS_REACHED" type="bit"/>
+       </addColumn>
+   </changeSet>
+</databaseChangeLog>

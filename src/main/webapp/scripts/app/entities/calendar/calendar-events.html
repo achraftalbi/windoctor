@@ -7,10 +7,17 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-primary" ng-click="cancelEventRows()"
-                                    ui-sref="calendar.newEvent({selectedDate:selectedDate})">
+                            <button class="btn btn-primary" ng-click="cancelEventRows()" ng-disabled="!userCanAddEvent"
+                                    ui-sref="calendar.newEventAppointment({selectedDate:selectedDate})">
                                 <span class="glyphicon glyphicon-flash"></span> <span
-                                translate="windoctorApp.calendar.home.createLabel">Create a new Event</span>
+                                translate="windoctorApp.calendar.home.createAppointmentLabel">Create a new Event</span>
+                            </button>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" ng-click="cancelEventRows()" ng-show="!account.currentUserPatient"
+                                    ui-sref="calendar.newEventVisit({selectedDate:selectedDate})">
+                                <span class="glyphicon glyphicon-flash"></span> <span
+                                translate="windoctorApp.calendar.home.createVisitLabel">Create a new Visit</span>
                             </button>
                         </div>
                         <div class="col-md-8">
@@ -42,6 +49,7 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
+                            <th translate="windoctorApp.calendar.type">Type</th>
                             <th translate="windoctorApp.calendar.patient">Patient</th>
                             <th translate="windoctorApp.calendar.event_date">Event_date</th>
                             <th translate="windoctorApp.calendar.description">Description</th>
@@ -53,8 +61,11 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="event in events">
-                            <td><a ui-sref="calendar.patientDetail({id:event.user.id,selectedDate:selectedDate})">{{event.user.firstName}}
-                                {{event.user.lastName}}</a></td>
+                            <td>
+                                <span ng-show="event.thisEventISAppointment" translate="windoctorApp.calendar.appointment">Appointment</span>
+                                <span ng-show="!event.thisEventISAppointment" translate="windoctorApp.calendar.visit">Visite</span>
+                            </td>
+                            <td>{{event.user.firstName}} {{event.user.lastName}}</a></td>
                             <td>{{event.event_date | date:'h:mm:ss a' : '+0100'}}</td>
                             <td>{{event.description}}</td>
                             <td><a ng-click="cancelEventRows()"
@@ -67,13 +78,13 @@
                                 <span>{{event.eventStatus.description}}</span>
                             </td>
                             <td>
-                                <button type="submit" ng-click="cancelEventRows()"
+                                <button type="submit" ng-click="cancelEventRows()"  ng-disabled="account.currentUserPatient && account.id!==event.user.id"
                                         ui-sref="calendar.edit({id:event.id,selectedDate:selectedDate})"
                                         class="btn btn-primary btn-sm">
                                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
                                     translate="entity.action.edit"> Edit</span>
                                 </button>
-                                <button type="submit"
+                                <button type="submit" ng-disabled="account.currentUserPatient"
                                         ng-click="delete(event.id)"
                                         class="btn btn-danger btn-sm">
                                     <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span

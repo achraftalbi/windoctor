@@ -114,6 +114,28 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "NO_EVENTS")
     private Boolean noEvents;
 
+    @Column(name = "CURRENT_USER_PATIENT")
+    private Boolean currentUserPatient;
+
+    @Column(name = "MAX_EVENTS_REACHED")
+    private Boolean maxEventsReached;
+
+    public Boolean getCurrentUserPatient() {
+        return currentUserPatient;
+    }
+
+    public void setCurrentUserPatient(Boolean currentUserPatient) {
+        this.currentUserPatient = currentUserPatient;
+    }
+
+    public Boolean getMaxEventsReached() {
+        return maxEventsReached;
+    }
+
+    public void setMaxEventsReached(Boolean maxEventsReached) {
+        this.maxEventsReached = maxEventsReached;
+    }
+
     public Set<Treatment> getDoctorTreatments() {
         return doctorTreatments;
     }

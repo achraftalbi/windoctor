@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarTreatmentController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch,
-                                                         ParseLinks, $filter, Event_reason, Event, Patient, Product,Attachment) {
+    .controller('CalendarTreatmentController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
+                                                         ParseLinks, $filter, Event_reason, Event, Patient,Attachment) {
         $scope.treatments = [];
         $scope.page = 1;
         $scope.attachmentPage = 1;
         $scope.treatment = null;
         $scope.event = null;
         $scope.patient = null;
-        $scope.product = null;
+        $scope.doctors = null;
+        $scope.defaultDoctor = null;
         $scope.treatmentToDelete = null;
 
         $scope.displayTreatments = true;
@@ -19,6 +20,7 @@ angular.module('windoctorApp')
         $scope.displayAllPatientTreatments = false;
         $scope.displayTreatmentToDelete = false;
         $scope.event_reasons = null;
+        $scope.defaultEventReason = null;
         $scope.selectedDate = null;
         $scope.eventReasonSelected = false;
 
@@ -26,6 +28,7 @@ angular.module('windoctorApp')
         $scope.dispalyAttachments = false;
         $scope.attachments = null;
         $scope.attachment = null;
+        $scope.viewSelectedAttachment = false;
 
         // Display treatments Begin
         $scope.loadAll = function () {
@@ -42,13 +45,6 @@ angular.module('windoctorApp')
                         if ($scope.event === null) {
                             Event.get({id: $stateParams.eventId}, function (result) {
                                 $scope.event = result;
-                                if ($scope.patient === null) {
-                                    Product.get({id: 1}, function (result) {
-                                        //$scope.patient = result;
-                                        $scope.product = result;
-                                    });
-                                }
-
                             });
                         }
                     }
@@ -107,7 +103,7 @@ angular.module('windoctorApp')
         };
 
         $scope.clear = function () {
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null, id: null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null};
         };
         $scope.clearDeleteTreatment = function () {
             $scope.treatmentToDelete = {
@@ -149,6 +145,8 @@ angular.module('windoctorApp')
                 price: null,
                 paid_price: null,
                 id: null,
+                eventReason : $scope.defaultEventReason,
+                doctor:$scope.defaultDoctor,
                 event: {id: $stateParams.eventId}
             };
             $scope.dialogPopupTreatment();
@@ -156,24 +154,44 @@ angular.module('windoctorApp')
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
             $scope.dialogPopupTreatment();
-            $scope.valueChanged();
             $scope.loadAllAttachments(1);
         };
         $scope.dialogPopupTreatment = function (treatment) {
             $scope.displayAddEditViewPopup = true;
             $scope.displayTreatments = false;
-            $scope.initEventReason();
+            $scope.initEventReasons();
+            $scope.initDoctors();
         }
-        $scope.initEventReason = function () {
+        $scope.initEventReasons = function () {
             if ($scope.event_reasons === null) {
-                $scope.event_reasons = Event_reason.query();
+                Event_reason.query(function (result, headers) {
+                        $scope.event_reasons = result;
+                        if($scope.event_reasons!==null && $scope.event_reasons.length > 0){
+                            $scope.defaultEventReason = $scope.event_reasons[0]
+                            console.log(" $scope.defaultEventReason a "+$scope.defaultEventReason);
+                        }
+                        if($scope.treatment!==null){
+                            $scope.treatment.eventReason = $scope.defaultEventReason;
+                        }
+                    }
+                );
             }
         }
-        $scope.valueChanged = function () {
-            if ($scope.treatment.eventReason === null) {
-                $scope.eventReasonSelected = false;
-            } else {
-                $scope.eventReasonSelected = true;
+        $scope.initDoctors = function () {
+            if ($scope.doctors === null) {
+                Doctor.query(function (result, headers) {
+                        $scope.doctors = result;
+                        console.log(" $scope.defaultDoctor 3 "+$scope.defaultDoctor);
+                        if($scope.doctors!==null && $scope.doctors.length > 0){
+                            $scope.defaultDoctor = $scope.doctors[0]
+                            console.log(" $scope.defaultDoctor 4 "+$scope.defaultDoctor);
+                        }
+                        if($scope.treatment!==null){
+                            $scope.treatment.doctor = $scope.defaultDoctor;
+                        }
+                    }
+                );
+
             }
         }
 
@@ -208,9 +226,18 @@ angular.module('windoctorApp')
             $scope.displayTreatments = false;
             $scope.displayTreatments = false;
             $scope.displayTreatmentView = true;
+            $scope.loadAllAttachments(1);
         };
 
-        // Attachments functions
+        /********************************************************************************/
+        /********************************************************************************/
+        /***********************                                       ******************/
+        /***********************          Attachments functions        ******************/
+        /***********************                                       ******************/
+        /********************************************************************************/
+        /********************************************************************************/
+        /********************************************************************************/
+
         $scope.loadAllAttachments = function (attachmentPage){
                 $scope.attachmentPage = attachmentPage;
                 Attachment.query({treatmentId:$scope.treatment.id,page: $scope.attachmentPage, per_page: 5}, function (result, headers) {
@@ -264,6 +291,7 @@ angular.module('windoctorApp')
         $scope.addNewAttachment = function () {
             $scope.attachment = {description: null, image: null, id: null,treatment: {id: $scope.treatment.id}};
             $scope.dialogPopupAttachment();
+            $scope.viewSelectedAttachment = false;
         };
         $scope.editAttachment = function (attachment) {
             $scope.attachment = attachment;
@@ -281,11 +309,32 @@ angular.module('windoctorApp')
 
         $scope.saveAttachment = function () {
             if ($scope.attachment.id != null) {
-                $scope.attachment = Treatment.update($scope.attachment, onSaveAttachmentFinished);
+                $scope.attachment = Attachment.update($scope.attachment, onSaveAttachmentFinished);
             } else {
-                $scope.attachment = Treatment.save($scope.attachment, onSaveAttachmentFinished);
+                $scope.attachment = Attachment.save($scope.attachment, onSaveAttachmentFinished);
             }
         };
 
+        $scope.deleteAttachment = function (id) {
+            Attachment.delete({id: id},
+                function () {
+                    $scope.loadAllAttachments($scope.attachmentPage);
+                });
+        };
+        $scope.editAttachment = function (attachment) {
+            $scope.attachment = attachment;
+            $scope.dialogPopupAttachment();
+            $scope.viewSelectedAttachment = false;
+        };
+        $scope.viewAttachment = function (attachment) {
+            $scope.attachment = attachment;
+            $scope.dialogPopupAttachment();
+            $scope.viewSelectedAttachment = true;
+        };
+        $scope.clearAttachmentDialog = function () {
+            $scope.attachment = {description: null, image: null, id: null,treatment: null};
+            $scope.displayAddEditViewAttachmentPopup = false;
+            $scope.viewSelectedAttachment = false;
+        };
     })
 ;

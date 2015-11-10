@@ -14,7 +14,7 @@
             },
             "description": "Description",
             "price": "price",
-s            "eventReason": "EventReason",
+            "eventReason": "EventReason",
             "treatment": "Treatment"
         }
     }

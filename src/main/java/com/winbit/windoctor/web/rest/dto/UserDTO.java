@@ -14,6 +14,8 @@ public class UserDTO {
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 100;
 
+    private Long id;
+
     @Pattern(regexp = "^[a-z0-9]*$")
     @NotNull
     @Size(min = 1, max = 50)
@@ -45,6 +47,10 @@ public class UserDTO {
     @Size(max = 1000000)
     private byte[] picture;
 
+    private Boolean currentUserPatient;
+
+    private Boolean maxEventsReached;
+
     public UserDTO() {
     }
 
@@ -62,8 +68,9 @@ public class UserDTO {
         this.activated = activated;
     }
 
-    public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
-                   List<String> roles) {
+    public UserDTO(Long id, String login, String password, String firstName, String lastName, String email, String langKey,
+                   List<String> roles, Boolean currentUserPatient, Boolean maxEventsReached) {
+        this.id = id;
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -71,6 +78,19 @@ public class UserDTO {
         this.email = email;
         this.langKey = langKey;
         this.roles = roles;
+        this.currentUserPatient = currentUserPatient;
+        this.maxEventsReached = maxEventsReached;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Boolean getCurrentUserPatient() {
+        return currentUserPatient;
+    }
+
+    public Boolean getMaxEventsReached() { return maxEventsReached;
     }
 
     public byte[] getPicture() {
@@ -116,13 +136,13 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-        "login='" + login + '\'' +
-        ", password='" + password + '\'' +
-        ", firstName='" + firstName + '\'' +
-        ", lastName='" + lastName + '\'' +
-        ", email='" + email + '\'' +
-        ", langKey='" + langKey + '\'' +
-        ", roles=" + roles +
-        '}';
+            "login='" + login + '\'' +
+            ", password='" + password + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", langKey='" + langKey + '\'' +
+            ", roles=" + roles +
+            '}';
     }
 }

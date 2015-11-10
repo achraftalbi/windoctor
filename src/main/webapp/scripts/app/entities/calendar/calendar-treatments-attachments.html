@@ -8,38 +8,11 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-4">
-                        <button class="btn btn-primary" ng-click="addNewAttachment()">
+                        <button class="btn btn-primary" ng-click="addNewAttachment()"
+                                ng-show="!displayTreatmentView" >
                             <span class="glyphicon glyphicon-flash"></span> <span
                             translate="windoctorApp.attachment.home.createLabel">Create a new Attachment</span>
                         </button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="deleteAttachmentConfirmation">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <form name="deleteForm" ng-submit="confirmDelete(attachment.id)">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                        ng-click="clear()">&times;</button>
-                                <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
-                            </div>
-                            <div class="modal-body">
-                                <p translate="windoctorApp.attachment.delete.question"
-                                   translate-values="{id: '{{attachment.id}}'}">Are you sure you want to delete this
-                                    Attachment?</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-                                    translate="entity.action.cancel">Cancel</span>
-                                </button>
-                                <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
-                                    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
-                                    translate="entity.action.delete">Delete</span>
-                                </button>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
@@ -65,19 +38,19 @@
                         </td>
                         <td>
                             <button type="submit"
-                                    ui-sref="attachment.detail({id:attachment.id})"
+                                    ng-click="viewAttachment(attachment)"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span
                                 translate="entity.action.view"> View</span>
                             </button>
-                            <button type="submit"
-                                    ui-sref="attachment.edit({id:attachment.id})"
+                            <button type="submit" ng-show="!displayTreatmentView"
+                                    ng-click="editAttachment(attachment)"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
                                 translate="entity.action.edit"> Edit</span>
                             </button>
-                            <button type="submit"
-                                    ng-click="delete(attachment.id)"
+                            <button type="button" ng-show="!displayTreatmentView"
+                                    ng-click="deleteAttachment(attachment.id)"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
                                 translate="entity.action.delete"> Delete</span>
@@ -111,26 +84,22 @@
         </div>
         <div ng-show="displayAddEditViewAttachmentPopup">
 
-            <form name="editAttachmentForm" role="form" novalidate show-validation>
+            <form name="editAttachmentForm" role="form" id="editAttachmentFormId" novalidate show-validation>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="clear()">&times;</button>
+                            ng-click="clearAttachmentDialog()">&times;</button>
                     <h4 class="modal-title" id="myAttachmentLabel" translate="windoctorApp.attachment.home.createOrEditLabel">Create or edit a Attachment</h4>
                 </div>
                 <div class="modal-body">
-                    <jh-alert-error></jh-alert-error>
-                    <div class="form-group">
-                        <label for="id" translate="global.field.id">ID</label>
-                        <input type="text" class="form-control" id="id" name="id"
-                               ng-model="attachment.id" readonly>
-                    </div>
+                    <jh-alert-error ng-show="!viewSelectedAttachment"></jh-alert-error>
 
                     <div class="form-group">
                         <label translate="windoctorApp.attachment.description" for="field_description">Description</label>
                         <input type="text" class="form-control" name="description" id="field_description"
-                               ng-model="attachment.description"
+                               ng-model="attachment.description" ng-show="!viewSelectedAttachment"
                                ng-maxlength="400">
+                        <span ng-show="viewSelectedAttachment" class="form-control-static">{{attachment.description}}</span>
 
                         <div ng-show="editAttachmentForm.description.$invalid">
                             <p class="help-block"
@@ -141,7 +110,7 @@
                     </div>
                     <div class="form-group" ngf-drop ngf-change="setImage($files, attachment)" ngf-accept="'image/*'">
                         <label translate="windoctorApp.attachment.image" for="field_image">Image</label>
-                        <div>
+                        <div ng-show="!viewSelectedAttachment">
                             <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" style="max-height: 100px;" ng-if="attachment.image"/>
                             <div class="help-block clearfix">
                                 <span class="pull-left">{{byteSize(attachment.image)}}</span>
@@ -157,9 +126,10 @@
                             </button>
                         </div>
                         <input type="hidden" class="form-control" name="image" id="field_image"
-                               ng-model="attachment.image"
+                               ng-model="attachment.image" ng-show="!viewSelectedAttachment"
                                required maxbytes="1000000">
-
+                        <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" ng-show="viewSelectedAttachment"
+                             style="max-width: 100%;" ng-if="attachment.image"/>
                         <div ng-show="editAttachmentForm.image.$invalid">
                             <p class="help-block"
                                ng-show="editAttachmentForm.image.$error.required" translate="entity.validation.required">
@@ -173,16 +143,21 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearAttachmentDialog()">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="button" ng-click="saveAttachment()"
+                    <button type="button" ng-click="saveAttachment()" ng-show="!viewSelectedAttachment"
                             ng-disabled="editAttachmentForm.$invalid || editAttachmentForm.$submitted" class="btn btn-primary">
                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                     </button>
                 </div>
             </form>
-
         </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeAddEditViewPopup()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+            translate="entity.action.close">Close</span>
+        </button>
     </div>
 </div>

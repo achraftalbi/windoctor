@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('windoctorApp').controller('CalendarDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event', 'Status', 'Event_reason', 'Patient', 'ParseLinks', 'PatientSearch',
-        function ($scope, $stateParams, $modalInstance, entity, Event, Status, Event_reason, Patient, ParseLinks, PatientSearch) {
+    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event', 'Status', 'Event_reason', 'Patient', 'ParseLinks', 'PatientSearch','Principal',
+        function ($scope, $stateParams, $modalInstance, entity, Event, Status, Event_reason, Patient, ParseLinks, PatientSearch,Principal) {
 
             $scope.event = entity;
             $scope.statuss = Status.query();
@@ -10,12 +10,19 @@ angular.module('windoctorApp').controller('CalendarDialogController',
             $scope.patients = Patient.query();
             $scope.count = 0;
             $scope.showListPatients = false;
+            $scope.account = null;
             console.log('patients ' + $scope.patients.length)
             $scope.load = function (id) {
                 Event.get({id: id}, function (result) {
                     $scope.event = result;
                 });
             };
+            Principal.identity(true).then(function(account) {
+                $scope.account = account;
+                if($scope.account.currentUserPatient && ($scope.event.user === null || $scope.event.user === undefined)){
+                    $scope.event.user = {id:$scope.account.id,firstName:$scope.account.firstName};
+                }
+            });
 
 
             //Begin Patient pages treatement

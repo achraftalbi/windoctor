@@ -100,7 +100,7 @@ angular.module('windoctorApp')
                 parent: 'calendar',
                 url: '/treatments/{eventId}/{selectedDate}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    roles: ['ROLE_DOCTOR'],
                     pageTitle: 'windoctorApp.treatment.home.title'
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
@@ -127,7 +127,7 @@ angular.module('windoctorApp')
                         })
                 }]
             })
-            .state('calendar.newEvent', {
+            .state('calendar.newEventAppointment', {
                 parent: 'calendar',
                 url: '/calendar-dialog/{selectedDate}',
                 data: {
@@ -141,7 +141,31 @@ angular.module('windoctorApp')
                         resolve: {
                             entity: function () {
                                 console.log("selectedDate 3-3 "+$stateParams.selectedDate);
-                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null};
+                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null,thisEventISAppointment:true};
+                            }
+                        }
+                    }).result.then(function(result) {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
+                        }, function() {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
+                        })
+                }]
+            })
+            .state('calendar.newEventVisit', {
+                parent: 'calendar',
+                url: '/calendar-dialog/{selectedDate}',
+                data: {
+                    roles: ['ROLE_DOCTOR'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/calendar/calendar-dialog.html',
+                        controller: 'CalendarDialogController',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                console.log("selectedDate 3-3 "+$stateParams.selectedDate);
+                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null,thisEventISAppointment:false};
                             }
                         }
                     }).result.then(function(result) {

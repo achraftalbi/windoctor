@@ -50,6 +50,9 @@ public class Event implements Serializable {
     @ManyToOne
     private Event_reason eventReason;
 
+    @Column(name = "THIS_EVENT_IS_APPOINTMENT")
+    private Boolean thisEventISAppointment;
+
     @ManyToOne
     private User user;
 
@@ -57,6 +60,8 @@ public class Event implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Treatment> treatments = new HashSet<>();
+
+
 
     public Set<Treatment> getTreatments() {
         return treatments;
@@ -130,6 +135,15 @@ public class Event implements Serializable {
         return true;
     }
 
+    public Boolean getThisEventISAppointment() {
+        return thisEventISAppointment;
+    }
+
+    public void setThisEventISAppointment(Boolean thisEventISAppointment) {
+        this.thisEventISAppointment = thisEventISAppointment;
+    }
+
+
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
@@ -141,6 +155,7 @@ public class Event implements Serializable {
                 "id=" + id +
                 ", event_date='" + event_date + "'" +
                 ", description='" + description + "'" +
+                ", thisEventISAppointment='" + thisEventISAppointment + "'" +
                 '}';
     }
 }

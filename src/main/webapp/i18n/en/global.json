@@ -21,6 +21,8 @@
                 "doctor": "Doctor",
                 "treatment": "Treatment",
                 "attachment": "Attachment",
+                "dashboard": "Dashboard",
+                "calendar": "Calendar",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -93,6 +95,7 @@
             "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
+            "close": "Close",
             "delete": "Delete",
             "edit": "Edit",
             "select": "Select",

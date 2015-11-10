@@ -1,7 +1,7 @@
 <div ng-show="displayTreatments">
     <div>
         <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
-            <form name="displayTreatmentForm" role="form" novalidate show-validation>
+            <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form" novalidate show-validation>
                 <h2 translate="windoctorApp.treatment.home.title">Treatments</h2>
                 <jh-alert></jh-alert>
                 <div class="container">
@@ -63,8 +63,8 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <img data-ng-src="{{'data:image/*;base64,' + product.image}}"
-                                                 style="max-width: 100%;" ng-if="product.image"/>
+                                            <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
+                                                 style="max-width: 100%;" ng-if="event.user.picture"/>
                                         </td>
                                     </tr>
                                     <tr>

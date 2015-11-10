@@ -21,6 +21,7 @@
             "defaultPrice": "Prix proposer",
             "paid_price": "Paid_price",
             "attachment": "Attachment",
+            "doctor": "Docteur",
             "eventReason": "EventReason"
         }
     }

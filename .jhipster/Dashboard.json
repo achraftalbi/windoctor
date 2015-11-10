@@ -1,0 +1,23 @@
+{
+    "relationships": [],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "value",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "descriptionEn",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "descriptionFr",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20151110082522",
+    "dto": "no",
+    "pagination": "pagination"
+}

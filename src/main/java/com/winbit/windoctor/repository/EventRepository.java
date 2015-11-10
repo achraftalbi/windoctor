@@ -14,4 +14,6 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event,Long> {
     @Query("select e from Event e where e.event_date between ?1 and ?2")
     Page<Event> findAll(DateTime selectedDate, DateTime segondDate, Pageable var1);
+    @Query("select e from Event e where e.user.id = ?1")
+    List<Event> findByPatient(Long patientId);
 }
