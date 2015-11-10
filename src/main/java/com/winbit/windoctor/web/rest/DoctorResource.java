@@ -6,6 +6,8 @@ import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.DoctorRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.DoctorSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.DoctorDTO;
@@ -19,9 +21,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URI;
@@ -54,6 +59,9 @@ public class DoctorResource {
     @Inject
     private SessionService sessionService;
 
+    @Inject
+    MailService mailService;
+
     /**
      * POST  /doctors -> Create a new doctor.
      */
@@ -61,7 +69,8 @@ public class DoctorResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> create(@Valid @RequestBody DoctorDTO doctor,HttpSession session) throws URISyntaxException {
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<?> create(HttpServletRequest request, @Valid @RequestBody DoctorDTO doctor,HttpSession session) throws URISyntaxException {
         log.debug("REST request to save Doctor : {}", doctor);
 
         return userRepository.findOneByLogin(doctor.getLogin())
@@ -72,10 +81,18 @@ public class DoctorResource {
                         User user = userService.createDoctorInformation(doctor.getLogin(), doctor.getPassword(),
                             doctor.getFirstName(), doctor.getLastName(), doctor.getEmail().toLowerCase(),
                             doctor.getLangKey(), doctor.getBlocked(), doctor.getActivated(), doctor.getPicture(), doctor.getStructure().getId());
+                        String baseUrl = request.getScheme() + // "http"
+                            "://" +                                // "://"
+                            request.getServerName() +              // "myhost"
+                            ":" +                                  // ":"
+                            request.getServerPort();               // "80"
+
+                        mailService.sendActivationEmail(user, baseUrl);
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
                     })
             );
+
     }
 
     /**
@@ -85,6 +102,7 @@ public class DoctorResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Doctor> update(@Valid @RequestBody DoctorDTO doctor) throws URISyntaxException {
         log.debug("REST request to update Doctor : {}", doctor);
         User user = userService.updateDoctorInformation(doctor.getLogin(), doctor.getPassword(),
@@ -101,11 +119,11 @@ public class DoctorResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured({AuthoritiesConstants.ADMIN,AuthoritiesConstants.DOCTOR})
     public ResponseEntity<List<User>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page;
-        Long currentStructure = sessionService.getCurrentStructure();
         page = userService.findAllDoctors(PaginationUtil.generatePageRequest(offset, limit));
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/doctors", offset, limit);
@@ -119,6 +137,7 @@ public class DoctorResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<User> get(@PathVariable Long id) {
         log.debug("REST request to get Doctor : {}", id);
         return Optional.ofNullable(userRepository.findOne(id))
@@ -135,6 +154,7 @@ public class DoctorResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Doctor : {}", id);
         userRepository.delete(id);
@@ -149,7 +169,9 @@ public class DoctorResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public List<Doctor> search(@PathVariable String query) {
+        //TODO - mbf-06-11-2015 : fix search
         return null;
     }
 }

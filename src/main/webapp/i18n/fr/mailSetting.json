@@ -1,0 +1,25 @@
+{
+    "windoctorApp": {
+        "mailSetting" : {
+            "home": {
+                "title": "MailSettings",
+                "createLabel": "Créer un nouveau MailSetting",
+                "createOrEditLabel": "Créer ou éditer un MailSetting"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le MailSetting {{ id }} ?"
+            },
+            "detail": {
+                "title": "MailSetting"
+            },
+            "mailOnEventCreation": "MailOnEventCreation",
+            "mailOnEventCancelation": "MailOnEventCancelation",
+            "mailOnEventEdition": "MailOnEventEdition",
+            "remaidingBeforeEventMail": "RemaidingBeforeEventMail",
+            "remaidingAfterEventMail": "RemaidingAfterEventMail",
+            "patientCreationAccountMail": "PatientCreationAccountMail",
+            "structure": "Structure"
+        }
+    }
+}
+

@@ -7,6 +7,7 @@ import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
@@ -51,9 +52,6 @@ public class PatientResource {
     @Inject
     private UserSearchRepository userSearchRepository;
 
-    @Inject
-    private SessionService sessionService;
-
     /**
      * POST  /patients -> Create a new patient.
      */
@@ -70,8 +68,9 @@ public class PatientResource {
                     .orElseGet(() -> {
                         User user = userService.createPatientInformation(patient.getLogin(), patient.getPassword(),
                             patient.getFirstName(), patient.getLastName(), patient.getEmail().toLowerCase(),
-                            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture(), sessionService.getCurrentStructure());
+                            patient.getLangKey(), patient.getBlocked(), patient.getActivated(), patient.getPicture());
                         userSearchRepository.save(user);
+
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
                     })
@@ -107,8 +106,7 @@ public class PatientResource {
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page;
-        Long currentStructure = sessionService.getCurrentStructure();
-        page = userService.findAllPatients(currentStructure, PaginationUtil.generatePageRequest(offset, limit));
+        page = userService.findAllPatients(PaginationUtil.generatePageRequest(offset, limit));
 
         for (User user:((List<User>)page.getContent())){
             user.setNoEvents(user.getEvents()==null || user.getEvents().size()==0);

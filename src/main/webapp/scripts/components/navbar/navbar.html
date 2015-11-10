@@ -46,7 +46,7 @@
                         &#xA0;<span translate="global.menu.entities.structure">structure</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_DOCTOR"><a ui-sref="patient"><span class="glyphicon glyphicon-user" style="color:#009900"></span>
                         &#xA0;<span translate="global.menu.entities.patient">patient</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ADMIN"><a ui-sref="doctor"><span class="glyphicon glyphicon-user" style="color:#BC7A00"></span>
+                        <li ui-sref-active="active" has-role="ROLE_DOCTOR"><a ui-sref="doctor"><span class="glyphicon glyphicon-user" style="color:#BC7A00"></span>
                             &#xA0;<span translate="global.menu.entities.doctor">doctor</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="testEntity2"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.testEntity2">testEntity2</span></a></li>
@@ -63,6 +63,8 @@
                         &#xA0;<span translate="global.menu.entities.attachment">attachment</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="dashboard"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.dashboard">dashboard</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="mailSetting" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.mailSetting">mailSetting</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>
@@ -88,7 +90,7 @@
                         <li ui-sref-active="active" ng-switch-when="false"><a ui-sref="login"><span class="glyphicon glyphicon-log-in"></span>
                             &#xA0;<span translate="global.menu.account.login">Authenticate</span></a></li>
 
-                        <li ui-sref-active="active" ng-switch-when="false"><a ui-sref="register"><span class="glyphicon glyphicon-plus-sign"></span>
+                        <li ui-sref-active="active" ng-switch-when="true" has-role="ROLE_ADMIN"><a ui-sref="register"><span class="glyphicon glyphicon-plus-sign"></span>
                             &#xA0;<span translate="global.menu.account.register">Register</span></a></li>
                     </ul>
                 </li>
