@@ -1,0 +1,9 @@
+id;label;description;content
+1;"PatientCreationEmail";"Email qui sera envoyé lors de la création d'un nouveau patient";
+2;"DoctorCreationEmail";"Email qui sera envoyé lors de la création d'un nouveau docteur";
+3;"ConsultationCreationEmail";"Email qui sera envoyé lors de la création d'une nouvelle consultation";
+4;"ConsultationAnnulationEmail";"Email qui sera envoyé lors de l'annulation d'une consultation";
+5;"ConsultationPreRappelEmail";"Email qui sera envoyé comme rappel avant une consultation";
+
+
+

@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.search.StructureSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -47,6 +49,7 @@ public class StructureResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Structure> create(@RequestBody Structure structure) throws URISyntaxException {
         log.debug("REST request to save Structure : {}", structure);
         if (structure.getId() != null) {
@@ -66,6 +69,7 @@ public class StructureResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Structure> update(@RequestBody Structure structure) throws URISyntaxException {
         log.debug("REST request to update Structure : {}", structure);
         if (structure.getId() == null) {
@@ -100,6 +104,7 @@ public class StructureResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Structure> get(@PathVariable Long id) {
         log.debug("REST request to get Structure : {}", id);
         return Optional.ofNullable(structureRepository.findOne(id))
@@ -116,6 +121,7 @@ public class StructureResource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Structure : {}", id);
         structureRepository.delete(id);
@@ -131,6 +137,7 @@ public class StructureResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public List<Structure> search(@PathVariable String query) {
         return StreamSupport
             .stream(structureSearchRepository.search(queryString(query)).spliterator(), false)

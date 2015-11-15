@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.MailSetting;
 import com.winbit.windoctor.repository.MailSettingRepository;
 import com.winbit.windoctor.repository.search.MailSettingSearchRepository;
+import com.winbit.windoctor.service.MailSettingService;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -40,6 +41,9 @@ public class MailSettingResource {
 
     @Inject
     private MailSettingSearchRepository mailSettingSearchRepository;
+
+    @Inject
+    private MailSettingService mailSettingService;
 
     /**
      * POST  /mailSettings -> Create a new mailSetting.
@@ -89,7 +93,7 @@ public class MailSettingResource {
     public ResponseEntity<List<MailSetting>> getAllMailSettings(@RequestParam(value = "page" , required = false) Integer offset,
                                                                 @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        Page<MailSetting> page = mailSettingRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<MailSetting> page = mailSettingService.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/mailSettings",offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

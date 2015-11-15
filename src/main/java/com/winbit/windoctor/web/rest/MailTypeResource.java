@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.MailType;
 import com.winbit.windoctor.repository.MailTypeRepository;
 import com.winbit.windoctor.repository.search.MailTypeSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -49,6 +51,7 @@ public class MailTypeResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<MailType> createMailType(@Valid @RequestBody MailType mailType) throws URISyntaxException {
         log.debug("REST request to save MailType : {}", mailType);
         if (mailType.getId() != null) {
@@ -68,6 +71,7 @@ public class MailTypeResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<MailType> updateMailType(@Valid @RequestBody MailType mailType) throws URISyntaxException {
         log.debug("REST request to update MailType : {}", mailType);
         if (mailType.getId() == null) {
@@ -102,6 +106,7 @@ public class MailTypeResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<MailType> getMailType(@PathVariable Long id) {
         log.debug("REST request to get MailType : {}", id);
         return Optional.ofNullable(mailTypeRepository.findOne(id))
@@ -118,6 +123,7 @@ public class MailTypeResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteMailType(@PathVariable Long id) {
         log.debug("REST request to delete MailType : {}", id);
         mailTypeRepository.delete(id);

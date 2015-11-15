@@ -2,7 +2,7 @@
     <h2 translate="windoctorApp.mailSetting.home.title">MailSettings</h2>
     <jh-alert></jh-alert>
     <div class="container">
-        <div class="row">
+        <div class="row" has-role="ROLE_ADMIN">
             <div class="col-md-4">
                 <button class="btn btn-primary" ui-sref="mailSetting.new">
                     <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.mailSetting.home.createLabel">Create a new MailSetting</span>
@@ -67,7 +67,7 @@
                     <td>
                         {{mailSetting.mail_type.label}}
                     </td>
-                    <td>
+                    <td has-role="ROLE_ADMIN">
                         <button type="submit"
                                 ui-sref="mailSetting.detail({id:mailSetting.id})"
                                 class="btn btn-info btn-sm">
@@ -83,6 +83,15 @@
                                 class="btn btn-danger btn-sm">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
                         </button>
+                    </td>
+                    <td>
+                    <input
+                        bs-switch
+                        ng-model="isSelected"
+                        type="checkbox"
+                        switch-active="true"
+                        ng-true-value="'yep'"
+                        ng-false-value="'nope'">
                     </td>
                 </tr>
             </tbody>
