@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the MailSetting entity.
+ * Performance test for the MailType entity.
  */
-class MailSettingGatlingTest extends Simulation {
+class MailTypeGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -37,7 +37,7 @@ class MailSettingGatlingTest extends Simulation {
         "X-CSRF-TOKEN" -> "${csrf_token}"
     )
 
-    val scn = scenario("Test the MailSetting entity")
+    val scn = scenario("Test the MailType entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -59,26 +59,26 @@ class MailSettingGatlingTest extends Simulation {
         .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token")))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all mailSettings")
-            .get("/api/mailSettings")
+            exec(http("Get all mailTypes")
+            .get("/api/mailTypes")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new mailSetting")
-            .post("/api/mailSettings")
+            .exec(http("Create new mailType")
+            .post("/api/mailTypes")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "activated":null}""")).asJSON
+            .body(StringBody("""{"id":null, "label":"SAMPLE_TEXT", "description":"SAMPLE_TEXT", "content":"SAMPLE_TEXT"}""")).asJSON
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_mailSetting_url")))
+            .check(headerRegex("Location", "(.*)").saveAs("new_mailType_url")))
             .pause(10)
             .repeat(5) {
-                exec(http("Get created mailSetting")
-                .get("${new_mailSetting_url}")
+                exec(http("Get created mailType")
+                .get("${new_mailType_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created mailSetting")
-            .delete("${new_mailSetting_url}")
+            .exec(http("Delete created mailType")
+            .delete("${new_mailType_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

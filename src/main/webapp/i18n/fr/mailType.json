@@ -1,0 +1,21 @@
+{
+    "windoctorApp": {
+        "mailType" : {
+            "home": {
+                "title": "MailTypes",
+                "createLabel": "Créer un nouveau MailType",
+                "createOrEditLabel": "Créer ou éditer un MailType"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le MailType {{ id }} ?"
+            },
+            "detail": {
+                "title": "MailType"
+            },
+            "label": "Label",
+            "description": "Description",
+            "content": "Content"
+        }
+    }
+}
+

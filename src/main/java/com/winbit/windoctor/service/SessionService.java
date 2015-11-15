@@ -32,7 +32,8 @@ public class SessionService {
 
     public  MailSetting getMailSetting(Long structureId){
 
-        List<MailSetting> mailSettingList = mailSettingRepository.findAll(structureId);
+        //TODO - get by structure id
+        List<MailSetting> mailSettingList = mailSettingRepository.findAll();
 
         if(mailSettingList != null && mailSettingList.size() > 0){
             if(mailSettingList.size() > 1){

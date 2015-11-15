@@ -14,29 +14,21 @@
     <property name="floatType" value="float" dbms="mysql, oracle"/>
 
     <!--
-        Added the entity MailSetting.
+        Added the entity MailType.
     -->
-    <changeSet id="20151106171800" author="jhipster">
-        <createTable tableName="mail_setting">
+    <changeSet id="20151115110500" author="jhipster">
+        <createTable tableName="mail_type">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="mail_on_event_creation" type="bit"/>
-            <column name="mail_on_event_cancelation" type="bit"/>
-            <column name="mail_on_event_edition" type="bit"/>
-            <column name="remaiding_before_event_mail" type="bit"/>
-            <column name="remaiding_after_event_mail" type="bit"/>
-            <column name="patient_creation_account_mail" type="bit"/>
-            <column name="structure_id" type="bigint">
-                <constraints unique="true"/>
+            <column name="label" type="varchar(30)">
+                <constraints nullable="false" />
             </column>
+            <column name="description" type="varchar(100)">
+                <constraints nullable="false" />
+            </column>
+            <column name="content" type="varchar(255)"/>
         </createTable>
         
-        <addForeignKeyConstraint baseColumnNames="structure_id"
-                                 baseTableName="mail_setting"
-                                 constraintName="fk_mailsetting_structure_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="structure"/>
-
     </changeSet>
 </databaseChangeLog>

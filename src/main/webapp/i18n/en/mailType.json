@@ -1,0 +1,23 @@
+{
+    "windoctorApp": {
+        "mailType" : {
+            "home": {
+                "title": "MailTypes",
+                "createLabel": "Create a new MailType",
+                "createOrEditLabel": "Create or edit a MailType"
+            },
+            "created": "A new MailType is created with identifier {{ param }}",
+            "updated": "A MailType is updated with identifier {{ param }}",
+            "deleted": "A MailType is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete MailType {{ id }}?"
+            },
+            "detail": {
+                "title": "MailType"
+            },
+            "label": "Label",
+            "description": "Description",
+            "content": "Content"
+        }
+    }
+}

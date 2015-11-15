@@ -5,7 +5,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,27 +23,14 @@ public class MailSetting implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "mail_on_event_creation")
-    private Boolean mailOnEventCreation;
+    @Column(name = "activated")
+    private Boolean activated;
 
-    @Column(name = "mail_on_event_cancelation")
-    private Boolean mailOnEventCancelation;
-
-    @Column(name = "mail_on_event_edition")
-    private Boolean mailOnEventEdition;
-
-    @Column(name = "remaiding_before_event_mail")
-    private Boolean remaidingBeforeEventMail;
-
-    @Column(name = "remaiding_after_event_mail")
-    private Boolean remaidingAfterEventMail;
-
-    @Column(name = "patient_creation_account_mail")
-    private Boolean patientCreationAccountMail;
-
-    @OneToOne
-    @NotNull
+    @ManyToOne
     private Structure structure;
+
+    @ManyToOne
+    private MailType mail_type;
 
     public Long getId() {
         return id;
@@ -54,52 +40,12 @@ public class MailSetting implements Serializable {
         this.id = id;
     }
 
-    public Boolean getMailOnEventCreation() {
-        return mailOnEventCreation;
+    public Boolean getActivated() {
+        return activated;
     }
 
-    public void setMailOnEventCreation(Boolean mailOnEventCreation) {
-        this.mailOnEventCreation = mailOnEventCreation;
-    }
-
-    public Boolean getMailOnEventCancelation() {
-        return mailOnEventCancelation;
-    }
-
-    public void setMailOnEventCancelation(Boolean mailOnEventCancelation) {
-        this.mailOnEventCancelation = mailOnEventCancelation;
-    }
-
-    public Boolean getMailOnEventEdition() {
-        return mailOnEventEdition;
-    }
-
-    public void setMailOnEventEdition(Boolean mailOnEventEdition) {
-        this.mailOnEventEdition = mailOnEventEdition;
-    }
-
-    public Boolean getRemaidingBeforeEventMail() {
-        return remaidingBeforeEventMail;
-    }
-
-    public void setRemaidingBeforeEventMail(Boolean remaidingBeforeEventMail) {
-        this.remaidingBeforeEventMail = remaidingBeforeEventMail;
-    }
-
-    public Boolean getRemaidingAfterEventMail() {
-        return remaidingAfterEventMail;
-    }
-
-    public void setRemaidingAfterEventMail(Boolean remaidingAfterEventMail) {
-        this.remaidingAfterEventMail = remaidingAfterEventMail;
-    }
-
-    public Boolean getPatientCreationAccountMail() {
-        return patientCreationAccountMail;
-    }
-
-    public void setPatientCreationAccountMail(Boolean patientCreationAccountMail) {
-        this.patientCreationAccountMail = patientCreationAccountMail;
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
     }
 
     public Structure getStructure() {
@@ -108,6 +54,14 @@ public class MailSetting implements Serializable {
 
     public void setStructure(Structure structure) {
         this.structure = structure;
+    }
+
+    public MailType getMail_type() {
+        return mail_type;
+    }
+
+    public void setMail_type(MailType MailType) {
+        this.mail_type = MailType;
     }
 
     @Override
@@ -135,12 +89,7 @@ public class MailSetting implements Serializable {
     public String toString() {
         return "MailSetting{" +
             "id=" + id +
-            ", mailOnEventCreation='" + mailOnEventCreation + "'" +
-            ", mailOnEventCancelation='" + mailOnEventCancelation + "'" +
-            ", mailOnEventEdition='" + mailOnEventEdition + "'" +
-            ", remaidingBeforeEventMail='" + remaidingBeforeEventMail + "'" +
-            ", remaidingAfterEventMail='" + remaidingAfterEventMail + "'" +
-            ", patientCreationAccountMail='" + patientCreationAccountMail + "'" +
+            ", activated='" + activated + "'" +
             '}';
     }
 }

@@ -22,6 +22,7 @@
                 "treatment": "Treatment",
                 "attachment": "Attachment",
                 "mailSetting": "MailSetting",
+                "mailType": "MailType",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

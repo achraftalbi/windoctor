@@ -89,10 +89,8 @@ public class MailSettingResource {
     public ResponseEntity<List<MailSetting>> getAllMailSettings(@RequestParam(value = "page" , required = false) Integer offset,
                                                                 @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-
-        log.debug("REST request to get mailSettings page per_page");
         Page<MailSetting> page = mailSettingRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/mailSettings",offset,limit);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/mailSettings",offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -135,6 +133,8 @@ public class MailSettingResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<MailSetting> searchMailSettings(@PathVariable String query) {
-        return null;
+        return StreamSupport
+            .stream(mailSettingSearchRepository.search(queryString(query)).spliterator(), false)
+            .collect(Collectors.toList());
     }
 }

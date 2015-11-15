@@ -3,94 +3,96 @@
 angular.module('windoctorApp')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('mailSetting', {
+            .state('mailType', {
                 parent: 'entity',
-                url: '/mailSettings',
+                url: '/mailTypes',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'windoctorApp.mailSetting.home.title'
+                    pageTitle: 'windoctorApp.mailType.home.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/mailSetting/mailSettings.html',
-                        controller: 'MailSettingController'
+                        templateUrl: 'scripts/app/entities/mailType/mailTypes.html',
+                        controller: 'MailTypeController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('mailSetting');
+                        $translatePartialLoader.addPart('mailType');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
                 }
             })
-            .state('mailSetting.detail', {
+            .state('mailType.detail', {
                 parent: 'entity',
-                url: '/mailSetting/{id}',
+                url: '/mailType/{id}',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'windoctorApp.mailSetting.detail.title'
+                    pageTitle: 'windoctorApp.mailType.detail.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/mailSetting/mailSetting-detail.html',
-                        controller: 'MailSettingDetailController'
+                        templateUrl: 'scripts/app/entities/mailType/mailType-detail.html',
+                        controller: 'MailTypeDetailController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('mailSetting');
+                        $translatePartialLoader.addPart('mailType');
                         return $translate.refresh();
                     }],
-                    entity: ['$stateParams', 'MailSetting', function($stateParams, MailSetting) {
-                        return MailSetting.get({id : $stateParams.id});
+                    entity: ['$stateParams', 'MailType', function($stateParams, MailType) {
+                        return MailType.get({id : $stateParams.id});
                     }]
                 }
             })
-            .state('mailSetting.new', {
-                parent: 'mailSetting',
+            .state('mailType.new', {
+                parent: 'mailType',
                 url: '/new',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/mailSetting/mailSetting-dialog.html',
-                        controller: 'MailSettingDialogController',
+                        templateUrl: 'scripts/app/entities/mailType/mailType-dialog.html',
+                        controller: 'MailTypeDialogController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
                                 return {
-                                    activated: null,
+                                    label: null,
+                                    description: null,
+                                    content: null,
                                     id: null
                                 };
                             }
                         }
                     }).result.then(function(result) {
-                        $state.go('mailSetting', null, { reload: true });
+                        $state.go('mailType', null, { reload: true });
                     }, function() {
-                        $state.go('mailSetting');
+                        $state.go('mailType');
                     })
                 }]
             })
-            .state('mailSetting.edit', {
-                parent: 'mailSetting',
+            .state('mailType.edit', {
+                parent: 'mailType',
                 url: '/{id}/edit',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/mailSetting/mailSetting-dialog.html',
-                        controller: 'MailSettingDialogController',
+                        templateUrl: 'scripts/app/entities/mailType/mailType-dialog.html',
+                        controller: 'MailTypeDialogController',
                         size: 'lg',
                         resolve: {
-                            entity: ['MailSetting', function(MailSetting) {
-                                return MailSetting.get({id : $stateParams.id});
+                            entity: ['MailType', function(MailType) {
+                                return MailType.get({id : $stateParams.id});
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('mailSetting', null, { reload: true });
+                        $state.go('mailType', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })

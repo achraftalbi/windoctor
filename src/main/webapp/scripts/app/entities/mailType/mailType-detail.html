@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="windoctorApp.mailSetting.detail.title">MailSetting</span> {{mailSetting.id}}</h2>
+    <h2><span translate="windoctorApp.mailType.detail.title">MailType</span> {{mailType.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -12,26 +12,26 @@
             <tbody>
             <tr>
                 <td>
-                    <span translate="windoctorApp.mailSetting.activated">Activated</span>
+                    <span translate="windoctorApp.mailType.label">Label</span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{mailSetting.activated}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.structure">structure</span>
-                </td>
-                <td>
-                    <a class="form-control-static" ui-sref="structure.detail({id:mailSetting.structure.id})">{{mailSetting.structure.name}}</a>
+                    <span class="form-control-static">{{mailType.label}}</span>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span translate="windoctorApp.mailSetting.mail_type">mail_type</span>
+                    <span translate="windoctorApp.mailType.description">Description</span>
                 </td>
                 <td>
-                    <a class="form-control-static" ui-sref="MailType.detail({id:mailSetting.mail_type.id})">{{mailSetting.mail_type.label}}</a>
+                    <span class="form-control-static">{{mailType.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.mailType.content">Content</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{mailType.content}}</span>
                 </td>
             </tr>
             </tbody>

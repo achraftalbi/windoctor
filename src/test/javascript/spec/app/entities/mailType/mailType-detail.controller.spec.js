@@ -1,16 +1,14 @@
 'use strict';
 
-describe('MailSetting Detail Controller', function() {
+describe('MailType Detail Controller', function() {
     var $scope, $rootScope;
-    var MockEntity, MockMailSetting, MockStructure, MockMailType;
+    var MockEntity, MockMailType;
     var createController;
 
     beforeEach(inject(function($injector) {
         $rootScope = $injector.get('$rootScope');
         $scope = $rootScope.$new();
         MockEntity = jasmine.createSpy('MockEntity');
-        MockMailSetting = jasmine.createSpy('MockMailSetting');
-        MockStructure = jasmine.createSpy('MockStructure');
         MockMailType = jasmine.createSpy('MockMailType');
         
 
@@ -18,19 +16,17 @@ describe('MailSetting Detail Controller', function() {
             '$scope': $scope,
             '$rootScope': $rootScope,
             'entity': MockEntity ,
-            'MailSetting': MockMailSetting,
-            'Structure': MockStructure,
             'MailType': MockMailType
         };
         createController = function() {
-            $injector.get('$controller')("MailSettingDetailController", locals);
+            $injector.get('$controller')("MailTypeDetailController", locals);
         };
     }));
 
 
     describe('Root Scope Listening', function() {
         it('Unregisters root scope listener upon scope destruction', function() {
-            var eventType = 'windoctorApp:mailSettingUpdate';
+            var eventType = 'windoctorApp:mailTypeUpdate';
 
             createController();
             expect($rootScope.$$listenerCount[eventType]).toEqual(1);

@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('MailSettingController', function ($scope, MailSetting, MailSettingSearch, ParseLinks) {
-        $scope.mailSettings = [];
+    .controller('MailTypeController', function ($scope, MailType, MailTypeSearch, ParseLinks) {
+        $scope.mailTypes = [];
         $scope.page = 0;
         $scope.loadAll = function() {
-            MailSetting.query({page: $scope.page, size: 20}, function(result, headers) {
+            MailType.query({page: $scope.page, size: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
-                $scope.mailSettings = result;
+                $scope.mailTypes = result;
             });
         };
         $scope.loadPage = function(page) {
@@ -17,24 +17,24 @@ angular.module('windoctorApp')
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            MailSetting.get({id: id}, function(result) {
-                $scope.mailSetting = result;
-                $('#deleteMailSettingConfirmation').modal('show');
+            MailType.get({id: id}, function(result) {
+                $scope.mailType = result;
+                $('#deleteMailTypeConfirmation').modal('show');
             });
         };
 
         $scope.confirmDelete = function (id) {
-            MailSetting.delete({id: id},
+            MailType.delete({id: id},
                 function () {
                     $scope.loadAll();
-                    $('#deleteMailSettingConfirmation').modal('hide');
+                    $('#deleteMailTypeConfirmation').modal('hide');
                     $scope.clear();
                 });
         };
 
         $scope.search = function () {
-            MailSettingSearch.query({query: $scope.searchQuery}, function(result) {
-                $scope.mailSettings = result;
+            MailTypeSearch.query({query: $scope.searchQuery}, function(result) {
+                $scope.mailTypes = result;
             }, function(response) {
                 if(response.status === 404) {
                     $scope.loadAll();
@@ -48,8 +48,10 @@ angular.module('windoctorApp')
         };
 
         $scope.clear = function () {
-            $scope.mailSetting = {
-                activated: null,
+            $scope.mailType = {
+                label: null,
+                description: null,
+                content: null,
                 id: null
             };
         };

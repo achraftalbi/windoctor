@@ -4,8 +4,17 @@
             "relationshipId": 1,
             "relationshipName": "structure",
             "otherEntityName": "structure",
-            "relationshipType": "one-to-one",
+            "relationshipType": "many-to-one",
             "otherEntityField": "name",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "mailSetting"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "mail_type",
+            "otherEntityName": "MailType",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "label",
             "ownerSide": true,
             "otherEntityRelationshipName": "mailSetting"
         }
@@ -13,37 +22,11 @@
     "fields": [
         {
             "fieldId": 1,
-            "fieldName": "mailOnEventCreation",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 2,
-            "fieldName": "mailOnEventCancelation",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 3,
-            "fieldName": "mailOnEventEdition",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 4,
-            "fieldName": "remaidingBeforeEventMail",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 5,
-            "fieldName": "remaidingAfterEventMail",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 6,
-            "fieldName": "patientCreationAccountMail",
+            "fieldName": "activated",
             "fieldType": "Boolean"
         }
-
     ],
-    "changelogDate": "20151106171800",
+    "changelogDate": "20151115134200",
     "dto": "no",
     "pagination": "pagination"
 }
