@@ -25,7 +25,7 @@
             <column name="structure_id" type="bigint"/>
             <column name="mail_type_id" type="bigint"/>
         </createTable>
-        
+
         <addForeignKeyConstraint baseColumnNames="structure_id"
                                  baseTableName="mail_setting"
                                  constraintName="fk_mailsetting_structure_id"
@@ -37,6 +37,11 @@
                                  constraintName="fk_mailsetting_mail_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="mail_type"/>
+        <addUniqueConstraint
+            columnNames="mail_type_id, structure_id"
+            constraintName="unique_mail_structure"
+            tableName="mail_setting"
+            />
 
     </changeSet>
 </databaseChangeLog>

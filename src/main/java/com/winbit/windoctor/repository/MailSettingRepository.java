@@ -14,6 +14,9 @@ import java.util.List;
 public interface MailSettingRepository extends JpaRepository<MailSetting,Long> {
 
     @Query("select m from MailSetting m where m.structure.id= ?1")
-    Page<MailSetting> findAll(Long structureId,Pageable var1);
+    Page<MailSetting> findAll(Long structureId, Pageable var1);
+
+    @Query("select m from MailSetting m where m.structure.id= ?1 and m.mail_type.id= ?2")
+    MailSetting findOne(Long structureId, Long emailType);
 
 }

@@ -13,6 +13,7 @@ import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.DoctorDTO;
 import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
+import com.winbit.windoctor.web.rest.util.HttpUtils;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,13 +82,9 @@ public class DoctorResource {
                         User user = userService.createDoctorInformation(doctor.getLogin(), doctor.getPassword(),
                             doctor.getFirstName(), doctor.getLastName(), doctor.getEmail().toLowerCase(),
                             doctor.getLangKey(), doctor.getBlocked(), doctor.getActivated(), doctor.getPicture(), doctor.getStructure().getId());
-                        String baseUrl = request.getScheme() + // "http"
-                            "://" +                                // "://"
-                            request.getServerName() +              // "myhost"
-                            ":" +                                  // ":"
-                            request.getServerPort();               // "80"
 
-                        mailService.sendActivationEmail(user, baseUrl);
+
+                        mailService.sendDoctorCreationAccountEmail(user, HttpUtils.getBaseUrl(request));
 
                         return new ResponseEntity<>(HttpStatus.CREATED);
                     })

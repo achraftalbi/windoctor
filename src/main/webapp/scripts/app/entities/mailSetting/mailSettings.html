@@ -50,7 +50,7 @@
             <thead>
                 <tr>
                     <th translate="windoctorApp.mailSetting.activated">Activated</th>
-                    <th translate="windoctorApp.mailSetting.structure">structure</th>
+                    <th translate="windoctorApp.mailSetting.structure" has-role="ROLE_ADMIN">structure</th>
                     <th translate="windoctorApp.mailSetting.mail_type">mail_type</th>
                     <th></th>
                 </tr>
@@ -58,14 +58,14 @@
             <tbody>
                 <tr ng-repeat="mailSetting in mailSettings track by mailSetting.id">
                     <td>
-                         <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.activated}}" />
-                         <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.activated}}" />
+                         <span style="color:#006600" class="glyphicon glyphicon-ok" ng-show="{{mailSetting.activated}}" />
+                         <span style="color:#ff050c" class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.activated}}" />
                     </td>
-                    <td>
+                    <td has-role="ROLE_ADMIN">
                         <a ui-sref="structure.detail({id:mailSetting.structure.id})">{{mailSetting.structure.name}}</a>
                     </td>
                     <td>
-                        {{mailSetting.mail_type.label}}
+                        {{mailSetting.mail_type.description}}
                     </td>
                     <td>
                         <button type="submit"

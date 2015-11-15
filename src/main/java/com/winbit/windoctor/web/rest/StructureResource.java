@@ -1,15 +1,19 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.google.common.collect.Lists;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.search.StructureSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.apache.commons.collections.ListUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,6 +46,9 @@ public class StructureResource {
 
     @Inject
     private StructureSearchRepository structureSearchRepository;
+
+    @Inject
+    private SessionService sessionService;
 
     /**
      * POST  /structures -> Create a new structure.
@@ -92,7 +100,19 @@ public class StructureResource {
     public ResponseEntity<List<Structure>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        Page<Structure> page = structureRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<Structure> page = null;
+        if(sessionService.isAdmin()){
+            page = structureRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+
+        } else {
+            List<Structure> content = new ArrayList<>();
+            Structure currentStructure = structureRepository.findOneById(sessionService.getCurrentStructure());
+            if(currentStructure != null){
+                content.add(currentStructure);
+            }
+            page = new PageImpl<Structure>(content);
+        }
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/structures", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
