@@ -3,6 +3,8 @@
         "calendar" : {
             "home": {
                 "title": "Events",
+                "createAppointmentLabel": "Créer un nouveau rendez vous",
+                "createVisitLabel": "Créer une nouvelle visite",
                 "createLabel": "Créer un nouveau Event",
                 "createOrEditLabel": "Créer ou éditer un rendez vous"
             },
@@ -12,6 +14,9 @@
             "detail": {
                 "title": "Event"
             },
+            "type": "Type",
+            "visit": "Visite",
+            "appointment": "Rendez vous",
             "patient": "Nom du patient",
             "changePatient": "Changer de patient",
             "addPatient": "Ajouter patient",

@@ -57,6 +57,7 @@ public class EventResource {
         if (event.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new event cannot already have an ID").body(null);
         }
+        log.debug("new event thisEventISAppointment "+event.getThisEventISAppointment());
         Event result = eventRepository.save(event);
         eventSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))

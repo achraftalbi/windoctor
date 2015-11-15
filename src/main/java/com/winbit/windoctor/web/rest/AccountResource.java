@@ -2,11 +2,14 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Authority;
+import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.domain.PersistentToken;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
+import com.winbit.windoctor.repository.EventRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
 import com.winbit.windoctor.repository.UserRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.UserService;
@@ -19,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -39,6 +42,9 @@ public class AccountResource {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private EventRepository eventRepository;
 
     @Inject
     private UserService userService;
@@ -115,16 +121,29 @@ public class AccountResource {
     public ResponseEntity<UserDTO> getAccount() {
         return Optional.ofNullable(userService.getUserWithAuthorities())
             .map(user -> {
+                List<String> roles = authorityRepository.findAllUnderPriority(user.getAuthorities().iterator().next().getPriority()).stream().map(Authority::getName)
+                    .collect(Collectors.toList());
+                boolean currentUserPatient = AuthoritiesConstants.PATIENT.equals(user.getAuthorities().iterator().next().getName());
+                boolean maxEventsReached = false;
+                if(currentUserPatient){
+                    List<Event> listEventByPatient = eventRepository.findByPatient(user.getId());
+                    maxEventsReached = listEventByPatient!=null && user.getStructure()!=null
+                        && user.getStructure().getMaxEventsPatientCanAdd()!=null ?listEventByPatient.size()>=user.getStructure().
+                        getMaxEventsPatientCanAdd().intValue():false;
+                }
                 return new ResponseEntity<>(
                     new UserDTO(
+                        user.getId(),
                         user.getLogin(),
                         null,
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
                         user.getLangKey(),
-                        authorityRepository.findAllUnderPriority(user.getAuthorities().iterator().next().getPriority()).stream().map(Authority::getName)
-                            .collect(Collectors.toList())),
+                        roles,
+                        currentUserPatient,
+                        maxEventsReached
+                    ),
                 HttpStatus.OK);
             })
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));

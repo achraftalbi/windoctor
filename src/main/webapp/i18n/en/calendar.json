@@ -3,7 +3,8 @@
         "calendar" : {
             "home": {
                 "title": "Events",
-                "createLabel": "Create a new appointment",
+                "createAppointmentLabel": "Create a new appointment",
+                "createVisitLabel": "Create a new visit",
                 "createOrEditLabel": "Create or edit an appointment"
             },
             "created": "A new Event is created with identifier {{ param }}",
@@ -15,6 +16,9 @@
             "detail": {
                 "title": "Event"
             },
+            "type": "Type",
+            "visit": "Visit",
+            "appointment": "Appointment",
             "patient": "Name of patient",
             "changePatient": "Change patient",
             "addPatient": "Add patient",

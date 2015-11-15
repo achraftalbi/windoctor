@@ -22,6 +22,8 @@
                 "treatment": "Treatment",
                 "attachment": "Attachment",
                 "mailSetting": "MailSetting",
+                "dashboard": "Dashboard",
+                "calendar": "Calendar",
                 "mailType": "MailType",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
@@ -95,6 +97,7 @@
             "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
+            "close": "Close",
             "delete": "Delete",
             "edit": "Edit",
             "select": "Select",

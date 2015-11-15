@@ -1,6 +1,6 @@
 <div ng-show="displayAddEditViewPopup">
-    <form name="editForm" role="form" novalidate show-validation>
 
+    <form name="editForm" id="editFormId" role="form" novalidate show-validation>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                     ng-click="closeAddEditViewPopup()">&times;</button>
@@ -14,14 +14,35 @@
             <div class="form-group">
                 <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
                 <input type="text" class="form-control" name="description" id="field_description"
-                       ng-model="treatment.description"
+                       ng-model="treatment.description" ng-show="!displayTreatmentView"
                        ng-maxlength="1000">
+                <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.description}}</span>
 
                 <div ng-show="editForm.description.$invalid">
                     <p class="help-block"
                        ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
                        translate-value-max="1000">
                         This field cannot be longer than 1000 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label translate="windoctorApp.treatment.doctor"
+                           for="field_doctor">doctor</label>
+
+                    <select class="form-control" id="field_doctor" name="doctor"
+                            ng-change="valueChanged()" ng-show="!displayTreatmentView"
+                            ng-model="treatment.doctor"
+                            ng-options="doctor as doctor.firstName +' '+ doctor.lastName for doctor in doctors track by doctor.id">
+                        <option value=""></option>
+                    </select>
+                    <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.doctor.firstName}} {{treatment.doctor.lastName}}</span>
+                </div>
+                <div ng-show="editForm.doctor.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.doctor.$error.required" translate="entity.validation.required">
+                        This field is required.
                     </p>
                 </div>
             </div>
@@ -43,9 +64,9 @@
                     <span ng-show="displayTreatmentView"
                           class="form-control-static">{{treatment.eventReason.price}}</span>
 
-                    <div ng-show="eventReasonSelected && !displayTreatmentView">
+                    <div ng-show="treatment.eventReason && !displayTreatmentView">
                         <span>{{treatment.eventReason.price}}</span></div>
-                    <div ng-show="!eventReasonSelected && !displayTreatmentView"><span
+                    <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
                         translate="windoctorApp.treatment.chooseReason">Choose a reason</span>
                     </div>
                 </div>
@@ -125,7 +146,7 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeAddEditViewPopup()">
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-                translate="entity.action.cancel">Cancel</span>
+                translate="entity.action.close">Close</span>
             </button>
             <button type="button" ng-click="saveTreatment()" ng-disabled="editForm.$invalid || editForm.$submitted"
                     ng-show="!displayTreatmentView"

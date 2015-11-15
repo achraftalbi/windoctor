@@ -6,7 +6,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -33,6 +37,20 @@ public class Structure implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "structure")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<User> users = new HashSet<>();
+
+    @NotNull
+    @Min(value = 0)
+    @Max(value = 1000)
+    @Column(name = "MAX_EVENTS_PATIENT_CAN_ADD", precision=4, nullable = false)
+    private BigDecimal maxEventsPatientCanAdd;
+
+    public BigDecimal getMaxEventsPatientCanAdd() {
+        return maxEventsPatientCanAdd;
+    }
+
+    public void setMaxEventsPatientCanAdd(BigDecimal maxEventsPatientCanAdd) {
+        this.maxEventsPatientCanAdd = maxEventsPatientCanAdd;
+    }
 
     public Set<User> getUsers() {
         return users;

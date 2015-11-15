@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarEventsController', function ($scope, $stateParams,$modalInstance, Event, EventSearch, ParseLinks,$filter) {
+    .controller('CalendarEventsController', function ($scope, $stateParams,$modalInstance, Event, EventSearch, ParseLinks,$filter,Principal) {
         $scope.events = [];
         $scope.page = 1;
         $scope.selectedDate= null;
+        $scope.account= null;
+        $scope.userCanAddEvent= true;
         $scope.loadAll = function () {
                 Event.query({selectedDate:$stateParams.selectedDate, page: $scope.page, per_page: 5}, function (result, headers) {
                     $scope.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
@@ -12,6 +14,10 @@ angular.module('windoctorApp')
                     $scope.events = result;
                 });
         };
+        Principal.identity(true).then(function(account) {
+            $scope.account = account;
+            $scope.userCanAddEvent = !$scope.account.currentUserPatient || ($scope.account.currentUserPatient && !$scope.account.maxEventsReached);
+        });
         $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();

@@ -22,6 +22,8 @@
                 "treatment": "Treatment",
                 "attachment": "Attachment",
                 "mailSetting": "MailSetting",
+                "dashboard": "Dashboard",
+                "calendar": "Calendrier",
                 "mailType": "MailType",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
@@ -95,10 +97,12 @@
             "addimage": "ajouter image",
             "back": "Retour",
             "cancel": "Annuler",
+            "close": "Fermer",
             "edit": "Editer",
             "select": "Séléctionner",
             "delete": "Supprimer",
             "save": "Sauvegarder",
+            "saveAndClose": "Sauvegarder et fermer",
             "view": "Voir"
         },
         "detail": {

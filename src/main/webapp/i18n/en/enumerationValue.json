@@ -1,0 +1,10 @@
+{
+    "windoctorApp": {
+        "EnumerationValue" : {
+            "SELECT": "{VALUE, select, month{month} profit{profit} numberPatients{numberPatients} other{}}",
+            "month": "month",
+            "profit": "profit",
+            "numberPatients": "numberPatients"
+        }
+    }
+}

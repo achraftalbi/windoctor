@@ -147,13 +147,16 @@ public class AccountResourceTest {
     @Transactional
     public void testRegisterValid() throws Exception {
         UserDTO u = new UserDTO(
+             1l,
             "joe",                  // login
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
             "joe@example.com",      // e-mail
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.DOCTOR)
+            Arrays.asList(AuthoritiesConstants.DOCTOR),
+            false,
+            false
         );
 
         restMvc.perform(
@@ -170,13 +173,16 @@ public class AccountResourceTest {
     @Transactional
     public void testRegisterInvalidLogin() throws Exception {
         UserDTO u = new UserDTO(
+            1l,
             "funky-log!n",          // login <-- invalid
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
             "funky@example.com",    // e-mail
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.DOCTOR)
+            Arrays.asList(AuthoritiesConstants.DOCTOR),
+            false,
+            false
         );
 
         restUserMockMvc.perform(
@@ -193,13 +199,16 @@ public class AccountResourceTest {
     @Transactional
     public void testRegisterInvalidEmail() throws Exception {
         UserDTO u = new UserDTO(
+            1l,
             "bob",              // login
             "password",         // password
             "Bob",              // firstName
             "Green",            // lastName
             "invalid",          // e-mail <-- invalid
             "en",               // langKey
-            Arrays.asList(AuthoritiesConstants.DOCTOR)
+            Arrays.asList(AuthoritiesConstants.DOCTOR),
+            false,
+            false
         );
 
         restUserMockMvc.perform(
@@ -217,18 +226,21 @@ public class AccountResourceTest {
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
         UserDTO u = new UserDTO(
+            1l,
             "alice",                // login
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
             "alice@example.com",    // e-mail
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.DOCTOR)
+            Arrays.asList(AuthoritiesConstants.DOCTOR),
+            false,
+            false
         );
 
         // Duplicate login, different e-mail
-        UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
-            "alicejr@example.com", u.getLangKey(), u.getRoles());
+        UserDTO dup = new UserDTO(1l,u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
+            "alicejr@example.com", u.getLangKey(), u.getRoles(),false,false);
 
         // Good user
         restMvc.perform(
@@ -253,18 +265,21 @@ public class AccountResourceTest {
     public void testRegisterDuplicateEmail() throws Exception {
         // Good
         UserDTO u = new UserDTO(
+            1l,
             "john",                 // login
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
             "john@example.com",     // e-mail
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.DOCTOR)
+            Arrays.asList(AuthoritiesConstants.DOCTOR),
+            false,
+            false
         );
 
         // Duplicate e-mail, different login
-        UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
-            u.getEmail(), u.getLangKey(), u.getRoles());
+        UserDTO dup = new UserDTO(1l,"johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
+            u.getEmail(), u.getLangKey(), u.getRoles(),false,false);
 
         // Good user
         restMvc.perform(
@@ -288,13 +303,14 @@ public class AccountResourceTest {
     @Transactional
     public void testRegisterAdminIsIgnored() throws Exception {
         UserDTO u = new UserDTO(
+            1l,
             "badguy",               // login
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.ADMIN) // <-- only admin should be able to do that
+            Arrays.asList(AuthoritiesConstants.ADMIN),false,false // <-- only admin should be able to do that
         );
 
         restMvc.perform(
