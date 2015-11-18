@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.repository.EventRepository;
 import com.winbit.windoctor.repository.search.EventSearchRepository;
+import com.winbit.windoctor.service.EventService;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -45,6 +46,9 @@ public class EventResource {
     @Inject
     private EventSearchRepository eventSearchRepository;
 
+    @Inject
+    private EventService eventService;
+
     /**
      * POST  /events -> Create a new event.
      */
@@ -58,7 +62,7 @@ public class EventResource {
             return ResponseEntity.badRequest().header("Failure", "A new event cannot already have an ID").body(null);
         }
         log.debug("new event thisEventISAppointment "+event.getThisEventISAppointment());
-        Event result = eventRepository.save(event);
+        Event result = eventService.save(event);
         eventSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))

@@ -40,7 +40,6 @@ public class Event implements Serializable {
     @Column(name = "event_date", nullable = false)
     private DateTime event_date;
 
-    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "creation_date", nullable = false)
     @JsonIgnore
@@ -49,8 +48,6 @@ public class Event implements Serializable {
     @Column(name = "creation_mail_sent")
     @JsonIgnore
     private Boolean creationMailSent;
-
-
 
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
@@ -73,7 +70,21 @@ public class Event implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Treatment> treatments = new HashSet<>();
 
+    public DateTime getCreation_date() {
+        return creation_date;
+    }
 
+    public void setCreation_date(DateTime creation_date) {
+        this.creation_date = creation_date;
+    }
+
+    public Boolean getCreationMailSent() {
+        return creationMailSent;
+    }
+
+    public void setCreationMailSent(Boolean creationMailSent) {
+        this.creationMailSent = creationMailSent;
+    }
 
     public Set<Treatment> getTreatments() {
         return treatments;
@@ -130,6 +141,8 @@ public class Event implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 
     @Override
     public boolean equals(Object o) {
