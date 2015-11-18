@@ -40,6 +40,18 @@ public class Event implements Serializable {
     @Column(name = "event_date", nullable = false)
     private DateTime event_date;
 
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "creation_date", nullable = false)
+    @JsonIgnore
+    private DateTime creation_date;
+
+    @Column(name = "creation_mail_sent")
+    @JsonIgnore
+    private Boolean creationMailSent;
+
+
+
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
