@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{email.doctor.creation.title}">Windoctor creation account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.doctor.creation.greeting(${user.firstName}, ${user.lastName})}">
+    Dear
+</p>
+<p th:text="#{email.doctor.creation.body}">
+    Your account has been created by WinDoctor, start your story with the simplicity !
+</p>
+
+<p>
+    <a th:href="@{|${baseUrl}|}"
+       th:text="#{email.doctor.creation.link}">Start WinDoctoring</a>
+</p>
+
+<p>
+    <span th:text="#{email.footer.regards}">Regards, </span>
+    <br/>
+    <em th:text="#{email.footer.signature}">WinDoctor.</em>
+</p>
+</body>
+</html>

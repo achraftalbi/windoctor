@@ -1,5 +1,6 @@
 package com.winbit.windoctor.service;
 
+import com.winbit.windoctor.common.WinDoctorConstants;
 import com.winbit.windoctor.domain.MailSetting;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
@@ -19,6 +20,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
+import javax.swing.*;
 import java.util.Locale;
 
 /**
@@ -108,8 +110,8 @@ public class MailService {
     @Async
     public void sendPatientCreationAccountEmail(User user,Structure structure) {
         if(structure != null){
-            MailSetting ms = sessionService.getMailSetting(structure.getId());
-            if(ms != null && Boolean.TRUE.equals(ms.getPatientCreationAccountMail())){
+            MailSetting ms = sessionService.getMailSetting(structure.getId(), WinDoctorConstants.Mail.DOCTOR_CREATION_EMAIL_TYPE);
+            if(ms != null && Boolean.TRUE.equals(ms.getActivated())){
                 log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
                 Locale locale = Locale.forLanguageTag("fr");
                 Context context = new Context(locale);
@@ -121,4 +123,18 @@ public class MailService {
             }
         }
     }
+
+    @Async
+    public void sendDoctorCreationAccountEmail(User user, String baseUrl) {
+        log.debug("Sending Doctor account creation e-mail to '{}'", user.getEmail());
+        Locale locale = Locale.forLanguageTag("fr");
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("baseUrl", baseUrl);
+        String content = templateEngine.process("doctorAccountCreationEmail", context);
+        String subject = messageSource.getMessage("email.doctor.creation.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+
 }

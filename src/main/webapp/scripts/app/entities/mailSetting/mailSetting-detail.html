@@ -12,50 +12,10 @@
             <tbody>
             <tr>
                 <td>
-                    <span translate="windoctorApp.mailSetting.mailOnEventCreation">MailOnEventCreation</span>
+                    <span translate="windoctorApp.mailSetting.activated">Activated</span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{mailSetting.mailOnEventCreation}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.mailOnEventCancelation">MailOnEventCancelation</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{mailSetting.mailOnEventCancelation}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.mailOnEventEdition">MailOnEventEdition</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{mailSetting.mailOnEventEdition}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.remaidingBeforeEventMail">RemaidingBeforeEventMail</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{mailSetting.remaidingBeforeEventMail}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.remaidingAfterEventMail">RemaidingAfterEventMail</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{mailSetting.remaidingAfterEventMail}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.mailSetting.patientCreationAccountMail">PatientCreationAccountMail</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{mailSetting.patientCreationAccountMail}}</span>
+                    <span class="form-control-static">{{mailSetting.activated}}</span>
                 </td>
             </tr>
             <tr>
@@ -64,6 +24,14 @@
                 </td>
                 <td>
                     <a class="form-control-static" ui-sref="structure.detail({id:mailSetting.structure.id})">{{mailSetting.structure.name}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.mailSetting.mail_type">mail_type</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="MailType.detail({id:mailSetting.mail_type.id})">{{mailSetting.mail_type.label}}</a>
                 </td>
             </tr>
             </tbody>

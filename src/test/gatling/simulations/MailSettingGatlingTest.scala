@@ -67,7 +67,7 @@ class MailSettingGatlingTest extends Simulation {
             .exec(http("Create new mailSetting")
             .post("/api/mailSettings")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "mailOnEventCreation":null, "mailOnEventCancelation":null, "mailOnEventEdition":null, "remaidingBeforeEventMail":null, "remaidingAfterEventMail":null, "patientCreationAccountMail":null}""")).asJSON
+            .body(StringBody("""{"id":null, "activated":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mailSetting_url")))
             .pause(10)

@@ -2,7 +2,7 @@
     <h2 translate="windoctorApp.mailSetting.home.title">MailSettings</h2>
     <jh-alert></jh-alert>
     <div class="container">
-        <div class="row">
+        <div class="row" has-role="ROLE_ADMIN">
             <div class="col-md-4">
                 <button class="btn btn-primary" ui-sref="mailSetting.new">
                     <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.mailSetting.home.createLabel">Create a new MailSetting</span>
@@ -49,51 +49,28 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
-                    <th translate="windoctorApp.mailSetting.mailOnEventCreation">MailOnEventCreation</th>
-                    <th translate="windoctorApp.mailSetting.mailOnEventCancelation">MailOnEventCancelation</th>
-                    <th translate="windoctorApp.mailSetting.mailOnEventEdition">MailOnEventEdition</th>
-                    <th translate="windoctorApp.mailSetting.remaidingBeforeEventMail">RemaidingBeforeEventMail</th>
-                    <th translate="windoctorApp.mailSetting.remaidingAfterEventMail">RemaidingAfterEventMail</th>
-                    <th translate="windoctorApp.mailSetting.patientCreationAccountMail">PatientCreationAccountMail</th>
-                    <th translate="windoctorApp.mailSetting.structure">structure</th>
+                    <th translate="windoctorApp.mailSetting.activated">Activated</th>
+                    <th translate="windoctorApp.mailSetting.structure" has-role="ROLE_ADMIN">structure</th>
+                    <th translate="windoctorApp.mailSetting.mail_type">mail_type</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="mailSetting in mailSettings track by mailSetting.id">
-                    <td><a ui-sref="mailSetting.detail({id:mailSetting.id})">{{mailSetting.id}}</a></td>
                     <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.mailOnEventCreation}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.mailOnEventCreation}}"></span>
+                         <span style="color:#006600" class="glyphicon glyphicon-ok" ng-show="{{mailSetting.activated}}" />
+                         <span style="color:#ff050c" class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.activated}}" />
                     </td>
-                    <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.mailOnEventCancelation}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.mailOnEventCancelation}}"></span>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.mailOnEventEdition}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.mailOnEventEdition}}"></span>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.remaidingBeforeEventMail}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.remaidingBeforeEventMail}}"></span>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.remaidingAfterEventMail}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.remaidingAfterEventMail}}"></span>
-                    </td>
-                    <td>
-                        <span class="glyphicon glyphicon-ok" ng-show="{{mailSetting.patientCreationAccountMail}}"></span>
-                        <span class="glyphicon glyphicon-remove" ng-hide="{{mailSetting.patientCreationAccountMail}}"></span>
-                    </td>
-                    <td>
+                    <td has-role="ROLE_ADMIN">
                         <a ui-sref="structure.detail({id:mailSetting.structure.id})">{{mailSetting.structure.name}}</a>
+                    </td>
+                    <td>
+                        {{mailSetting.mail_type.description}}
                     </td>
                     <td>
                         <button type="submit"
                                 ui-sref="mailSetting.detail({id:mailSetting.id})"
-                                class="btn btn-info btn-sm">
+                                class="btn btn-info btn-sm" has-role="ROLE_ADMIN">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
                         </button>
                         <button type="submit"
@@ -103,7 +80,7 @@
                         </button>
                         <button type="submit"
                                 ng-click="delete(mailSetting.id)"
-                                class="btn btn-danger btn-sm">
+                                class="btn btn-danger btn-sm" has-role="ROLE_ADMIN">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
                         </button>
                     </td>

@@ -16,4 +16,11 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     Page<Event> findAll(DateTime selectedDate, DateTime segondDate, Long structure_id, Pageable var1);
     @Query("select e from Event e where e.user.id = ?1")
     List<Event> findByPatient(Long patientId);
+
+    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+        "and ms.activated = true " +
+        "and e.creationMailSent = false " +
+        "and e.creation_date between ?2 and ?3")
+    List<Event> getAllNewelyCreatedEvent(Long emailCode, DateTime start, DateTime end);
+
 }

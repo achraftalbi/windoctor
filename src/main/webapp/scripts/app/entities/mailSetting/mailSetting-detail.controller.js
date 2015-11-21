@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('MailSettingDetailController', function ($scope, $rootScope, $stateParams, entity, MailSetting, Structure) {
+    .controller('MailSettingDetailController', function ($scope, $rootScope, $stateParams, entity, MailSetting, Structure, MailType) {
         $scope.mailSetting = entity;
         $scope.load = function (id) {
             MailSetting.get({id: id}, function(result) {

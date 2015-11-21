@@ -2,7 +2,7 @@
 
 describe('MailSetting Detail Controller', function() {
     var $scope, $rootScope;
-    var MockEntity, MockMailSetting, MockStructure;
+    var MockEntity, MockMailSetting, MockStructure, MockMailType;
     var createController;
 
     beforeEach(inject(function($injector) {
@@ -11,6 +11,7 @@ describe('MailSetting Detail Controller', function() {
         MockEntity = jasmine.createSpy('MockEntity');
         MockMailSetting = jasmine.createSpy('MockMailSetting');
         MockStructure = jasmine.createSpy('MockStructure');
+        MockMailType = jasmine.createSpy('MockMailType');
         
 
         var locals = {
@@ -18,7 +19,8 @@ describe('MailSetting Detail Controller', function() {
             '$rootScope': $rootScope,
             'entity': MockEntity ,
             'MailSetting': MockMailSetting,
-            'Structure': MockStructure
+            'Structure': MockStructure,
+            'MailType': MockMailType
         };
         createController = function() {
             $injector.get('$controller')("MailSettingDetailController", locals);

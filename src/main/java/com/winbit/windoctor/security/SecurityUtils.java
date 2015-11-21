@@ -43,12 +43,23 @@ public final class SecurityUtils {
         WinDoctorUserDetails springSecurityUser = null;
         Long structureId = null;
         if(authentication != null) {
-            if (authentication.getPrincipal() instanceof UserDetails) {
+            if (authentication.getPrincipal() instanceof WinDoctorUserDetails) {
                 springSecurityUser = (WinDoctorUserDetails) authentication.getPrincipal();
                 structureId = springSecurityUser.getStructureId();
             }
         }
         return structureId;
+    }
+
+    public static WinDoctorUserDetails getCurrentWinDoctorUserDetails(){
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if(authentication != null) {
+            if (authentication.getPrincipal() instanceof WinDoctorUserDetails) {
+               return (WinDoctorUserDetails) authentication.getPrincipal();
+            }
+        }
+        return null;
     }
 
 

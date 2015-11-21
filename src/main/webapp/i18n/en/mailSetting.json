@@ -15,13 +15,9 @@
             "detail": {
                 "title": "MailSetting"
             },
-            "mailOnEventCreation": "Event Creation",
-            "mailOnEventCancelation": "Event Cancelation",
-            "mailOnEventEdition": "Event Edition",
-            "remaidingBeforeEventMail": "Remaiding Before Event",
-            "remaidingAfterEventMail": "Remaiding After Event",
-            "patientCreationAccountMail": "Patient Creation Account",
-            "structure": "Structure"
+            "activated": "Activated",
+            "structure": "Structure",
+            "mail_type": "Mail_type"
         }
     }
 }

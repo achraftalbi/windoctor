@@ -43,23 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MailSettingResourceTest {
 
 
-    private static final Boolean DEFAULT_MAIL_ON_EVENT_CREATION = false;
-    private static final Boolean UPDATED_MAIL_ON_EVENT_CREATION = true;
-
-    private static final Boolean DEFAULT_MAIL_ON_EVENT_CANCELATION = false;
-    private static final Boolean UPDATED_MAIL_ON_EVENT_CANCELATION = true;
-
-    private static final Boolean DEFAULT_MAIL_ON_EVENT_EDITION = false;
-    private static final Boolean UPDATED_MAIL_ON_EVENT_EDITION = true;
-
-    private static final Boolean DEFAULT_REMAIDING_BEFORE_EVENT_MAIL = false;
-    private static final Boolean UPDATED_REMAIDING_BEFORE_EVENT_MAIL = true;
-
-    private static final Boolean DEFAULT_REMAIDING_AFTER_EVENT_MAIL = false;
-    private static final Boolean UPDATED_REMAIDING_AFTER_EVENT_MAIL = true;
-
-    private static final Boolean DEFAULT_PATIENT_CREATION_ACCOUNT_MAIL = false;
-    private static final Boolean UPDATED_PATIENT_CREATION_ACCOUNT_MAIL = true;
+    private static final Boolean DEFAULT_ACTIVATED = false;
+    private static final Boolean UPDATED_ACTIVATED = true;
 
     @Inject
     private MailSettingRepository mailSettingRepository;
@@ -91,12 +76,7 @@ public class MailSettingResourceTest {
     @Before
     public void initTest() {
         mailSetting = new MailSetting();
-        mailSetting.setMailOnEventCreation(DEFAULT_MAIL_ON_EVENT_CREATION);
-        mailSetting.setMailOnEventCancelation(DEFAULT_MAIL_ON_EVENT_CANCELATION);
-        mailSetting.setMailOnEventEdition(DEFAULT_MAIL_ON_EVENT_EDITION);
-        mailSetting.setRemaidingBeforeEventMail(DEFAULT_REMAIDING_BEFORE_EVENT_MAIL);
-        mailSetting.setRemaidingAfterEventMail(DEFAULT_REMAIDING_AFTER_EVENT_MAIL);
-        mailSetting.setPatientCreationAccountMail(DEFAULT_PATIENT_CREATION_ACCOUNT_MAIL);
+        mailSetting.setActivated(DEFAULT_ACTIVATED);
     }
 
     @Test
@@ -115,12 +95,7 @@ public class MailSettingResourceTest {
         List<MailSetting> mailSettings = mailSettingRepository.findAll();
         assertThat(mailSettings).hasSize(databaseSizeBeforeCreate + 1);
         MailSetting testMailSetting = mailSettings.get(mailSettings.size() - 1);
-        assertThat(testMailSetting.getMailOnEventCreation()).isEqualTo(DEFAULT_MAIL_ON_EVENT_CREATION);
-        assertThat(testMailSetting.getMailOnEventCancelation()).isEqualTo(DEFAULT_MAIL_ON_EVENT_CANCELATION);
-        assertThat(testMailSetting.getMailOnEventEdition()).isEqualTo(DEFAULT_MAIL_ON_EVENT_EDITION);
-        assertThat(testMailSetting.getRemaidingBeforeEventMail()).isEqualTo(DEFAULT_REMAIDING_BEFORE_EVENT_MAIL);
-        assertThat(testMailSetting.getRemaidingAfterEventMail()).isEqualTo(DEFAULT_REMAIDING_AFTER_EVENT_MAIL);
-        assertThat(testMailSetting.getPatientCreationAccountMail()).isEqualTo(DEFAULT_PATIENT_CREATION_ACCOUNT_MAIL);
+        assertThat(testMailSetting.getActivated()).isEqualTo(DEFAULT_ACTIVATED);
     }
 
     @Test
@@ -134,12 +109,7 @@ public class MailSettingResourceTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(mailSetting.getId().intValue())))
-                .andExpect(jsonPath("$.[*].mailOnEventCreation").value(hasItem(DEFAULT_MAIL_ON_EVENT_CREATION.booleanValue())))
-                .andExpect(jsonPath("$.[*].mailOnEventCancelation").value(hasItem(DEFAULT_MAIL_ON_EVENT_CANCELATION.booleanValue())))
-                .andExpect(jsonPath("$.[*].mailOnEventEdition").value(hasItem(DEFAULT_MAIL_ON_EVENT_EDITION.booleanValue())))
-                .andExpect(jsonPath("$.[*].remaidingBeforeEventMail").value(hasItem(DEFAULT_REMAIDING_BEFORE_EVENT_MAIL.booleanValue())))
-                .andExpect(jsonPath("$.[*].remaidingAfterEventMail").value(hasItem(DEFAULT_REMAIDING_AFTER_EVENT_MAIL.booleanValue())))
-                .andExpect(jsonPath("$.[*].patientCreationAccountMail").value(hasItem(DEFAULT_PATIENT_CREATION_ACCOUNT_MAIL.booleanValue())));
+                .andExpect(jsonPath("$.[*].activated").value(hasItem(DEFAULT_ACTIVATED.booleanValue())));
     }
 
     @Test
@@ -153,12 +123,7 @@ public class MailSettingResourceTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(mailSetting.getId().intValue()))
-            .andExpect(jsonPath("$.mailOnEventCreation").value(DEFAULT_MAIL_ON_EVENT_CREATION.booleanValue()))
-            .andExpect(jsonPath("$.mailOnEventCancelation").value(DEFAULT_MAIL_ON_EVENT_CANCELATION.booleanValue()))
-            .andExpect(jsonPath("$.mailOnEventEdition").value(DEFAULT_MAIL_ON_EVENT_EDITION.booleanValue()))
-            .andExpect(jsonPath("$.remaidingBeforeEventMail").value(DEFAULT_REMAIDING_BEFORE_EVENT_MAIL.booleanValue()))
-            .andExpect(jsonPath("$.remaidingAfterEventMail").value(DEFAULT_REMAIDING_AFTER_EVENT_MAIL.booleanValue()))
-            .andExpect(jsonPath("$.patientCreationAccountMail").value(DEFAULT_PATIENT_CREATION_ACCOUNT_MAIL.booleanValue()));
+            .andExpect(jsonPath("$.activated").value(DEFAULT_ACTIVATED.booleanValue()));
     }
 
     @Test
@@ -178,12 +143,7 @@ public class MailSettingResourceTest {
 		int databaseSizeBeforeUpdate = mailSettingRepository.findAll().size();
 
         // Update the mailSetting
-        mailSetting.setMailOnEventCreation(UPDATED_MAIL_ON_EVENT_CREATION);
-        mailSetting.setMailOnEventCancelation(UPDATED_MAIL_ON_EVENT_CANCELATION);
-        mailSetting.setMailOnEventEdition(UPDATED_MAIL_ON_EVENT_EDITION);
-        mailSetting.setRemaidingBeforeEventMail(UPDATED_REMAIDING_BEFORE_EVENT_MAIL);
-        mailSetting.setRemaidingAfterEventMail(UPDATED_REMAIDING_AFTER_EVENT_MAIL);
-        mailSetting.setPatientCreationAccountMail(UPDATED_PATIENT_CREATION_ACCOUNT_MAIL);
+        mailSetting.setActivated(UPDATED_ACTIVATED);
 
         restMailSettingMockMvc.perform(put("/api/mailSettings")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -194,12 +154,7 @@ public class MailSettingResourceTest {
         List<MailSetting> mailSettings = mailSettingRepository.findAll();
         assertThat(mailSettings).hasSize(databaseSizeBeforeUpdate);
         MailSetting testMailSetting = mailSettings.get(mailSettings.size() - 1);
-        assertThat(testMailSetting.getMailOnEventCreation()).isEqualTo(UPDATED_MAIL_ON_EVENT_CREATION);
-        assertThat(testMailSetting.getMailOnEventCancelation()).isEqualTo(UPDATED_MAIL_ON_EVENT_CANCELATION);
-        assertThat(testMailSetting.getMailOnEventEdition()).isEqualTo(UPDATED_MAIL_ON_EVENT_EDITION);
-        assertThat(testMailSetting.getRemaidingBeforeEventMail()).isEqualTo(UPDATED_REMAIDING_BEFORE_EVENT_MAIL);
-        assertThat(testMailSetting.getRemaidingAfterEventMail()).isEqualTo(UPDATED_REMAIDING_AFTER_EVENT_MAIL);
-        assertThat(testMailSetting.getPatientCreationAccountMail()).isEqualTo(UPDATED_PATIENT_CREATION_ACCOUNT_MAIL);
+        assertThat(testMailSetting.getActivated()).isEqualTo(UPDATED_ACTIVATED);
     }
 
     @Test

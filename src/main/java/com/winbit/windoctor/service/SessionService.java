@@ -5,6 +5,7 @@ import com.winbit.windoctor.domain.MailSetting;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.MailSettingRepository;
 import com.winbit.windoctor.security.SecurityUtils;
+import com.winbit.windoctor.security.WinDoctorUserDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,18 +31,41 @@ public class SessionService {
         return SecurityUtils.getCurrerntStructure();
     }
 
-    public  MailSetting getMailSetting(Long structureId){
-
-        List<MailSetting> mailSettingList = mailSettingRepository.findAll(structureId);
-
-        if(mailSettingList != null && mailSettingList.size() > 0){
-            if(mailSettingList.size() > 1){
-                log.error("More than one mail setting find for the current structure :"+ structureId);
-            }
-            return  mailSettingList.get(0);
-        } else {
-            log.error("No mail setting found for the current structure:"+ structureId);
-            return null;
-        }
+    public  MailSetting getMailSetting(Long structureId, Long emailType){
+        return mailSettingRepository.findOne(structureId, emailType);
     }
+
+    public boolean isAdmin(){
+        WinDoctorUserDetails current = SecurityUtils.getCurrentWinDoctorUserDetails();
+        if(current!=null){
+            return current.isAdmin();
+        }
+        return false;
+    }
+
+    public boolean isDoctor(){
+        WinDoctorUserDetails current = SecurityUtils.getCurrentWinDoctorUserDetails();
+        if(current!=null){
+            return current.isDoctor();
+        }
+        return false;
+    }
+
+    public boolean isAssistant(){
+        WinDoctorUserDetails current = SecurityUtils.getCurrentWinDoctorUserDetails();
+        if(current!=null){
+            return current.isAssistant();
+        }
+        return false;
+    }
+
+    public boolean isPatient(){
+        WinDoctorUserDetails current = SecurityUtils.getCurrentWinDoctorUserDetails();
+        if(current!=null){
+            return current.isPatient();
+        }
+        return false;
+    }
+
+
 }

@@ -16,27 +16,32 @@
     <!--
         Added the entity MailSetting.
     -->
-    <changeSet id="20151106171800" author="jhipster">
+    <changeSet id="20151115134200" author="jhipster">
         <createTable tableName="mail_setting">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="mail_on_event_creation" type="bit"/>
-            <column name="mail_on_event_cancelation" type="bit"/>
-            <column name="mail_on_event_edition" type="bit"/>
-            <column name="remaiding_before_event_mail" type="bit"/>
-            <column name="remaiding_after_event_mail" type="bit"/>
-            <column name="patient_creation_account_mail" type="bit"/>
-            <column name="structure_id" type="bigint">
-                <constraints unique="true"/>
-            </column>
+            <column name="activated" type="bit"/>
+            <column name="structure_id" type="bigint"/>
+            <column name="mail_type_id" type="bigint"/>
         </createTable>
-        
+
         <addForeignKeyConstraint baseColumnNames="structure_id"
                                  baseTableName="mail_setting"
                                  constraintName="fk_mailsetting_structure_id"
                                  referencedColumnNames="id"
                                  referencedTableName="structure"/>
+
+        <addForeignKeyConstraint baseColumnNames="mail_type_id"
+                                 baseTableName="mail_setting"
+                                 constraintName="fk_mailsetting_mail_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="mail_type"/>
+        <addUniqueConstraint
+            columnNames="mail_type_id, structure_id"
+            constraintName="unique_mail_structure"
+            tableName="mail_setting"
+            />
 
     </changeSet>
 </databaseChangeLog>

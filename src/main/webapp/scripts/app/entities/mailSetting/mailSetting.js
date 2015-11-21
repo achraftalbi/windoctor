@@ -61,12 +61,7 @@ angular.module('windoctorApp')
                         resolve: {
                             entity: function () {
                                 return {
-                                    mailOnEventCreation: null,
-                                    mailOnEventCancelation: null,
-                                    mailOnEventEdition: null,
-                                    remaidingBeforeEventMail: null,
-                                    remaidingAfterEventMail: null,
-                                    patientCreationAccountMail: null,
+                                    activated: null,
                                     id: null
                                 };
                             }

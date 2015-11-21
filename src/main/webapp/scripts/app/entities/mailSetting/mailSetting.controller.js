@@ -49,12 +49,7 @@ angular.module('windoctorApp')
 
         $scope.clear = function () {
             $scope.mailSetting = {
-                mailOnEventCreation: null,
-                mailOnEventCancelation: null,
-                mailOnEventEdition: null,
-                remaidingBeforeEventMail: null,
-                remaidingAfterEventMail: null,
-                patientCreationAccountMail: null,
+                activated: null,
                 id: null
             };
         };
