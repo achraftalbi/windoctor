@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Dashboard;
 import com.winbit.windoctor.repository.DashboardRepository;
 import com.winbit.windoctor.repository.search.DashboardSearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -81,18 +82,35 @@ public class DashboardResource {
     /**
      * GET  /dashboards -> get all the dashboards.
      */
-    @RequestMapping(value = "/dashboards",
+    /*@RequestMapping(value = "/dashboards",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<Dashboard>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        Page<Dashboard> page = dashboardRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<Dashboard> page = dashboardRepository.findAllByYear(2015l);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/dashboards", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
+    }*/
 
+    @RequestMapping(value = "/dashboards",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<Dashboard> getAll(@RequestParam(value = "typeDashboard", required = false) Long typeDashboard,
+                                  @RequestParam(value = "year", required = false) Long year)
+        throws URISyntaxException {
+        log.debug("REST request to get all Dashboards");
+        if(typeDashboard==null){
+            return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        }else if(typeDashboard==1l) {
+            return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        }else if(typeDashboard==2l){
+            return dashboardRepository.findPatientsByYearMonths(year, SecurityUtils.getCurrerntStructure());
+        }
+        return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+    }
     /**
      * GET  /dashboards/:id -> get the "id" dashboard.
      */

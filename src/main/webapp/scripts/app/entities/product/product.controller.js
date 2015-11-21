@@ -3,18 +3,31 @@
 angular.module('windoctorApp')
     .controller('ProductController', function ($scope, Product, ProductSearch, ParseLinks) {
         $scope.products = [];
+        $scope.productsThreshold = [];
         $scope.page = 1;
+        $scope.pageThreshold = 1;
         $scope.loadAll = function () {
-            Product.query({page: $scope.page, per_page: 5}, function (result, headers) {
+            Product.query({typeProductToGet:1,page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.products = result;
+            });
+        };
+        $scope.loadAllThreshold = function () {
+            Product.query({typeProductToGet:2,page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.linksThreshold = ParseLinks.parse(headers('link'));
+                $scope.productsThreshold = result;
             });
         };
         $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();
         };
+        $scope.loadPageThreshold = function (page) {
+            $scope.pageThreshold = page;
+            $scope.loadAllThreshold();
+        };
         $scope.loadAll();
+        $scope.loadAllThreshold();
 
         $scope.delete = function (id) {
             Product.get({id: id}, function (result) {

@@ -17,8 +17,12 @@
             },
             "name": "Name",
             "image": "Image",
-            "price": "Price",
-            "amount": "Amount",
+            "price": "Price per unit",
+            "totalPrice": "Total price",
+            "amount": "Quantity",
+            "threshold": "Threshold",
+            "fillPriceQuantity": "Fill price and quantity to see total price",
+            "materialsOutStock": "Materials out of stock",
             "product": "Product"
         }
     }

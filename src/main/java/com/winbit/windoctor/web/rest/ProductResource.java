@@ -2,8 +2,10 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Product;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.ProductRepository;
 import com.winbit.windoctor.repository.search.ProductSearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,8 @@ public class ProductResource {
         if (product.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new product cannot already have an ID").body(null);
         }
+        product.setStructure(new Structure());
+        product.getStructure().setId(SecurityUtils.getCurrerntStructure());
         Product result = productRepository.save(product);
         productSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
@@ -86,11 +90,19 @@ public class ProductResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Product>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+    public ResponseEntity<List<Product>> getAll(@RequestParam(value = "typeProductToGet", required = false) Long typeProductToGet,
+                                                @RequestParam(value = "page" , required = false) Integer offset,
                                               @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         log.debug("REST request to get products page per_page");
-        Page<Product> page = productRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<Product> page;
+        if(typeProductToGet==1l) {
+            page = productRepository.findAll(SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        }else if(typeProductToGet==2l){
+            page = productRepository.findAllThreshold(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        }else{
+            page = productRepository.findAll(SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/products", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

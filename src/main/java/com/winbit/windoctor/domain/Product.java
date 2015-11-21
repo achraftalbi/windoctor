@@ -47,8 +47,32 @@ public class Product implements Serializable {
     @Column(name = "amount", precision=10, scale=2, nullable = false)
     private BigDecimal amount;
 
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "threshold", precision=10, scale=2, nullable = false)
+    private BigDecimal threshold;
+
     @ManyToOne
     private Category product;
+
+    @ManyToOne
+    private Structure structure;
+
+    public BigDecimal getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(BigDecimal threshold) {
+        this.threshold = threshold;
+    }
+
+    public Structure getStructure() {
+        return structure;
+    }
+
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
 
     public Long getId() {
         return id;

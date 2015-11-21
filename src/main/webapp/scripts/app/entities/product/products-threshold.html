@@ -1,0 +1,81 @@
+<div ng-show="productsThreshold" style="padding: 15px;">
+    <div class="panel panel-danger">
+        <div class="panel-heading">
+            <h3 translate="windoctorApp.product.materialsOutStock" class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+            <jh-alert></jh-alert>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th translate="global.field.id">ID</th>
+                        <th translate="windoctorApp.product.name">Name</th>
+                        <th translate="windoctorApp.product.image">Image</th>
+                        <th translate="windoctorApp.product.price">Price</th>
+                        <th translate="windoctorApp.product.totalPrice">Total price</th>
+                        <th translate="windoctorApp.product.amount">Amount</th>
+                        <th translate="windoctorApp.product.threshold">Threshold</th>
+                        <th translate="windoctorApp.product.product">product</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="product in productsThreshold">
+                        <td><a ui-sref="product.detail({id:product.id})">{{product.id}}</a></td>
+                        <td>{{product.name}}</td>
+                        <td>
+                            <img data-ng-src="{{'data:image/*;base64,' + product.image}}" style="max-height: 30px;"
+                                 ng-if="product.image"/>
+                            {{byteSize(product.image)}}
+                        </td>
+                        <td>{{product.price}}</td>
+                        <td>{{product.price * product.amount}}</td>
+                        <td><span class="label label-danger">{{product.amount}}</span></td>
+                        <td>{{product.threshold}}</td>
+                        <td>
+                            <a ui-sref="category.detail({id:product.product.id})">{{product.product.name}}</a>
+                        </td>
+                        <td>
+                            <button type="submit"
+                                    ui-sref="product.detail({id:product.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span
+                                translate="entity.action.view"> View</span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="product.edit({id:product.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
+                                translate="entity.action.edit"> Edit</span>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination">
+                        <li ng-show="linksThreshold['first']" ng-click="loadPageThreshold(linksThreshold['first'])"><a>
+                            &lt;&lt;</a></li>
+                        <li ng-show="linksThreshold['prev']" ng-click="loadPageThreshold(linksThreshold['prev'])"><a>
+                            &lt;</a></li>
+                        <li ng-show="pageThreshold > 2" ng-click="loadPageThreshold(pageThreshold - 2)"><a>{{pageThreshold
+                            - 2}}</a></li>
+                        <li ng-show="pageThreshold > 1" ng-click="loadPageThreshold(pageThreshold - 1)"><a>{{pageThreshold
+                            - 1}}</a></li>
+                        <li class="active"><a>{{pageThreshold}}</a></li>
+                        <li ng-show="pageThreshold < linksThreshold['last']"
+                            ng-click="loadPageThreshold(pageThreshold + 1)"><a>{{pageThreshold + 1}}</a></li>
+                        <li ng-show="pageThreshold < linksThreshold['last'] - 1"
+                            ng-click="loadPageThreshold(pageThreshold + 2)"><a>{{pageThreshold + 2}}</a></li>
+                        <li ng-show="linksThreshold['next']" ng-click="loadPageThreshold(linksThreshold['next'])"><a>
+                            &gt;</a></li>
+                        <li ng-show="linksThreshold['last']" ng-click="loadPageThreshold(linksThreshold['last'])"><a>
+                            &gt;&gt;</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

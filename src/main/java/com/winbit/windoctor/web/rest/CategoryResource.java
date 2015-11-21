@@ -2,8 +2,10 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Category;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.CategoryRepository;
 import com.winbit.windoctor.repository.search.CategorySearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,8 @@ public class CategoryResource {
         if (category.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new category cannot already have an ID").body(null);
         }
+        category.setStructure(new Structure());
+        category.getStructure().setId(SecurityUtils.getCurrerntStructure());
         Category result = categoryRepository.save(category);
         categorySearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/categorys/" + result.getId()))
@@ -90,7 +94,7 @@ public class CategoryResource {
                                                     @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         log.debug("REST request to get Categorys page per_page");
-        Page<Category> page = categoryRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        Page<Category> page = categoryRepository.findAll(SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/categorys", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

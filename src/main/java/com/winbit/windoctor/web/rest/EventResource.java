@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.repository.EventRepository;
 import com.winbit.windoctor.repository.search.EventSearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -100,7 +101,7 @@ public class EventResource {
             page = eventRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         }else{
             log.debug("first date:"+new DateTime(selectedDate)+" segond date:"+new DateTime(addDays(selectedDate,1)));
-            page = eventRepository.findAll(new DateTime(selectedDate),new DateTime(addDays(selectedDate,1)),PaginationUtil.generatePageRequest(offset, limit));
+            page = eventRepository.findAll(new DateTime(selectedDate),new DateTime(addDays(selectedDate,1)), SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

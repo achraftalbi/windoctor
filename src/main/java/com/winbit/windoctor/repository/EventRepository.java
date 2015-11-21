@@ -12,8 +12,8 @@ import java.util.List;
  * Spring Data JPA repository for the Event entity.
  */
 public interface EventRepository extends JpaRepository<Event,Long> {
-    @Query("select e from Event e where e.event_date between ?1 and ?2")
-    Page<Event> findAll(DateTime selectedDate, DateTime segondDate, Pageable var1);
+    @Query("select e from Event e where e.event_date between ?1 and ?2 and e.user.structure.id = ?3")
+    Page<Event> findAll(DateTime selectedDate, DateTime segondDate, Long structure_id, Pageable var1);
     @Query("select e from Event e where e.user.id = ?1")
     List<Event> findByPatient(Long patientId);
 }

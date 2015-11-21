@@ -14,8 +14,12 @@
             },
             "name": "Name",
             "image": "Image",
-            "price": "Price",
-            "amount": "Amount",
+            "price": "Prix par unité",
+            "totalPrice": "Prix totale",
+            "amount": "Quantité",
+            "threshold": "Seuil",
+            "fillPriceQuantity": "Remplissez le prix et la quantité pour voir le prix totale",
+            "materialsOutStock": "Matériaux en rupture de stock",
             "product": "Product"
         }
     }

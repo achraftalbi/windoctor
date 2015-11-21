@@ -25,10 +25,10 @@ public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 
     @NotNull
-    @Size(min = 1, max = 100)        
+    @Size(min = 1, max = 100)
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
@@ -36,6 +36,17 @@ public class Category implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Product> products = new HashSet<>();
+
+    @ManyToOne
+    private Structure structure;
+
+    public Structure getStructure() {
+        return structure;
+    }
+
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }
 
     public Long getId() {
         return id;

@@ -18,7 +18,10 @@ angular.module('windoctorApp')
                 var deferred = $q.defer();
                 deferred.resolve(LANGUAGES);
                 return deferred.promise;
-            }
+            }/*,
+            getObjectRelatedCurrentLang(param1,param2){
+
+            }*/
         };
     })
 

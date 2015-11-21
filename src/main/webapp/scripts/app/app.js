@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pascalprecht.translate',
-                'mwl.calendar', // Add calendar to my application
+               'mwl.calendar', // Add calendar to my application
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
+               'angular-loading-bar', 'ngAnimate', //Used for inclufing loading bar
     'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {
@@ -102,4 +103,7 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
         tmhDynamicLocaleProvider.useCookieStorage();
         tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
 
-    });
+    })
+    .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.latencyThreshold = 1;
+    }]);
