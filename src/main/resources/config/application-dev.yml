@@ -4,8 +4,8 @@ server:
 email:
     hostname: http://localhost
     reminder:
-        before: 2
-        after: 2
+        before: 2 # in hour
+        after: 15 # in minutes
 
 
 

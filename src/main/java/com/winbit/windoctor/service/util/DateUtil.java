@@ -15,4 +15,9 @@ public class DateUtil {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(WinDoctorConstants.WinDoctorPattern.EMAIL_DATE_PATTERN);
         return simpleDateFormat.format(date.toDate());
     }
+
+    public static String getFormattedTime(DateTime date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(WinDoctorConstants.WinDoctorPattern.EMAIL_SHORT_DATE_PATTERN);
+        return simpleDateFormat.format(date.toDate());
+    }
 }

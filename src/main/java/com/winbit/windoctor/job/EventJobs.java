@@ -80,7 +80,7 @@ public final class EventJobs {
 
         if (CollectionUtils.isNotEmpty(events)) {
             log.info("Cancelation event job > Start...");
-            log.info("Cancelation event job > "+events.size() + "consultation canceled !");
+            log.info("Cancelation event job > "+events.size() + " consultation canceled !");
             log.info("Cancelation event job > emailing patients...");
             events
                 .stream()
@@ -96,20 +96,20 @@ public final class EventJobs {
         }
     }
 
-    @Scheduled(cron = "* */1 * * * *")
+    @Scheduled(cron = "* */5 * * * *")
     public void reminderBeforeEventEmailJob() {
 
         String beforeDelai =  env.getRequiredProperty("email.reminder.before");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.HOUR, Integer.valueOf(beforeDelai));
 
-        List<Event> events = eventRepository.getAllEventForReminding(
+        List<Event> events = eventRepository.getAllEventBeforeReminding(
             WinDoctorConstants.Mail.BEFORE_EVENT_START_EMAIL_TYPE,
             WinDoctorConstants.EventStatus.EVENT_CREATION, new DateTime(c.getTime()));
 
         if (CollectionUtils.isNotEmpty(events)) {
             log.info("Reminding before event job > Start...");
-            log.info("Reminding before event job > "+events.size() + "consultation to remind !");
+            log.info("Reminding before event job > "+events.size() + " consultation to remind !");
             log.info("Reminding before event job > emailing patients...");
 
             events
@@ -120,6 +120,38 @@ public final class EventJobs {
                         mailService.sendEventBeforeRemindingEmail(event);
                         event.setRemindBeforeMail(Boolean.TRUE);
                         eventRepository.save(event);
+                    }
+
+                );
+        }
+    }
+
+    @Scheduled(cron = "* */1 * * * *")
+    public void reminderAfterEventEmailJob() {
+
+        String afterDelai =  env.getRequiredProperty("email.reminder.after");
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MINUTE, Integer.valueOf(Integer.valueOf(afterDelai).intValue() * -1));
+
+        List<Event> events = eventRepository.getAllEventAfterReminding(
+            WinDoctorConstants.Mail.AFTER_EVENT_START_EMAIL_TYPE,
+            WinDoctorConstants.EventStatus.EVENT_CREATION, new DateTime(c.getTime()));
+
+        if (CollectionUtils.isNotEmpty(events)) {
+            log.info("Reminding after event job > Start...");
+            log.info("Reminding after event job > "+events.size() + " consultation to remind !");
+            log.info("Reminding after event job > emailing patients...");
+
+            events
+                .stream()
+                .filter(event -> event.getUser() != null)
+                .forEach(
+                    event -> {
+                        System.out.println("Event date="+ event.getEvent_date());
+             /*           mailService.sendEventAfterRemindingEmail(event);
+                        event.setRemindAfterMail(Boolean.TRUE);
+                        eventRepository.save(event);*/
                     }
 
                 );

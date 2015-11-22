@@ -1,4 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-   remainding after event
+<head>
+    <title th:text="#{email.event.reminding.after.title}">[WinDoctor] Appointement reminder - delay</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.event.reminding.after.greeting(${user.lastName})}">
+    Dear {0},
+</p>
+<p th:text="#{email.event.reminding.after.body(${eventdate},${structure.name})}">
+    Please note that you delayed beings over your appointment at {0} on { 1} .
+</p>
+
+<p>
+    <span th:text="#{email.footer.regards}">Regards, </span>
+    <br/>
+    <em th:text="#{email.footer.signature}">WinDoctor.</em>
+</p>
+</body>
 </html>
