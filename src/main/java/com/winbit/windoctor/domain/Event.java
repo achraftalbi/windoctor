@@ -49,6 +49,18 @@ public class Event implements Serializable {
     @JsonIgnore
     private Boolean creationMailSent;
 
+    @Column(name = "canceled_mail_sent")
+    @JsonIgnore
+    private Boolean canceledMailSent;
+
+    @Column(name = "remind_before_mail")
+    @JsonIgnore
+    private Boolean remindBeforeMail;
+
+    @Column(name = "remind_after_mail")
+    @JsonIgnore
+    private Boolean remindAfterMail;
+
     @Size(max = 1000)
     @Column(name = "description", length = 1000)
     private String description;
@@ -142,7 +154,29 @@ public class Event implements Serializable {
         this.user = user;
     }
 
+    public Boolean getCanceledMailSent() {
+        return canceledMailSent;
+    }
 
+    public void setCanceledMailSent(Boolean canceledMailSent) {
+        this.canceledMailSent = canceledMailSent;
+    }
+
+    public Boolean getRemindBeforeMail() {
+        return remindBeforeMail;
+    }
+
+    public void setRemindBeforeMail(Boolean remindBeforeMail) {
+        this.remindBeforeMail = remindBeforeMail;
+    }
+
+    public Boolean getRemindAfterMail() {
+        return remindAfterMail;
+    }
+
+    public void setRemindAfterMail(Boolean remindAfterMail) {
+        this.remindAfterMail = remindAfterMail;
+    }
 
     @Override
     public boolean equals(Object o) {

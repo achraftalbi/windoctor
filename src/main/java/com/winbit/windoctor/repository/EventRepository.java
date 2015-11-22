@@ -32,6 +32,32 @@ public interface EventRepository extends JpaRepository<Event,Long> {
         "and e.creationMailSent = false " +
         "and e.eventStatus.id = ?4 "+
         "and e.creation_date between ?2 and ?3")
-    List<Event> getAllNewelyCreatedEvent(Long emailCode, DateTime start, DateTime end, Long es);
+    List<Event> getAllNewelyCreatedEvents(Long emailCode, DateTime start, DateTime end, Long es);
+
+    /**
+     * Get all canceled event on all structure that accept emailing after event cancelation
+     *
+     * @param emailCode - email code
+     * @param es - event status code
+     * @return event list
+     */
+    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+        "and ms.activated = true " +
+        "and e.canceledMailSent = false " +
+        "and e.eventStatus.id = ?2")
+    List<Event> getAllCanceledEvents(Long emailCode, Long es);
+
+    /**
+     * Get all canceled event on all structure that accept emailing after event cancelation
+     *
+     * @param emailCode - email code
+     * @param es - event status code
+     * @return event list
+     */
+    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+        "and ms.activated = true " +
+        "and e.canceledMailSent = false " +
+        "and e.eventStatus.id = ?2")
+    List<Event> getAllEventBeofreReminding(Long emailCode, Long es);
 
 }

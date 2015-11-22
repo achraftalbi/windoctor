@@ -3,6 +3,9 @@ server:
 
 email:
     hostname: http://localhost
+    reminder:
+        before: 2
+        after: 2
 
 liquibase:
     context: prod

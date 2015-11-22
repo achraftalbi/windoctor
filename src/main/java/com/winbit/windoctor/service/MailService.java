@@ -153,6 +153,21 @@ public class MailService {
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
+    @Async
+    public void sendEventCanceledEmail(Event e) {
+        User user = e.getUser();
+        log.debug("Sending event cancelation e-mail to '{}'", user.getEmail());
+        Locale locale = Locale.forLanguageTag("fr");
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("eventdate", DateUtil.formatDate(e.getEvent_date()));
+        context.setVariable("structure", e.getUser().getStructure());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        String content = templateEngine.process("eventCancelationEmail", context);
+        String subject = messageSource.getMessage("email.event.cancelation.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
     private String getBaseUrlOnAsynchronousJobs(){
         return env.getProperty("email.hostname") +":"+ env.getProperty("server.port");
     }

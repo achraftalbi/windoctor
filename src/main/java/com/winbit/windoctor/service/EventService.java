@@ -33,53 +33,17 @@ public class EventService {
     @Inject
     private StatusRepository statusRepository;
 
-    @Inject
-    private MailService mailService;
-
     public Event save(Event event){
         event.setCreation_date(new DateTime());
+
         event.setCreationMailSent(Boolean.FALSE);
+        event.setCanceledMailSent(Boolean.FALSE);
+        event.setRemindAfterMail(Boolean.FALSE);
+        event.setRemindBeforeMail(Boolean.FALSE);
+
         Status status = statusRepository.findOneById(WinDoctorConstants.EventStatus.EVENT_CREATION);
         event.setEventStatus(status);
+
         return eventRepository.save(event);
-    }
-
-
-
-    @Scheduled(cron = "*/10 * * * * *")
-//    @Scheduled(cron = "* */5 * * * *")
-    public void notifyEventCreationEmail() {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY,0);
-        c.set(Calendar.MINUTE,0);
-        c.set(Calendar.SECOND,0);
-        DateTime startDate = new DateTime(c.getTime());
-
-        c.set(Calendar.HOUR_OF_DAY,23);
-        c.set(Calendar.MINUTE,59);
-        c.set(Calendar.SECOND, 59);
-        DateTime endDate = new DateTime(c.getTime());
-
-        List<Event> events = eventRepository.getAllNewelyCreatedEvent(
-            WinDoctorConstants.Mail.EVENT_CREATION_EMAIL_TYPE,
-            startDate,
-            endDate,
-            WinDoctorConstants.EventStatus.EVENT_CREATION);
-
-        if(CollectionUtils.isNotEmpty(events)){
-            log.info(events.size()+" new consultation created !");
-            log.debug("Start emailing patients...");
-            events
-                .stream()
-                .filter(event -> event.getUser()!=null)
-                .forEach(
-                    event ->  {
-                        mailService.sendEventCreationEmail(event);
-                        event.setCreationMailSent(Boolean.TRUE);
-                        eventRepository.save(event);
-                    }
-
-                );
-        }
     }
 }
