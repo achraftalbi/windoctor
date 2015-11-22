@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,8 +57,9 @@ public interface EventRepository extends JpaRepository<Event,Long> {
      */
     @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
         "and ms.activated = true " +
-        "and e.canceledMailSent = false " +
-        "and e.eventStatus.id = ?2")
-    List<Event> getAllEventBeofreReminding(Long emailCode, Long es);
+        "and e.remindBeforeMail = false " +
+        "and e.eventStatus.id = ?2 " +
+        "and e.event_date < ?3")
+    List<Event> getAllEventForReminding(Long emailCode, Long es, DateTime date);
 
 }

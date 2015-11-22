@@ -1,4 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-   remainding before event
+<head>
+    <title th:text="#{email.event.reminding.before.title}">[WinDoctor] Appointement reminder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p th:text="#{email.event.reminding.before.greeting(${user.lastName})}">
+    Dear {0}
+</p>
+<p th:text="#{email.event.reminding.before.body(${eventdate},${structure.name})}">
+    Your appointement at {0} with {1} was validated.
+</p>
+
+<p>
+    <span th:text="#{email.footer.regards}">Regards, </span>
+    <br/>
+    <em th:text="#{email.footer.signature}">WinDoctor.</em>
+</p>
+</body>
 </html>

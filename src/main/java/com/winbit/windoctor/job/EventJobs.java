@@ -9,6 +9,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,9 @@ public final class EventJobs {
     @Inject
     private MailService mailService;
 
+    @Inject
+    private Environment env;
+
     @Scheduled(cron = "*/10 * * * * *")
     public void notifyEventCreationEmailJob() {
         Calendar c = Calendar.getInstance();
@@ -51,8 +55,9 @@ public final class EventJobs {
             WinDoctorConstants.EventStatus.EVENT_CREATION);
 
         if (CollectionUtils.isNotEmpty(events)) {
+            log.info("Creation event job> Start...");
             log.info("Creation event job > "+events.size() + " new consultation created !");
-            log.info("Creation event job> Start emailing patients...");
+            log.info("Creation event job> emailing patients...");
             events
                 .stream()
                 .filter(event -> event.getUser() != null)
@@ -74,8 +79,9 @@ public final class EventJobs {
             WinDoctorConstants.EventStatus.EVENT_CANCELATION);
 
         if (CollectionUtils.isNotEmpty(events)) {
-            log.info("Cancelation event job > Start emailing patients...");
+            log.info("Cancelation event job > Start...");
             log.info("Cancelation event job > "+events.size() + "consultation canceled !");
+            log.info("Cancelation event job > emailing patients...");
             events
                 .stream()
                 .filter(event -> event.getUser() != null)
@@ -92,20 +98,27 @@ public final class EventJobs {
 
     @Scheduled(cron = "* */1 * * * *")
     public void reminderBeforeEventEmailJob() {
-        List<Event> events = eventRepository.getAllCanceledEvents(
-            WinDoctorConstants.Mail.EVENT_CANCELATION_EMAIL_TYPE,
-            WinDoctorConstants.EventStatus.EVENT_CANCELATION);
+
+        String beforeDelai =  env.getRequiredProperty("email.reminder.before");
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR, Integer.valueOf(beforeDelai));
+
+        List<Event> events = eventRepository.getAllEventForReminding(
+            WinDoctorConstants.Mail.BEFORE_EVENT_START_EMAIL_TYPE,
+            WinDoctorConstants.EventStatus.EVENT_CREATION, new DateTime(c.getTime()));
 
         if (CollectionUtils.isNotEmpty(events)) {
-            log.info("Cancelation event job > Start emailing patients...");
-            log.info("Cancelation event job > "+events.size() + "consultation canceled !");
+            log.info("Reminding before event job > Start...");
+            log.info("Reminding before event job > "+events.size() + "consultation to remind !");
+            log.info("Reminding before event job > emailing patients...");
+
             events
                 .stream()
                 .filter(event -> event.getUser() != null)
                 .forEach(
                     event -> {
-                        mailService.sendEventCanceledEmail(event);
-                        event.setCanceledMailSent(Boolean.TRUE);
+                        mailService.sendEventBeforeRemindingEmail(event);
+                        event.setRemindBeforeMail(Boolean.TRUE);
                         eventRepository.save(event);
                     }
 
