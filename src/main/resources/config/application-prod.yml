@@ -1,6 +1,9 @@
 server:
     port: 8080
 
+email:
+    hostname: http://localhost
+
 liquibase:
     context: prod
 

@@ -1,10 +1,12 @@
 package com.winbit.windoctor.service;
 
 import com.winbit.windoctor.common.WinDoctorConstants;
+import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.domain.MailSetting;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.StructureRepository;
+import com.winbit.windoctor.service.util.DateUtil;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,6 +136,25 @@ public class MailService {
         String content = templateEngine.process("doctorAccountCreationEmail", context);
         String subject = messageSource.getMessage("email.doctor.creation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendEventCreationEmail(Event e) {
+        User user = e.getUser();
+        log.debug("Sending event creation e-mail to '{}'", user.getEmail());
+        Locale locale = Locale.forLanguageTag("fr");
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("eventdate", DateUtil.formatDate(e.getEvent_date()));
+        context.setVariable("structure", e.getUser().getStructure());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        String content = templateEngine.process("eventCreationEmail", context);
+        String subject = messageSource.getMessage("email.event.creation.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    private String getBaseUrlOnAsynchronousJobs(){
+        return env.getProperty("email.hostname") +":"+ env.getProperty("server.port");
     }
 
 
