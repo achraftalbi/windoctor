@@ -25,6 +25,10 @@
             "paid_price": "Paid_price",
             "attachment": "Attachment",
             "doctor": "Doctor",
+            "fund": "Fund",
+            "fundAmount": "Fund amount",
+            "chooseFund": "Choose a fund to see this field",
+            "theAmountOfNewOrOldFundNotEnough": "The amount of the current fund or the old fund is not enough.",
             "eventReason": "EventReason"
         }
     }

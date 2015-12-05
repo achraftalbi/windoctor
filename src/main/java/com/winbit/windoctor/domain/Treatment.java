@@ -71,6 +71,17 @@ public class Treatment implements Serializable {
     @ManyToOne
     private Event event;
 
+    @ManyToOne
+    private Fund fund;
+
+    public Fund getFund() {
+        return fund;
+    }
+
+    public void setFund(Fund fund) {
+        this.fund = fund;
+    }
+
     public Event getEvent() {
         return event;
     }

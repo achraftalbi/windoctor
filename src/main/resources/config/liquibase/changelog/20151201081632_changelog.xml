@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1448957827971-1">
+       <addColumn tableName="FUND_HISTORY">
+           <column name="supply_type_id" type="bigint"/>
+           <column name="created_by" type="bigint"/>
+           <column name="creation_date" type="timestamp"/>
+       </addColumn>
+       <addForeignKeyConstraint baseColumnNames="supply_type_id"
+                                baseTableName="FUND_HISTORY"
+                                constraintName="fk_fund_history_supply_type"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="SUPPLY_TYPE"/>
+       <addForeignKeyConstraint baseColumnNames="created_by"
+                                baseTableName="FUND_HISTORY"
+                                constraintName="fk_fund_history_jhi_user"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="JHI_USER"/>
+   </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,132 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myFund_historyLabel" translate="windoctorApp.fund_history.home.createOrEditLabel">Create or edit a Fund_history</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="fund_history.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.old_amount" for="field_old_amount">Old_amount</label>
+            <input type="number" class="form-control" name="old_amount" id="field_old_amount"
+                    ng-model="fund_history.old_amount"
+                    required min="0" max="1000000000">
+
+            <div ng-show="editForm.old_amount.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.old_amount.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.old_amount.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.old_amount.$error.max" translate="entity.validation.max" translate-value-max="1000000000">
+                    This field cannot be more than 1000000000.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.old_amount.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.new_amount" for="field_new_amount">New_amount</label>
+            <input type="number" class="form-control" name="new_amount" id="field_new_amount"
+                    ng-model="fund_history.new_amount"
+                    required min="0" max="1000000000">
+
+            <div ng-show="editForm.new_amount.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.new_amount.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.new_amount.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.new_amount.$error.max" translate="entity.validation.max" translate-value-max="1000000000">
+                    This field cannot be more than 1000000000.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.new_amount.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.type_operation" for="field_type_operation">Type_operation</label>
+            <input type="checkbox" class="form-control" name="type_operation" id="field_type_operation"
+                    ng-model="fund_history.type_operation"
+                    >
+
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.amount_movement" for="field_amount_movement">Amount_movement</label>
+            <input type="number" class="form-control" name="amount_movement" id="field_amount_movement"
+                    ng-model="fund_history.amount_movement"
+                    required min="0" max="1000000000">
+
+            <div ng-show="editForm.amount_movement.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.amount_movement.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amount_movement.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amount_movement.$error.max" translate="entity.validation.max" translate-value-max="1000000000">
+                    This field cannot be more than 1000000000.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amount_movement.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.fund" for="field_fund_history_fund">fund</label>
+
+            <select class="form-control" id="field_fund_history_fund" name="fund" ng-model="fund_history.fund" ng-options="fund as fund.description for fund in funds track by fund.id">
+                <option value=""></option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.treatment" for="field_fund_history_treatment">treatment</label>
+
+            <select class="form-control" id="field_fund_history_treatment" name="treatment" ng-model="fund_history.treatment" ng-options="treatment as treatment.id for treatment in treatments track by treatment.id">
+                <option value=""></option>
+            </select>
+
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.fund_history.product" for="field_fund_history_product">product</label>
+
+            <select class="form-control" id="field_fund_history_product" name="product" ng-model="fund_history.product" ng-options="product as product.name for product in products track by product.id">
+                <option value=""></option>
+            </select>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

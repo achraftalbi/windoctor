@@ -58,6 +58,17 @@ public class Product implements Serializable {
     @ManyToOne
     private Structure structure;
 
+    @ManyToOne
+    private Fund fund;
+
+    public Fund getFund() {
+        return fund;
+    }
+
+    public void setFund(Fund fund) {
+        this.fund = fund;
+    }
+
     public BigDecimal getThreshold() {
         return threshold;
     }

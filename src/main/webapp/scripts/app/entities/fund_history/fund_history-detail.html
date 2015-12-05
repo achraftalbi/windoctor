@@ -1,0 +1,78 @@
+
+<div>
+    <h2><span translate="windoctorApp.fund_history.detail.title">Fund_history</span> {{fund_history.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.old_amount">Old_amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{fund_history.old_amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.new_amount">New_amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{fund_history.new_amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.type_operation">Type_operation</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{fund_history.type_operation}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.amount_movement">Amount_movement</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{fund_history.amount_movement}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.fund">fund</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="fund.detail({id:fund_history.fund.id})">{{fund_history.fund.description}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.treatment">treatment</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="treatment.detail({id:fund_history.treatment.id})">{{fund_history.treatment.id}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.fund_history.product">product</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="product.detail({id:fund_history.product.id})">{{fund_history.product.name}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

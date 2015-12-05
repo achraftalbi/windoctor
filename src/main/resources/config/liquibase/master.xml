@@ -14,7 +14,6 @@
     <include file="classpath:config/liquibase/changelog/20150926164808_added_entity_Structure.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20150927163211_changelog.xml" relativeToChangelogFile="false"/>
 
-    <include file="classpath:config/liquibase/changelog/sampledata.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151007134849_changelog.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/20151008130939_added_entity_TestEntity2.xml" relativeToChangelogFile="false"/>
@@ -28,7 +27,6 @@
     <include file="classpath:config/liquibase/changelog/20151018191929_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151021075038_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151018174600_added_entity_Doctor.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20151106171800_added_entity_MailSetting.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/20151107081444_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151108104323_changelog.xml" relativeToChangelogFile="false"/>
@@ -39,5 +37,12 @@
 
     <include file="classpath:config/liquibase/changelog/sampledata.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151121100642_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151122113143_added_entity_Fund.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151122114032_added_entity_Fund_history.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151124080423_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151130081548_added_entity_Supply_type.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151201081632_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151202084057_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151203082709_changelog.xml" relativeToChangelogFile="false"/>
     <!-- JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

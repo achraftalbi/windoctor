@@ -1,9 +1,11 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.winbit.windoctor.domain.Product;
-import com.winbit.windoctor.domain.Structure;
+import com.winbit.windoctor.domain.*;
+import com.winbit.windoctor.repository.Fund_historyRepository;
 import com.winbit.windoctor.repository.ProductRepository;
+import com.winbit.windoctor.repository.FundRepository;
+import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.repository.search.ProductSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -41,6 +44,15 @@ public class ProductResource {
     private ProductRepository productRepository;
 
     @Inject
+    private FundRepository fundRepository;
+
+    @Inject
+    private Fund_historyRepository fund_historyRepository;
+
+    @Inject
+    private FundSearchRepository fundSearchRepository;
+
+    @Inject
     private ProductSearchRepository productSearchRepository;
 
     /**
@@ -57,8 +69,20 @@ public class ProductResource {
         }
         product.setStructure(new Structure());
         product.getStructure().setId(SecurityUtils.getCurrerntStructure());
+        // Decrease amount from the current fund.
+
+        BigDecimal oldFundAmount = new BigDecimal(product.getFund().getAmount().doubleValue());
+        product.getFund().setAmount(new BigDecimal(product.getFund().getAmount().doubleValue() - (product.getAmount().doubleValue()*product.getPrice().doubleValue())));
+        product.setFund(fundRepository.save(product.getFund()));
+        fundSearchRepository.save(product.getFund());
+
         Product result = productRepository.save(product);
         productSearchRepository.save(result);
+
+
+        // Save fund history
+        saveFundHistory(product, oldFundAmount);
+
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("product", result.getId().toString()))
                 .body(result);
@@ -76,8 +100,39 @@ public class ProductResource {
         if (product.getId() == null) {
             return create(product);
         }
+        // Add the product amount to the old fund and decrease it from the current one.
+        Product productBeforeSave = productRepository.findOne(product.getId());
+        Fund oldFund = productBeforeSave.getFund();
+        log.info("oldFund value "+oldFund);
+        if(oldFund!=null && oldFund.getAmount()!=null){
+            log.info("oldFund before "+oldFund.getAmount().doubleValue());
+            BigDecimal oldFundAmount = new BigDecimal(productBeforeSave.getFund().getAmount().doubleValue());
+            oldFund.setAmount(new BigDecimal(oldFund.getAmount().doubleValue() + (productBeforeSave.getAmount().doubleValue() * productBeforeSave.getPrice().doubleValue())));
+            log.info("oldFund after " + oldFund.getAmount().doubleValue());
+            fundRepository.save(oldFund);
+            fundSearchRepository.save(oldFund);
+            if(oldFund.getId().equals(product.getFund().getId())) {
+                product.setFund(oldFund);
+            }
+
+            // Save old fund history
+            saveFundHistory(productBeforeSave, oldFundAmount);
+        }
+        log.info("product.getFund() before "+product.getFund().getAmount().doubleValue());
+        log.info("product.getAmount().doubleValue() before " + product.getAmount().doubleValue());
+        log.info("diff " + new BigDecimal(product.getFund().getAmount().doubleValue() - product.getAmount().doubleValue()));
+        BigDecimal oldFundAmount = new BigDecimal(product.getFund().getAmount().doubleValue());
+        product.getFund().setAmount(new BigDecimal(product.getFund().getAmount().doubleValue() - (product.getAmount().doubleValue() * product.getPrice().doubleValue())));
+        log.info("product.getFund() after " + product.getFund().getAmount().doubleValue());
+        product.setFund(fundRepository.save(product.getFund()));
+        fundSearchRepository.save(product.getFund());
+
         Product result = productRepository.save(product);
         productSearchRepository.save(product);
+
+        // Save fund history
+        saveFundHistory(product, oldFundAmount);
+
         return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert("product", product.getId().toString()))
                 .body(result);
@@ -150,4 +205,17 @@ public class ProductResource {
             .stream(productSearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+
+    public void saveFundHistory(Product product, BigDecimal oldFundAmount){
+        Fund_history fund_history = new Fund_history();
+        fund_history.setFund(product.getFund());
+        fund_history.setNew_amount(product.getFund().getAmount());
+        fund_history.setOld_amount(oldFundAmount);
+        fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
+        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue()>=0d?true:false);
+        fund_history.setProduct(product);
+        fund_historyRepository.save(fund_history);
+    }
+
 }

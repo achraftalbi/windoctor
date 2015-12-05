@@ -22,6 +22,10 @@
             "paid_price": "Paid_price",
             "attachment": "Attachment",
             "doctor": "Docteur",
+            "fund": "Caisse",
+            "fundAmount": "Montant de la caisse",
+            "chooseFund": "Choisissez une caisse pour voir ce champs",
+            "theAmountOfNewOrOldFundNotEnough": "Le montant dans la caisse courante ou l'anciènne caisse n'est pas assez.",
             "eventReason": "EventReason"
         }
     }

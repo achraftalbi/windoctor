@@ -1,0 +1,21 @@
+{
+    "windoctorApp": {
+        "supply_type" : {
+            "home": {
+                "title": "Supply_types",
+                "createLabel": "Create a new Supply_type",
+                "createOrEditLabel": "Create or edit a Supply_type"
+            },
+            "created": "A new Supply_type is created with identifier {{ param }}",
+            "updated": "A Supply_type is updated with identifier {{ param }}",
+            "deleted": "A Supply_type is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Supply_type {{ id }}?"
+            },
+            "detail": {
+                "title": "Supply_type"
+            },
+            "description": "Description"
+        }
+    }
+}

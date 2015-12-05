@@ -47,8 +47,8 @@ public class EventService {
         DateTime endDate = new DateTime(c.getTime());
         List<Event> events = eventRepository.getAllNewelyCreatedEvent(WinDoctorConstants.Mail.EVENT_CREATION_EMAIL_TYPE, startDate, endDate);
         if(log.isDebugEnabled()){
-            log.info(events.size()+" new consultation created today.");
-            log.debug("Start emailing patients...");
+            //log.info(events.size()+" new consultation created today.");
+            //log.debug("Start emailing patients...");
         }
 
     }

@@ -2,11 +2,12 @@
 
 angular.module('windoctorApp')
     .controller('CalendarTreatmentController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
-                                                         ParseLinks, $filter, Event_reason, Event, Patient,Attachment) {
+                                                         ParseLinks, $filter, Event_reason, Event, Patient,Attachment,Fund) {
         $scope.treatments = [];
         $scope.page = 1;
         $scope.attachmentPage = 1;
         $scope.treatment = null;
+        $scope.oldTreatmentPaidPrice = null;
         $scope.event = null;
         $scope.patient = null;
         $scope.doctors = null;
@@ -23,7 +24,9 @@ angular.module('windoctorApp')
         $scope.defaultEventReason = null;
         $scope.selectedDate = null;
         $scope.eventReasonSelected = false;
-
+        $scope.funds;
+        $scope.oldFundContainEnoughMoney = true;
+        $scope.oldFund=null;
         /*Attachments variables */
         $scope.dispalyAttachments = false;
         $scope.attachments = null;
@@ -69,7 +72,21 @@ angular.module('windoctorApp')
             $scope.loadAll();
         };
         $scope.loadAll();
+        $scope.loadFunds = function () {
+            Fund.query(function (result, headers) {
+                    $scope.funds = result;
+                    console.log("$scope.treatment.fund 0 ")
+                    if ($scope.funds !== null && $scope.funds.length > 0) {
+                        console.log("$scope.treatment.fund 1 ")
+                        if ($scope.treatment.fund === null || $scope.treatment.fund === undefined) {
+                            $scope.treatment.fund = $scope.funds[0];
+                            console.log("$scope.treatment.fund 2 "+$scope.treatment.fund)
+                        }
+                    }
+                }
+            );
 
+        };
         $scope.delete = function (id) {
             Treatment.get({id: id}, function (result) {
                 $scope.treatmentToDelete = result;
@@ -131,7 +148,28 @@ angular.module('windoctorApp')
             $scope.loadPage($scope.page);
         }
 
+        $scope.changeFields = function () {
+            console.log("changeFields 0");
+            if ($scope.treatment.fund === null || $scope.treatment.fund === undefined
+                || $scope.oldFund === null || $scope.oldTreatmentPaidPrice ==null) {
+                $scope.oldFundContainEnoughMoney = true;
+                console.log("changeFields 2");
+            } else if ($scope.oldFund.id===$scope.treatment.fund.id &&($scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price)) < 0) {
+                $scope.oldFundContainEnoughMoney = false;
+                console.log("changeFields 3");
+            } else if ($scope.oldFund.id!==$scope.treatment.fund.id &&($scope.oldFund.amount - $scope.oldTreatmentPaidPrice) < 0) {
+                $scope.oldFundContainEnoughMoney = false;
+                console.log("changeFields 3 - 2 :");
+            } else {
+                    $scope.oldFundContainEnoughMoney = true;
+                console.log("changeFields 4");
+            }
+            console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
+            console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );
+            console.log(" $scope.treatment.paid_price "+$scope.treatment.paid_price );
+            console.log("$scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price) 4 "+($scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price)));
 
+        };
         // Display treatments end
 
 
@@ -149,12 +187,17 @@ angular.module('windoctorApp')
                 doctor:$scope.defaultDoctor,
                 event: {id: $stateParams.eventId}
             };
+            $scope.oldTreatmentPaidPrice = null;
             $scope.dialogPopupTreatment();
+            $scope.loadFunds();
         };
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
+            $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
+            $scope.oldFund = $scope.treatment.fund;
             $scope.dialogPopupTreatment();
             $scope.loadAllAttachments(1);
+            $scope.loadFunds();
         };
         $scope.dialogPopupTreatment = function (treatment) {
             $scope.displayAddEditViewPopup = true;
@@ -198,6 +241,9 @@ angular.module('windoctorApp')
         var onSaveTreatmentFinished = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.loadPage($scope.page);
+            $scope.oldFund = $scope.treatment.fund;
+            $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
+            $scope.loadFunds();
         };
 
         $scope.saveTreatmentAndClose = function () {

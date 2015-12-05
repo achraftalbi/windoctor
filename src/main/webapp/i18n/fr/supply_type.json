@@ -1,0 +1,19 @@
+{
+    "windoctorApp": {
+        "supply_type" : {
+            "home": {
+                "title": "Supply_types",
+                "createLabel": "Créer un nouveau Supply_type",
+                "createOrEditLabel": "Créer ou éditer un Supply_type"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Supply_type {{ id }} ?"
+            },
+            "detail": {
+                "title": "Supply_type"
+            },
+            "description": "Description"
+        }
+    }
+}
+

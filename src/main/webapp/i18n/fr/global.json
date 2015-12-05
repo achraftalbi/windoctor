@@ -25,6 +25,9 @@
                 "dashboard": "Dashboard",
                 "calendar": "Calendrier",
                 "mailType": "MailType",
+                "fund": "Fund",
+                "fund_history": "Fund_history",
+                "supply_type": "Supply_type",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -103,7 +106,8 @@
             "delete": "Supprimer",
             "save": "Sauvegarder",
             "saveAndClose": "Sauvegarder et fermer",
-            "view": "Voir"
+            "view": "Voir",
+            "display": "Afficher"
         },
         "detail": {
             "field": "Champs",

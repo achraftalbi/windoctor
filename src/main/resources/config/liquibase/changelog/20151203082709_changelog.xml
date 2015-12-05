@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1449131267374-1">
+       <addColumn tableName="SUPPLY_TYPE">
+           <column name="structure_id" type="bigint"/>
+       </addColumn>
+       <addForeignKeyConstraint baseColumnNames="structure_id"
+                                baseTableName="SUPPLY_TYPE"
+                                constraintName="fk_supply_type_structure"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="STRUCTURE"/>
+   </changeSet>
+</databaseChangeLog>

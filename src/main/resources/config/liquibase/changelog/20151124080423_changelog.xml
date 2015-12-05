@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="achraftalbi" id="1448352294906-8">
+        <addColumn tableName="PRODUCT">
+            <column name="fund_id" type="bigint"/>
+        </addColumn>
+        <addColumn tableName="TREATMENT">
+            <column name="fund_id" type="bigint"/>
+        </addColumn>
+        <addForeignKeyConstraint baseColumnNames="fund_id"
+                                 baseTableName="PRODUCT"
+                                 constraintName="fk_product_fund_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="FUND"/>
+        <addForeignKeyConstraint baseColumnNames="fund_id"
+                                 baseTableName="TREATMENT"
+                                 constraintName="fk_treatment_fund_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="FUND"/>
+    </changeSet>
+</databaseChangeLog>

@@ -25,6 +25,9 @@
                 "dashboard": "Dashboard",
                 "calendar": "Calendar",
                 "mailType": "MailType",
+                "fund": "Fund",
+                "fund_history": "Fund_history",
+                "supply_type": "Supply_type",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -103,7 +106,8 @@
             "select": "Select",
             "save": "Save",
             "saveAndClose": "Save and close",
-            "view": "View"
+            "view": "View",
+            "display": "Display"
         },
         "detail": {
             "field": "Field",

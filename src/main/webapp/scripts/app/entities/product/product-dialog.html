@@ -76,7 +76,7 @@
             <div class="form-group col-xs-6">
                 <label translate="windoctorApp.product.price" for="field_price">Price</label>
                 <input type="number" class="form-control" name="price" id="field_price"
-                       ng-model="product.price"
+                       ng-model="product.price" ng-change="changeFields()"
                        required min="0">
 
                 <div ng-show="editForm.price.$invalid">
@@ -110,50 +110,85 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <label translate="windoctorApp.product.amount" for="field_amount">Quantity</label>
-            <input type="number" class="form-control" name="amount" id="field_amount"
-                   ng-model="product.amount"
-                   required min="0">
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label translate="windoctorApp.product.amount" for="field_amount">Quantity</label>
+                <input type="number" class="form-control" name="amount" id="field_amount"
+                       ng-model="product.amount" ng-change="changeFields()"
+                       required min="0">
 
-            <div ng-show="editForm.amount.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.amount.$error.required" translate="entity.validation.required">
-                    This field is required.
-                </p>
+                <div ng-show="editForm.amount.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.amount.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
 
-                <p class="help-block"
-                   ng-show="editForm.amount.$error.min" translate="entity.validation.min" translate-value-min="0">
-                    This field should be more than 0.
-                </p>
+                    <p class="help-block"
+                       ng-show="editForm.amount.$error.min" translate="entity.validation.min" translate-value-min="0">
+                        This field should be more than 0.
+                    </p>
 
-                <p class="help-block"
-                   ng-show="editForm.amount.$error.number" translate="entity.validation.number">
-                    This field should be a number.
-                </p>
+                    <p class="help-block"
+                       ng-show="editForm.amount.$error.number" translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
             </div>
+            <div class="form-group col-xs-6">
+                <label translate="windoctorApp.product.threshold" for="field_threshold">Threshold</label>
+                <input type="number" class="form-control" name="threshold" id="field_threshold"
+                       ng-model="product.threshold"
+                       required min="0">
+
+                <div ng-show="editForm.threshold.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.threshold.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+
+                    <p class="help-block"
+                       ng-show="editForm.threshold.$error.min" translate="entity.validation.min"
+                       translate-value-min="0">
+                        This field should be more than 0.
+                    </p>
+
+                    <p class="help-block"
+                       ng-show="editForm.threshold.$error.number" translate="entity.validation.number">
+                        This field should be a number.
+                    </p>
+                </div>
+            </div>
+
         </div>
-        <div class="form-group">
-            <label translate="windoctorApp.product.threshold" for="field_threshold">Threshold</label>
-            <input type="number" class="form-control" name="threshold" id="field_threshold"
-                   ng-model="product.threshold"
-                   required min="0">
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label translate="windoctorApp.product.fund" for="field_fund">Fund</label>
+                <select class="form-control" id="field_fund" name="fund" ng-model="product.fund" ng-change="changeFields()"
+                        ng-options="fund as fund.description for fund in funds track by fund.id" required>
+                    <option value=""></option>
+                </select>
+                <div ng-show="editForm.fund.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.fund.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
+                <div ng-show="!fundContainEnoughMoney">
+                    <p class="help-block" translate="windoctorApp.product.totalPriceGreaterToFund">
+                        Le prix totale est supérieur à la somme de la caisse.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label translate="windoctorApp.product.fundAmount">Fund amount</label>
 
-            <div ng-show="editForm.threshold.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.threshold.$error.required" translate="entity.validation.required">
-                    This field is required.
-                </p>
-
-                <p class="help-block"
-                   ng-show="editForm.threshold.$error.min" translate="entity.validation.min" translate-value-min="0">
-                    This field should be more than 0.
-                </p>
-
-                <p class="help-block"
-                   ng-show="editForm.threshold.$error.number" translate="entity.validation.number">
-                    This field should be a number.
-                </p>
+                <div>
+                    <span ng-show="product.fund"
+                          class="form-control-static">{{product.fund.amount}}</span>
+                    <span ng-show="!product.fund"
+                          translate="windoctorApp.product.chooseFund"
+                          class="form-control-static">Choose a fund to see this field</span>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -171,7 +206,7 @@
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
             translate="entity.action.cancel">Cancel</span>
         </button>
-        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted || !fundContainEnoughMoney" class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
         </button>
     </div>

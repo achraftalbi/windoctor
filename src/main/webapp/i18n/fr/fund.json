@@ -1,0 +1,23 @@
+{
+    "windoctorApp": {
+        "fund" : {
+            "home": {
+                "title": "Funds",
+                "createLabel": "Créer un nouveau Fund",
+                "createOrEditLabel": "Créer ou éditer un Fund"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Fund {{ id }} ?"
+            },
+            "detail": {
+                "title": "Fund"
+            },
+            "description": "Description",
+            "amount": "Amount",
+            "supply_type": "Approvisionnement",
+            "histories": "Historiques",
+            "fund_fund_history": "Fund_fund_history"
+        }
+    }
+}
+

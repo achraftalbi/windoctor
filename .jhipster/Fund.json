@@ -1,0 +1,40 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "fund_fund_history",
+            "otherEntityName": "fund_history",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "fund_history_fund"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "200"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "amount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "1000000000"
+        }
+    ],
+    "changelogDate": "20151122113143",
+    "dto": "no",
+    "pagination": "pagination"
+}

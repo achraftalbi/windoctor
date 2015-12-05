@@ -16,6 +16,9 @@
                 "title": "Product"
             },
             "name": "Name",
+            "fund": "Fund",
+            "fundAmount": "Fund amount",
+            "chooseFund": "Choose a fund to see this field",
             "image": "Image",
             "price": "Price per unit",
             "totalPrice": "Total price",
@@ -23,6 +26,7 @@
             "threshold": "Threshold",
             "fillPriceQuantity": "Fill price and quantity to see total price",
             "materialsOutStock": "Materials out of stock",
+            "totalPriceGreaterToFund": "The total price is greater than the sum of the fund.",
             "product": "Product"
         }
     }

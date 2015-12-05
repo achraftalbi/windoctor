@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1449045682464-1">
+       <dropForeignKeyConstraint baseTableName="FUND_HISTORY" constraintName="fk_fund_history_jhi_user"/>
+        <renameColumn tableName="FUND_HISTORY" oldColumnName="created_by" newColumnName="created_by_id" columnDataType="bigint" />
+       <addForeignKeyConstraint baseColumnNames="created_by_id"
+                                baseTableName="FUND_HISTORY"
+                                constraintName="fk_fund_history_jhi_user"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="JHI_USER"/>
+   </changeSet>
+</databaseChangeLog>

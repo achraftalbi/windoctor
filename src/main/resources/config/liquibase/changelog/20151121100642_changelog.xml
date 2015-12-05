@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1448100439867-1">
+      <addColumn tableName="CATEGORY">
+         <column name="structure_id" type="bigint"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1448100439867-2">
+      <addColumn tableName="PRODUCT">
+         <column name="structure_id" type="bigint"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1448100439867-3">
+      <addColumn tableName="PRODUCT">
+         <column name="threshold" type="decimal(10, 2)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1448100439867-4">
+      <addForeignKeyConstraint baseColumnNames="structure_id"
+                               baseTableName="CATEGORY"
+                               constraintName="FK_790rd6nav2s1eeqqkslf6w9w5"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="STRUCTURE"/>
+   </changeSet>
+   <changeSet author="achraftalbi (generated)" id="1448100439867-5">
+      <addForeignKeyConstraint baseColumnNames="structure_id"
+                               baseTableName="PRODUCT"
+                               constraintName="FK_bsc9he42wq7wm0wu1usnr8b4k"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="STRUCTURE"/>
+   </changeSet>
+</databaseChangeLog>

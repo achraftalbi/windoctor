@@ -1,0 +1,26 @@
+{
+    "windoctorApp": {
+        "fund_history" : {
+            "home": {
+                "title": "Fund_historys",
+                "createLabel": "Créer un nouveau Fund_history",
+                "createOrEditLabel": "Créer ou éditer un Fund_history"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Fund_history {{ id }} ?"
+            },
+            "detail": {
+                "title": "Fund_history"
+            },
+            "old_amount": "Old_amount",
+            "new_amount": "New_amount",
+            "type_operation": "Type_operation",
+            "amount_movement": "Amount_movement",
+            "fund": "fund",
+            "treatment": "treatment",
+            "fundHistoryName": "Historique de la caisse {{fundName}}",
+            "product": "product"
+        }
+    }
+}
+

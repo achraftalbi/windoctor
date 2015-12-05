@@ -1,0 +1,71 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "fund_history_fund",
+            "otherEntityName": "fund",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "description"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "fund_history_treatment",
+            "otherEntityName": "treatment",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "fund_history_product",
+            "otherEntityName": "product",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "old_amount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "1000000000"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "new_amount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "1000000000"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "type_operation",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "amount_movement",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "1000000000"
+        }
+    ],
+    "changelogDate": "20151122114032",
+    "dto": "no",
+    "pagination": "pagination"
+}

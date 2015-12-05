@@ -1,8 +1,14 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.domain.Fund;
+import com.winbit.windoctor.domain.Fund_history;
+import com.winbit.windoctor.domain.Product;
 import com.winbit.windoctor.domain.Treatment;
+import com.winbit.windoctor.repository.FundRepository;
+import com.winbit.windoctor.repository.Fund_historyRepository;
 import com.winbit.windoctor.repository.TreatmentRepository;
+import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.repository.search.TreatmentSearchRepository;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
@@ -18,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
@@ -42,6 +49,15 @@ public class TreatmentResource {
     private TreatmentRepository treatmentRepository;
 
     @Inject
+    private FundRepository fundRepository;
+
+    @Inject
+    private Fund_historyRepository fund_historyRepository;
+
+    @Inject
+    private FundSearchRepository fundSearchRepository;
+
+    @Inject
     private TreatmentSearchRepository treatmentSearchRepository;
 
     /**
@@ -56,8 +72,21 @@ public class TreatmentResource {
         if (treatment.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new treatment cannot already have an ID").body(null);
         }
+
+        // Mange funds with treatments Begin
+        BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
+        treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
+        treatment.setFund(fundRepository.save(treatment.getFund()));
+        fundSearchRepository.save(treatment.getFund());
+        // Mange funds with treatments End
+
         Treatment result = treatmentRepository.save(treatment);
         treatmentSearchRepository.save(result);
+
+        // Save fund history
+        saveFundHistory(treatment,oldFundAmount);
+
+
         return ResponseEntity.created(new URI("/api/treatments/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("treatment", result.getId().toString()))
                 .body(result);
@@ -75,6 +104,45 @@ public class TreatmentResource {
         if (treatment.getId() == null) {
             return create(treatment);
         }
+
+        // Mange funds with treatments Begin
+        Treatment treatmentBeforeSave = treatmentRepository.findOne(treatment.getId());
+        Fund oldFund = treatmentBeforeSave.getFund();
+        log.info("oldFund value "+oldFund);
+        if(oldFund!=null && oldFund.getAmount()!=null){
+            BigDecimal oldFundAmount = new BigDecimal(treatmentBeforeSave.getFund().getAmount().doubleValue());
+            log.info("oldFund before " + oldFund.getAmount().doubleValue());
+            oldFund.setAmount(new BigDecimal(oldFund.getAmount().doubleValue() - treatmentBeforeSave.getPaid_price().doubleValue()));
+            log.info("oldFund after " + oldFund.getAmount().doubleValue());
+
+            //Manage the case the some funds
+            if(oldFund.getId().equals(treatment.getFund().getId())) {
+                oldFund.setAmount(new BigDecimal(oldFund.getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
+            }
+
+            fundRepository.save(oldFund);
+            fundSearchRepository.save(oldFund);
+
+            // Save old fund history
+            saveFundHistory(treatmentBeforeSave, oldFundAmount);
+        }
+        log.info("treatment.getFund() before "+treatment.getFund().getAmount().doubleValue());
+        log.info("treatment.getPaid_price().doubleValue() before "+treatment.getPaid_price().doubleValue());
+        log.info("Add " + new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
+        if(oldFund==null || (!oldFund.getId().equals(treatment.getFund().getId()))) {
+            BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
+            treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
+            treatment.setFund(fundRepository.save(treatment.getFund()));
+            fundSearchRepository.save(treatment.getFund());
+
+            // Save fund history
+            saveFundHistory(treatment, oldFundAmount);
+        }
+        log.info("treatment.getFund() after " + treatment.getFund().getAmount().doubleValue());
+        // Mange funds with treatments End
+
+
+
         Treatment result = treatmentRepository.save(treatment);
         treatmentSearchRepository.save(treatment);
         return ResponseEntity.ok()
@@ -150,5 +218,16 @@ public class TreatmentResource {
         return StreamSupport
             .stream(treatmentSearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }
+
+    public void saveFundHistory(Treatment treatment, BigDecimal oldFundAmount){
+        Fund_history fund_history = new Fund_history();
+        fund_history.setFund(treatment.getFund());
+        fund_history.setNew_amount(treatment.getFund().getAmount());
+        fund_history.setOld_amount(oldFundAmount);
+        fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
+        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue()>=0d?true:false);
+        fund_history.setTreatment(treatment);
+        fund_historyRepository.save(fund_history);
     }
 }
