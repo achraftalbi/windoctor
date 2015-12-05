@@ -27,6 +27,7 @@
     <include file="classpath:config/liquibase/changelog/20151018191929_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151021075038_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151018174600_added_entity_Doctor.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151106171800_added_entity_MailSetting.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/20151107081444_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151108104323_changelog.xml" relativeToChangelogFile="false"/>
@@ -34,6 +35,7 @@
     <include file="classpath:config/liquibase/changelog/20151115110500_added_entity_MailType.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151115134200_added_entity_MailSetting.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151118170208_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20151122161839_changelog.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/sampledata.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20151121100642_changelog.xml" relativeToChangelogFile="false"/>

@@ -1,6 +1,12 @@
 server:
     port: 8080
 
+email:
+    hostname: http://localhost
+    reminder:
+       before: 2 # in hour
+       after: 15 # in minutes
+
 liquibase:
     context: prod
 
