@@ -5,10 +5,12 @@ import com.winbit.windoctor.domain.*;
 import com.winbit.windoctor.repository.Fund_historyRepository;
 import com.winbit.windoctor.repository.ProductRepository;
 import com.winbit.windoctor.repository.FundRepository;
+import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.repository.search.ProductSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -54,6 +56,9 @@ public class ProductResource {
 
     @Inject
     private ProductSearchRepository productSearchRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     /**
      * POST  /products -> Create a new product.
@@ -213,8 +218,11 @@ public class ProductResource {
         fund_history.setNew_amount(product.getFund().getAmount());
         fund_history.setOld_amount(oldFundAmount);
         fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
-        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue()>=0d?true:false);
+        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue() >= 0d ? true : false);
         fund_history.setProduct(product);
+        Optional<User>  user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+        fund_history.setCreated_by(user.isPresent()?user.get():null);
+        fund_history.setCreation_date(new DateTime());
         fund_historyRepository.save(fund_history);
     }
 

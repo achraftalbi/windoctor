@@ -10,6 +10,7 @@ import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.apache.commons.collections.ListUtils;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -63,6 +64,7 @@ public class StructureResource {
         if (structure.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new structure cannot already have an ID").body(null);
         }
+        structure.setCreation_date(new DateTime());
         Structure result = structureRepository.save(structure);
         structureSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/structures/" + result.getId()))

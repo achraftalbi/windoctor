@@ -2,17 +2,16 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.config.SecurityConfiguration;
-import com.winbit.windoctor.domain.Fund;
-import com.winbit.windoctor.domain.Fund_history;
-import com.winbit.windoctor.domain.Product;
-import com.winbit.windoctor.domain.Structure;
+import com.winbit.windoctor.domain.*;
 import com.winbit.windoctor.repository.FundRepository;
 import com.winbit.windoctor.repository.Fund_historyRepository;
+import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.dto.FundDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -51,6 +50,9 @@ public class FundResource {
 
     @Inject
     private FundSearchRepository fundSearchRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     /**
      * POST  /funds -> Create a new fund.
@@ -162,8 +164,11 @@ public class FundResource {
         fund_history.setNew_amount(fund.getFund().getAmount());
         fund_history.setOld_amount(oldFundAmount);
         fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
-        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue()>=0d?true:false);
+        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue() >= 0d ? true : false);
         fund_history.setSupply_type(fund.getSupply_type());
+        Optional<User>  user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+        fund_history.setCreated_by(user.isPresent() ? user.get() : null);
+        fund_history.setCreation_date(new DateTime());
         fund_historyRepository.save(fund_history);
     }
 

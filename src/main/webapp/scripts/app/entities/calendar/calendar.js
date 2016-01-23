@@ -129,7 +129,7 @@ angular.module('windoctorApp')
             })
             .state('calendar.newEventAppointment', {
                 parent: 'calendar',
-                url: '/calendar-dialog/{selectedDate}',
+                url: '/calendar-dialog-event/{selectedDate}',
                 data: {
                     roles: ['ROLE_DOCTOR'],
                 },
@@ -141,7 +141,31 @@ angular.module('windoctorApp')
                         resolve: {
                             entity: function () {
                                 console.log("selectedDate 3-3 "+$stateParams.selectedDate);
-                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null,thisEventISAppointment:true};
+                                return {event_date: null, event_date_end: null, description: null, id: null,eventStatus:{id:1}};
+                            }
+                        }
+                    }).result.then(function(result) {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
+                        }, function() {
+                            $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
+                        })
+                }]
+            })
+            .state('calendar.newEventRequest', {
+                parent: 'calendar',
+                url: '/calendar-dialog-request/{selectedDate}',
+                data: {
+                    roles: ['ROLE_DOCTOR'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/calendar/calendar-dialog.html',
+                        controller: 'CalendarDialogController',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                console.log("selectedDate 4-4 visite "+$stateParams.selectedDate);
+                                return {event_date: null, event_date_end: null, description: null, id: null,eventStatus:{id:7}};
                             }
                         }
                     }).result.then(function(result) {
@@ -153,7 +177,7 @@ angular.module('windoctorApp')
             })
             .state('calendar.newEventVisit', {
                 parent: 'calendar',
-                url: '/calendar-dialog/{selectedDate}',
+                url: '/calendar-dialog-visit/{selectedDate}',
                 data: {
                     roles: ['ROLE_DOCTOR'],
                 },
@@ -164,8 +188,8 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                console.log("selectedDate 3-3 "+$stateParams.selectedDate);
-                                return {event_date: new Date($stateParams.selectedDate), description: null, id: null,thisEventISAppointment:false};
+                                console.log("selectedDate 4-4 visite "+$stateParams.selectedDate);
+                                return {event_date: null, event_date_end: null, description: null, id: null,eventStatus:{id:8}};
                             }
                         }
                     }).result.then(function(result) {

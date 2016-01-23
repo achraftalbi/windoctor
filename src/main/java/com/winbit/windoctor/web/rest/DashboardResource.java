@@ -2,11 +2,15 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Dashboard;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.DashboardRepository;
+import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.search.DashboardSearchRepository;
 import com.winbit.windoctor.security.SecurityUtils;
+import com.winbit.windoctor.web.rest.dto.DashboardDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,6 +45,9 @@ public class DashboardResource {
 
     @Inject
     private DashboardSearchRepository dashboardSearchRepository;
+
+    @Inject
+    private StructureRepository structureRepository;
 
     /**
      * POST  /dashboards -> Create a new dashboard.
@@ -98,18 +106,46 @@ public class DashboardResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Dashboard> getAll(@RequestParam(value = "typeDashboard", required = false) Long typeDashboard,
+    public ResponseEntity<DashboardDTO> getAll(@RequestParam(value = "typeDashboard", required = false) Long typeDashboard,
                                   @RequestParam(value = "year", required = false) Long year)
         throws URISyntaxException {
         log.debug("REST request to get all Dashboards");
-        if(typeDashboard==null){
-            return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
-        }else if(typeDashboard==1l) {
-            return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
-        }else if(typeDashboard==2l){
-            return dashboardRepository.findPatientsByYearMonths(year, SecurityUtils.getCurrerntStructure());
+        List<Dashboard> dashboardList = null;
+        DashboardDTO dashboardDTO= new DashboardDTO();
+        List<Integer> years= new ArrayList<Integer>();
+        Structure structure = structureRepository.findOneById(SecurityUtils.getCurrerntStructure());
+        DateTime structureDateTime = structure.getCreation_date();
+        DateTime currentDateTime = new DateTime();
+        if(structureDateTime == null || structureDateTime.isAfter(currentDateTime)){
+            years.add(currentDateTime.getYear());
+        }else{
+            int structureYear = structureDateTime.getYear();
+            int currentYear = currentDateTime.getYear();
+            for (int i = currentYear; i >= structureYear ; i--) {
+                years.add(i);
+            }
         }
-        return dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        if(year==null){
+            year = new Long(currentDateTime.getYear());
+        }
+        if(typeDashboard==null){
+            dashboardList = dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        }else if(typeDashboard==1l) {
+            dashboardList = dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        }else if(typeDashboard==2l){
+            dashboardList = dashboardRepository.findPatientsByYearMonths(year, SecurityUtils.getCurrerntStructure());
+        }else{
+            dashboardList = dashboardRepository.findBudgetByYear(year, SecurityUtils.getCurrerntStructure());
+        }
+
+
+
+
+        dashboardDTO.setDashboardList(dashboardList);
+        dashboardDTO.setYears(years);
+        return new ResponseEntity<>(
+            dashboardDTO,
+            HttpStatus.OK);
     }
     /**
      * GET  /dashboards/:id -> get the "id" dashboard.

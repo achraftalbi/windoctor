@@ -1,29 +1,42 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarController', function ($scope, Event, EventSearch, $modal, moment,$state, $translate,$filter) {
-        $scope.calendarEvts= [];
-        $scope.loadAll = function() {
-            Event.query(function(result) {
+    .controller('CalendarController', function ($scope, Event, EventAll, EventSearch, $modal, moment, $state, $translate, $filter) {
+        $scope.calendarEvts = [];
+        $scope.loadAll = function () {
+
+            EventAll.query(function (result) {
                 $scope.calendarEvts = result;
+                var cuurentDate = new Date();
+                console.log(" new Tdate 1 " + moment(cuurentDate).format('HH:mm')+' +00:00');
+                console.log(" new Tdate 2 " + new Date(moment(cuurentDate).format('MMMM Do YYYY, HH:mm:ss')+' +00:00'));
                 for (var i = 0; i < $scope.calendarEvts.length; i++) {
-                    var start = $scope.calendarEvts[i].event_date;
+                    var startDate = $scope.calendarEvts[i].event_date;
+                    var endDate = $scope.calendarEvts[i].event_date_end;
+                    console.log(" teeest $scope.calendarEvts[i].event_date  " + $scope.calendarEvts[i].event_date);
                     $scope.events.push({
                         title: angular.isUndefined($scope.calendarEvts[i].eventReason)
-                        ||$scope.calendarEvts[i].eventReason==null?'':$scope.calendarEvts[i].eventReason.description,
-                        type:'info',
-                            //angular.isUndefined($scope.calendarEvts[i].eventStatus)
+                        || $scope.calendarEvts[i].eventReason === null ? '' : $scope.calendarEvts[i].eventReason.description,
+                        type: $scope.calendarEvts[i].eventStatus === null ? 'Not applicable' :
+                            ($scope.calendarEvts[i].eventStatus.id === 1 ? 'info' :
+                                ($scope.calendarEvts[i].eventStatus.id === 2 ? 'special' :
+                                    ($scope.calendarEvts[i].eventStatus.id === 3 ? 'success' :
+                                        ($scope.calendarEvts[i].eventStatus.id === 4 ? 'important' :
+                                            ($scope.calendarEvts[i].eventStatus.id === 7 ? 'request' :
+                                                ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' : 'Not applicable')))))),
+                        //angular.isUndefined($scope.calendarEvts[i].eventStatus)
                         //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
-                        startsAt: start,
-                        endsAt: moment(start).add(0.5, 'hours').toDate()
+                        startsAt: startDate//,
+                        //endsAt: endDate
                     })
                 }
+                console.log("current 1 language " + $translate.use());
             });
         };
         $scope.loadAll();
 
         $scope.delete = function (id) {
-            Event.get({id: id}, function(result) {
+            Event.get({id: id}, function (result) {
                 $scope.calendarEvts = result;
                 $('#deleteEvent_reasonConfirmation').modal('show');
             });
@@ -39,10 +52,10 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            Event.query({query: $scope.searchQuery}, function(result) {
+            Event.query({query: $scope.searchQuery}, function (result) {
                 $scope.calendarEvts = result;
-            }, function(response) {
-                if(response.status === 404) {
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });
@@ -58,45 +71,43 @@ angular.module('windoctorApp')
         };
 
 
-
-
         //These variables MUST be set as a minimum for the calendar to work
         $scope.calendarView = 'month';
         $scope.calendarDay = new Date();
-/*        $scope.events = [
-            {
-                title: 'An event',
-                type: 'warning',
-                startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-                endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-                draggable: false,
-                resizable: false
-            }, {
-                title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-                type: 'info',
-                startsAt: moment().subtract(1, 'day').toDate(),
-                endsAt: moment().add(5, 'days').toDate(),
-                draggable: false,
-                resizable: false
-            }, {
-                title: 'This is a really long event title that occurs on every year',
-                type: 'important',
-                startsAt: moment().startOf('day').add(7, 'hours').toDate(),
-                endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-                recursOn: 'year',
-                draggable: false,
-                resizable: false
-            }
-        ];*/
+        /*        $scope.events = [
+         {
+         title: 'An event',
+         type: 'warning',
+         startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
+         endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
+         draggable: false,
+         resizable: false
+         }, {
+         title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
+         type: 'info',
+         startsAt: moment().subtract(1, 'day').toDate(),
+         endsAt: moment().add(5, 'days').toDate(),
+         draggable: false,
+         resizable: false
+         }, {
+         title: 'This is a really long event title that occurs on every year',
+         type: 'important',
+         startsAt: moment().startOf('day').add(7, 'hours').toDate(),
+         endsAt: moment().startOf('day').add(19, 'hours').toDate(),
+         recursOn: 'year',
+         draggable: false,
+         resizable: false
+         }
+         ];*/
         moment.locale($translate.use(), {
-            week : {
-                dow : 1 // Monday is the first day of the week
+            week: {
+                dow: 1 // Monday is the first day of the week
             }
         });
-        $scope.cellClicked = function(date,view) {
+        $scope.cellClicked = function (date, view) {
             // Show modal etc to add a new event. date is the start of the month, day, hour etc depending on which view you're on.
             //$('#deleteEvent_reasonConfirmation').modal('show');
-            $state.go(view, { selectedDate: date });
+            $state.go(view, {selectedDate: date});
         };
         /*
          var currentYear = moment().year();
@@ -108,7 +119,7 @@ angular.module('windoctorApp')
         function showModal(action, event) {
             $modal.open({
                 templateUrl: 'modalContent.html',
-                controller: function() {
+                controller: function () {
                     var vm = this;
                     vm.action = action;
                     vm.event = event;
@@ -117,32 +128,29 @@ angular.module('windoctorApp')
             });
         }
 
-        $scope.eventClicked = function($event) {
+        $scope.eventClicked = function ($event) {
             //showModal('Clicked', event);
             $event.preventDefault();
 
         };
 
-        $scope.eventEdited = function(event) {
+        $scope.eventEdited = function (event) {
             showModal('Edited', event);
         };
 
-        $scope.eventDeleted = function(event) {
+        $scope.eventDeleted = function (event) {
             showModal('Deleted', event);
         };
 
-        $scope.eventTimesChanged = function(event) {
+        $scope.eventTimesChanged = function (event) {
             showModal('Dropped or resized', event);
         };
 
-        $scope.toggle = function($event, field, event) {
+        $scope.toggle = function ($event, field, event) {
             $event.preventDefault();
             $event.stopPropagation();
             event[field] = !event[field];
         };
-
-
-
 
 
     })

@@ -21,6 +21,10 @@
             "amount_movement": "Amount_movement",
             "fund": "fund",
             "treatment": "treatment",
+            "supply_type": "Supply",
+            "movementCause": "Movement cause",
+            "credit": "Credit",
+            "debit": "Debit",
             "fundHistoryName": "History of the fund {{fundName}}",
             "product": "product"
         }

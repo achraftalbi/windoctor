@@ -1,18 +1,25 @@
 package com.winbit.windoctor.web.rest.util;
 
+import com.winbit.windoctor.common.WinDoctorConstants;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by achraftalbi on 9/28/15.
  */
 public class FunctionsUtil {
 
-    private final Logger log = LoggerFactory.getLogger(FunctionsUtil.class);
+    private final static Logger log = LoggerFactory.getLogger(FunctionsUtil.class);
 
     public static Date addDays(Date date, int days)
     {
@@ -20,6 +27,63 @@ public class FunctionsUtil {
         cal.setTime(date);
         cal.add(Calendar.DATE, days); //minus number would decrement the days
         return cal.getTime();
+    }
+
+    public static String convertDateToString(Date date, String format)
+    {
+        try{
+            String stringDate = DateFormatUtils.format(date, format);
+            return stringDate;
+        }catch(Exception ex){
+            log.error("Exception in convertDateToString date:"+date+", format:"+format+ " "+ex);
+        }
+        return null;
+    }
+
+    public static Date convertStringToDate(String stringDate, String format)
+    {
+        DateFormat df = new SimpleDateFormat(format);
+        try{
+            Date date = df.parse(stringDate);
+            return date;
+        }catch(Exception ex){
+            log.error("Exception in convertStringToDate date:"+stringDate+", format:"+format+ " "+ex);
+        }
+        return null;
+    }
+
+    public static Date convertStringToDate(String stringDate, String format, String timezone)
+    {
+        DateFormat df = new SimpleDateFormat(format);
+        if(!isEmpty(timezone)){
+            df.setTimeZone(TimeZone.getTimeZone(timezone));
+        }
+        try{
+            Date date = df.parse(stringDate);
+            return date;
+        }catch(Exception ex){
+            log.error("Exception in convertStringToDate date:"+stringDate+", format:"+format+ " "+ex);
+        }
+        return null;
+    }
+
+    public static DateTime convertStringToDateTimeUTC(String stringDate, String format)
+    {
+        try{
+            DateTimeFormatter formatter = org.joda.time.format.DateTimeFormat.forPattern(format);
+            DateTime dateTimeInUTC = formatter.withZoneUTC().parseDateTime(stringDate);
+            return dateTimeInUTC;
+        }catch(Exception ex){
+            log.error("Exception in convertStringToDateTimeUTC date:"+stringDate+", format:"+format+ " "+ex);
+        }
+        return null;
+    }
+
+    public static boolean isEmpty(String string){
+        if(string==null || string.length()==0){
+            return true;
+        }
+        return false;
     }
 
     public static boolean stringExist(List<String> list, String string){

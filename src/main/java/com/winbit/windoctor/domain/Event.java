@@ -34,11 +34,21 @@ public class Event implements Serializable {
 
 
     @NotNull
+    /*@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime",
+        parameters = { @org.hibernate.annotations.Parameter(name = "databaseZone", value = "UTC"),
+            @org.hibernate.annotations.Parameter(name = "javaZone", value = "UTC")})*/
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "event_date", nullable = false)
     private DateTime event_date;
+
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    @Column(name = "event_date_end", nullable = false)
+    private DateTime event_date_end;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "creation_date", nullable = false)
@@ -81,6 +91,14 @@ public class Event implements Serializable {
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Treatment> treatments = new HashSet<>();
+
+    public DateTime getEvent_date_end() {
+        return event_date_end;
+    }
+
+    public void setEvent_date_end(DateTime event_date_end) {
+        this.event_date_end = event_date_end;
+    }
 
     public DateTime getCreation_date() {
         return creation_date;
@@ -214,7 +232,7 @@ public class Event implements Serializable {
                 "id=" + id +
                 ", event_date='" + event_date + "'" +
                 ", description='" + description + "'" +
-                ", thisEventISAppointment='" + thisEventISAppointment + "'" +
+                ", eventStatus='" + eventStatus + "'" +
                 '}';
     }
 }

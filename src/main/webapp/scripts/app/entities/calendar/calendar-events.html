@@ -7,14 +7,21 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-primary" ng-click="cancelEventRows()" ng-disabled="!userCanAddEvent"
+                            <button class="btn btn-primary" ng-click="cancelEventRows()"
+                                    ng-show="!account.currentUserPatient"
                                     ui-sref="calendar.newEventAppointment({selectedDate:selectedDate})">
                                 <span class="glyphicon glyphicon-flash"></span> <span
                                 translate="windoctorApp.calendar.home.createAppointmentLabel">Create a new Event</span>
                             </button>
+                            <button class="btn btn-warning" ng-click="cancelEventRows()" ng-show="userCanAddRequest"
+                                    ui-sref="calendar.newEventRequest({selectedDate:selectedDate})">
+                                <span class="glyphicon glyphicon-flash"></span> <span
+                                translate="windoctorApp.calendar.home.createRequestLabel">Create a new request</span>
+                            </button>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-primary" ng-click="cancelEventRows()" ng-show="!account.currentUserPatient"
+                            <button class="btn btn-success" ng-click="cancelEventRows()"
+                                    ng-show="!account.currentUserPatient"
                                     ui-sref="calendar.newEventVisit({selectedDate:selectedDate})">
                                 <span class="glyphicon glyphicon-flash"></span> <span
                                 translate="windoctorApp.calendar.home.createVisitLabel">Create a new Visit</span>
@@ -61,12 +68,38 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="event in events">
-                            <td>
-                                <span ng-show="event.thisEventISAppointment" translate="windoctorApp.calendar.appointment">Appointment</span>
-                                <span ng-show="!event.thisEventISAppointment" translate="windoctorApp.calendar.visit">Visite</span>
+                            <div>
+                                <td style="background-color: dodgerblue;color: white;"
+                                    ng-show="event.eventStatus.id===1">
+                                    <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                                </td>
+                                <td style="background-color: #800080;color: white;"
+                                    ng-show="event.eventStatus.id===2">
+                                    <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                                </td>
+                                <td style="background-color: darkgreen;color: white;"
+                                    ng-show="event.eventStatus.id===3">
+                                    <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                                </td>
+                                <td style="background-color: #ad2121;color: white;"
+                                    ng-show="event.eventStatus.id===4">
+                                    <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                                </td>
+                                <td style="background-color: rgb(255, 170, 4);color: white;"
+                                    ng-show="event.eventStatus.id===7">
+                                    <span translate="windoctorApp.calendar.request">Request</span>
+                                </td>
+                                <td style="background-color: darkgreen;;color: white;"
+                                    ng-show="event.eventStatus.id===8">
+                                    <span translate="windoctorApp.calendar.visit">Visite</span>
+                                </td>
+                            </div>
+                            <td><span ng-show="(!account.currentUserPatient) || (account.currentUserPatient && account.id===event.user.id)">
+                                {{event.user.firstName}} {{event.user.lastName}}
+                                </span>
+                                <span ng-show="account.currentUserPatient && account.id!==event.user.id" translate="windoctorApp.calendar.anonymous">Anonymous</span>
                             </td>
-                            <td>{{event.user.firstName}} {{event.user.lastName}}</a></td>
-                            <td>{{event.event_date | date:'h:mm:ss a' : '+0100'}}</td>
+                            <td>{{event.event_date | date:'HH:mm' : '+0000'}}</td>
                             <td>{{event.description}}</td>
                             <td><a ng-click="cancelEventRows()"
                                    ui-sref="calendar.treatment({eventId:event.id,selectedDate:event.event_date})"
@@ -74,21 +107,48 @@
                             <td>
                                 <span>{{event.eventReason.description}}</span>
                             </td>
+                            <div>
+                                <td style="background-color: #adadad;color: white;"
+                                    ng-show="event.eventStatus.id===8 || event.eventStatus.id===7">
+                                    <span></span>
+                                </td>
+                                <td style="background-color: dodgerblue;color: white;"
+                                    ng-show="event.eventStatus.id===1">
+                                    <span translate="windoctorApp.calendar.inProgress">In progress</span>
+                                    <a ng-show="!account.currentUserPatient" data-toggle="tooltip" data-placement="bottom"
+                                       title="" data-original-title="Tooltip on bottom"
+                                            ng-click="annul(event)"
+                                            class="btn btn-danger btn-sm red-tooltip">
+                                        <span class="glyphicon glyphicon-off"></span>&nbsp;<span
+                                        > </span>
+                                    </a>
+                                </td>
+                                <td style="background-color: #800080;color: white;"
+                                    ng-show="event.eventStatus.id===2">
+                                    <span translate="windoctorApp.calendar.annulled">Annuled</span>
+                                </td>
+                                <td style="background-color: darkgreen;color: white;"
+                                    ng-show="event.eventStatus.id===3">
+                                    <span translate="windoctorApp.calendar.realized">Realized</span>
+                                </td>
+                                <td style="background-color: #ad2121;color: white;"
+                                    ng-show="event.eventStatus.id===4">
+                                    <span translate="windoctorApp.calendar.abandoned">Abandoned</span>
+                                </td>
+                            </div>
                             <td>
-                                <span>{{event.eventStatus.description}}</span>
-                            </td>
-                            <td>
-                                <button type="submit" ng-click="cancelEventRows()"  ng-disabled="account.currentUserPatient && account.id!==event.user.id"
+                                <button type="submit" ng-click="cancelEventRows()"
+                                        ng-disabled="account.currentUserPatient && (account.id!==event.user.id || (account.id===event.user.id && event.eventStatus.id!==7))"
                                         ui-sref="calendar.edit({id:event.id,selectedDate:selectedDate})"
                                         class="btn btn-primary btn-sm">
                                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
-                                    translate="entity.action.edit"> Edit</span>
+                                   > </span>
                                 </button>
-                                <button type="submit" ng-disabled="account.currentUserPatient"
+                                <button type="submit" ng-show="!account.currentUserPatient"
                                         ng-click="delete(event.id)"
                                         class="btn btn-danger btn-sm">
-                                    <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
-                                    translate="entity.action.delete"> Delete</span>
+                                    <span class="glyphicon glyphicon-remove"></span>&nbsp;<span
+                                    > </span>
                                 </button>
                             </td>
                         </tr>

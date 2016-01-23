@@ -3,6 +3,8 @@ package com.winbit.windoctor.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -43,6 +45,19 @@ public class Structure implements Serializable {
     @Max(value = 1000)
     @Column(name = "MAX_EVENTS_PATIENT_CAN_ADD", precision=4, nullable = false)
     private BigDecimal maxEventsPatientCanAdd;
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "creation_date", nullable = false)
+    @JsonIgnore
+    private DateTime creation_date;
+
+    public DateTime getCreation_date() {
+        return creation_date;
+    }
+
+    public void setCreation_date(DateTime creation_date) {
+        this.creation_date = creation_date;
+    }
 
     public BigDecimal getMaxEventsPatientCanAdd() {
         return maxEventsPatientCanAdd;

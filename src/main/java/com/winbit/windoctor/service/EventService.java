@@ -41,8 +41,8 @@ public class EventService {
         event.setRemindAfterMail(Boolean.FALSE);
         event.setRemindBeforeMail(Boolean.FALSE);
 
-        Status status = statusRepository.findOneById(WinDoctorConstants.EventStatus.EVENT_CREATION);
-        event.setEventStatus(status);
+        //Status status = statusRepository.findOneById(WinDoctorConstants.EventStatus.EVENT_CREATION);
+        //event.setEventStatus(status);
 
         return eventRepository.save(event);
     }

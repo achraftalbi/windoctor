@@ -1,7 +1,9 @@
-id;description
-1;Accepter
-2;Refuser
-3;"En attente"
-4;Terminer
-5;Payer
-6;"Non payer"
+id;description;description_fr
+1;"In progress";"En cours"
+2;"Annulled";"Annulé"
+3;"Realized";"Réalisé"
+4;"Abandoned";"Abondonné"
+5;"Not applicable";"Non applicable"
+6;"Rejected";"Rejeté"
+7;"Request";"Demande"
+8;"Visit";"Visite"

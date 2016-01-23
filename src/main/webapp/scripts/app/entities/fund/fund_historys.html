@@ -16,9 +16,7 @@
                         <th translate="windoctorApp.fund_history.new_amount">New_amount</th>
                         <th translate="windoctorApp.fund_history.type_operation">Type_operation</th>
                         <th translate="windoctorApp.fund_history.amount_movement">Amount_movement</th>
-                        <th translate="windoctorApp.fund_history.fund">fund</th>
-                        <th translate="windoctorApp.fund_history.treatment">treatment</th>
-                        <th translate="windoctorApp.fund_history.product">product</th>
+                        <th translate="windoctorApp.fund_history.movementCause">Movement cause</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -27,24 +25,23 @@
                         <td><a ui-sref="fund_history.detail({id:fund_history.id})">{{fund_history.id}}</a></td>
                         <td>{{fund_history.old_amount}}</td>
                         <td>{{fund_history.new_amount}}</td>
-                        <td>{{fund_history.type_operation}}</td>
+                        <td>
+                            <span translate="windoctorApp.fund_history.credit"
+                                  ng-show="fund_history.type_operation">Credit</span>
+                            <span translate="windoctorApp.fund_history.debit"
+                                  ng-show="!fund_history.type_operation">Debit</span>
+                        </td>
                         <td>{{fund_history.amount_movement}}</td>
                         <td>
-                            <a ui-sref="fund.detail({id:fund_history.fund.id})">{{fund_history.fund.description}}</a>
-                        </td>
-                        <td>
-                            <a ui-sref="treatment.detail({id:fund_history.treatment.id})">{{fund_history.treatment.id}}</a>
-                        </td>
-                        <td>
-                            <a ui-sref="product.detail({id:fund_history.product.id})">{{fund_history.product.name}}</a>
-                        </td>
-                        <td>
-                            <button type="submit"
-                                    ui-sref="fund_history.detail({id:fund_history.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span
-                                translate="entity.action.view"> View</span>
-                            </button>
+                            <a ng-click="displayTheMovementCause(fund_history)" ng-show="fund_history.treatment">
+                                <span translate="windoctorApp.fund_history.treatment">Treatment</span>
+                            </a>
+                            <a ng-click="displayTheMovementCause(fund_history)" ng-show="fund_history.product">
+                                <span translate="windoctorApp.fund_history.product">Product</span>
+                            </a>
+                            <a ng-click="displayTheMovementCause(fund_history)" ng-show="fund_history.supply_type">
+                                <span translate="windoctorApp.fund_history.supply_type">Supply</span>
+                            </a>
                         </td>
                     </tr>
                     </tbody>

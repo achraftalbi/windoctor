@@ -7,6 +7,7 @@ angular.module('windoctorApp')
         $scope.page = 1;
         $scope.pageHistory = 1;
         $scope.selectedFund;
+        $scope.selectedFundHistory =null;
         $scope.loadAll = function() {
             Fund.query({page: $scope.page, per_page: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -49,6 +50,14 @@ angular.module('windoctorApp')
                 $scope.linksHistories = ParseLinks.parse(headers('link'));
                 $scope.fund_historys = result;
             });
+        };
+
+        $scope.displayTheMovementCause = function(fund_history) {
+            $scope.selectedFundHistory = fund_history;
+        };
+
+        $scope.hideTheMovementCause = function() {
+            $scope.selectedFundHistory = null;
         };
 
         $scope.search = function () {

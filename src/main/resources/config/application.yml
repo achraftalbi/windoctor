@@ -2,6 +2,8 @@
 management.security.enabled: true
 security.basic.enabled: false
 
+spring.jackson.time-zone: UTC
+
 # Disable Jolokia - An http/json bridge for remote JMX access
 endpoints.jolokia.enabled: false
 

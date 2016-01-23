@@ -25,17 +25,31 @@ public class Status implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 
     @NotNull
-    @Size(min = 1, max = 100)        
+    @Size(min = 1, max = 100)
     @Column(name = "description", length = 100, nullable = false)
     private String description;
+
+
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "description_fr", length = 100, nullable = false)
+    private String descriptionFr;
 
     @OneToMany(mappedBy = "eventStatus")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Event> eventStatuss = new HashSet<>();
+
+    public String getDescriptionFr() {
+        return descriptionFr;
+    }
+
+    public void setDescriptionFr(String descriptionFr) {
+        this.descriptionFr = descriptionFr;
+    }
 
     public Long getId() {
         return id;

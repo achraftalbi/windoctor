@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="windoctorApp.treatment.detail.title">Treatment</span> {{selectedFundHistory.treatment.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.treatment_date">Treatment_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.treatment_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.description">Description</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.description}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.price">Price</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.price}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.paid_price">Paid_price</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.paid_price}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.eventReason">eventReason</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="event_reason.detail({id:treatment.eventReason.id})">{{selectedFundHistory.treatment.eventReason.description}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ng-click="hideTheMovementCause()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

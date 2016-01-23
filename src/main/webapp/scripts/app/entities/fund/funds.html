@@ -1,4 +1,5 @@
-<div>
+<div ng-show="!selectedFundHistory">
+    <div>
 
     <h2 translate="windoctorApp.fund.home.title">Funds</h2>
     <jh-alert></jh-alert>
@@ -99,3 +100,15 @@
     </div>
 </div>
 <ng-include src="'scripts/app/entities/fund/fund_historys.html'"></ng-include>
+</div>
+<div ng-show="selectedFundHistory">
+    <div ng-show="selectedFundHistory.treatment">
+        <ng-include  src="'scripts/app/entities/fund/fund-treatment-detail.html'"></ng-include>
+    </div>
+    <div ng-show="selectedFundHistory.product">
+        <ng-include  src="'scripts/app/entities/fund/fund-product-detail.html'"></ng-include>
+    </div>
+    <div ng-show="selectedFundHistory.supply_type">
+        <ng-include  src="'scripts/app/entities/fund/fund-supply_type-detail.html'"></ng-include>
+    </div>
+</div>

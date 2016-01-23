@@ -18,6 +18,10 @@
             "amount_movement": "Amount_movement",
             "fund": "fund",
             "treatment": "treatment",
+            "supply_type": "Approvisionnement",
+            "movementCause": "Cause du mouvement",
+            "credit": "Crédit",
+            "debit": "Débit",
             "fundHistoryName": "Historique de la caisse {{fundName}}",
             "product": "product"
         }

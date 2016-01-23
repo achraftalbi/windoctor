@@ -20,6 +20,9 @@ angular.module('windoctorApp')
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('fund');
                         $translatePartialLoader.addPart('fund_history');
+                        $translatePartialLoader.addPart('product');
+                        $translatePartialLoader.addPart('treatment');
+                        $translatePartialLoader.addPart('supply_type');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]

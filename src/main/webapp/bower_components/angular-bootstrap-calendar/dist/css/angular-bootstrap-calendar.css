@@ -302,7 +302,13 @@
   border: 1px solid #e3bc08;
 }
 .cal-day-box .day-highlight.dh-event-info {
-  border: 1px solid dodgerblue;
+    border: 1px solid dodgerblue;
+}
+.cal-day-box .day-highlight.dh-event-request {
+    border: 1px solid rgba(255, 213, 7, 0.67);
+}
+.cal-day-box .day-highlight.dh-event-visit {
+    border: 1px solid darkgreen;
 }
 .cal-day-box .day-highlight.dh-event-inverse {
   border: 1px solid #1b1b1b;
@@ -339,7 +345,31 @@
   background-color: #ad2121;
 }
 .event-info {
-  background-color: dodgerblue;
+    background-color: dodgerblue;
+}
+.event-request {
+    background: url("../../../../assets/images/request-icon.png") no-repeat center top;
+    border-radius: 0px;
+    border: 0px;
+    -webkit-box-shadow: inset 0px 0px 0px 0px rgb(255, 170, 4);
+    box-shadow:0px;
+    width: 15px;
+    height: 15px;
+    background-color: inherit;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}
+.event-visit {
+    background: url("../../../../assets/images/success.png") no-repeat center top;
+    border-radius: 0px;
+    border: 0px;
+    -webkit-box-shadow: inset 0px 0px 0px 0px darkgreen;
+    box-shadow:0px;
+    width: 15px;
+    height: 15px;
+    background-color: inherit;
+    margin-right: 2px;
+    margin-bottom: 2px;
 }
 .event-warning {
   background-color: #e3bc08;
@@ -367,7 +397,15 @@
 }
 .day-highlight.dh-event-info:hover,
 .day-highlight.dh-event-info {
-  background-color: #d1e8ff;
+    background-color: #d1e8ff;
+}
+.day-highlight.dh-event-request:hover,
+.day-highlight.dh-event-request {
+    background-color: rgba(255, 213, 7, 0.67);
+}
+.day-highlight.dh-event-visit:hover,
+.day-highlight.dh-event-visit {
+    background-color: rgba(0, 69, 0, 0.65);
 }
 .day-highlight.dh-event-inverse:hover,
 .day-highlight.dh-event-inverse {

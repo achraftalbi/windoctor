@@ -69,6 +69,7 @@ public class Application {
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
         addDefaultProfile(app, source);
         addLiquibaseScanPackages();
+        addGlobalProperties();
         Environment env = app.run(args).getEnvironment();
         log.info("WinDoctor is up and running on "+ env.getProperty("server.port"));
 
@@ -97,4 +98,12 @@ public class Application {
             "liquibase.structure", "liquibase.structurecompare", "liquibase.lockservice",
             "liquibase.ext", "liquibase.changelog"));
     }
+
+    /**
+     * Set the liquibases.scan.packages to avoid an exception from ServiceLocator.
+     */
+    private static void addGlobalProperties() {
+        System.setProperty("user.timezone", "UTC");
+    }
+
 }

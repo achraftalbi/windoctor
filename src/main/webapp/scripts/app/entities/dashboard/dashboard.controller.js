@@ -2,18 +2,30 @@
 
 angular.module('windoctorApp')
     .controller('DashboardController', function ($scope, Dashboard, DashboardSearch, ParseLinks,Language) {
+        $scope.dashboardDTO;
         $scope.dashboards = [];
         $scope.lineLabels = [];
         $scope.lineDataFirst = [];
         $scope.lineData = [[]];
         $scope.barLabels = [];
+        $scope.years = [];
         $scope.barDataFirst = [];
         $scope.barData = [[]];
         $scope.page = 1;
         $scope.currentLang;
+        $scope.selectedYear=null;
         $scope.loadAll = function() {
-            Dashboard.query({typeDashboard: 1, year: 2015}, function(result) {
-                $scope.dashboards = result;
+            Dashboard.get({typeDashboard: 1, year: $scope.selectedYear}, function(result) {
+                $scope.dashboardDTO = result;
+                $scope.dashboards = $scope.dashboardDTO.dashboardList;
+                $scope.years = $scope.dashboardDTO.years;
+                if($scope.selectedYear===null) {
+                    $scope.selectedYear = $scope.years[0];
+                }
+                for (var i = 0; i < $scope.years.length; i++) {
+                    console.log("$scope.years[i] 1  "+$scope.years[i]);
+                }
+
                 Language.getCurrent().then(function(current) {
                     $scope.currentLang = current;
                     for (var i = 0; i < $scope.dashboards.length; i++) {
@@ -36,8 +48,9 @@ angular.module('windoctorApp')
                     }
                 });
             });
-            Dashboard.query({typeDashboard: 2, year: 2015}, function(result) {
-                $scope.dashboards = result;
+            Dashboard.get({typeDashboard: 2, year: $scope.selectedYear}, function(result) {
+                $scope.dashboardDTO = result;
+                $scope.dashboards = $scope.dashboardDTO.dashboardList;
                 Language.getCurrent().then(function(current) {
                     $scope.currentLang = current;
                     for (var i = 0; i < $scope.dashboards.length; i++) {
@@ -72,6 +85,10 @@ angular.module('windoctorApp')
                 $scope.dashboard = result;
                 $('#deleteDashboardConfirmation').modal('show');
             });
+        };
+
+        $scope.changeYear = function () {
+            $scope.loadAll();
         };
 
         $scope.confirmDelete = function (id) {

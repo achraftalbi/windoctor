@@ -127,9 +127,14 @@ public class AccountResource {
                 boolean maxEventsReached = false;
                 if(currentUserPatient){
                     List<Event> listEventByPatient = eventRepository.findByPatient(user.getId());
-                    maxEventsReached = listEventByPatient!=null && user.getStructure()!=null
-                        && user.getStructure().getMaxEventsPatientCanAdd()!=null ?listEventByPatient.size()>=user.getStructure().
+                    maxEventsReached = (listEventByPatient!=null && user.getStructure()!=null
+                        && user.getStructure().getMaxEventsPatientCanAdd()!=null )?listEventByPatient.size()>=user.getStructure().
                         getMaxEventsPatientCanAdd().intValue():false;
+                    log.info("User listEventByPatient "+listEventByPatient.size());
+                    log.info("User user.getStructure()." +
+                        "                        getMaxEventsPatientCanAdd().intValue() "+user.getStructure().
+                        getMaxEventsPatientCanAdd().intValue());
+                    log.info("User maxEventsReached "+maxEventsReached);
                 }
                 return new ResponseEntity<>(
                     new UserDTO(

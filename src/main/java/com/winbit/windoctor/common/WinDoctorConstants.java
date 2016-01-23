@@ -22,5 +22,7 @@ public class WinDoctorConstants {
     public interface WinDoctorPattern{
         public static final String EMAIL_DATE_PATTERN = "yyyy.MM.dd '(' HH:mm:ss ')'";
         public static final String EMAIL_SHORT_DATE_PATTERN = "HH:mm";
+        public static final String DATE_PATTERN = "yyyy-MM-dd";
+        public static final String DATE_PATTERN_BROWZER = "EEE MMM dd yyyy HH:mm:ss";
     }
 }

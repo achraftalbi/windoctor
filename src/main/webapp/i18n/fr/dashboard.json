@@ -13,6 +13,7 @@
                 "title": "Dashboard"
             },
             "value": "Value",
+            "selectYear":"Sélectionneer une année :",
             "descriptionEn": "DescriptionEn",
             "descriptionFr": "DescriptionFr"
         }

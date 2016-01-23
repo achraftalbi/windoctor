@@ -1,5 +1,19 @@
 <div>
 
+    <div class="row">
+        <div class="form-group col-xs-6 col-md-4">
+        </div>
+        <div class="form-group col-xs-6 col-md-4">
+            <span translate="windoctorApp.dashboard.selectYear" for="field_selectYear">Select a year </span>
+            <select class="form-control" id="field_selectYear" name="selectedYear" ng-model="selectedYear"
+                    ng-change="changeYear()"
+                    ng-options="o as o for o in years" required>
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group col-xs-6 col-md-4">
+        </div>
+    </div>
 
     <div class="row">
         <div class="form-group col-xs-6">
@@ -15,11 +29,13 @@
             </canvas>
         </div>
     </div>
-    <div class="row">
-        <div class="form-group col-xs-6">
-            <canvas id="doughnut" class="chart chart-doughnut" chart-data="doughnutData"
-                    chart-labels="doughnutLabels" chart-colours="doughnutColors">
-            </canvas>
+    <!--
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <canvas id="doughnut" class="chart chart-doughnut" chart-data="doughnutData"
+                        chart-labels="doughnutLabels" chart-colours="doughnutColors">
+                </canvas>
+            </div>
         </div>
-    </div>
+    -->
 </div>
