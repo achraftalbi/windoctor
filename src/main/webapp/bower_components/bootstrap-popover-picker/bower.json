@@ -1,0 +1,29 @@
+{
+  "name": "bootstrap-popover-picker",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "bootstrap": "^3"
+  },
+  "ignore": [
+    "\\.*",
+    "/src",
+    "index.html",
+    "/package.json",
+    "/Gruntfile.js",
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/wangshijun/bootstrap-popover-picker",
+  "authors": [
+    "Javier Aguilar"
+  ],
+  "description": "bootstrap-popover-picker",
+  "license": "MIT",
+  "resolutions": {
+    "jquery": "^1.10"
+  }
+}
