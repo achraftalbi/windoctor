@@ -25,6 +25,8 @@
             "inProgress": "In progress",
             "annulled": "Annulled",
             "annul": "Annul",
+            "accept": "Accept",
+            "reject": "Reject",
             "realized": "Realized",
             "abandoned": "Abandoned",
             "anonymous": "Anonymous",

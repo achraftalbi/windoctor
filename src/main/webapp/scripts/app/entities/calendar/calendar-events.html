@@ -109,14 +109,34 @@
                             </td>
                             <div>
                                 <td style="background-color: #adadad;color: white;"
-                                    ng-show="event.eventStatus.id===8 || event.eventStatus.id===7">
+                                    ng-show="event.eventStatus.id===8">
                                     <span></span>
+                                </td>
+                                <td style="background-color: #adadad;color: white;"
+                                    ng-show="event.eventStatus.id===7">
+                                    <span></span>
+                                    <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                                       tooltip="{{ 'windoctorApp.calendar.accept' | translate }}"
+                                       tooltip-class="acceptClass"
+                                       tooltip-placement="bottom-left"
+                                       ng-click="accept(event)"
+                                       class="btn btn-success glyphicon glyphicon-thumbs-up">
+                                    </a>
+                                    <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                                       tooltip="{{ 'windoctorApp.calendar.reject' | translate }}"
+                                       tooltip-class="rejectClass"
+                                       tooltip-placement="bottom-left"
+                                       ng-click="reject(event)"
+                                       class="btn btn-danger glyphicon glyphicon-thumbs-down">
+                                    </a>
                                 </td>
                                 <td style="background-color: dodgerblue;color: white;"
                                     ng-show="event.eventStatus.id===1">
                                     <span translate="windoctorApp.calendar.inProgress">In progress</span>
-                                    <a ng-show="!account.currentUserPatient" data-toggle="tooltip" data-placement="bottom"
-                                       title="" data-original-title="Tooltip on bottom"
+                                    <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                                       tooltip="{{ 'windoctorApp.calendar.annul' | translate }}"
+                                       tooltip-class="annulClass"
+                                       tooltip-placement="bottom-left"
                                             ng-click="annul(event)"
                                             class="btn btn-danger btn-sm red-tooltip">
                                         <span class="glyphicon glyphicon-off"></span>&nbsp;<span

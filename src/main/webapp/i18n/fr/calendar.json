@@ -22,6 +22,8 @@
             "inProgress": "En cours",
             "annulled": "Annulé",
             "annul": "Annuler",
+            "accept": "Accepter",
+            "reject": "Rejeter",
             "realized": "Réalisé",
             "abandoned": "Abandonné",
             "anonymous": "Anonyme",

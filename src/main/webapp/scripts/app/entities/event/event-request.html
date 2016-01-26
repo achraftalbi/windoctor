@@ -1,0 +1,97 @@
+<div>
+
+    <h2 translate="windoctorApp.event.home.title">Test6Entitys</h2>
+    <jh-alert></jh-alert>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="windoctorApp.calendar.type">Type</th>
+                <th translate="windoctorApp.calendar.patient">Patient</th>
+                <th translate="windoctorApp.calendar.event_date">Event_date</th>
+                <th translate="windoctorApp.calendar.description">Description</th>
+                <th translate="windoctorApp.calendar.eventReason">eventReason</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+            <tr ng-repeat="event in events">
+                <div>
+                    <td style="background-color: dodgerblue;color: white;"
+                        ng-show="event.eventStatus.id===1">
+                        <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                    </td>
+                    <td style="background-color: #800080;color: white;"
+                        ng-show="event.eventStatus.id===2">
+                        <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                    </td>
+                    <td style="background-color: darkgreen;color: white;"
+                        ng-show="event.eventStatus.id===3">
+                        <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                    </td>
+                    <td style="background-color: #ad2121;color: white;"
+                        ng-show="event.eventStatus.id===4">
+                        <span translate="windoctorApp.calendar.appointment">Appointment</span>
+                    </td>
+                    <td style="background-color: rgb(255, 170, 4);color: white;"
+                        ng-show="event.eventStatus.id===7">
+                        <span translate="windoctorApp.calendar.request">Request</span>
+                    </td>
+                    <td style="background-color: darkgreen;;color: white;"
+                        ng-show="event.eventStatus.id===8">
+                        <span translate="windoctorApp.calendar.visit">Visite</span>
+                    </td>
+                </div>
+                <td><span ng-show="(!account.currentUserPatient) || (account.currentUserPatient && account.id===event.user.id)">
+                                {{event.user.firstName}} {{event.user.lastName}}
+                                </span>
+                    <span ng-show="account.currentUserPatient && account.id!==event.user.id" translate="windoctorApp.calendar.anonymous">Anonymous</span>
+                </td>
+                <td>{{event.event_date | date:'HH:mm' : '+0000'}}</td>
+                <td>{{event.description}}</td>
+                <td>
+                    <span>{{event.eventReason.description}}</span>
+                </td>
+                <div>
+                    <td style="background-color: #adadad;color: white;"
+                        ng-show="event.eventStatus.id===8">
+                        <span></span>
+                    </td>
+                    <td style="background-color: #adadad;color: white;"
+                        ng-show="event.eventStatus.id===7">
+                        <span></span>
+                        <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                           tooltip="{{ 'windoctorApp.calendar.accept' | translate }}"
+                           tooltip-class="acceptClass"
+                           tooltip-placement="bottom-left"
+                           ng-click="accept(event)"
+                           class="btn btn-success glyphicon glyphicon-thumbs-up">
+                        </a>
+                        <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                           tooltip="{{ 'windoctorApp.calendar.reject' | translate }}"
+                           tooltip-class="rejectClass"
+                           tooltip-placement="bottom-left"
+                           ng-click="reject(event)"
+                           class="btn btn-danger glyphicon glyphicon-thumbs-down">
+                        </a>
+                    </td>
+                    <td style="background-color: dodgerblue;color: white;"
+                        ng-show="event.eventStatus.id===1">
+                        <span translate="windoctorApp.calendar.inProgress">In progress</span>
+                        <a ng-show="!account.currentUserPatient" data-toggle="tooltip"
+                           tooltip="{{ 'windoctorApp.calendar.annul' | translate }}"
+                           tooltip-class="annulClass"
+                           tooltip-placement="bottom-left"
+                           ng-click="annul(event)"
+                           class="btn btn-danger btn-sm red-tooltip">
+                            <span class="glyphicon glyphicon-off"></span>&nbsp;<span
+                            > </span>
+                        </a>
+                    </td>
+                </div>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

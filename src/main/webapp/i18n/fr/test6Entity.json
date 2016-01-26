@@ -1,0 +1,19 @@
+{
+    "windoctorApp": {
+        "test6Entity" : {
+            "home": {
+                "title": "Test6Entitys",
+                "createLabel": "Créer un nouveau Test6Entity",
+                "createOrEditLabel": "Créer ou éditer un Test6Entity"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Test6Entity {{ id }} ?"
+            },
+            "detail": {
+                "title": "Test6Entity"
+            },
+            "description": "Description"
+        }
+    }
+}
+

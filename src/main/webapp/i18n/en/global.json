@@ -28,6 +28,7 @@
                 "fund": "Fund",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply_type",
+                "test6Entity": "Test6Entity",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

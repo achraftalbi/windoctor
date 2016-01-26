@@ -73,6 +73,8 @@
                         &#xA0;<span translate="global.menu.entities.fund_history">fund_history</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="supply_type"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.supply_type">supply_type</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="test6Entity"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.test6Entity">test6Entity</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>
@@ -138,6 +140,65 @@
                             <a href="" ng-click="changeLanguage(language)">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
+                </li>
+                <li ui-sref-active="active" class="dropdown pointer" ng-controller="EventRequestController">
+                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
+                            <i class="glyphicon glyphicon-bell notifications-params">  <span class="badge badge-notify">3</span>
+                            </i>
+                        </a>
+
+                        <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+
+                            <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notifications-wrapper">
+                                <a class="content" href="#">
+
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+                                <a class="content" href="#">
+                                    <div class="notification-item">
+                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
+                                        <p class="item-info">Marketing 101, Video Assignment</p>
+                                    </div>
+                                </a>
+
+                            </div>
+                            <li class="divider"></li>
+                            <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
+                            <ng-include src="'scripts/app/entities/event/event-request.html'"></ng-include>
+                        </ul>
+
                 </li>
             </ul>
         </div>
