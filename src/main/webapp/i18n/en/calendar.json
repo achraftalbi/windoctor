@@ -29,6 +29,7 @@
             "reject": "Reject",
             "realized": "Realized",
             "abandoned": "Abandoned",
+            "annulledByPatient": "Annuled by patient",
             "anonymous": "Anonymous",
             "patient": "Name of patient",
             "changePatient": "Change patient",

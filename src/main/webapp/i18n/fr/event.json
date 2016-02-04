@@ -4,7 +4,8 @@
             "home": {
                 "title": "Events",
                 "createLabel": "Créer un nouveau Event",
-                "createOrEditLabel": "Créer ou éditer un Event"
+                "createOrEditLabel": "Créer ou éditer un Event",
+                "selectDaysToBlock": "Sélectionner la date à blocker"
             },
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"

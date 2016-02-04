@@ -137,8 +137,17 @@
                                        tooltip="{{ 'windoctorApp.calendar.annul' | translate }}"
                                        tooltip-class="annulClass"
                                        tooltip-placement="bottom-left"
-                                            ng-click="annul(event)"
-                                            class="btn btn-danger btn-sm red-tooltip">
+                                       ng-click="annul(event)"
+                                       class="btn btn-danger btn-sm red-tooltip">
+                                        <span class="glyphicon glyphicon-off"></span>&nbsp;<span
+                                        > </span>
+                                    </a>
+                                    <a ng-show="account.currentUserPatient" data-toggle="tooltip"
+                                       tooltip="{{ 'windoctorApp.calendar.annul' | translate }}"
+                                       tooltip-class="annulClass"
+                                       tooltip-placement="bottom-left"
+                                       ng-click="annulByPatient(event)"
+                                       class="btn btn-danger btn-sm red-tooltip">
                                         <span class="glyphicon glyphicon-off"></span>&nbsp;<span
                                         > </span>
                                     </a>
@@ -154,6 +163,10 @@
                                 <td style="background-color: #ad2121;color: white;"
                                     ng-show="event.eventStatus.id===4">
                                     <span translate="windoctorApp.calendar.abandoned">Abandoned</span>
+                                </td>
+                                <td style="background-color: #800080;color: white;"
+                                    ng-show="event.eventStatus.id===10 || event.eventStatus.id===11">
+                                    <span translate="windoctorApp.calendar.annulledByPatient">Annuled by patient</span>
                                 </td>
                             </div>
                             <td>

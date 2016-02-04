@@ -9,6 +9,7 @@ angular.module('windoctorApp')
                 $scope.calendarEvts = result;
                 var cuurentDate = new Date();
                 console.log(" new Tdate 1 " + moment(cuurentDate).format('HH:mm')+' +00:00');
+                console.log(" new Tdate XX " + moment(cuurentDate).utc().format('MMMM Do YYYY,  HH:mm z')+' +00:00');
                 console.log(" new Tdate 2 " + new Date(moment(cuurentDate).format('MMMM Do YYYY, HH:mm:ss')+' +00:00'));
                 for (var i = 0; i < $scope.calendarEvts.length; i++) {
                     var startDate = $scope.calendarEvts[i].event_date;

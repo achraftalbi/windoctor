@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('EventController', function ($scope, Event, EventSearch, ParseLinks) {
+    .controller('EventBlockController', function ($scope, Event, EventsBlock, EventSearch, Principal, ParseLinks) {
         $scope.events = [];
         $scope.page = 1;
         $scope.loadAll = function () {
-            Event.query({page: $scope.page, per_page: 5}, function (result, headers) {
+            EventsBlock.query({statusType: 9,page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.events = result;
             });
         };
+
         $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();

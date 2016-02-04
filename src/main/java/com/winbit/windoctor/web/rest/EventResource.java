@@ -108,7 +108,7 @@ public class EventResource {
         List<Event> listEventsFounded = eventRepository.findAllEvents(SecurityUtils.getCurrerntStructure());
         List<Event> listEvents = new ArrayList<Event>();
         log.info("TimeZone " + TimeZone.getDefault().getID());
-        for (Event event : listEventsFounded){
+        for (Event event : listEventsFounded) {
             Event eventTmp = new Event();
             eventTmp.setId(event.getId());
             eventTmp.setEventReason(event.getEventReason());
@@ -120,23 +120,24 @@ public class EventResource {
         return listEvents;
     }
 
-    /*public DateTime ConvertTimeZones(String sFromTimeZone, String sToTimeZone, String sFromDateTime){
-        DateTimeZone oFromZone       = DateTimeZone.forID(sFromTimeZone);
-        DateTimeZone oToZone         = DateTimeZone.forID(sToTimeZone);
+    /**
+     * GET  /eventsNotification -> get all the events notification for the current structure.
+     */
+    @RequestMapping(value = "/eventsNotification",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Event>> getAllNotification(@RequestParam(value = "page", required = false) Integer offset,
+                                              @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get events page per_page");
+        Page<Event> page = null;
 
-        DateTime oDateTime           = new DateTime(sFromDateTime);
-        DateTime oFromDateTime       = oDateTime.withZoneRetainFields(oFromZone);
+        page = eventRepository.getAllNotification(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
 
-        DateTime oToDateTime         = new DateTime(oFromDateTime).withZone(oToZone);
-
-        DateTimeFormatter oFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'H:mm:ss.SSSZ");
-        DateTimeFormatter oFormatter2 = DateTimeFormat.forPattern("yyyy-MM-dd H:mm:ss");
-
-        DateTime oNewDate            = oFormatter.withOffsetParsed().parseDateTime(oToDateTime.toString());
-
-        //return oFormatter2.withZone(oToZone).print(oNewDate.getMillis());
-        return oNewDate;
-    }*/
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
     /**
      * GET  /events -> get all the events.
@@ -156,13 +157,33 @@ public class EventResource {
             page = eventRepository.findAll(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
         } else {
             selectedDate = selectedDate.split("GMT")[0].trim();
-            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate,WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
-            log.debug("first date:" +dateTimeInUTC + " segond date:" + dateTimeInUTC.plusDays(1));
+            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
+            log.debug("first date:" + dateTimeInUTC + " segond date:" + dateTimeInUTC.plusDays(1));
             page = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
-            for(Event event : page){
-                log.debug("event founded "+event.getEvent_date());
+            for (Event event : page) {
+                log.debug("event founded " + event.getEvent_date());
             }
         }
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /events -> get all the events.
+     */
+    @RequestMapping(value = "/eventsBlock",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Event>> getAllEventsBlock(@RequestParam(value = "statusType", required = false) Long statusType, @RequestParam(value = "page", required = false) Integer offset,
+                                              @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get eventsBlock page per_page");
+        Page<Event> page = null;
+        log.debug("statusType " + statusType);
+
+        page = eventRepository.findAllEventsBlock(statusType, SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -186,7 +207,7 @@ public class EventResource {
         } else {
             log.debug("selectedDate 222 " + selectedDate);
             selectedDate = selectedDate.split("GMT")[0].trim();
-            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate,WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
+            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
             eventList = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure());
             eventDTO.setEventList(eventList);
             Long startHour = 6l;
@@ -199,7 +220,7 @@ public class EventResource {
                 eventDTO.getStartDateList().add(hour + ":30");
                 eventDTO.getStartDateList().add(hour + ":45");
             }
-            eventDTO.getStartDateList().add(endHour+":00");
+            eventDTO.getStartDateList().add(endHour + ":00");
             eventDTO.setEndDateList(new ArrayList<String>(eventDTO.getStartDateList()));
             if (eventList != null && eventList.size() > 0) {
                 SimpleDateFormat output = new SimpleDateFormat("HH:mm");
@@ -214,17 +235,17 @@ public class EventResource {
                     boolean findStartDate = false;
                     if (!event.getId().equals(eventId)) {
                         for (int i = 0; i < eventDTO.getStartDateList().size(); i++) {
-                            log.info("eventDTO.getStartDateList().get("+i+") --- " + eventDTO.getStartDateList().get(i));
+                            log.info("eventDTO.getStartDateList().get(" + i + ") --- " + eventDTO.getStartDateList().get(i));
                             if (formattedTimeStartDate.equals(eventDTO.getStartDateList().get(i)) && (!findStartDate)) {
                                 findStartDate = true;
-                                log.info("Start eventDTO.getStartDateList().get("+i+") --- " + eventDTO.getStartDateList().get(i));
+                                log.info("Start eventDTO.getStartDateList().get(" + i + ") --- " + eventDTO.getStartDateList().get(i));
                                 eventDTO.getStartDateList().set(i, "NO");
-                            } else if (formattedTimeEndDate.equals(eventDTO.getStartDateList().get(i))&& findStartDate) {
-                                log.info("End eventDTO.getStartDateList().get("+i+") --- " + eventDTO.getStartDateList().get(i));
+                            } else if (formattedTimeEndDate.equals(eventDTO.getStartDateList().get(i)) && findStartDate) {
+                                log.info("End eventDTO.getStartDateList().get(" + i + ") --- " + eventDTO.getStartDateList().get(i));
                                 eventDTO.getEndDateList().set(i, "NO");
                                 break;
                             } else if (findStartDate) {
-                                log.info("elses eventDTO.getStartDateList().get("+i+") --- " + eventDTO.getStartDateList().get(i));
+                                log.info("elses eventDTO.getStartDateList().get(" + i + ") --- " + eventDTO.getStartDateList().get(i));
                                 eventDTO.getStartDateList().set(i, "NO");
                                 eventDTO.getEndDateList().set(i, "NO");
                             }
@@ -233,9 +254,9 @@ public class EventResource {
                 }
 
             }
-            if(eventDTO.getStartDateList().size()>0 &&
-                eventDTO.getStartDateList().get(eventDTO.getStartDateList().size()-1).equals(endHour+":00")){
-                eventDTO.getStartDateList().remove(eventDTO.getStartDateList().size()-1);
+            if (eventDTO.getStartDateList().size() > 0 &&
+                eventDTO.getStartDateList().get(eventDTO.getStartDateList().size() - 1).equals(endHour + ":00")) {
+                eventDTO.getStartDateList().remove(eventDTO.getStartDateList().size() - 1);
             }
             log.info("eventDTO.setStartDateList " + eventDTO.getStartDateList());
         }

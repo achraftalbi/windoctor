@@ -13,9 +13,22 @@
             <ul class="nav navbar-nav nav-pills navbar-right">
                 <li ui-sref-active="active">
                     <a ui-sref="home">
-                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="glyphicon glyphicon-home" style="color: blue;"></span>
                         <span translate="global.menu.home">Home</span>
                     </a>
+                </li>
+                <li ui-sref-active="active" >
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
+                        <span class="glyphicon  glyphicon-calendar" style="color: green;"></span>
+                    &#xA0;<span translate="global.menu.entities.calendar">Calendar</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="calendar"><span class="glyphicon glyphicon-calendar" style="color: green;"></span>
+                            &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event"><span class="glyphicon glyphicon-ban-circle" style="color: black;"></span>
+                            &#xA0;<span translate="global.menu.entities.blockOfDays">Block of days</span></a></li>
+                    </ul>
                 </li>
                 <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
@@ -141,62 +154,22 @@
                         </li>
                     </ul>
                 </li>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="EventRequestController">
-                        <a id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="/page.html">
-                            <i class="glyphicon glyphicon-bell notifications-params">  <span class="badge badge-notify">3</span>
+                <li class="dropdown trigger" ng-controller="EventRequestController">
+                        <a id="dLabel" role="button" data-toggle="dropdown" >
+                            <i class="glyphicon glyphicon-bell notifications-params">  <span class="badge badge-notify glyphicon" ng-style="notificationCountColor()">{{eventsCount}}</span>
                             </i>
                         </a>
 
-                        <ul class="dropdown-menu notifications" role="menu" aria-labelledby="dLabel">
+                        <ul class="dropdown-menu drop"  ng-click="$event.stopPropagation()" >
 
-                            <div class="notification-heading"><h4 class="menu-title">Notifications</h4><h4 class="menu-title pull-right">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4>
+                            <div class="notification-heading"><h4 class="menu-title" translate="global.menu.notification.notifications">Notifications</h4><h4 class="menu-title pull-right"><i class="glyphicon"></i></h4>
                             </div>
                             <li class="divider"></li>
                             <div class="notifications-wrapper">
-                                <a class="content" href="#">
-
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 · day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-                                <a class="content" href="#">
-                                    <div class="notification-item">
-                                        <h4 class="item-title">Evaluation Deadline 1 • day ago</h4>
-                                        <p class="item-info">Marketing 101, Video Assignment</p>
-                                    </div>
-                                </a>
-
+                                <ng-include src="'scripts/app/entities/event/event-request.html'"></ng-include>
                             </div>
                             <li class="divider"></li>
-                            <div class="notification-footer"><h4 class="menu-title">View all<i class="glyphicon glyphicon-circle-arrow-right"></i></h4></div>
-                            <ng-include src="'scripts/app/entities/event/event-request.html'"></ng-include>
+                            <div class="notification-footer"><h4 class="menu-title"><i class="glyphicon"></i></h4></div>
                         </ul>
 
                 </li>

@@ -50,35 +50,20 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.event.event_date">Event_date</th>
                     <th translate="windoctorApp.event.description">Description</th>
-                    <th translate="windoctorApp.event.eventStatus">eventStatus</th>
-                    <th translate="windoctorApp.event.eventReason">eventReason</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="event in events">
-                    <td><a ui-sref="event.detail({id:event.id})">{{event.id}}</a></td>
-                    <td>{{event.event_date | date:'d MMMM yyyy h:mm:ss a' : '+0100'}}</td>
+                    <td>{{event.event_date | date:'d MMMM yyyy h:mm:ss a' : '+0000'}}</td>
                     <td>{{event.description}}</td>
-                    <td>
-                        <a ui-sref="status.detail({id:event.eventStatus.id})">{{event.eventStatus.description}}</a>
-                    </td>
-                    <td>
-                        <a ui-sref="event_reason.detail({id:event.eventReason.id})">{{event.eventReason.description}}</a>
-                    </td>
                     <td>
                         <button type="submit"
                                 ui-sref="event.detail({id:event.id})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
-                        </button>
-                        <button type="submit"
-                                ui-sref="event.edit({id:event.id})"
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
                         </button>
                         <button type="submit"
                                 ng-click="delete(event.id)"

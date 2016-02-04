@@ -12,8 +12,8 @@ angular.module('windoctorApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/event/events.html',
-                        controller: 'EventController'
+                        templateUrl: 'scripts/app/entities/event/events-block.html',
+                        controller: 'EventBlockController'
                     }
                 },
                 resolve: {
@@ -33,8 +33,8 @@ angular.module('windoctorApp')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/event/event-detail.html',
-                        controller: 'EventDetailController'
+                        templateUrl: 'scripts/app/entities/event/event-block-detail.html',
+                        controller: 'EventBlockDetailController'
                     }
                 },
                 resolve: {
@@ -55,12 +55,12 @@ angular.module('windoctorApp')
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/event/event-dialog.html',
-                        controller: 'EventDialogController',
+                        templateUrl: 'scripts/app/entities/event/event-block-dialog.html',
+                        controller: 'EventBlockDialogController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {event_date: null, description: null, id: null};
+                                return {event_date: null, description: null, id: null,eventStatus:{id:9}};
                             }
                         }
                     }).result.then(function(result) {
@@ -78,8 +78,8 @@ angular.module('windoctorApp')
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
-                        templateUrl: 'scripts/app/entities/event/event-dialog.html',
-                        controller: 'EventDialogController',
+                        templateUrl: 'scripts/app/entities/event/event-block-dialog.html',
+                        controller: 'EventBlockDialogController',
                         size: 'lg',
                         resolve: {
                             entity: ['Event', function(Event) {

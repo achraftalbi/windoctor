@@ -26,6 +26,7 @@
                 "calendar": "Calendar",
                 "mailType": "MailType",
                 "fund": "Fund",
+                "blockOfDays": "Block of days",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply_type",
                 "test6Entity": "Test6Entity",
@@ -50,6 +51,14 @@
                 "audits": "Audits",
                 "apidocs": "API",
                 "database": "Database"
+            },
+            "notification": {
+                "notifications": "Notifications",
+                "requestText": "Request : The patient {{firstName}} {{lastName}} requests an appointment on {{event_date}} for the reason {{reason}} with description {{description}}",
+                "annulationText": "Annulation : The patient {{firstName}} {{lastName}} annuls an appointment on {{event_date}}",
+                "accept": "Accept",
+                "reject": "Reject",
+                "read": "Read"
             },
             "language": "Language"
         },

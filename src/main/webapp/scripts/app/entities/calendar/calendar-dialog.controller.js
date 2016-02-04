@@ -185,6 +185,7 @@ angular.module('windoctorApp').controller('CalendarDialogController',
                     var endDateUTC = $filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').replace('00:00:00', $('.pickerenddate').data('picker1').picker1Value + ':00') + ' +00:00';
                     $scope.event.event_date_end = new Date(endDateUTC);
                     console.log("end display event_date_end " + $scope.event.event_date_end);
+                    console.log("end endDateUTC " + endDateUTC);
                     $scope.endDateValue = $filter('date')(new Date(endDate), 'HH:mm');
                     console.log("end display 2 endDateValue " + $scope.endDateValue);
                 }

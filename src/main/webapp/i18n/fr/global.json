@@ -26,6 +26,7 @@
                 "calendar": "Calendrier",
                 "mailType": "MailType",
                 "fund": "Fund",
+                "blockOfDays": "Blocker des jours",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply_type",
                 "test6Entity": "Test6Entity",
@@ -50,6 +51,14 @@
                 "audits": "Audits",
                 "apidocs": "API",
                 "database": "Base de données"
+            },
+            "notification": {
+                "notifications": "Notifications",
+                "requestText": "Demande : Le patient {{firstName}} {{lastName}} demande un rendez vous le {{event_date}} pour la raison {{reason}} avec la  description {{description}}",
+                "annulationText": "Annulation : Le patient {{firstName}} {{lastName}} a annulé le rendez vous du {{event_date}}",
+                "accept": "Accepter",
+                "reject": "Rejeter",
+                "read": "Lu"
             },
             "language": "Langue"
         },

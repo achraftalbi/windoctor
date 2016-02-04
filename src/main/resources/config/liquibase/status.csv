@@ -7,3 +7,6 @@ id;description;description_fr
 6;"Rejected";"Rejeté"
 7;"Request";"Demande"
 8;"Visit";"Visite"
+9;"Blocked";"Bloqué"
+10;"Annulled by patient";"Annulé par le patient"
+11;"The annullation by patient was informed to the cabinet";"L'annulation par le patient a été indiqué au cabinet"

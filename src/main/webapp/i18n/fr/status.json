@@ -13,6 +13,7 @@
                 "title": "Status"
             },
             "description": "Description",
+            "descriptionFr": "Description français",
             "eventStatus": "EventStatus"
         }
     }

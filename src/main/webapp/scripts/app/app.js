@@ -5,6 +5,7 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
                'angular-loading-bar', 'ngAnimate', //Used for inclufing loading bar
+                'datePicker',
     'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {
@@ -80,7 +81,6 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                     }
                 ],
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('calendar');
                     $translatePartialLoader.addPart('global');
                 }]
             }

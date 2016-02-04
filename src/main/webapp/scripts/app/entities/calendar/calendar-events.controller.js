@@ -82,6 +82,11 @@ angular.module('windoctorApp')
             event.eventStatus.id = 2;
             $scope.save(event);
         };
+        $scope.annulByPatient = function (event) {
+            // Annul an appointment
+            event.eventStatus.id = 10;
+            $scope.save(event);
+        };
         $scope.accept = function (event) {
             // Accept an appointment
             event.eventStatus.id = 1;
