@@ -2,6 +2,7 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.common.WinDoctorConstants;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.repository.EventRepository;
 import com.winbit.windoctor.repository.search.EventSearchRepository;
@@ -10,12 +11,15 @@ import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.dto.EventDTO;
 import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
+import org.elasticsearch.index.query.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -282,6 +286,7 @@ public class EventResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
     /**
      * DELETE  /events/:id -> delete the "id" event.
      */
@@ -308,5 +313,30 @@ public class EventResource {
         return StreamSupport
             .stream(eventSearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * SEARCH  /_search/eventsBlock/:query -> search for the event corresponding
+     * to the query.
+     */
+    @RequestMapping(value = "/_search/eventsBlock/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Event>> searchBlock(@PathVariable String query, @RequestParam(value = "page", required = false) Integer offset,
+                                                   @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+            log.debug("REST request to get eventsBlock page per_page");
+            Page<Event> page = null;
+        QueryStringQueryBuilder queryStringQueryBuilder = queryString(query);
+        log.debug("REST request to get eventsBlock query "+query);
+        log.debug("REST request to get eventsBlock queryStringQueryBuilder "+queryStringQueryBuilder);
+        //QueryBuilder boolQueryBuilder = boolQuery().should(matchQuery("skuCode", keyword)).should(matchQuery("name", keyword));
+        //FilterBuilder filterBuilder = BoolFilter().must(termFilter("enabled", true), termFilter("type", "SIMPLE"), termFilter("tenantCode", "Triveni"));
+        //NativeSearchQueryBuilder().withQuery(QueryBuilders.filteredQuery(boolQueryBuilder, filterBuilder).build();
+        //log.debug("REST request to get eventsBlock NativeSearchQuery "+nativeSearchQuery.getQuery());
+        page = eventSearchRepository.search(query, Constants.STATUS_BLOCKED,SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/eventsBlock", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 }

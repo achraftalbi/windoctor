@@ -1,9 +1,10 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('EventBlockController', function ($scope, Event, EventsBlock, EventSearch, Principal, ParseLinks) {
+    .controller('EventBlockController', function ($scope, Event, EventsBlock, EventSearchBlock, Principal, ParseLinks) {
         $scope.events = [];
         $scope.page = 1;
+        $scope.searchCalled = false;
         $scope.loadAll = function () {
             EventsBlock.query({statusType: 9,page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -13,8 +14,13 @@ angular.module('windoctorApp')
 
         $scope.loadPage = function (page) {
             $scope.page = page;
-            $scope.loadAll();
+            if($scope.searchCalled){
+                $scope.loadAllSearch();
+            }else{
+                $scope.loadAll();
+            }
         };
+
         $scope.loadAll();
         $scope.delete = function (id) {
             Event.get({id: id}, function (result) {
@@ -33,7 +39,13 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            EventSearch.query({query: $scope.searchQuery}, function (result) {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearch();
+        };
+        $scope.loadAllSearch = function () {
+            EventSearchBlock.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
                 $scope.events = result;
             }, function (response) {
                 if (response.status === 404) {

@@ -20,6 +20,9 @@ public final class Constants {
 
     public static final String CURRENT_USER_LOGIN = "current_user_login";
 
+    //Event constants
+    public static final Long STATUS_BLOCKED = 9l;
+
     private Constants() {
     }
 }
