@@ -2,7 +2,7 @@
     <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
         <div class="panel panel-empty">
             <form name="editForm" role="form" novalidate show-validation>
-                <h2 translate="windoctorApp.calendar.home.title">Events</h2>
+                <h2 translate="windoctorApp.calendar.home.title">Appointments and visits for date </h2>
                 <jh-alert></jh-alert>
                 <div class="container">
                     <div class="row">
@@ -27,7 +27,7 @@
                                 translate="windoctorApp.calendar.home.createVisitLabel">Create a new Visit</span>
                             </button>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8" ng-show="!eventsEmpty">
                             <form name="searchForm" class="form-inline">
                                 <table>
                                     <tr>
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive" ng-show="!eventsEmpty">
                     <table class="table table-striped">
                         <thead>
                         <tr>

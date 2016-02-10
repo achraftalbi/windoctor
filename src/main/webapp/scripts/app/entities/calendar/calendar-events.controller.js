@@ -7,6 +7,7 @@ angular.module('windoctorApp')
         $scope.selectedDate = null;
         $scope.account = null;
         $scope.userCanAddRequest = false;
+        $scope.eventsEmpty = false;
         $scope.loadAll = function () {
             console.info('first $stateParams.selectedDate' + $stateParams.selectedDate);
             Event.query({
@@ -17,6 +18,10 @@ angular.module('windoctorApp')
                 $scope.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.events = result;
+                if($scope.events!==null && $scope.events!== undefined && $scope.events.length===0){
+                    $scope.eventsEmpty = true;
+                }
+                console.log('events eventsEmpty '+$scope.eventsEmpty);
             });
         };
         Principal.identity(true).then(function (account) {

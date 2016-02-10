@@ -3,6 +3,7 @@
         "calendar" : {
             "home": {
                 "title": "Events",
+                "dayEventsTitle": "Appointments and visits for date {{ param }}",
                 "createAppointmentLabel": "Create a new appointment",
                 "createVisitLabel": "Create a new visit",
                 "createRequestLabel": "Create a new request",

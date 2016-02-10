@@ -547,21 +547,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    vm.dayClicked = function(day, dayClickedFirstRun) {
+          var blockedDay = false;
+            day.events.forEach(function(eventIn) {
+                if (eventIn.type==='block') {
+                    blockedDay = true;
+                }
+            });
+          if(!blockedDay) {
+              if (!dayClickedFirstRun) {
+                  vm.onTimespanClick({
+                      calendarDate: day.date.toDate()
+                  });
+              }
 
-	      if (!dayClickedFirstRun) {
-	        vm.onTimespanClick({
-	          calendarDate: day.date.toDate()
-	        });
-	      }
-
-	      vm.openRowIndex = null;
-	      var dayIndex = vm.view.indexOf(day);
-	      if (dayIndex === vm.openDayIndex) { //the day has been clicked and is already open
-	        vm.openDayIndex = null; //close the open day
-	      } else {
-	        vm.openDayIndex = dayIndex;
-	        vm.openRowIndex = Math.floor(dayIndex / 7);
-	      }
+              vm.openRowIndex = null;
+              var dayIndex = vm.view.indexOf(day);
+              if (dayIndex === vm.openDayIndex) { //the day has been clicked and is already open
+                  vm.openDayIndex = null; //close the open day
+              } else {
+                  vm.openDayIndex = dayIndex;
+                  vm.openRowIndex = Math.floor(dayIndex / 7);
+              }
+          }
 
 	    };
 
