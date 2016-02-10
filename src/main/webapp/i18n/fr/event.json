@@ -3,10 +3,23 @@
         "event" : {
             "home": {
                 "title": "Events",
+                "blockedDaysTitle": "Jours blockés",
                 "createLabel": "Créer un nouveau Event",
+                "blockANewDayLabel": "Blocker une nouvelle journée",
                 "createOrEditLabel": "Créer ou éditer un Event",
                 "selectDaysToBlock": "Sélectionner la date à blocker"
             },
+            "blockDays": {
+                "created": "Une nouvelle journée blocké avec la date {{ param }} a été créé.",
+                "updated": "Une journée blocké avec la date {{ param }} a été mis à jour.",
+                "deleted": "Une journée blocké avec la date {{ param }} a été supprimé.",
+                "delete": {
+                    "question": "Etes vous sure que vous voulez supprimé la journée blocké avec la date {{ event_date }}?"
+                }
+            },
+            "created": "A new Event is created with identifier {{ param }}: Tu dois mettre la transtation française.",
+            "updated": "A Event is updated with identifier {{ param }}: Tu dois mettre la transtation française.",
+            "deleted": "A Event is deleted with identifier {{ param }}: Tu dois mettre la transtation française.",
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"
             },
@@ -14,6 +27,8 @@
                 "title": "Event"
             },
             "event_date": "Event_date",
+            "dateBlocked": "Date blocké",
+            "dateToBlock": "Date à blocker",
             "description": "Description",
             "eventStatus": "EventStatus",
             "eventReason": "EventReason"

@@ -23,6 +23,10 @@ public final class Constants {
     //Event constants
     public static final Long STATUS_BLOCKED = 9l;
 
+
+    //WinDoctor application format
+    public static final String GLOBAL_DATE_FORMAT = "yy/MM/yyyy";
+
     private Constants() {
     }
 }

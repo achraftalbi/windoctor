@@ -1,6 +1,12 @@
 {
     "global": {
         "title": "WinDoctor",
+        "year": "Year",
+        "month": "Month",
+        "week": "Week {{ day }}",
+        "previous": "Previous",
+        "next": "Next",
+        "today": "Today",
         "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
         "menu": {
             "home": "Home",
@@ -26,7 +32,7 @@
                 "calendar": "Calendar",
                 "mailType": "MailType",
                 "fund": "Fund",
-                "blockOfDays": "Block of days",
+                "blockOfDays": "Block days",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply_type",
                 "test6Entity": "Test6Entity",
@@ -114,6 +120,7 @@
             "delete": "Delete",
             "edit": "Edit",
             "select": "Select",
+            "search": "Search",
             "save": "Save",
             "saveAndClose": "Save and close",
             "view": "View",

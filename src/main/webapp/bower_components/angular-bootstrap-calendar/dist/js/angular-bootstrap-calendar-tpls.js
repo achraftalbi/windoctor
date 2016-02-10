@@ -127,7 +127,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<div\n  mwl-droppable\n  on-drop=\"vm.handleEventDrop(dropData.event, day.date)\"\n  class=\"cal-month-day {{ day.cssClass }}\"\n  ng-class=\"{\n            'cal-day-outmonth': !day.inMonth,\n            'cal-day-inmonth': day.inMonth,\n            'cal-day-weekend': day.isWeekend,\n            'cal-day-past': day.isPast,\n            'cal-day-today': day.isToday,\n            'cal-day-future': day.isFuture\n          }\">\n\n  <small\n    class=\"cal-events-num badge badge-important pull-left\"\n    ng-show=\"day.badgeTotal > 0\"\n    ng-bind=\"day.badgeTotal\">\n  </small>\n\n  <span\n    class=\"pull-right\"\n    data-cal-date\n    ng-click=\"vm.calendarCtrl.drillDown(day.date)\"\n    ng-bind=\"day.label\">\n  </span>\n\n  <ng-include src=\"vm.cellEventsTemplateUrl || 'calendarMonthCellEvents.html'\"></ng-include>\n\n  <div id=\"cal-week-box\" ng-if=\"$first && rowHovered\">\n    Week {{ day.date.week() }}\n  </div>\n\n</div>\n";
+	module.exports = "<div\n  mwl-droppable\n  on-drop=\"vm.handleEventDrop(dropData.event, day.date)\"\n  class=\"cal-month-day {{ day.cssClass }} {{ day.highlightClassDay }}\"\n  ng-class=\"{\n            'cal-day-outmonth': !day.inMonth,\n            'cal-day-inmonth': day.inMonth,\n            'cal-day-weekend': day.isWeekend,\n            'cal-day-past': day.isPast,\n            'cal-day-today': day.isToday,\n            'cal-day-future': day.isFuture\n          }\">\n\n  <small\n    class=\"cal-events-num badge badge-important pull-left\"\n    ng-show=\"day.badgeTotal > 0\"\n    ng-bind=\"day.badgeTotal\">\n  </small>\n\n  <span\n    class=\"pull-right\"\n    data-cal-date\n   ng-bind=\"day.label\" >\n  </span>\n\n  <ng-include src=\"vm.cellEventsTemplateUrl || 'calendarMonthCellEvents.html'\"></ng-include>\n\n  <div id=\"cal-week-box\" ng-if=\"$first && rowHovered\">\n <span style=\"color:black\" translate=\"global.week\" translate-values=\"{day: '{{ day.date.week() }}'}\">Week {{ day.date.week() }}\n</span>     </div>\n\n</div>\n";
 
 /***/ },
 /* 16 */
@@ -526,8 +526,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	      for (var i = 0; i < rows; i++) {
 	        vm.monthOffsets.push(i * 7);
 	      }
-
-	      //Auto open the calendar to the current day if set
+            vm.view.forEach(function(day) {
+                day.events.forEach(function(eventIn) {
+                    if (eventIn.type==='block') {
+                        day.highlightClassDay = 'day-highlight-day dh-event-' + eventIn.type;
+                        $('.day-highlight-day').click(function (ev) {
+                            ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation();return false;
+                        });
+                    }
+                });
+            });	      //Auto open the calendar to the current day if set
 	      if (vm.autoOpen) {
 	        vm.view.forEach(function(day) {
 	          if (day.inMonth && moment(vm.currentDay).startOf('day').isSame(day.date) && !vm.openDayIndex) {
@@ -561,6 +569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      vm.view.forEach(function(day) {
 	        delete day.highlightClass;
+
 	        if (shouldAddClass) {
 	          var dayContainsEvent = day.events.indexOf(event) > -1;
 	          if (dayContainsEvent) {

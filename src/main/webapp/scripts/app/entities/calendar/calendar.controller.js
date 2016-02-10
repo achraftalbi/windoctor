@@ -24,7 +24,8 @@ angular.module('windoctorApp')
                                     ($scope.calendarEvts[i].eventStatus.id === 3 ? 'success' :
                                         ($scope.calendarEvts[i].eventStatus.id === 4 ? 'important' :
                                             ($scope.calendarEvts[i].eventStatus.id === 7 ? 'request' :
-                                                ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' : 'Not applicable')))))),
+                                                ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' :
+                                                    ($scope.calendarEvts[i].eventStatus.id === 9 ? 'block' : 'Not applicable'))))))),
                         //angular.isUndefined($scope.calendarEvts[i].eventStatus)
                         //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
                         startsAt: startDate//,

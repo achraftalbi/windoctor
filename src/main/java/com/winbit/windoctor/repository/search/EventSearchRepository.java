@@ -16,8 +16,11 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 public interface EventSearchRepository extends ElasticsearchRepository<Event, Long> {
 
     //@Query("{\"bool\" : {\"must\" : [ {\"query_string\": {\"query\": \"?0\"}}, {\"filter\":{\"term\":{\"user.structure.id\":?2}}}]}}")
-    @Query("{" +
+   @Query("{" +
         "\"filtered\":{\"query\":{\"query_string\":{\"query\":\"*?0*\"}},\"filter\":{\"term\":{\"user.structure.id\":\"?2\",\"eventStatus.id\":\"?1\"}}}" +
         "}")
+       /* @Query("{" +
+            "\"filtered\":{\"query\":{\"query_string\":{\"query\":\"*?0*\"}},\"filter\":{\"bool\" : {\"must_not\" : {\"term\":{\"user.structure.id\":\"?2\",\"eventStatus.id\":\"?1\"}}}}}" +
+            "}")   */
     Page<Event> search(String query,Long statusType,Long structure_id,Pageable var2);
 }

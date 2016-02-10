@@ -16,21 +16,25 @@
                                 mwl-date-modifier
                                 date="calendarDay"
                                 decrement="calendarView">
-                                Previous
+                                <span
+                                translate="global.previous">Previous</span>
+
                             </button>
                             <button
                                 class="btn btn-default"
                                 mwl-date-modifier
                                 date="calendarDay"
                                 set-to-today>
-                                Today
+                                <span
+                                    translate="global.today">Today</span>
                             </button>
                             <button
                                 class="btn btn-primary"
                                 mwl-date-modifier
                                 date="calendarDay"
                                 increment="calendarView">
-                                Next
+                                <span
+                                    translate="global.next">Next</span>
                             </button>
                         </div>
                     </div>
@@ -39,8 +43,12 @@
 
                     <div class="col-md-6 text-center">
                         <div class="btn-group">
-                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'year'">Year</label>
-                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'month'">Month</label>
+                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'year'"
+                                   ><span
+                                translate="global.year">Year</span></label>
+                            <label class="btn btn-primary" ng-model="calendarView" btn-radio="'month'"
+                                   ><span
+                                translate="global.month">Month</span></label>
                         </div>
                     </div>
 

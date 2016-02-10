@@ -7,8 +7,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             ng-click="clear()">&times;</button>
                     <h4 class="modal-title" id="myEventLabel" translate="windoctorApp.event.home.selectDaysToBlock">
-                        Create or edit a
-                        Event</h4>
+                        Select days to block </h4>
                 </div>
                 <div class="modal-body">
                     <jh-alert-error></jh-alert-error>
@@ -17,7 +16,7 @@
                         <div class='col-md-5'>
                             <div class="form-group">
                                 <div>
-                                    <label translate="windoctorApp.event.event_date">Event_date</label>
+                                    <label translate="windoctorApp.event.dateToBlock">Date to block</label>
                                 </div>
                                 <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
                                        date-change="changeDate" readonly name="event_date" min-date="minDateValue"

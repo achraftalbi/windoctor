@@ -75,9 +75,16 @@ public class EventResource {
         log.debug("new event status getId " + event.getEventStatus().getId());
         Event result = eventService.save(event);
         eventSearchRepository.save(result);
-        return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
-            .body(result);
+        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
+            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("event.blockDays",
+                            result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
+                            .body(result);
+        }else {
+            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
+                    .body(result);
+        }
     }
 
     /**
@@ -94,9 +101,16 @@ public class EventResource {
         }
         Event result = eventRepository.save(event);
         eventSearchRepository.save(event);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("event", event.getId().toString()))
-            .body(result);
+        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
+            return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("event.blockDays",
+                            result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
+                    .body(result);
+        }else {
+            return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("event", event.getId().toString()))
+                    .body(result);
+        }
     }
 
 
@@ -295,10 +309,16 @@ public class EventResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete Event : {}", id);
+        log.debug("REST request to delete Event change : {}", id);
+        Event event = eventRepository.findOne(id);
         eventRepository.delete(id);
         eventSearchRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
+        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event.blockDays",
+                event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT))).build();
+        }else {
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
+        }
     }
 
     /**
@@ -328,13 +348,7 @@ public class EventResource {
         throws URISyntaxException {
             log.debug("REST request to get eventsBlock page per_page");
             Page<Event> page = null;
-        QueryStringQueryBuilder queryStringQueryBuilder = queryString(query);
         log.debug("REST request to get eventsBlock query "+query);
-        log.debug("REST request to get eventsBlock queryStringQueryBuilder "+queryStringQueryBuilder);
-        //QueryBuilder boolQueryBuilder = boolQuery().should(matchQuery("skuCode", keyword)).should(matchQuery("name", keyword));
-        //FilterBuilder filterBuilder = BoolFilter().must(termFilter("enabled", true), termFilter("type", "SIMPLE"), termFilter("tenantCode", "Triveni"));
-        //NativeSearchQueryBuilder().withQuery(QueryBuilders.filteredQuery(boolQueryBuilder, filterBuilder).build();
-        //log.debug("REST request to get eventsBlock NativeSearchQuery "+nativeSearchQuery.getQuery());
         page = eventSearchRepository.search(query, Constants.STATUS_BLOCKED,SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/eventsBlock", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

@@ -29,8 +29,8 @@ angular.module('windoctorApp')
             });
         };
 
-        $scope.confirmDelete = function (id) {
-            Event.delete({id: id},
+        $scope.confirmDelete = function (event) {
+            Event.delete({id: event.id},
                 function () {
                     $scope.loadAll();
                     $('#deleteEventConfirmation').modal('hide');

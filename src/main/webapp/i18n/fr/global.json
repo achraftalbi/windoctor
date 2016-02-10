@@ -1,6 +1,12 @@
 {
     "global": {
         "title": "WinDoctor",
+        "year": "Année",
+        "month": "Mois",
+        "week": "Semaine {{ day }}",
+        "previous": "Précédent",
+        "next": "Suivant",
+        "today": "Aujourd'hui",
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
@@ -113,6 +119,7 @@
             "close": "Fermer",
             "edit": "Editer",
             "select": "Séléctionner",
+            "search": "Rechercher",
             "delete": "Supprimer",
             "save": "Sauvegarder",
             "saveAndClose": "Sauvegarder et fermer",

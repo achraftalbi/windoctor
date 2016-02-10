@@ -32,7 +32,10 @@ public class FunctionsUtil {
     public static String convertDateToString(Date date, String format)
     {
         try{
+            log.info("date "+date);
+            log.info("format "+format);
             String stringDate = DateFormatUtils.format(date, format);
+            log.info("stringDate "+stringDate);
             return stringDate;
         }catch(Exception ex){
             log.error("Exception in convertDateToString date:"+date+", format:"+format+ " "+ex);
