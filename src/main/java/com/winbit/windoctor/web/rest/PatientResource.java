@@ -7,6 +7,7 @@ import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
@@ -14,6 +15,7 @@ import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.ErrorCodes;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -107,11 +109,6 @@ public class PatientResource {
         throws URISyntaxException {
         Page<User> page;
         page = userService.findAllPatients(PaginationUtil.generatePageRequest(offset, limit));
-
-        for (User user:((List<User>)page.getContent())){
-            user.setNoEvents(user.getEvents()==null || user.getEvents().size()==0);
-            log.debug("user.getNoEvents"+user.getNoEvents()+" user getEvents "+user.getEvents());
-        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/patients", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -154,9 +151,26 @@ public class PatientResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<User> search(@PathVariable String query) {
+    /*public List<User> search(@PathVariable String query) {
+        QueryStringQueryBuilder queryStringQueryBuilder = queryString(query);
+        log.debug("patients  queryStringQueryBuilder " + queryStringQueryBuilder);
+
+
+
+
+
+
         return StreamSupport
-            .stream(userSearchRepository.search(queryString(query)).spliterator(), false)
+            .stream(userRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, AuthoritiesConstants.PATIENT, SecurityUtils.getCurrerntStructure()).spliterator(), false)
             .collect(Collectors.toList());
+    }*/
+    public ResponseEntity<List<User>> search(@PathVariable String query,@RequestParam(value = "page" , required = false) Integer offset,
+                                             @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<User> page;
+        page = userRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, AuthoritiesConstants.PATIENT, SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/patients", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

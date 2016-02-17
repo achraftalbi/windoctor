@@ -25,7 +25,10 @@ angular.module('windoctorApp')
                                         ($scope.calendarEvts[i].eventStatus.id === 4 ? 'important' :
                                             ($scope.calendarEvts[i].eventStatus.id === 7 ? 'request' :
                                                 ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' :
-                                                    ($scope.calendarEvts[i].eventStatus.id === 9 ? 'block' : 'Not applicable'))))))),
+                                                    ($scope.calendarEvts[i].eventStatus.id === 9 ? 'block' :
+                                                        ($scope.calendarEvts[i].eventStatus.id === 10 ? 'special' :
+                                                            ($scope.calendarEvts[i].eventStatus.id === 11 ? 'special' :
+                                                        'Not applicable'))))))))),
                         //angular.isUndefined($scope.calendarEvts[i].eventStatus)
                         //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
                         startsAt: startDate//,
@@ -37,9 +40,11 @@ angular.module('windoctorApp')
         };
         $scope.loadAll();
 
-        $scope.delete = function (id) {
-            Event.get({id: id}, function (result) {
+        $scope.delete = function (event) {
+            Event.get({id: event.id}, function (result) {
                 $scope.calendarEvts = result;
+                /*$scope.deleteMessage =$scope.event.eventStatus.id === 1 ? 'info' :
+                    ($scope.event.eventStatus.id === 7 ? 'request');*/
                 $('#deleteEvent_reasonConfirmation').modal('show');
             });
         };
@@ -62,6 +67,7 @@ angular.module('windoctorApp')
                 }
             });
         };
+
 
         $scope.refresh = function () {
             $scope.loadAll();

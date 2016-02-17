@@ -18,6 +18,7 @@ angular.module('windoctorApp').controller('CalendarDialogController',
             $scope.endDateTab = [];
             $scope.displayDate = false;
             $scope.visit = false;
+            $scope.searchCalled = false;
             console.log('patients ' + $scope.patients.length)
             $scope.load = function (id) {
                 Event.get({id: id}, function (result) {
@@ -200,11 +201,24 @@ angular.module('windoctorApp').controller('CalendarDialogController',
             };
             $scope.loadPage = function (page) {
                 $scope.page = page;
-                $scope.loadAll();
+                if($scope.searchCalled){
+                    $scope.loadAllSearchPatient();
+                }else{
+                    $scope.loadAll();
+                }
             };
             $scope.loadAll();
+
             $scope.searchPatient = function () {
-                PatientSearch.query({query: $scope.searchQueryPatient}, function (result) {
+                $scope.page = 1;
+                $scope.searchCalled = true;
+                $scope.loadAllSearchPatient();
+            };
+
+            $scope.loadAllSearchPatient = function () {
+                PatientSearch.query({query: $scope.searchQueryPatient,
+                    page: $scope.page, per_page: 5}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
                     $scope.patients = result;
                 }, function (response) {
                     if (response.status === 404) {
@@ -212,6 +226,7 @@ angular.module('windoctorApp').controller('CalendarDialogController',
                     }
                 });
             };
+
             $scope.displayListPatients = function () {
                 $scope.page = 1;
                 $scope.loadAll();

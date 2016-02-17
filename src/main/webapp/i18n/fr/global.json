@@ -7,6 +7,9 @@
         "previous": "Précédent",
         "next": "Suivant",
         "today": "Aujourd'hui",
+        "to": "à",
+        "wordToSearch": "Mot à chercher",
+        "cheeeese": "Cheeeese",
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
@@ -114,6 +117,8 @@
         "action": {
             "addblob": "Ajouter blob",
             "addimage": "ajouter image",
+            "captureAnImage": "Capturer une image",
+            "capture": "Capturer",
             "back": "Retour",
             "cancel": "Annuler",
             "close": "Fermer",
@@ -124,6 +129,7 @@
             "save": "Sauvegarder",
             "saveAndClose": "Sauvegarder et fermer",
             "view": "Voir",
+            "choose": "Choisisser",
             "display": "Afficher"
         },
         "detail": {

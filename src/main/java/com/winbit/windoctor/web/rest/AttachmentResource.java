@@ -1,9 +1,11 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Attachment;
 import com.winbit.windoctor.repository.AttachmentRepository;
 import com.winbit.windoctor.repository.search.AttachmentSearchRepository;
+import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -56,7 +58,8 @@ public class AttachmentResource {
         Attachment result = attachmentRepository.save(attachment);
         attachmentSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/attachments/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("attachment", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("attachment",
+                    result.getTreatment().getTreatment_date() == null ? "" : FunctionsUtil.convertDateToString(result.getTreatment().getTreatment_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                 .body(result);
     }
 
@@ -75,7 +78,8 @@ public class AttachmentResource {
         Attachment result = attachmentRepository.save(attachment);
         attachmentSearchRepository.save(attachment);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("attachment", attachment.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("attachment",
+                    attachment.getTreatment().getTreatment_date() == null ? "" : FunctionsUtil.convertDateToString(attachment.getTreatment().getTreatment_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                 .body(result);
     }
 
@@ -126,9 +130,12 @@ public class AttachmentResource {
     @Timed
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Attachment : {}", id);
+        Attachment attachment = attachmentRepository.findOne(id);
         attachmentRepository.delete(id);
         attachmentSearchRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("attachment", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("attachment",
+            attachment.getTreatment().getTreatment_date() == null ? "" : FunctionsUtil.convertDateToString(attachment.getTreatment().getTreatment_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+            .build();
     }
 
     /**

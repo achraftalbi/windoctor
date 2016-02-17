@@ -22,10 +22,20 @@ public final class Constants {
 
     //Event constants
     public static final Long STATUS_BLOCKED = 9l;
+    public static final Long STATUS_IN_PROGRESS = 1l;
+    public static final Long STATUS_VISIT = 8l;
+    public static final Long STATUS_ANNULED = 2l;
+    public static final Long STATUS_ANNULED_BY_PATIENT = 10l;
+    public static final Long STATUS_REQUEST = 7l;
 
 
     //WinDoctor application format
     public static final String GLOBAL_DATE_FORMAT = "yy/MM/yyyy";
+    public static final String GLOBAL_HOUR_MINUTE = "HH:mm";
+
+
+    // Special characters
+    public static final String PERCENTAGE = "%";
 
     private Constants() {
     }

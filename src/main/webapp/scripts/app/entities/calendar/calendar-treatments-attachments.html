@@ -3,155 +3,237 @@
         <div class="panel-heading">
             <h3 translate="windoctorApp.attachment.home.title" class="panel-title"></h3>
         </div>
-        <div class="panel-body">
-            <jh-alert></jh-alert>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4">
-                        <button class="btn btn-primary" ng-click="addNewAttachment()"
-                                ng-show="!displayTreatmentView" >
-                            <span class="glyphicon glyphicon-flash"></span> <span
-                            translate="windoctorApp.attachment.home.createLabel">Create a new Attachment</span>
-                        </button>
+        <div ng-show="!captureAnImageScreen">
+            <div class="panel-body">
+                <jh-alert></jh-alert>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button class="btn btn-primary" ng-click="addNewAttachment()"
+                                    ng-show="!displayTreatmentView">
+                                <span class="glyphicon glyphicon-flash"></span> <span
+                                translate="windoctorApp.attachment.home.createLabel">Create a new Attachment</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th translate="global.field.id">ID</th>
-                        <th translate="windoctorApp.attachment.description">Description</th>
-                        <th translate="windoctorApp.attachment.image">Image</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="attachment in attachments">
-                        <td><a ui-sref="attachment.detail({id:attachment.id})">{{attachment.id}}</a></td>
-                        <td>{{attachment.description}}</td>
-                        <td>
+                <div class="table-responsive"
+                     ng-show="attachments!==null && attachments!==undefined && attachments.length>0">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th translate="windoctorApp.attachment.description">Description</th>
+                            <th translate="windoctorApp.attachment.image">Image</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="attachment in attachments">
+                            <td>{{attachment.description}}</td>
+                            <td>
                             <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" style="max-height: 30px;"
                                  ng-if="attachment.image"/>
                             {{byteSize(attachment.image)}}
                         </td>
                         <td>
                             <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.view' | translate }}"
+                                    tooltip-class="eyeClass"
+                                    tooltip-placement="bottom-left"
                                     ng-click="viewAttachment(attachment)"
                                     class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span
-                                translate="entity.action.view"> View</span>
+                                <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
                             <button type="submit" ng-show="!displayTreatmentView"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.edit' | translate }}"
+                                    tooltip-class="pencilClass"
+                                    tooltip-placement="bottom-left"
                                     ng-click="editAttachment(attachment)"
                                     class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
-                                translate="entity.action.edit"> Edit</span>
+                                <span class="glyphicon glyphicon-pencil"></span>
                             </button>
                             <button type="button" ng-show="!displayTreatmentView"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.delete' | translate }}"
+                                    tooltip-class="deleteClass"
+                                    tooltip-placement="bottom-left"
                                     ng-click="deleteAttachment(attachment.id)"
                                     class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
-                                translate="entity.action.delete"> Delete</span>
+                                <span class="glyphicon glyphicon-remove-circle"></span>
                             </button>
                         </td>
                     </tr>
                     </tbody>
                 </table>
                 <nav>
-                    <ul class="pagination">
-                        <li ng-show="linkAttachments['first']" ng-click="loadAttachmentPage(linkAttachments['first'])">
-                            <a>&lt;&lt;</a></li>
-                        <li ng-show="linkAttachments['prev']" ng-click="loadAttachmentPage(linkAttachments['prev'])"><a>
-                            &lt;</a></li>
-                        <li ng-show="attachmentPage > 2" ng-click="loadAttachmentPage(attachmentPage - 2)"><a>{{attachmentPage
-                            - 2}}</a></li>
-                        <li ng-show="attachmentPage > 1" ng-click="loadAttachmentPage(attachmentPage - 1)"><a>{{attachmentPage
-                            - 1}}</a></li>
-                        <li class="active"><a>{{attachmentPage}}</a></li>
-                        <li ng-show="attachmentPage < linkAttachments['last']"
-                            ng-click="loadAttachmentPage(attachmentPage + 1)"><a>{{attachmentPage + 1}}</a></li>
-                        <li ng-show="attachmentPage < linkAttachments['last'] - 1"
-                            ng-click="loadAttachmentPage(attachmentPage + 2)"><a>{{attachmentPage + 2}}</a></li>
-                        <li ng-show="linkAttachments['next']" ng-click="loadAttachmentPage(linkAttachments['next'])"><a>
-                            &gt;</a></li>
-                        <li ng-show="linkAttachments['last']" ng-click="loadAttachmentPage(linkAttachments['last'])"><a>
-                            &gt;&gt;</a></li>
-                    </ul>
-                </nav>
+                        <ul class="pagination" ng-show="linkAttachments['prev'] || linkAttachments['next']">
+                            <li ng-show="linkAttachments['first']"
+                                ng-click="loadAttachmentPage(linkAttachments['first'])">
+                                <a>&lt;&lt;</a></li>
+                            <li ng-show="linkAttachments['prev']"
+                                ng-click="loadAttachmentPage(linkAttachments['prev'])"><a>
+                                &lt;</a></li>
+                            <li ng-show="attachmentPage > 2" ng-click="loadAttachmentPage(attachmentPage - 2)"><a>{{attachmentPage
+                                - 2}}</a></li>
+                            <li ng-show="attachmentPage > 1" ng-click="loadAttachmentPage(attachmentPage - 1)"><a>{{attachmentPage
+                                - 1}}</a></li>
+                            <li class="active"><a>{{attachmentPage}}</a></li>
+                            <li ng-show="attachmentPage < linkAttachments['last']"
+                                ng-click="loadAttachmentPage(attachmentPage + 1)"><a>{{attachmentPage + 1}}</a></li>
+                            <li ng-show="attachmentPage < linkAttachments['last'] - 1"
+                                ng-click="loadAttachmentPage(attachmentPage + 2)"><a>{{attachmentPage + 2}}</a></li>
+                            <li ng-show="linkAttachments['next']"
+                                ng-click="loadAttachmentPage(linkAttachments['next'])"><a>
+                                &gt;</a></li>
+                            <li ng-show="linkAttachments['last']"
+                                ng-click="loadAttachmentPage(linkAttachments['last'])"><a>
+                                &gt;&gt;</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div ng-show="displayAddEditViewAttachmentPopup">
+
+                <form name="editAttachmentForm" role="form" id="editAttachmentFormId" novalidate show-validation>
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clearAttachmentDialog()">&times;</button>
+                        <h4 class="modal-title" id="myAttachmentLabel"
+                            translate="windoctorApp.attachment.home.createOrEditLabel">Create or edit a Attachment</h4>
+                    </div>
+                    <div class="modal-body">
+                        <jh-alert-error ng-show="!viewSelectedAttachment"></jh-alert-error>
+
+                        <div class="form-group">
+                            <label translate="windoctorApp.attachment.description"
+                                   for="field_description">Description</label>
+                            <input type="text" class="form-control" name="description" id="field_description"
+                                   ng-model="attachment.description" ng-show="!viewSelectedAttachment"
+                                   ng-maxlength="400">
+                            <span ng-show="viewSelectedAttachment" class="form-control-static">{{attachment.description}}</span>
+
+                            <div ng-show="editAttachmentForm.description.$invalid">
+                                <p class="help-block"
+                                   ng-show="editAttachmentForm.description.$error.maxlength"
+                                   translate="entity.validation.maxlength" translate-value-max="400">
+                                    This field cannot be longer than 400 characters.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group" ngf-drop ngf-change="setImage($files, attachment)"
+                             ngf-accept="'image/*'">
+                            <label translate="windoctorApp.attachment.image" for="field_image">Image</label>
+
+                            <div ng-show="!viewSelectedAttachment">
+                                <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}"
+                                     style="max-height: 100px;" ng-if="attachment.image"/>
+
+                                <div class="help-block clearfix">
+                                    <span class="pull-left">{{byteSize(attachment.image)}}</span>
+                                    <button ng-click="attachment.image=null"
+                                            ng-if="attachment.image"
+                                            class="btn btn-default btn-xs pull-right">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </button>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-xs-6">
+                                        <button type="file" ngf-select class="btn btn-default btn-block"
+                                                ngf-change="setImage($files, attachment)" accept="image/*"
+                                                translate="entity.action.addimage">
+                                            Add image
+                                        </button>
+                                    </div>
+                                    <div class="form-group col-xs-6">
+                                        <button class="btn btn-default btn-block"
+                                                ng-click="captureAnImage()"
+                                                translate="entity.action.captureAnImage">
+                                            Capture image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" class="form-control" name="image" id="field_image"
+                                   ng-model="attachment.image" ng-show="!viewSelectedAttachment"
+                                   required maxbytes="1000000">
+                            <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}"
+                                 ng-show="viewSelectedAttachment"
+                                 style="max-width: 100%;" ng-if="attachment.image"/>
+
+                            <div ng-show="editAttachmentForm.image.$invalid">
+                                <p class="help-block"
+                                   ng-show="editAttachmentForm.image.$error.required"
+                                   translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+
+                                <p class="help-block"
+                                   ng-show="editAttachmentForm.image.$error.maxbytes"
+                                   translate="entity.validation.maxbytes" translate-value-max="1000000">
+                                    This field cannot be more than 1000000.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                ng-click="clearAttachmentDialog()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                            translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="button" ng-click="saveAttachment()" ng-show="!viewSelectedAttachment"
+                                ng-disabled="editAttachmentForm.$invalid"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <div ng-show="displayAddEditViewAttachmentPopup">
-
-            <form name="editAttachmentForm" role="form" id="editAttachmentFormId" novalidate show-validation>
-
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="clearAttachmentDialog()">&times;</button>
-                    <h4 class="modal-title" id="myAttachmentLabel" translate="windoctorApp.attachment.home.createOrEditLabel">Create or edit a Attachment</h4>
+        <div ng-show="captureAnImageScreen">
+            <div  class="row embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+                <webcam placeholder="'../../../../assets/images/ajax-loader.gif'"  ></webcam>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    &nbsp;
                 </div>
-                <div class="modal-body">
-                    <jh-alert-error ng-show="!viewSelectedAttachment"></jh-alert-error>
-
-                    <div class="form-group">
-                        <label translate="windoctorApp.attachment.description" for="field_description">Description</label>
-                        <input type="text" class="form-control" name="description" id="field_description"
-                               ng-model="attachment.description" ng-show="!viewSelectedAttachment"
-                               ng-maxlength="400">
-                        <span ng-show="viewSelectedAttachment" class="form-control-static">{{attachment.description}}</span>
-
-                        <div ng-show="editAttachmentForm.description.$invalid">
-                            <p class="help-block"
-                               ng-show="editAttachmentForm.description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="400">
-                                This field cannot be longer than 400 characters.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="form-group" ngf-drop ngf-change="setImage($files, attachment)" ngf-accept="'image/*'">
-                        <label translate="windoctorApp.attachment.image" for="field_image">Image</label>
-                        <div ng-show="!viewSelectedAttachment">
-                            <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" style="max-height: 100px;" ng-if="attachment.image"/>
-                            <div class="help-block clearfix">
-                                <span class="pull-left">{{byteSize(attachment.image)}}</span>
-                                <button ng-click="attachment.image=null"
-                                        ng-if="attachment.image"
-                                        class="btn btn-default btn-xs pull-right">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            </div>
-                            <button type="file" ngf-select class="btn btn-default btn-block"
-                                    ngf-change="setImage($files, attachment)" accept="image/*" translate="entity.action.addimage">
-                                Add image
-                            </button>
-                        </div>
-                        <input type="hidden" class="form-control" name="image" id="field_image"
-                               ng-model="attachment.image" ng-show="!viewSelectedAttachment"
-                               required maxbytes="1000000">
-                        <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}" ng-show="viewSelectedAttachment"
-                             style="max-width: 100%;" ng-if="attachment.image"/>
-                        <div ng-show="editAttachmentForm.image.$invalid">
-                            <p class="help-block"
-                               ng-show="editAttachmentForm.image.$error.required" translate="entity.validation.required">
-                                This field is required.
-                            </p>
-                            <p class="help-block"
-                               ng-show="editAttachmentForm.image.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="1000000">
-                                This field cannot be more than 1000000.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clearAttachmentDialog()">
-                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <button class="btn btn-default btn-block"
+                            ng-click="capture()"
+                            translate="entity.action.capture">
+                        Capture
                     </button>
-                    <button type="button" ng-click="saveAttachment()" ng-show="!viewSelectedAttachment"
-                            ng-disabled="editAttachmentForm.$invalid || editAttachmentForm.$submitted" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                    <ng-camera
+                        capture-message="{{global.cheeeese || translate}}"
+                        countdown="3"
+                        output-height="160"
+                        output-width="213"
+                        viewer-height="320"
+                        viewer-width="426"
+                        image-format="png"
+                        jpeg-quality="100"
+                        action-message="{{entity.action.capture || translate}}"
+                        snapshot="capturedImage"
+                        flash-fallback-url="/vendors/webcamjs/webcam.swf"
+                        overlay-url="/overlay.png"
+                        shutter-url="/shutter.mp3"
+                        ></ng-camera>
+                </div>
+                <div class="form-group col-xs-6">
+                    <button class="btn btn-default btn-block"
+                            ng-click="cancelImageCapture()"
+                            translate="entity.action.cancel">
+                        Cancel
                     </button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

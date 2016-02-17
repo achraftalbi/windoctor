@@ -10,7 +10,7 @@ angular.module('windoctorApp')
                 AuthServerProvider.login(credentials).then(function (data) {
                     // retrieve the logged account information
                     Principal.identity(true).then(function(account) {
-                      
+
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
                         $translate.use(account.langKey);
@@ -47,7 +47,7 @@ angular.module('windoctorApp')
                                 // send them to the signin state, so you can return them when you're done
                                 $rootScope.returnToState = $rootScope.toState;
                                 $rootScope.returnToStateParams = $rootScope.toStateParams;
-
+                                console.log("1 user not auttenticated");
                                 // now, send them to the signin state so they can log in
                                 $state.go('login');
                             }

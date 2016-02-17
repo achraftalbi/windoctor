@@ -1,11 +1,15 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.common.WinDoctorConstants;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.*;
 import com.winbit.windoctor.repository.*;
 import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.repository.search.TreatmentSearchRepository;
+import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
+import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.joda.time.DateTime;
@@ -89,7 +93,8 @@ public class TreatmentResource {
 
 
         return ResponseEntity.created(new URI("/api/treatments/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("treatment", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("treatment",
+                    treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                 .body(result);
     }
 
@@ -127,8 +132,8 @@ public class TreatmentResource {
             // Save old fund history
             saveFundHistory(treatmentBeforeSave, oldFundAmount);
         }
-        log.info("treatment.getFund() before "+treatment.getFund().getAmount().doubleValue());
-        log.info("treatment.getPaid_price().doubleValue() before "+treatment.getPaid_price().doubleValue());
+        log.info("treatment.getFund() before " + treatment.getFund().getAmount().doubleValue());
+        log.info("treatment.getPaid_price().doubleValue() before " + treatment.getPaid_price().doubleValue());
         log.info("Add " + new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
         if(oldFund==null || (!oldFund.getId().equals(treatment.getFund().getId()))) {
             BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
@@ -147,8 +152,9 @@ public class TreatmentResource {
         Treatment result = treatmentRepository.save(treatment);
         treatmentSearchRepository.save(treatment);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("treatment", treatment.getId().toString()))
-                .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert("treatment",
+                    treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+            .body(result);
     }
 
     /**
@@ -204,7 +210,9 @@ public class TreatmentResource {
         log.debug("REST request to delete Treatment : {}", id);
         treatmentRepository.delete(id);
         treatmentSearchRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("treatment", id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("treatment",
+            id.toString()))
+            .build();
     }
 
     /**
@@ -215,11 +223,15 @@ public class TreatmentResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Treatment> search(@PathVariable String query) {
-        return StreamSupport
-            .stream(treatmentSearchRepository.search(queryString(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    public ResponseEntity<List<Treatment>> search(@PathVariable String query,@RequestParam(value = "eventId" , required = false) Long eventId,@RequestParam(value = "page" , required = false) Integer offset,
+                                             @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Treatment> page;
+        page = treatmentRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, eventId,PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/treatments", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 
     public void saveFundHistory(Treatment treatment, BigDecimal oldFundAmount){
         Fund_history fund_history = new Fund_history();

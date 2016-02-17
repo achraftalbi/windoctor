@@ -35,8 +35,8 @@ public final class EventJobs {
     @Inject
     private Environment env;
 
-    @Scheduled(cron = "*/10 * * * * *")
-    public void notifyEventCreationEmailJob() {
+    //@Scheduled(cron = "*/10 * * * * *")
+    /*public void notifyEventCreationEmailJob() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
@@ -70,10 +70,10 @@ public final class EventJobs {
 
                 );
         }
-    }
+    }*/
 
-    @Scheduled(cron = "*/5 * * * * *")
-    public void notifyEventCanceledEmailJob() {
+    //@Scheduled(cron = "*/5 * * * * *")
+    /*public void notifyEventCanceledEmailJob() {
         List<Event> events = eventRepository.getAllCanceledEvents(
             WinDoctorConstants.Mail.EVENT_CANCELATION_EMAIL_TYPE,
             WinDoctorConstants.EventStatus.EVENT_CANCELATION);
@@ -94,7 +94,7 @@ public final class EventJobs {
 
                 );
         }
-    }
+    }*/
 
     @Scheduled(cron = "* */5 * * * *")
     public void reminderBeforeEventEmailJob() {

@@ -61,7 +61,8 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                $stateParams.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
+                                //$stateParams.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
+                                $stateParams.selectedDate = new Date($stateParams.selectedDate)+'';
                                 console.log("selectedDate rows "+$stateParams.selectedDate);
                                 return {description: null, id: null};
                             }
@@ -69,7 +70,7 @@ angular.module('windoctorApp')
                     }).result.then(function(result) {
                             $state.go('calendar', null, { reload: true });
                         }, function() {
-                            $state.go('calendar');
+                            $state.go('calendar',{ reload: true });
                         })
                 }]
             })
@@ -116,13 +117,15 @@ angular.module('windoctorApp')
                                 return $translate.refresh();
                             }],
                             entity: function () {
-                                console.log("selectedDate 2 "+$stateParams.selectedDate);
+                                console.log("selectedDate 2treatment "+$stateParams.selectedDate);
                                 return {description: null, id: null};
                             }
                         }
                     }).result.then(function(result) {
+                            console.log("selectedDate 2treatment3 "+$stateParams.selectedDate);
                             $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate}, { reload: true });
                         }, function() {
+                            console.log("selectedDate 2treatment4 "+$stateParams.selectedDate);
                             $state.go('calendar.rows', { selectedDate: $stateParams.selectedDate});
                         })
                 }]

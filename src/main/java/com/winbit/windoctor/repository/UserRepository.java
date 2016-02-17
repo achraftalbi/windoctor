@@ -33,6 +33,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u join u.authorities a where a.name= ?1")
     Page<User> findAll(String role, Pageable var1);
 
+    @Query("select u from User u join u.authorities a where a.name= ?2 and u.structure.id = ?3 and" +
+        " ( lower(u.login) like lower(?1) or lower(u.firstName) like lower(?1) or lower(u.lastName) like lower(?1) or lower(u.email) like lower(?1)) ")
+    Page<User> findAllMatchString(String query, String role, Long structureId, Pageable var1);
+
 
     @Override
     void delete(User t);

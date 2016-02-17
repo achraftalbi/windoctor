@@ -50,6 +50,17 @@ public class Event_reason implements Serializable {
     @Column(name = "price", precision=10, scale=2, nullable = false)
     private BigDecimal price;
 
+    /*@ManyToOne
+    private Structure structure;
+
+    public Structure getStructure() {
+        return structure;
+    }
+
+    public void setStructure(Structure structure) {
+        this.structure = structure;
+    }*/
+
     public BigDecimal getPrice() {
         return price;
     }

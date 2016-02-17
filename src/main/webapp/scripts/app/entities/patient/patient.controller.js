@@ -1,19 +1,16 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('PatientController', function ($scope,$rootScope, Patient, PatientSearch, ParseLinks) {
+    .controller('PatientController', function ($scope,$rootScope, Patient, PatientSearch, ParseLinks,LANGUAGES) {
         $scope.patients = [];
         $scope.page = 1;
+        $scope.searchCalled = false;
         $scope.loadAll = function() {
-            Patient.query({page: $scope.page, per_page: 20}, function(result, headers) {
+            Patient.query({page: $scope.page, per_page: 5}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.patients = result;
                 console.log("username "+$rootScope.username);
             });
-        };
-        $scope.loadPage = function(page) {
-            $scope.page = page;
-            $scope.loadAll();
         };
         $scope.loadAll();
 
@@ -38,6 +35,34 @@ angular.module('windoctorApp')
                 $scope.patients = result;
             }, function(response) {
                 if(response.status === 404) {
+                    $scope.page = 1;
+                    $scope.loadAll();
+                }
+            });
+        };
+
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            if($scope.searchCalled){
+                $scope.loadAllSearchPatient();
+            }else{
+                $scope.loadAll();
+            }
+        };
+
+        $scope.search = function () {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearchPatient();
+        };
+
+        $scope.loadAllSearchPatient = function () {
+            PatientSearch.query({query: $scope.searchQuery,
+                page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.patients = result;
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });

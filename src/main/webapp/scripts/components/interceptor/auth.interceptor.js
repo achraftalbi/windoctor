@@ -14,6 +14,7 @@ angular.module('windoctorApp')
                     Auth.logout();
                     $rootScope.returnToState = to;
                     $rootScope.returnToStateParams = params;
+                    console.log("4 user not auttenticated");
                     $state.go('login');
                 }
                 return $q.reject(response);

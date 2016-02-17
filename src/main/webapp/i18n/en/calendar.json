@@ -3,16 +3,60 @@
         "calendar" : {
             "home": {
                 "title": "Events",
-                "dayEventsTitle": "Appointments and visits for date {{ param }}",
+                "dayEventsTitle": "Appointments and visits for the day {{ day }}",
                 "createAppointmentLabel": "Create a new appointment",
                 "createVisitLabel": "Create a new visit",
                 "createRequestLabel": "Create a new request",
                 "createLabel": "Create a new Event",
-                "createOrEditLabel": "Create or edit an appointment"
+                "createOrEditLabel": "Create or edit an appointment test"
             },
             "created": "A new Event is created with identifier {{ param }}",
             "updated": "A Event is updated with identifier {{ param }}",
             "deleted": "A Event is deleted with identifier {{ param }}",
+            "blockDays": {
+                "created": "A new blocked day with date {{ param }} is created.",
+                "updated": "A blocked day with date {{ param }} is updated.",
+                "deleted": "A blocked day with date {{ param }} is deleted.",
+                "delete": {
+                    "question": "Are you sure you want to delete blocked day with date {{ event_date }}?"
+                }
+            },
+            "appointment": {
+                "title": "Appointment",
+                "created": "A new appointment at {{ param }} was created.",
+                "updated": "An appointment at {{ param }} was updated.",
+                "deleted": "An appointment as {{ param }} was deleted.",
+                "delete": {
+                    "question": "Are you sure you want to delete appointment at {{ event_date }}?",
+                    "questionAnnuled": "Are you sure you want to delete the annuled appointment at {{ event_date }}?",
+                    "questionAbondonned": "Are you sure you want to delete the abondonned appointment at {{ event_date }}?",
+                    "questionAnnuledByPatient": "Are you sure you want to delete the appointment annuled by patient at {{ event_date }}?"
+                },
+                "annuled": {
+                    "updated": "The appointment at {{ param }} was annuled."
+                },
+                "annuledByPatient": {
+                    "updated": "The appointment at {{ param }} was annuled by the patient."
+                }
+            },
+            "request": {
+                "title": "Request",
+                "created": "A new request at {{ param }} was created.",
+                "updated": "An request at {{ param }} was updated.",
+                "deleted": "An request as {{ param }} was deleted.",
+                "delete": {
+                    "question": "Are you sure you want to delete request at {{ event_date }}?"
+                }
+            },
+            "visit": {
+                "title": "Visit",
+                "created": "A new visit at {{ param }} was created.",
+                "updated": "An visit at {{ param }} was updated.",
+                "deleted": "An visit as {{ param }} was deleted.",
+                "delete": {
+                    "question": "Are you sure you want to delete visit at {{ event_date }}?"
+                }
+            },
             "delete": {
                 "question": "Are you sure you want to delete Event {{ id }}?"
             },
@@ -20,9 +64,6 @@
                 "title": "Event"
             },
             "type": "Type",
-            "visit": "Visit",
-            "appointment": "Appointment",
-            "request": "Request",
             "inProgress": "In progress",
             "annulled": "Annulled",
             "annul": "Annul",
@@ -32,18 +73,18 @@
             "abandoned": "Abandoned",
             "annulledByPatient": "Annuled by patient",
             "anonymous": "Anonymous",
-            "patient": "Name of patient",
+            "patient": "Patient",
             "changePatient": "Change patient",
             "addPatient": "Add patient",
-            "event_date": "Event_date",
+            "event_date": "Date",
             "startDate": "Start date",
             "endDate": "End date",
             "chooseDate": "Click to choose a date",
             "description": "Description",
-            "eventStatus": "EventStatus",
+            "eventStatus": "Status",
             "treatments": "Acts",
             "manageTreatments": "Manage acts",
-            "eventReason": "EventReason"
+            "eventReason": "Oral hygiene"
         }
     }
 }

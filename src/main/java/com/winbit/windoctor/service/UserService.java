@@ -339,7 +339,7 @@ public class UserService {
      * <p>
      * This is scheduled to get fired everyday, at 01:00 (am).
      * </p>
-     */
+     *
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         DateTime now = new DateTime();
@@ -349,7 +349,7 @@ public class UserService {
             userRepository.delete(user);
             userSearchRepository.delete(user);
         }
-    }
+    }*/
 
     /**
      * Find all patient of the current structure

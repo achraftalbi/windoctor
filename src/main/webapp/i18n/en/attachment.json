@@ -3,12 +3,12 @@
         "attachment" : {
             "home": {
                 "title": "Attachments",
-                "createLabel": "Create a new Attachment",
-                "createOrEditLabel": "Create or edit a Attachment"
+                "createLabel": "Create a new attachment",
+                "createOrEditLabel": "Create or edit an attachment"
             },
-            "created": "A new Attachment is created with identifier {{ param }}",
-            "updated": "A Attachment is updated with identifier {{ param }}",
-            "deleted": "A Attachment is deleted with identifier {{ param }}",
+            "created": "A new attachment is created with time {{ param }}",
+            "updated": "An attachment with the time {{ param }} is updated ",
+            "deleted": "An attachment with the time {{ param }} is deleted",
             "delete": {
                 "question": "Are you sure you want to delete Attachment {{ id }}?"
             },
@@ -17,7 +17,7 @@
             },
             "description": "Description",
             "image": "Image",
-            "treatment": "Treatment"
+            "treatment": "Acts"
         }
     }
 }

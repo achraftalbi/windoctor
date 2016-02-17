@@ -3,11 +3,48 @@
         "calendar" : {
             "home": {
                 "title": "Events",
+                "dayEventsTitle": "Rendez vous et visites pour la journée {{ day }}",
                 "createAppointmentLabel": "Créer un nouveau rendez vous",
                 "createVisitLabel": "Créer une nouvelle visite",
                 "createRequestLabel": "Create a new request",
                 "createLabel": "Créer un nouveau Event",
                 "createOrEditLabel": "Créer ou éditer un rendez vous"
+            },
+            "appointment": {
+                "title": "Rendez-vous",
+                "created": "Un nouveau rendez vous à l'heure {{ param }} a été créé.",
+                "updated": "Un nouveau rendez vous à l'heure {{ param }} a été mis à jour.",
+                "deleted": "Un nouveau rendez vous à l'heure {{ param }} a été supprimé.",
+                "delete": {
+                    "question": "Etes vous sure que vous voulez supprimé le rendez vous à l'heure  {{ param }}?",
+                    "questionAnnuled": "Etes vous sure que vous voulez supprimé le rendez vous qui a été annulé et qui été  à l'heure  {{ param }}?",
+                    "questionAbondonned": "Etes vous sure que vous voulez supprimé le rendez vous qui a été abondonné et qui été  à l'heure  {{ param }}?",
+                    "questionAnnuledByPatient": "Etes vous sure que vous voulez supprimé le rendez vous qui a été annulé par le patient et qui été  à l'heure  {{ param }}?"
+                },
+                "annuled": {
+                    "updated": "Le rendez vous à l'heure {{ param }} a été annulé."
+                },
+                "annuledByPatient": {
+                    "updated": "Le nouveau rendez vous à l'heure {{ param }} a été annulé par le patient."
+                }
+            },
+            "request": {
+                "title": "Request",
+                "created": "Une nouvelle demande à l'heure {{ param }} a été créé.",
+                "updated": "Une nouvelle demande à l'heure {{ param }} a été mis à jour.",
+                "deleted": "Une nouvelle demande à l'heure {{ param }} a été supprimé.",
+                "delete": {
+                    "question": "Etes vous sure que vous voulez supprimé la demande à l'heure  {{ param }}?"
+                }
+            },
+            "visit": {
+                "title": "Visite",
+                "created": "Une nouvelle visite à l'heure {{ param }} a été créé.",
+                "updated": "Une nouvelle visite à l'heure {{ param }} a été mis à jour.",
+                "deleted": "Une nouvelle visite à l'heure {{ param }} a été supprimé.",
+                "delete": {
+                    "question": "Etes vous sure que vous voulez supprimé la visite à l'heure  {{ param }}?"
+                }
             },
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Event {{ id }} ?"
@@ -16,9 +53,6 @@
                 "title": "Event"
             },
             "type": "Type",
-            "visit": "Visite",
-            "appointment": "Rendez vous",
-            "request": "Demande",
             "inProgress": "En cours",
             "annulled": "Annulé",
             "annul": "Annuler",
@@ -28,18 +62,18 @@
             "abandoned": "Abandonné",
             "annulledByPatient": "Annulé par le patient",
             "anonymous": "Anonyme",
-            "patient": "Nom du patient",
+            "patient": "Patient",
             "changePatient": "Changer de patient",
             "addPatient": "Ajouter patient",
-            "event_date": "Event_date",
+            "event_date": "Date",
             "startDate": "Date de début",
             "endDate": "Date de fin",
             "chooseDate": "Cliquez pour choisir une date",
             "description": "Description",
-            "eventStatus": "EventStatus",
+            "eventStatus": "Status",
             "treatments": "Actes",
             "manageTreatments": "Gestion des actes",
-            "eventReason": "EventReason"
+            "eventReason": "Hygiène bucco-dentaire"
         }
     }
 }

@@ -2,14 +2,18 @@
     "windoctorApp": {
         "treatment" : {
             "home": {
-                "title": "Treatments",
-                "createLabel": "Créer un nouveau Treatment",
-                "createOrEditLabel": "Créer ou éditer un Treatment",
-                "displayAllPatientTreatments": "Afficher tout les traiements du patient",
-                "displayPatientTreatmentsEvent": "Afficher les traiements du patient liés au rendez vous"
+                "title": "Actes à la date {{ date }}",
+                "createLabel": "Créer un nouveau acte",
+                "createOrEditLabel": "Créer ou éditer un acte",
+                "displayAllPatientTreatments": "Afficher tout les actes du patient",
+                "displayPatientTreatmentsAppointment": "Afficher seulement les actes de ce rendez vous",
+                "displayPatientTreatmentsVisit": "Afficher seulement les actes de cette visite"
             },
+            "created": "Un nouvelle acte avec l'heure {{ param }} est créé",
+            "updated": "Un acte avec l'heure {{ param }} a été mis à jour",
+            "deleted": "Un acte avec l'heure {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Treatment {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer l'acte ?"
             },
             "detail": {
                 "title": "Treatment"
@@ -17,16 +21,18 @@
             "treatment_date": "Treatment_date",
             "chooseReason": "Choisissez une raison",
             "description": "Description",
-            "price": "Price",
+            "price": "Prix",
             "defaultPrice": "Prix proposer",
-            "paid_price": "Paid_price",
+            "paid_price": "Prix payé",
+            "remainingPrice": "Prix restant",
             "attachment": "Attachment",
             "doctor": "Docteur",
             "fund": "Caisse",
             "fundAmount": "Montant de la caisse",
             "chooseFund": "Choisissez une caisse pour voir ce champs",
             "theAmountOfNewOrOldFundNotEnough": "Le montant dans la caisse courante ou l'anciènne caisse n'est pas assez.",
-            "eventReason": "EventReason"
+            "priceLessThanPaidPrice": "Le prix payé doit être moins que le prix.",
+            "eventReason": "Hygiène bucco-dentaire"
         }
     }
 }

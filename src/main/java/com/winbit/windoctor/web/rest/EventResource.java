@@ -75,15 +75,36 @@ public class EventResource {
         log.debug("new event status getId " + event.getEventStatus().getId());
         Event result = eventService.save(event);
         eventSearchRepository.save(result);
-        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
-            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+        if(event.getEventStatus().getId()!=null){
+            if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("event.blockDays",
-                            result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
-                            .body(result);
-        }else {
-            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
+                    .body(result);
+            } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("calendar.appointment",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("calendar.request",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert("calendar.visit",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            }else{
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
                     .body(result);
+            }
+        }else {
+            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
+                .body(result);
         }
     }
 
@@ -101,16 +122,52 @@ public class EventResource {
         }
         Event result = eventRepository.save(event);
         eventSearchRepository.save(event);
-        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
-            return ResponseEntity.ok()
+
+        ////////////////////////////////
+        if(event.getEventStatus().getId()!=null){
+            if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("event.blockDays",
-                            result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
                     .body(result);
+            } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("calendar.request",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("calendar.visit",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_ANNULED.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment.annuled",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            } else if(Constants.STATUS_ANNULED_BY_PATIENT.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment.annuledByPatient",
+                        result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .body(result);
+            }else{
+                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("event", result.getId().toString()))
+                    .body(result);
+            }
         }else {
-            return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert("event", event.getId().toString()))
-                    .body(result);
+            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                .headers(HeaderUtil.createEntityUpdateAlert("event", result.getId().toString()))
+                .body(result);
         }
+        ////////////////////////////////
+
+
     }
 
 
@@ -146,7 +203,7 @@ public class EventResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<Event>> getAllNotification(@RequestParam(value = "page", required = false) Integer offset,
-                                              @RequestParam(value = "per_page", required = false) Integer limit)
+                                                          @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         log.debug("REST request to get events page per_page");
         Page<Event> page = null;
@@ -194,7 +251,7 @@ public class EventResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<Event>> getAllEventsBlock(@RequestParam(value = "statusType", required = false) Long statusType, @RequestParam(value = "page", required = false) Integer offset,
-                                              @RequestParam(value = "per_page", required = false) Integer limit)
+                                                         @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         log.debug("REST request to get eventsBlock page per_page");
         Page<Event> page = null;
@@ -313,9 +370,26 @@ public class EventResource {
         Event event = eventRepository.findOne(id);
         eventRepository.delete(id);
         eventSearchRepository.delete(id);
-        if(event.getEventStatus().getId()!=null && Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())){
-            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event.blockDays",
-                event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT))).build();
+        if(event.getEventStatus().getId()!=null){
+            if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event.blockDays",
+                    event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
+                    .build();
+            } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.appointment",
+                    event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .build();
+            } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.request",
+                    event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .build();
+            } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
+                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.visit",
+                    event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+                    .build();
+            }else{
+                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
+            }
         }else {
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
         }
@@ -329,12 +403,19 @@ public class EventResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event> search(@PathVariable String query) {
-        return StreamSupport
-            .stream(eventSearchRepository.search(queryString(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    public ResponseEntity<List<Event>> search(@PathVariable String query,@RequestParam(value = "selectedDate", required = false) String selectedDate
+        , @RequestParam(value = "page", required = false) Integer offset,
+                                              @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get events change page per_page");
+        Page<Event> page = null;
+        log.debug("REST request to get events query "+query);
+        selectedDate = selectedDate.split("GMT")[0].trim();
+        DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
+        page = eventSearchRepository.search(query,dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/events", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
     /**
      * SEARCH  /_search/eventsBlock/:query -> search for the event corresponding
      * to the query.
@@ -346,8 +427,8 @@ public class EventResource {
     public ResponseEntity<List<Event>> searchBlock(@PathVariable String query, @RequestParam(value = "page", required = false) Integer offset,
                                                    @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-            log.debug("REST request to get eventsBlock page per_page");
-            Page<Event> page = null;
+        log.debug("REST request to get eventsBlock page per_page");
+        Page<Event> page = null;
         log.debug("REST request to get eventsBlock query "+query);
         page = eventSearchRepository.search(query, Constants.STATUS_BLOCKED,SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/eventsBlock", offset, limit);

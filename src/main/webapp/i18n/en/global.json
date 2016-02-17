@@ -7,6 +7,9 @@
         "previous": "Previous",
         "next": "Next",
         "today": "Today",
+        "to": "to",
+        "wordToSearch": "Word to search",
+        "cheeeese": "Cheeeese",
         "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
         "menu": {
             "home": "Home",
@@ -114,6 +117,8 @@
         "action": {
             "addblob": "Add blob",
             "addimage": "Add image",
+            "captureAnImage": "Capture an image",
+            "capture": "Capture",
             "back": "Back",
             "cancel": "Cancel",
             "close": "Close",
@@ -124,6 +129,7 @@
             "save": "Save",
             "saveAndClose": "Save and close",
             "view": "View",
+            "choose": "Choose",
             "display": "Display"
         },
         "detail": {

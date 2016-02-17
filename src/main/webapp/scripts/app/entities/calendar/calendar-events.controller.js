@@ -1,13 +1,17 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarEventsController', function ($scope, $stateParams, $modalInstance, Event, EventSearch, ParseLinks, $filter, Principal) {
+    .controller('CalendarEventsController', function ($scope, $stateParams, $modalInstance, Event, EventSearch, ParseLinks, $filter, Principal,$translate) {
         $scope.events = [];
         $scope.page = 1;
         $scope.selectedDate = null;
+        $scope.selectedDateString = null;
         $scope.account = null;
         $scope.userCanAddRequest = false;
         $scope.eventsEmpty = false;
+        $scope.selectedDateObject = new Date($stateParams.selectedDate);
+        $scope.searchCalled = false;
+        console.log('selectedDateString '+$scope.selectedDateString);
         $scope.loadAll = function () {
             console.info('first $stateParams.selectedDate' + $stateParams.selectedDate);
             Event.query({
@@ -30,16 +34,23 @@ angular.module('windoctorApp')
             console.log('$scope.account.maxEventsReached ' + $scope.account.maxEventsReached);
             $scope.userCanAddRequest = $scope.account.currentUserPatient && !$scope.account.maxEventsReached;
         });
+
         $("a").tooltip();
+
         $scope.loadPage = function (page) {
             $scope.page = page;
-            $scope.loadAll();
+            if($scope.searchCalled){
+                $scope.loadAllSearch();
+            }else{
+                $scope.loadAll();
+            }
         };
         $scope.loadAll();
 
-        $scope.delete = function (id) {
-            Event.get({id: id}, function (result) {
+        $scope.delete = function (event) {
+            Event.get({id: event.id}, function (result) {
                 $scope.event = result;
+                $scope.deleteMessage();
                 $('#deleteEventConfirmation').modal('show');
             });
         };
@@ -54,7 +65,15 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            EventSearch.query({query: $scope.searchQuery}, function (result) {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearch();
+        };
+
+        $scope.loadAllSearch = function () {
+            EventSearch.query({query: $scope.searchQuery,selectedDate: $stateParams.selectedDate + '',
+                page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
                 $scope.events = result;
             }, function (response) {
                 if (response.status === 404) {
@@ -77,6 +96,7 @@ angular.module('windoctorApp')
         };
 
         $scope.cancelEventRows = function () {
+            $scope.$emit('windoctorApp:eventUpdate');
             $modalInstance.dismiss('cancel');
         };
 
@@ -119,5 +139,34 @@ angular.module('windoctorApp')
                 Event.save(event, onSaveFinished);
             }
         };
+
+
+        $scope.deleteMessage = function () {
+            $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.question',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            console.log("event to delete  "+$scope.event);
+            if($scope.event.eventStatus.id===1){
+                // In progress
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.question',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else if($scope.event.eventStatus.id===2){
+                // Annuled
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.questionAnnuled',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else if($scope.event.eventStatus.id===4){
+                // Abondonned
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.questionAbondonned',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else if($scope.event.eventStatus.id===7){
+                // Request
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.request.question',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else if($scope.event.eventStatus.id===8){
+                // Visit
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.visit.question',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else if($scope.event.eventStatus.id===10 || $scope.event.eventStatus.id===11){
+                // Annuled by patient
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.questionAnnuledByPatient',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }else{
+                $scope.messageToDeleted = $translate.instant('windoctorApp.calendar.appointment.delete.question',{ param : $filter('date')($scope.event.event_date, 'HH:mm', '+0000')});
+            }
+            return $scope.messageToDeleted;
+        };
+
 
     });

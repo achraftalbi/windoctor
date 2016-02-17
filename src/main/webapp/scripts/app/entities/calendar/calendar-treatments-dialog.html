@@ -11,7 +11,7 @@
             <jh-alert-error></jh-alert-error>
 
 
-            <div class="form-group">
+            <div class="form-group" ng-init="initEventReasons()">
                 <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
                 <input type="text" class="form-control" name="description" id="field_description"
                        ng-model="treatment.description" ng-show="!displayTreatmentView"
@@ -76,15 +76,16 @@
             </div>
             <div class="row">
                 <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.treatment.eventReason"
-                           for="field_eventReason">eventReason</label>
-
-                    <select class="form-control" id="field_eventReason" name="eventReason"
-                            ng-change="valueChanged()" ng-show="!displayTreatmentView"
-                            ng-model="treatment.eventReason"
-                            ng-options="event_reason as event_reason.description for event_reason in event_reasons track by event_reason.id">
-                        <option value=""></option>
-                    </select>
+                    <label translate="windoctorApp.treatment.eventReason">eventReason</label>
+                    <ui-select ng-model="treatment.eventReason" theme="select2" class="form-control" ng-change="reasonValueChanged()"
+                               ng-show="!displayTreatmentView" name="eventReason"
+                               title="{{ 'entity.action.choose' | translate }}" ng-disabled="disabled" style="min-width: 300px;">
+                        <ui-select-match placeholder="{{ 'entity.action.select' | translate }}">{{$select.selected.description}}</ui-select-match>
+                        <ui-select-choices repeat="event_reason in event_reasons | filter: $select.search">
+                            <span ng-bind-html="event_reason.id | highlight: $select.search"></span>
+                            <small ng-bind-html="event_reason.description | highlight: $select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
                     <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.eventReason.description}}</span>
                 </div>
                 <div class="form-group col-xs-6">
@@ -103,7 +104,7 @@
                 <div class="form-group col-xs-6">
                     <label translate="windoctorApp.treatment.price" for="field_price">Price</label>
                     <input type="number" class="form-control" name="price" id="field_price"
-                           ng-model="treatment.price" ng-show="!displayTreatmentView"
+                           ng-model="treatment.price" ng-show="!displayTreatmentView" ng-change="changeFields()"
                            required min="0" max="10000000">
                     <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.price}}</span>
 
@@ -161,12 +162,17 @@
                             This field should be a number.
                         </p>
                     </div>
+                    <div ng-show="priceLessThanPaidPrice">
+                        <p class="help-block" translate="windoctorApp.treatment.priceLessThanPaidPrice">
+                            The paid price must be less than price.
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
                     <div ng-show="!treatment.id" class="alert alert-warning">
-                        <span>You must save before manage images radios</span>
+                        <span>You must save before manage radios images</span>
                     </div>
                 </div>
             </div>
@@ -176,13 +182,13 @@
                 <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
                 translate="entity.action.close">Close</span>
             </button>
-            <button type="button" ng-click="saveTreatment()" ng-disabled="editForm.$invalid || editForm.$submitted || !oldFundContainEnoughMoney"
+            <button type="button" ng-click="saveTreatment()" ng-disabled="editForm.$invalid || editForm.$submitted || !oldFundContainEnoughMoney || priceLessThanPaidPrice"
                     ng-show="!displayTreatmentView"
                     class="btn btn-primary">
                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
             </button>
             <button type="button" ng-click="saveTreatmentAndClose()" ng-show="!displayTreatmentView"
-                    ng-disabled="editForm.$invalid || editForm.$submitted || !oldFundContainEnoughMoney" class="btn btn-primary">
+                    ng-disabled="editForm.$invalid || editForm.$submitted || !oldFundContainEnoughMoney || priceLessThanPaidPrice" class="btn btn-primary">
                 <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save and close</span>
             </button>
         </div>

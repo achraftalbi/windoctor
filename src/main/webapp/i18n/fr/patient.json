@@ -12,13 +12,13 @@
             "detail": {
                 "title": "Patient"
             },
-            "login": "Login",
-            "password": "Password",
-            "firstName": "FirstName",
-            "lastName": "LastName",
+            "login": "Identifiant",
+            "password": "Mot de passe",
+            "firstName": "Prénom",
+            "lastName": "Nom",
             "email": "Email",
-            "activated": "Activated",
-            "blocked": "Blocked",
+            "activated": "Activaté",
+            "blocked": "Blocké",
             "picture": "Picture"
         }
     }

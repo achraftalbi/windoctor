@@ -5,7 +5,7 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
                'angular-loading-bar', 'ngAnimate', //Used for inclufing loading bar
-                'datePicker',
+                'datePicker','ui.select','ngSanitize','webcam','camera',
     'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {

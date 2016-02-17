@@ -27,11 +27,14 @@ angular.module('windoctorApp')
         $scope.funds;
         $scope.oldFundContainEnoughMoney = true;
         $scope.oldFund=null;
+        $scope.searchCalled = false;
         /*Attachments variables */
         $scope.dispalyAttachments = false;
         $scope.attachments = null;
         $scope.attachment = null;
         $scope.viewSelectedAttachment = false;
+        $scope.priceLessThanPaidPrice = false;
+        $scope.captureAnImageScreen = false;
 
         // Display treatments Begin
         $scope.loadAll = function () {
@@ -66,12 +69,6 @@ angular.module('windoctorApp')
             }
         };
 
-
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            $scope.loadAll();
-        };
-        $scope.loadAll();
         $scope.loadFunds = function () {
             Fund.query(function (result, headers) {
                     $scope.funds = result;
@@ -104,15 +101,42 @@ angular.module('windoctorApp')
                 });
         };
 
-        $scope.search = function () {
-            TreatmentSearch.query({query: $scope.searchQuery}, function (result) {
-                $scope.treatments = result;
-            }, function (response) {
-                if (response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
+        ///////////////////////
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            if($scope.searchCalled){
+                $scope.search();
+            }else{
+                $scope.loadAll();
+            }
         };
+        $scope.loadAll();
+        $scope.searchPatient = function () {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.search();
+        };
+
+        $scope.search = function () {
+            if($scope.searchQuery!==null && $scope.searchQuery!==undefined && $scope.searchQuery.length>0) {
+                TreatmentSearch.query({
+                    query: $scope.searchQuery, eventId: $scope.event.id,
+                    page: $scope.page, per_page: 5
+                }, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.treatments = result;
+                }, function (response) {
+                    if (response.status === 404) {
+                        $scope.loadAll();
+                    }
+                });
+            }else{
+                $scope.loadAll();
+            }
+        };
+
+
+        //////////////////////
 
         $scope.refresh = function () {
             $scope.loadAll();
@@ -164,6 +188,14 @@ angular.module('windoctorApp')
                     $scope.oldFundContainEnoughMoney = true;
                 console.log("changeFields 4");
             }
+            if(( $scope.treatment.price - $scope.treatment.paid_price) < 0){
+                console.log("1 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
+                $scope.priceLessThanPaidPrice = true;
+            }else{
+                console.log("2 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
+                $scope.priceLessThanPaidPrice = false;
+            }
+
             console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
             console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );
             console.log(" $scope.treatment.paid_price "+$scope.treatment.paid_price );
@@ -180,14 +212,15 @@ angular.module('windoctorApp')
             $scope.treatment = {
                 treatment_date: $scope.event.event_date,
                 description: null,
-                price: null,
-                paid_price: null,
+                price: $scope.defaultEventReason.price,
+                paid_price: $scope.defaultEventReason.price,
                 id: null,
                 eventReason : $scope.defaultEventReason,
                 doctor:$scope.defaultDoctor,
                 event: {id: $stateParams.eventId}
             };
             $scope.oldTreatmentPaidPrice = null;
+            $scope.attachments=null;
             $scope.dialogPopupTreatment();
             $scope.loadFunds();
         };
@@ -205,6 +238,7 @@ angular.module('windoctorApp')
             $scope.initEventReasons();
             $scope.initDoctors();
         }
+
         $scope.initEventReasons = function () {
             if ($scope.event_reasons === null) {
                 Event_reason.query(function (result, headers) {
@@ -234,23 +268,29 @@ angular.module('windoctorApp')
                         }
                     }
                 );
-
             }
         }
 
         var onSaveTreatmentFinished = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
+            $scope.treatment=result;
             $scope.loadPage($scope.page);
             $scope.oldFund = $scope.treatment.fund;
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
             $scope.loadFunds();
+            $scope.loadAllAttachments(1);
         };
 
         $scope.saveTreatmentAndClose = function () {
             $scope.saveTreatment();
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
-        }
+        };
+
+        $scope.reasonValueChanged = function () {
+            $scope.treatment.price = $scope.treatment.eventReason.price;
+            $scope.treatment.paid_price = $scope.treatment.eventReason.price;
+        };
 
         $scope.saveTreatment = function () {
             if ($scope.treatment.id != null) {
@@ -258,7 +298,6 @@ angular.module('windoctorApp')
             } else {
                 $scope.treatment = Treatment.save($scope.treatment, onSaveTreatmentFinished);
             }
-            $scope.loadAllAttachments(1);
         };
         $scope.closeAddEditViewPopup = function () {
             $scope.displayAddEditViewPopup = false;
@@ -349,6 +388,7 @@ angular.module('windoctorApp')
 
         var onSaveAttachmentFinished = function (result) {
             $scope.$emit('windoctorApp:attachmentUpdate', result);
+            $scope.$emit('windoctorApp:eventUpdate', result.event);
             $scope.loadAllAttachments($scope.attachmentPage);
             $scope.displayAddEditViewAttachmentPopup = false;
         };
@@ -382,5 +422,20 @@ angular.module('windoctorApp')
             $scope.displayAddEditViewAttachmentPopup = false;
             $scope.viewSelectedAttachment = false;
         };
+
+        // Manage live capture image
+
+        $scope.captureAnImage= function (id) {
+            $scope.captureAnImageScreen = true;
+        };
+
+        $scope.capture= function (id) {
+            //$scope.captureAnImageScreen = true;
+        };
+
+        $scope.cancelImageCapture= function (id) {
+            $scope.captureAnImageScreen = false;
+        };
+
     })
 ;

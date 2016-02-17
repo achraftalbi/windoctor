@@ -76,7 +76,11 @@ angular.module('windoctorApp')
 
         function addAlert(alertOptions) {
             alertOptions.alertId = alertId++;
+            //console.log('alertOptions.msg'+alertOptions.msg);
+            //console.log('alertOptions.params'+alertOptions.params[0]);
             alertOptions.msg = $translate.instant(alertOptions.msg, alertOptions.params);
+
+            console.log('alertOptions.params translated'+alertOptions.msg);
             var that = this;
             this.factory(alertOptions);
             if (alertOptions.timeout && alertOptions.timeout > 0) {

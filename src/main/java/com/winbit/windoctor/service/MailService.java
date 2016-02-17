@@ -7,6 +7,7 @@ import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.service.util.DateUtil;
+import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -110,23 +114,6 @@ public class MailService {
     }
 
     @Async
-    public void sendPatientCreationAccountEmail(User user,Structure structure) {
-        if(structure != null){
-            MailSetting ms = sessionService.getMailSetting(structure.getId(), WinDoctorConstants.Mail.DOCTOR_CREATION_EMAIL_TYPE);
-            if(ms != null && Boolean.TRUE.equals(ms.getActivated())){
-                log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
-                Locale locale = Locale.forLanguageTag("fr");
-                Context context = new Context(locale);
-                context.setVariable("user", user);
-                context.setVariable("structure", structure);
-                String content = templateEngine.process("patientAccountCreationEmail", context);
-                String subject = messageSource.getMessage("email.patient.creation.title", null, locale);
-                sendEmail(user.getEmail(), subject, content, false, true);
-            }
-        }
-    }
-
-    @Async
     public void sendDoctorCreationAccountEmail(User user, String baseUrl) {
         log.debug("Sending Doctor account creation e-mail to '{}'", user.getEmail());
         Locale locale = Locale.forLanguageTag("fr");
@@ -201,6 +188,32 @@ public class MailService {
     private String getBaseUrlOnAsynchronousJobs(){
         return env.getProperty("email.hostname") +":"+ env.getProperty("server.port");
     }
+
+    /************************************************************************************************************/
+    /************************************************************************************************************/
+    /***********************************          Sent mails treated                 ****************************/
+    /************************************************************************************************************/
+    /************************************************************************************************************/
+    @Async
+    public void sendPatientCreationAccountEmail(User user,Structure structure) {
+        if(structure != null){
+            //MailSetting ms = sessionService.getMailSetting(structure.getId(), WinDoctorConstants.Mail.DOCTOR_CREATION_EMAIL_TYPE);
+            //if(ms != null && Boolean.TRUE.equals(ms.getActivated())){
+                log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
+                Locale locale = Locale.forLanguageTag(user.getLangKey());
+                Context context = new Context(locale);
+                context.setVariable("user", user);
+                context.setVariable("structure", structure);
+                context.setVariable("date", FunctionsUtil.convertDateToString(new Date(),WinDoctorConstants.WinDoctorPattern.DATE_PATTERN));
+                context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+                String content = templateEngine.process("patientAccountCreationEmail", context);
+                Object[] subjectVariables = {structure.getName()};
+                String subject = messageSource.getMessage("email.patient.creation.title", subjectVariables, locale);
+                sendEmail(user.getEmail(), subject, content, false, true);
+            //}
+        }
+    }
+
 
 
 }

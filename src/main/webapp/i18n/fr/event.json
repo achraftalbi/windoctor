@@ -14,7 +14,7 @@
                 "updated": "Une journée blocké avec la date {{ param }} a été mis à jour.",
                 "deleted": "Une journée blocké avec la date {{ param }} a été supprimé.",
                 "delete": {
-                    "question": "Etes vous sure que vous voulez supprimé la journée blocké avec la date {{ event_date }}?"
+                    "question": "Etes vous sure que vous voulez supprimé la journée blocké avec la date {{ param }}?"
                 }
             },
             "created": "A new Event is created with identifier {{ param }}: Tu dois mettre la transtation française.",

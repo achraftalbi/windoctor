@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <title th:text="#{email.patient.creation.title}">Windoctor patient creation account</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title th:text="#{email.patient.creation.title(${structure.name})}">MyOffice : Account creation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<p th:text="#{email.patient.creation.greeting(${user.firstName}, ${user.lastName})}">
-    Dear
-</p>
+<span th:text="#{email.patient.creation.greeting}">Dear, </span>
+    <span style="color:rgb(255,255,255)" th:text="#{email.patient.creation.greeting.user(${user.firstName}, ${user.lastName})}"/>
+
+
 <p th:text="#{email.patient.creation.body(${structure.name})}">
     Your WinDoctor account has been created by
 </p>
@@ -19,3 +20,191 @@
 </p>
 </body>
 </html>
+
+
+<td width="100%" valign="top">
+
+    <table width="650" border="0" cellpadding="0" cellspacing="0" align="center" style="margin:0 auto">
+        <tbody>
+        <tr>
+            <td width="100%" height="130" valign="middle" bgcolor="green">
+                <table width="45%" height="30" border="0" align="left" cellpadding="0" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <td width="100" height="70" align="left" valign="middle">
+                            <div
+                                style="font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-size:14px;padding:20px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.greeting}">Dear, </span>
+                                <span style="color:white" th:text="#{email.greeting.user(${user.login})}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table width="45%" border="0" align="right" cellpadding="0" cellspacing="0" style="text-align:right">
+                    <tbody>
+                    <tr>
+                        <td valign="top">
+                            <div
+                                style="font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-size:14px;padding:0px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.office.name}">Office name</span>
+                                <span style="color:white" th:text="#{email.office.name.value(${structure.name})}"/>
+                            </div>
+                            <div
+                                style="font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-size:14px;padding:0px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.date}">Dear, </span>
+                                <span style="color:white" th:text="#{email.date.value(${date})}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="650" cellpadding="0" cellspacing="0" align="center" bgcolor="#E6E4E6" style="margin:0 auto">
+        <tbody>
+        <tr>
+            <td align="center" valign="middle">
+                <table width="640" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto">
+                    <tbody>
+                    <tr>
+                        <td align="center" style="padding:40px 0">
+                            <table width="" align="center">
+                                <tbody>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <a
+                                        style="text-decoration:none;font-size:25px;color:green;font-weight:bold;font-family:Arial,sans-serif"
+                                        href="#">
+                                            <span th:text="#{email.patient.creation.subtitle(${user.login})}">Account creation patient</span>
+
+                                    </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="min-height:30px">&nbsp;</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="100%" align="center" bgcolor="#90ee90">
+        <tbody>
+        <tr>
+            <td>
+                <a style="text-decoration:none"
+                   href="http://bugtracker.zoho.com/portal/winbit#mymilestones"
+                   title="My Milestones" target="_blank">
+                    <table width="640" cellspacing="0" bgcolor="#90ee90" cellpadding="0" align="center">
+                        <tbody>
+                        <tr>
+                            <td valign="middle" align="center" height="140">
+                                <table width="640" bgcolor="#90ee90" align="center" height="81"
+                                       valign="middle">
+                                    <tbody>
+                                    <tr>
+                                        <td valign="middle" bgcolor="#90ee90" align="center"
+                                            height="90">
+                                            <div
+                                                style="font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-weight:bold;letter-spacing:-1px;min-height:30px;background-color:#90ee90;font-size:18px;color:rgb(54,63,77);text-align:left">
+                                                                        <span th:text="#{email.patient.creation.body(${structure.name})}">
+                                                                            Your WinDoctor account has been created by
+                                                                        </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="overflow:auto;vertical-align:top">
+        <table width="650" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto">
+            <tbody>
+            <tr>
+                <td valign="middle" align="center">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                        <tr>
+                            <td valign="top">
+                                <table style="margin:0px auto" border="0" cellpadding="0" cellspacing="0" width="100%"
+                                       align="center">
+                                    <tbody>
+                                    <tr>
+                                        <td valign="top" style="padding:20px 0px 40px">
+                                            <table width="100%" cellspacing="1" cellpadding="0" border="0"
+                                                   align="center">
+                                                <tbody>
+                                                <tr>
+                                                    <td valign="top"
+                                                        style="border-bottom:1px dashed #bdbdbd;border-top:1px dashed #bdbdbd;padding:10px"
+                                                        colspan="2"><a style="text-decoration:none"
+                                                                       href="http://bugtracker.zoho.com/portal/winbit#mymilestones"
+                                                                       target="_blank">
+                                                        <div
+                                                            style="font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-weight:normal;font-size:16px;color:#333">
+                                                            My Milestones
+                                                        </div>
+                                                    </a></td>
+                                                </tr>
+                                                <tr bgcolor="#FFFFFF">
+                                                    <td height="50"
+                                                        style="padding:10px;border-bottom:1px solid #f5f7f9;font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif">
+                                                        <div style="word-break:break-word"><a
+                                                            href="http://bugtracker.zoho.com/portal/winbit#mymilestones/864343000000016001"
+                                                            style="color:#0f5491;text-decoration:none;font-size:14px;line-height:20px"
+                                                            title="test" target="_blank">
+                                                            test
+                                                        </a>
+
+                                                            <div style="font-size:13px;color:#7a7a7a;padding-top:5px">
+                                                                <span style="color:#a4a4a4">Ends on </span>&nbsp;
+                                                                <span
+                                                                    style="font-size:11px;color:#7a7a7a">26/Jan/2016 </span>&nbsp;
+                                                                <span style="color:#a4a4a4">in </span>&nbsp;
+                                                                Explore <span class="il">Zoho</span> Bug Tracker!
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td align="center"
+                                                        style="padding:5px;border-bottom:1px solid rgb(245,247,249);font-family:ProximaNovaRegular,Lucida Grande,Lucida Sans,Lucida Sans Unicode,Arial,Helvetica,Verdana,sans-serif;font-size:14px;color:#d6545e"
+                                                        width="15%"> delayed<br/><span
+                                                        style="font-size:13px;color:#a4a4a4;line-height:20px"></span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <br/><br/></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</td>

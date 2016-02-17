@@ -60,7 +60,7 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {login: null, password: null, firstName: null, lastName: null, email: null, activated: null, blocked: null, picture: null, id: null};
+                                return {login: null, password: null, firstName: null, lastName: null, email: null, activated: null, blocked: null, picture: null, langKey:'fr', id: null};
                             }
                         }
                     }).result.then(function(result) {
