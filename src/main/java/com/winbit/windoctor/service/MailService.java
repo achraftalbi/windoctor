@@ -1,6 +1,7 @@
 package com.winbit.windoctor.service;
 
 import com.winbit.windoctor.common.WinDoctorConstants;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.domain.MailSetting;
 import com.winbit.windoctor.domain.Structure;
@@ -72,7 +73,7 @@ public class MailService {
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-                isMultipart, isHtml, to, subject, content);
+            isMultipart, isHtml, to, subject, content);
 
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -185,8 +186,8 @@ public class MailService {
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
-    private String getBaseUrlOnAsynchronousJobs(){
-        return env.getProperty("email.hostname") +":"+ env.getProperty("server.port");
+    private String getBaseUrlOnAsynchronousJobs() {
+        return env.getProperty("email.hostname") + ":" + env.getProperty("server.port");
     }
 
     /************************************************************************************************************/
@@ -195,25 +196,57 @@ public class MailService {
     /************************************************************************************************************/
     /************************************************************************************************************/
     @Async
-    public void sendPatientCreationAccountEmail(User user,Structure structure) {
-        if(structure != null){
+    public void sendPatientCreationAccountEmail(User user, Structure structure, String unencryptedPassword) {
+        if (structure != null) {
             //MailSetting ms = sessionService.getMailSetting(structure.getId(), WinDoctorConstants.Mail.DOCTOR_CREATION_EMAIL_TYPE);
             //if(ms != null && Boolean.TRUE.equals(ms.getActivated())){
-                log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
-                Locale locale = Locale.forLanguageTag(user.getLangKey());
-                Context context = new Context(locale);
-                context.setVariable("user", user);
-                context.setVariable("structure", structure);
-                context.setVariable("date", FunctionsUtil.convertDateToString(new Date(),WinDoctorConstants.WinDoctorPattern.DATE_PATTERN));
-                context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
-                String content = templateEngine.process("patientAccountCreationEmail", context);
-                Object[] subjectVariables = {structure.getName()};
-                String subject = messageSource.getMessage("email.patient.creation.title", subjectVariables, locale);
-                sendEmail(user.getEmail(), subject, content, false, true);
+            log.debug("Sending Patient account creation e-mail to '{}'", user.getEmail());
+            Locale locale = Locale.forLanguageTag(user.getLangKey());
+            Context context = new Context(locale);
+            context.setVariable("user", user);
+            context.setVariable("structure", structure);
+            context.setVariable("date", FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN));
+            context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+            context.setVariable("unencryptedPassword", unencryptedPassword);
+            String content = templateEngine.process("patientAccountCreationEmail", context);
+            Object[] subjectVariables = {structure.getName()};
+            String subject = messageSource.getMessage("email.patient.creation.title", subjectVariables, locale);
+            sendEmail(user.getEmail(), subject, content, false, true);
             //}
         }
     }
 
+    @Async
+    public void sendEventEmail(Event oldEvent, Event newEvent, Structure structure) {
+        if (structure != null) {
+            if (oldEvent == null) {
+                if (newEvent != null &&
+                    newEvent.getEventStatus() != null &&
+                    Constants.STATUS_IN_PROGRESS.equals(newEvent.getEventStatus().getId())) {
+                    sendAppointmentCreationEmail(newEvent, structure);
+                }
+            }else if(oldEvent.getEventStatus()!=null){
+
+            }
+        }
+    }
+
+    @Async
+    public void sendAppointmentCreationEmail(Event event, Structure structure) {
+        if (structure != null) {
+            log.debug("Sending Patient appointment creation e-mail to '{}'", event.getUser().getEmail());
+            Locale locale = Locale.forLanguageTag(event.getUser().getLangKey());
+            Context context = new Context(locale);
+            context.setVariable("user", event.getUser());
+            context.setVariable("structure", structure);
+            context.setVariable("date", FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN));
+            context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+            String content = templateEngine.process("appointmentCreationEmail", context);
+            Object[] subjectVariables = {structure.getName()};
+            String subject = messageSource.getMessage("email.appointment.creation.title", subjectVariables, locale);
+            sendEmail(event.getUser().getEmail(), subject, content, false, true);
+        }
+    }
 
 
 }

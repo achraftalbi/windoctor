@@ -173,7 +173,7 @@ public class UserService {
         userSearchRepository.save(patient);
         log.debug("Created Information for Patient: {}", patient);
         // send mail
-        mailService.sendPatientCreationAccountEmail(patient, patient.getStructure());
+        mailService.sendPatientCreationAccountEmail(patient, patient.getStructure(),password);
         return patient;
     }
 

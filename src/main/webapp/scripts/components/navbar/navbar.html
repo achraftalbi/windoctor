@@ -154,7 +154,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="dropdown trigger" ng-controller="EventRequestController">
+                <li class="dropdown trigger" ng-switch-when="true"  ng-controller="EventRequestController">
                         <a id="dLabel" role="button" data-toggle="dropdown" >
                             <i class="glyphicon glyphicon-bell notifications-params">  <span class="badge badge-notify glyphicon" ng-style="notificationCountColor()">{{eventsCount}}</span>
                             </i>
