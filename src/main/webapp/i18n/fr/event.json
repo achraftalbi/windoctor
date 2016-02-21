@@ -15,7 +15,9 @@
                 "deleted": "Une journée blocké avec la date {{ param }} a été supprimé.",
                 "delete": {
                     "question": "Etes vous sure que vous voulez supprimé la journée blocké avec la date {{ param }}?"
-                }
+                },
+                "warningMessage":"Attention : Toutes les demandes et rendez vous en cours de la date sélectionner seront rejetées et annulés."
+
             },
             "created": "A new Event is created with identifier {{ param }}: Tu dois mettre la transtation française.",
             "updated": "A Event is updated with identifier {{ param }}: Tu dois mettre la transtation française.",

@@ -206,33 +206,23 @@
             <div class="row">
                 <div class="form-group col-xs-6">
                     <button class="btn btn-default btn-block"
-                            ng-click="capture()"
-                            translate="entity.action.capture">
-                        Capture
-                    </button>
-                    <ng-camera
-                        capture-message="{{global.cheeeese || translate}}"
-                        countdown="3"
-                        output-height="160"
-                        output-width="213"
-                        viewer-height="320"
-                        viewer-width="426"
-                        image-format="png"
-                        jpeg-quality="100"
-                        action-message="{{entity.action.capture || translate}}"
-                        snapshot="capturedImage"
-                        flash-fallback-url="/vendors/webcamjs/webcam.swf"
-                        overlay-url="/overlay.png"
-                        shutter-url="/shutter.mp3"
-                        ></ng-camera>
-                </div>
-                <div class="form-group col-xs-6">
-                    <button class="btn btn-default btn-block"
                             ng-click="cancelImageCapture()"
                             translate="entity.action.cancel">
                         Cancel
                     </button>
                 </div>
+            </div>
+            <div>
+                <div class="alert alert-error ng-scope" ng-show="webcamError" style="">
+                    <span>Webcam could not be started. Did you give access to it?</span>
+                </div>
+                <webcam channel="channel"
+                        on-streaming="onSuccess()"
+                        on-error="onError(err)"
+                        on-stream="onStream(stream)"></webcam>
+                <button ng-click="makeSnapshot()">take picture</button>
+                <canvas id="snapshot" width="100" height="100"/>
+
             </div>
         </div>
     </div>

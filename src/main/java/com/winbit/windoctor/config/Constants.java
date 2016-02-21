@@ -24,9 +24,11 @@ public final class Constants {
     public static final Long STATUS_BLOCKED = 9l;
     public static final Long STATUS_IN_PROGRESS = 1l;
     public static final Long STATUS_VISIT = 8l;
-    public static final Long STATUS_ANNULED = 2l;
-    public static final Long STATUS_ANNULED_BY_PATIENT = 10l;
+    public static final Long STATUS_CANCELLED = 2l;
+    public static final Long STATUS_CANCELLED_BY_PATIENT = 10l;
     public static final Long STATUS_REQUEST = 7l;
+    public static final Long STATUS_REJECTED = 6l;
+    public static final String FULL_DATE_PATTERN = "MMMM EEEE dd yyyy HH:mm";
 
 
     //WinDoctor application format

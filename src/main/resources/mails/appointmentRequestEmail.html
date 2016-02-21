@@ -8,7 +8,7 @@
     <table width="650" border="0" cellpadding="0" cellspacing="0" align="center" style="margin:0 auto">
         <tbody>
         <tr>
-            <td width="100%" height="130" valign="middle" bgcolor="Darkgreen">
+            <td width="100%" height="130" valign="middle" bgcolor="DarkOrange">
                 <table width="45%" height="30" border="0" align="left" cellpadding="0" cellspacing="0">
                     <tbody>
                     <tr>
@@ -57,9 +57,9 @@
                                 <tr>
                                     <td align="center" valign="middle">
                                         <a
-                                            style="text-decoration:none;font-size:25px;color:green;font-weight:bold;font-family:Arial,sans-serif"
+                                            style="text-decoration:none;font-size:25px;color:DarkOrange;font-weight:bold;font-family:Arial,sans-serif"
                                             href="#">
-                                            <span th:text="#{email.patient.creation.subtitle(${user.login})}">Account creation patient</span>
+                                            <span th:text="#{email.appointment.request.subtitle(${user.login},${appointmentDate})}">Appointment request</span>
 
                                         </a>
                                     </td>
@@ -83,50 +83,29 @@
         </tr>
         </tbody>
     </table>
-    <table width="100%" align="center" bgcolor="green">
+    <table width="100%" align="center" bgcolor="Orange">
         <tbody>
         <tr>
             <td>
                 <a style="text-decoration:none"
                    href="#"
                    title="My Milestones" target="_blank">
-                    <table width="640" cellspacing="0" bgcolor="green" cellpadding="0" align="center">
+                    <table width="640" cellspacing="0" bgcolor="Orange" cellpadding="0" align="center">
                         <tbody>
                         <tr>
                             <td valign="middle" align="center" height="140">
-                                <table width="640" bgcolor="green" align="center" height="81"
+                                <table width="640" bgcolor="Orange" align="center" height="81"
                                        valign="middle">
                                     <tbody>
                                     <tr>
-                                        <td valign="middle" bgcolor="green" align="center"
+                                        <td valign="middle" bgcolor="Orange" align="center"
                                             height="90">
                                             <div
-                                                style="font-family:Bodoni MT;letter-spacing:-1px;min-height:30px;background-color:green;font-size:18px;color:white;text-align:left">
+                                                style="font-family:Bodoni MT;letter-spacing:-1px;min-height:30px;background-color:Orange;font-size:18px;color:white;text-align:left">
                                                 <span
-                                                    th:text="#{email.patient.creation.body.first(${structure.name})}">
-                                                    Your account has been created for the office. Your login and password are
+                                                    th:text="#{email.appointment.request.body.first(${user.login},${appointmentDate},${structure.name})}">
+                                                    You made a request with patient account for an appointment on the date . The office "" will treat your request and respond you as soon as possible.
                                                 </span>
-
-                                                <p
-                                                    th:text="#{email.login(${user.login})}">
-                                                    Login
-                                                </p>
-
-                                                <p
-                                                    th:text="#{email.password(${unencryptedPassword})}">
-                                                    Password
-                                                </p>
-
-                                                <p
-                                                    th:text="#{email.patient.creation.body.segond}">
-                                                    Please click in this link to access to your account.
-                                                </p>
-
-
-                                                <p>
-                                                    <a th:href="@{|${baseUrl}/#/login|}"
-                                                       th:text="#{email.office.name.value(${structure.name})}">Cabinet</a>
-                                                </p>
                                             </div>
                                         </td>
                                     </tr>

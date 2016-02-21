@@ -29,6 +29,12 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     @Query("select e from Event e where e.event_date between ?1 and ?2 and e.user.structure.id = ?3 and e.eventStatus.id!=6 order by e.event_date asc")
     Page<Event> findAll(DateTime selectedDate, DateTime segondDate, Long structure_id, Pageable var1);
 
+    @Query("select e from Event e where e.event_date between ?1 and ?2 and e.user.structure.id = ?3 and e.eventStatus.id in (1,7) order by e.event_date asc")
+    List<Event> findEventsToBlock(DateTime firstDate, DateTime segondDate, Long structure_id);
+
+    @Query("select e from Event e where (e.event_date between ?1 and ?2) and e.eventStatus.id in (1) order by e.event_date asc")
+    List<Event> findAppointmentsToRecall(DateTime firstDate, DateTime segondDate);
+
     @Query("select e from Event e where e.eventStatus.id = ?1 and e.user.structure.id = ?2 order by e.event_date desc")
     Page<Event> findAllEventsBlock(Long statusType, Long structure_id, Pageable var1);
 

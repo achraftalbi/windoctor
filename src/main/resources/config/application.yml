@@ -18,8 +18,8 @@ async:
 mail:
     host: smtp.gmail.com
     port: 587
-    username: achraft@winbit.ma
-    password: winbit123456
+    username: winbitnotification@gmail.com
+    password: Test_1234_1234
     protocol: smtp
     tls: true
     auth: true

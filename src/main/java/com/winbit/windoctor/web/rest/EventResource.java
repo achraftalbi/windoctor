@@ -5,21 +5,18 @@ import com.winbit.windoctor.common.WinDoctorConstants;
 import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.repository.EventRepository;
+import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.EventSearchRepository;
 import com.winbit.windoctor.service.EventService;
 import com.winbit.windoctor.security.SecurityUtils;
+import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.web.rest.dto.EventDTO;
 import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
-import org.elasticsearch.index.query.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,14 +30,9 @@ import java.net.URISyntaxException;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.springframework.data.domain.Page;
-
-import static com.winbit.windoctor.web.rest.util.FunctionsUtil.addDays;
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Event.
@@ -60,6 +52,12 @@ public class EventResource {
     @Inject
     private EventService eventService;
 
+    @Inject
+    private UserRepository userRepository;
+
+    @Inject
+    private MailService mailService;
+
     /**
      * POST  /events -> Create a new event.
      */
@@ -75,37 +73,42 @@ public class EventResource {
         log.debug("new event status getId " + event.getEventStatus().getId());
         Event result = eventService.save(event);
         eventSearchRepository.save(result);
+        ResponseEntity<Event> responseEntity;
         if(event.getEventStatus().getId()!=null){
             if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("event.blockDays",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
                     .body(result);
             } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("calendar.appointment",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("calendar.request",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("calendar.visit",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             }else{
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
                     .body(result);
             }
         }else {
-            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+            responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert("event", result.getId().toString()))
                 .body(result);
         }
+        log.info("user event "+result.getUser()+" user id "+result.getUser().getId());
+        result.setUser(userRepository.findOne(result.getUser().getId()));
+        mailService.sendEventEmail(null,result);
+        return responseEntity;
     }
 
     /**
@@ -120,54 +123,55 @@ public class EventResource {
         if (event.getId() == null) {
             return create(event);
         }
+        Event oldEvent = eventRepository.findOne(event.getId());
         Event result = eventRepository.save(event);
         eventSearchRepository.save(event);
+        ResponseEntity<Event> responseEntity;
 
-        ////////////////////////////////
         if(event.getEventStatus().getId()!=null){
             if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("event.blockDays",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
                     .body(result);
             } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("calendar.request",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("calendar.visit",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
-            } else if(Constants.STATUS_ANNULED.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+            } else if(Constants.STATUS_CANCELLED.equals(event.getEventStatus().getId())) {
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment.annuled",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
-            } else if(Constants.STATUS_ANNULED_BY_PATIENT.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+            } else if(Constants.STATUS_CANCELLED_BY_PATIENT.equals(event.getEventStatus().getId())) {
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("calendar.appointment.annuledByPatient",
                         result.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(result.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .body(result);
             }else{
-                return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+                responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                     .headers(HeaderUtil.createEntityUpdateAlert("event", result.getId().toString()))
                     .body(result);
             }
         }else {
-            return ResponseEntity.created(new URI("/api/events/" + result.getId()))
+            responseEntity = ResponseEntity.created(new URI("/api/events/" + result.getId()))
                 .headers(HeaderUtil.createEntityUpdateAlert("event", result.getId().toString()))
                 .body(result);
         }
-        ////////////////////////////////
+        mailService.sendEventEmail(oldEvent, event);
 
-
+        return responseEntity;
     }
 
 
@@ -210,7 +214,7 @@ public class EventResource {
 
         page = eventRepository.getAllNotification(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/eventsNotification", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -370,29 +374,33 @@ public class EventResource {
         Event event = eventRepository.findOne(id);
         eventRepository.delete(id);
         eventSearchRepository.delete(id);
+        ResponseEntity<Void> responseEntity;
         if(event.getEventStatus().getId()!=null){
             if(Constants.STATUS_BLOCKED.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event.blockDays",
+                responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event.blockDays",
                     event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_DATE_FORMAT)))
                     .build();
             } else if(Constants.STATUS_IN_PROGRESS.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.appointment",
+                responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.appointment",
                     event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .build();
             } else if(Constants.STATUS_REQUEST.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.request",
+                responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.request",
                     event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .build();
             } else if(Constants.STATUS_VISIT.equals(event.getEventStatus().getId())) {
-                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.visit",
+                responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("calendar.visit",
                     event.getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
                     .build();
             }else{
-                return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
+                responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
             }
         }else {
-            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
+            responseEntity = ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", id.toString())).build();
         }
+        mailService.sendEventEmail(event, null);
+
+        return responseEntity;
     }
 
     /**

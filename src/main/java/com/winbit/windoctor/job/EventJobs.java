@@ -94,9 +94,10 @@ public final class EventJobs {
 
                 );
         }
-    }*/
+    }
 
-    @Scheduled(cron = "* */5 * * * *")
+    //@Scheduled(cron = "* * /5 * * * *")
+    @Scheduled(cron = "* * * * * *")
     public void reminderBeforeEventEmailJob() {
 
         String beforeDelai =  env.getRequiredProperty("email.reminder.before");
@@ -126,7 +127,8 @@ public final class EventJobs {
         }
     }
 
-    @Scheduled(cron = "* */1 * * * *")
+    //@Scheduled(cron = "* * /1 * * * *")
+    @Scheduled(cron = "* * * * * *")
     public void reminderAfterEventEmailJob() {
 
         String afterDelai =  env.getRequiredProperty("email.reminder.after");
@@ -149,14 +151,18 @@ public final class EventJobs {
                 .forEach(
                     event -> {
                         System.out.println("Event date="+ event.getEvent_date());
-             /*           mailService.sendEventAfterRemindingEmail(event);
+                        mailService.sendEventAfterRemindingEmail(event);
                         event.setRemindAfterMail(Boolean.TRUE);
-                        eventRepository.save(event);*/
+                        eventRepository.save(event);
                     }
 
                 );
         }
-    }
+    }*/
 
+    @Scheduled(cron = "0 0 1 * * *")
+    public void appointmentsRecallEmailJob() {
+        mailService.sendAppointmentJobRecall();
+    }
 
 }

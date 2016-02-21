@@ -1,21 +1,173 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title th:text="#{email.event.creation.title}">[WinDoctor] New appointement</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
 <body>
-<p th:text="#{email.event.creation.greeting(${user.lastName})}">
-    Dear {0}
-</p>
-<p th:text="#{email.event.creation.body(${eventdate},${structure.name})}">
-    Your appointement at {0} with {1} was validated.
-</p>
 
-<p>
-    <span th:text="#{email.footer.regards}">Regards, </span>
-    <br/>
-    <em th:text="#{email.footer.signature}">WinDoctor.</em>
-</p>
+
+<td width="100%" valign="top">
+
+    <table width="650" border="0" cellpadding="0" cellspacing="0" align="center" style="margin:0 auto">
+        <tbody>
+        <tr>
+            <td width="100%" height="130" valign="middle" bgcolor="Darkblue">
+                <table width="45%" height="30" border="0" align="left" cellpadding="0" cellspacing="0">
+                    <tbody>
+                    <tr>
+                        <td width="100" height="70" align="left" valign="middle">
+                            <div
+                                style="font-family:Bodoni MT;font-size:14px;padding:20px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.greeting}">Dear, </span>
+                                <span style="color:white" th:text="#{email.greeting.user(${user.login})}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table width="45%" border="0" align="right" cellpadding="0" cellspacing="0" style="text-align:right">
+                    <tbody>
+                    <tr>
+                        <td valign="top">
+                            <div
+                                style="font-family:Bodoni MT;font-size:14px;padding:0px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.office.name}">Office name</span>
+                                <span style="color:white" th:text="#{email.office.name.value(${structure.name})}"/>
+                            </div>
+                            <div
+                                style="font-family:Bodoni MT;font-size:14px;padding:0px 15px;color:#999;line-height:2em">
+                                <span th:text="#{email.date}">Dear, </span>
+                                <span style="color:white" th:text="#{email.date.value(${date})}"/>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="650" cellpadding="0" cellspacing="0" align="center" bgcolor="#E6E4E6" style="margin:0 auto">
+        <tbody>
+        <tr>
+            <td align="center" valign="middle">
+                <table width="640" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto">
+                    <tbody>
+                    <tr>
+                        <td align="center" style="padding:40px 0">
+                            <table width="" align="center">
+                                <tbody>
+                                <tr>
+                                    <td align="center" valign="middle">
+                                        <a
+                                            style="text-decoration:none;font-size:25px;color:DarkBlue;font-weight:bold;font-family:Arial,sans-serif"
+                                            href="#">
+                                            <span th:text="#{email.appointment.creation.subtitle(${user.login},${appointmentDate})}">Appointment creation</span>
+
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="min-height:30px">&nbsp;</div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <table width="100%" align="center" bgcolor="blue">
+        <tbody>
+        <tr>
+            <td>
+                <a style="text-decoration:none"
+                   href="#"
+                   title="My Milestones" target="_blank">
+                    <table width="640" cellspacing="0" bgcolor="blue" cellpadding="0" align="center">
+                        <tbody>
+                        <tr>
+                            <td valign="middle" align="center" height="140">
+                                <table width="640" bgcolor="blue" align="center" height="81"
+                                       valign="middle">
+                                    <tbody>
+                                    <tr>
+                                        <td valign="middle" bgcolor="blue" align="center"
+                                            height="90">
+                                            <div
+                                                style="font-family:Bodoni MT;letter-spacing:-1px;min-height:30px;background-color:blue;font-size:18px;color:white;text-align:left">
+                                                <span
+                                                    th:text="#{email.appointment.creation.body.first(${user.login},${structure.name})}">
+                                                    An appointment was created for patient by the office on the date
+                                                </span>
+                                                <span  style="font-weight:bold;"
+                                                    th:text="#{email.appointment.creation.body.segond(${appointmentDate})}">
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="overflow:auto;vertical-align:top">
+        <table width="650" cellspacing="0" cellpadding="0" align="center" style="margin:0 auto">
+            <tbody>
+            <tr>
+                <td valign="middle" align="center">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                        <tr>
+                            <td valign="top">
+                                <table style="margin:0px auto" border="0" cellpadding="0" cellspacing="0" width="100%"
+                                       align="center">
+                                    <tbody>
+                                    <tr>
+                                        <td valign="top" style="padding:20px 0px 40px">
+                                            <table width="100%" cellspacing="1" cellpadding="0" border="0"
+                                                   align="center">
+                                                <tbody>
+                                                <tr>
+                                                    <td valign="top"
+                                                        style="border-bottom:1px dashed #bdbdbd;border-top:1px dashed #bdbdbd;padding:10px"
+                                                        colspan="2"><a style="text-decoration:none"
+                                                                       href="http://winbit.ma"
+                                                                       target="_blank">
+                                                        <div
+                                                            style="font-family:Bodoni MT;font-weight:normal;font-size:16px;color:#333">
+                                                            <span th:text="#{email.company}">WinBit</span>
+                                                        </div>
+                                                    </a></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <br/><br/></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</td>
+
 </body>
 </html>

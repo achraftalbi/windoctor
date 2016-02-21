@@ -15,7 +15,8 @@
                 "deleted": "A blocked day with date {{ param }} is deleted.",
                 "delete": {
                     "question": "Are you sure you want to delete blocked day with date {{ event_date }}?"
-                }
+                },
+                "warningMessage":"Note: All requests and appointments during the day selected will be rejected or cancelled."
             },
             "created": "A new Event is created with identifier {{ param }}",
             "updated": "A Event is updated with identifier {{ param }}",

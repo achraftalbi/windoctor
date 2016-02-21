@@ -9,9 +9,7 @@ angular.module('windoctorApp')
         $scope.loadAll = function() {
             EventsNotification.query({page: $scope.page, per_page: 5}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
-                for (var i = 0; i < result.length; i++) {
-                    $scope.events.push(result[i]);
-                }
+                $scope.events = result;
                 $scope.eventsCount = $scope.events.length;
             });
         };

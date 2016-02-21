@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.Locale;
 
 /**
  * Created by achraftalbi on 9/28/15.
@@ -29,18 +30,23 @@ public class FunctionsUtil {
         return cal.getTime();
     }
 
-    public static String convertDateToString(Date date, String format)
+    public static String convertDateToString(Date date, String format,Locale locale)
     {
         try{
             log.info("date "+date);
             log.info("format "+format);
-            String stringDate = DateFormatUtils.format(date, format);
+            String stringDate = locale==null?DateFormatUtils.format(date, format):DateFormatUtils.format(date, format,locale);
             log.info("stringDate "+stringDate);
             return stringDate;
         }catch(Exception ex){
             log.error("Exception in convertDateToString date:"+date+", format:"+format+ " "+ex);
         }
         return null;
+    }
+
+    public static String convertDateToString(Date date, String format)
+    {
+        return convertDateToString(date,format,null);
     }
 
     public static Date convertStringToDate(String stringDate, String format)

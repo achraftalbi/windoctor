@@ -47,7 +47,7 @@ angular.module('windoctorApp')
                         if (reset) {
                             setVisible();
                         }
-
+                        console.log('role '+role);
                         Principal.isInRole(role)
                             .then(function(result) {
                                 if (result) {
