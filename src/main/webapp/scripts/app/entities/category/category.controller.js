@@ -4,6 +4,7 @@ angular.module('windoctorApp')
     .controller('CategoryController', function ($scope, Category, CategorySearch, ParseLinks) {
         $scope.categorys = [];
         $scope.page = 1;
+        $scope.searchCalled = false;
         $scope.loadAll = function () {
             Category.query({page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -12,8 +13,13 @@ angular.module('windoctorApp')
         };
         $scope.loadPage = function (page) {
             $scope.page = page;
-            $scope.loadAll();
+            if($scope.searchCalled){
+                $scope.loadAllSearch();
+            }else{
+                $scope.loadAll();
+            }
         };
+
         $scope.loadAll();
 
         $scope.delete = function (id) {
@@ -33,7 +39,13 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            CategorySearch.query({query: $scope.searchQuery}, function (result) {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearch();
+        };
+        $scope.loadAllSearch = function () {
+            CategorySearch.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
                 $scope.categorys = result;
             }, function (response) {
                 if (response.status === 404) {

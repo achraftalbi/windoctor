@@ -2,18 +2,18 @@
     "windoctorApp": {
         "category" : {
             "home": {
-                "title": "Categorys",
+                "title": "Categories",
                 "createLabel": "Create a new Category",
                 "createOrEditLabel": "Create or edit a Category"
             },
-            "created": "A new Category is created with identifier {{ param }}",
-            "updated": "A Category is updated with identifier {{ param }}",
-            "deleted": "A Category is deleted with identifier {{ param }}",
+            "created": "A new Category is created with name {{ param }}",
+            "updated": "A Category is updated with name {{ param }}",
+            "deleted": "A Category is deleted with name {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Category {{ id }}?"
+                "question": "Are you sure you want to delete Category {{ name }}?"
             },
             "detail": {
-                "title": "Category"
+                "title": "Category :"
             },
             "name": "Name",
             "product": "Product"

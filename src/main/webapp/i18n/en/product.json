@@ -2,18 +2,18 @@
     "windoctorApp": {
         "product" : {
             "home": {
-                "title": "Products",
-                "createLabel": "Create a new Product",
-                "createOrEditLabel": "Create or edit a Product"
+                "title": "Materials",
+                "createLabel": "Create a new material",
+                "createOrEditLabel": "Create or edit a material"
             },
-            "created": "A new Product is created with identifier {{ param }}",
-            "updated": "A Product is updated with identifier {{ param }}",
-            "deleted": "A Product is deleted with identifier {{ param }}",
+            "created": "A new material is created with name {{ param }}",
+            "updated": "A material is updated with name {{ param }}",
+            "deleted": "A material is deleted with name {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete Product {{ id }}?"
+                "question": "Are you sure you want to delete material {{ name }}?"
             },
             "detail": {
-                "title": "Product"
+                "title": "Material :"
             },
             "name": "Name",
             "fund": "Fund",
@@ -27,7 +27,7 @@
             "fillPriceQuantity": "Fill price and quantity to see total price",
             "materialsOutStock": "Materials out of stock",
             "totalPriceGreaterToFund": "The total price is greater than the sum of the fund.",
-            "product": "Product"
+            "product": "Category"
         }
     }
 }

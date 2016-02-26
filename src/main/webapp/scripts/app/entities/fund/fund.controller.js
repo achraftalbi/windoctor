@@ -40,7 +40,7 @@ angular.module('windoctorApp')
                 });
         };
 
-        $scope.displayHistories = function (fund) {
+        $scope.displayHistoricals= function (fund) {
             $scope.pageHistory = 1;
             $scope.selectedFund = fund;
             $scope.loadHistories();

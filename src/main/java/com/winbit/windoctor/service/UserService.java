@@ -1,9 +1,6 @@
 package com.winbit.windoctor.service;
 
-import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Authority;
-import com.winbit.windoctor.domain.PersistentToken;
-import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
 import com.winbit.windoctor.repository.PersistentTokenRepository;
@@ -13,8 +10,7 @@ import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.util.RandomUtil;
-import com.winbit.windoctor.web.rest.util.PaginationUtil;
-import org.apache.commons.lang.BooleanUtils;
+import com.winbit.windoctor.web.rest.dto.UserDTO;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -27,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -135,32 +129,35 @@ public class UserService {
         return newUser;
     }
 
-    public User createPatientInformation(String login, String password, String firstName, String lastName, String email,
-                                         String langKey, Boolean blocked, Boolean activated, byte [] picture) {
+    public User createPatientInformation(UserDTO patientCreated) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
         Set<Authority> authorities = new HashSet<>();
-        String encryptedPassword = passwordEncoder.encode(password);
-        patient.setLogin(login);
+        String encryptedPassword = passwordEncoder.encode(patientCreated.getPassword());
         // new user gets initially a generated password
+        patient.setLogin(patientCreated.getLogin());
         patient.setPassword(encryptedPassword);
-        patient.setFirstName(firstName);
-        patient.setLastName(lastName);
-        patient.setEmail(email);
-        patient.setLangKey(langKey);
+        patient.setFirstName(patientCreated.getFirstName());
+        patient.setLastName(patientCreated.getLastName());
+        patient.setBirthDate(patientCreated.getBirthDate());
+        patient.setDiseases(patientCreated.getDiseases());
+        patient.setFacebook(patientCreated.getFacebook());
+        patient.setPhoneNumber(patientCreated.getPhoneNumber());
+        patient.setEmail(patientCreated.getEmail());
+        patient.setLangKey(patientCreated.getLangKey());
         Long structureId = sessionService.getCurrentStructure();
         if(structureId != null){
             patient.setStructure(structureRepository.findOneById(structureId));
         }
         // new user is not active
-        if(activated==null || activated == false){
+        if(patientCreated.getActivated()==null || patientCreated.getActivated() == false){
             patient.setActivated(false);
         } else {
             patient.setActivated(true);
         }
 
-        if(blocked==null || blocked == false){
+        if(patientCreated.getBlocked()==null || patientCreated.getBlocked() == false){
             patient.setBlocked(false);
         } else {
             patient.setBlocked(true);
@@ -168,12 +165,12 @@ public class UserService {
 
         authorities.add(authority);
         patient.setAuthorities(authorities);
-        patient.setPicture(picture);
+        patient.setPicture(patientCreated.getPicture());
         userRepository.save(patient);
         userSearchRepository.save(patient);
         log.debug("Created Information for Patient: {}", patient);
         // send mail
-        mailService.sendPatientCreationAccountEmail(patient, patient.getStructure(),password);
+        mailService.sendPatientCreationAccountEmail(patient, patient.getStructure(), patientCreated.getPassword());
         return patient;
     }
 
@@ -216,33 +213,36 @@ public class UserService {
         return doctor;
     }
 
-    public User updatePatientInformation(String login, String password, String firstName, String lastName, String email,
-                                         String langKey, Boolean blocked, Boolean activated, byte [] picture) {
+    public User updatePatientInformation(UserDTO patientUpdated) {
 
-        Optional<User> rst = userRepository.findOneByLogin(login);
+        Optional<User> rst = userRepository.findOneByLogin(patientUpdated.getLogin());
         User patient = rst.get();
-        String encryptedPassword = passwordEncoder.encode(password);
+        String encryptedPassword = passwordEncoder.encode(patientUpdated.getPassword());
         // new user gets initially a generated password
         patient.setPassword(encryptedPassword);
-        patient.setFirstName(firstName);
-        patient.setLastName(lastName);
-        patient.setEmail(email);
-        patient.setLangKey(langKey);
+        patient.setFirstName(patientUpdated.getFirstName());
+        patient.setLastName(patientUpdated.getLastName());
+        patient.setBirthDate(patientUpdated.getBirthDate());
+        patient.setDiseases(patientUpdated.getDiseases());
+        patient.setFacebook(patientUpdated.getFacebook());
+        patient.setPhoneNumber(patientUpdated.getPhoneNumber());
+        patient.setEmail(patientUpdated.getEmail());
+        patient.setLangKey(patientUpdated.getLangKey());
         // new user is not active
-        if(activated==null || activated == false){
+        if(patientUpdated.getActivated()==null || patientUpdated.getActivated() == false){
             patient.setActivated(false);
         } else {
             patient.setActivated(true);
         }
 
-        if(blocked==null || blocked == false){
+        if(patientUpdated.getBlocked()==null || patientUpdated.getBlocked() == false){
             patient.setBlocked(false);
         } else {
             patient.setBlocked(true);
         }
 
         // new user gets registration key
-        patient.setPicture(picture);
+        patient.setPicture(patientUpdated.getPicture());
         userRepository.save(patient);
         userSearchRepository.save(patient);
         log.debug("Update Information for Patient: {}", patient);

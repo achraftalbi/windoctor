@@ -60,7 +60,7 @@ public class Supply_typeResource {
         Supply_type result = supply_typeRepository.save(supply_type);
         supply_typeSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/supply_types/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("supply_type", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("supply_type", result.getDescription().toString()))
                 .body(result);
     }
 
@@ -79,7 +79,7 @@ public class Supply_typeResource {
         Supply_type result = supply_typeRepository.save(supply_type);
         supply_typeSearchRepository.save(supply_type);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("supply_type", supply_type.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("supply_type", supply_type.getDescription().toString()))
                 .body(result);
     }
 

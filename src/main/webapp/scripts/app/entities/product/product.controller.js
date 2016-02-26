@@ -6,6 +6,7 @@ angular.module('windoctorApp')
         $scope.productsThreshold = [];
         $scope.page = 1;
         $scope.pageThreshold = 1;
+        $scope.searchCalled = false;
         $scope.loadAll = function () {
             Product.query({typeProductToGet:1,page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -20,8 +21,13 @@ angular.module('windoctorApp')
         };
         $scope.loadPage = function (page) {
             $scope.page = page;
-            $scope.loadAll();
+            if($scope.searchCalled){
+                $scope.loadAllSearch();
+            }else{
+                $scope.loadAll();
+            }
         };
+
         $scope.loadPageThreshold = function (page) {
             $scope.pageThreshold = page;
             $scope.loadAllThreshold();
@@ -46,7 +52,13 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            ProductSearch.query({query: $scope.searchQuery}, function (result) {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearch();
+        };
+        $scope.loadAllSearch = function () {
+            ProductSearch.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
                 $scope.products = result;
             }, function (response) {
                 if (response.status === 404) {

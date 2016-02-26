@@ -1,6 +1,12 @@
 package com.winbit.windoctor.web.rest.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.winbit.windoctor.domain.util.CustomDateTimeDeserializer;
+import com.winbit.windoctor.domain.util.CustomDateTimeSerializer;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
+import org.joda.time.DateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Lob;
@@ -50,6 +56,41 @@ public class UserDTO {
     private Boolean currentUserPatient;
 
     private Boolean maxEventsReached;
+
+    @NotNull
+    @Size(min = 9, max = 9)
+    @Pattern(regexp = "^[0-9]*$")
+    private String phoneNumber;
+
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    private DateTime birthDate;
+
+    @NotNull
+    @Size(min = 1, max = 100)
+    private String facebook;
+
+    @NotNull
+    @Size(min = 1, max = 200)
+    private String diseases;
+
+    public String getDiseases() {
+        return diseases;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public DateTime getBirthDate() {
+        return birthDate;
+    }
 
     public UserDTO() {
     }

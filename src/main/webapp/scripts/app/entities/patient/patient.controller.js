@@ -5,6 +5,7 @@ angular.module('windoctorApp')
         $scope.patients = [];
         $scope.page = 1;
         $scope.searchCalled = false;
+        $scope.captureAnImageScreen = false;
         $scope.loadAll = function() {
             Patient.query({page: $scope.page, per_page: 5}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -121,4 +122,6 @@ angular.module('windoctorApp')
             console.log("segond"+(val==='true'));
             return val===true;
         }
+
+
     });

@@ -1,7 +1,9 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Category;
+import com.winbit.windoctor.domain.Product;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.CategoryRepository;
 import com.winbit.windoctor.repository.search.CategorySearchRepository;
@@ -60,7 +62,7 @@ public class CategoryResource {
         Category result = categoryRepository.save(category);
         categorySearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/categorys/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("category", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("category", result.getName()))
                 .body(result);
     }
 
@@ -79,7 +81,7 @@ public class CategoryResource {
         Category result = categoryRepository.save(category);
         categorySearchRepository.save(category);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("category", category.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("category", category.getName().toString()))
                 .body(result);
     }
 
@@ -137,9 +139,18 @@ public class CategoryResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Category> search(@PathVariable String query) {
+    /*public List<Category> search(@PathVariable String query) {
         return StreamSupport
             .stream(categorySearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }*/
+    public ResponseEntity<List<Category>> search(@PathVariable String query,@RequestParam(value = "page" , required = false) Integer offset,
+                                                @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Category> page;
+        page = categoryRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/categorys", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

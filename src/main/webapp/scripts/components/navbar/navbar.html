@@ -17,10 +17,10 @@
                         <span translate="global.menu.home">Home</span>
                     </a>
                 </li>
-                <li ui-sref-active="active" >
+                <li ui-sref-active="active"  ng-switch-when="true">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="" >
                         <span class="glyphicon  glyphicon-calendar" style="color: green;"></span>
-                    &#xA0;<span translate="global.menu.entities.calendar">Calendar</span>
+                        &#xA0;<span translate="global.menu.entities.calendar">Calendar</span>
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -28,6 +28,34 @@
                             &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event"><span class="glyphicon glyphicon-ban-circle" style="color: black;"></span>
                             &#xA0;<span translate="global.menu.entities.blockOfDays">Block of days</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="glyphicon glyphicon-align-left" style="color: black;"></span>
+                            &#xA0;<span translate="global.menu.entities.event_reason">Acts</span></a></li>
+                    </ul>
+                </li>
+                <li ui-sref-active="active"  ng-switch-when="true">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
+                        <span class="glyphicon  glyphicon-object-align-bottom" style="color: green;"></span>
+                        &#xA0;<span translate="global.menu.entities.product">Materials</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="product"><span class="glyphicon glyphicon-object-align-bottom" style="color: green;"></span>
+                            &#xA0;<span translate="global.menu.entities.product">Materials</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="category"><span class="glyphicon glyphicon-folder-open" style="color: black;"></span>
+                            &#xA0;<span translate="global.menu.entities.category">Categories</span></a></li>
+                    </ul>
+                </li>
+                <li ui-sref-active="active"  ng-switch-when="true">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
+                        <span class="fa fa-archive" style="color: green;"></span>
+                        &#xA0;<span translate="global.menu.entities.fund">Funds</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="fund"><span class="fa fa-archive" style="color: green;"></span>
+                            &#xA0;<span translate="global.menu.entities.fund">Funds</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="supply_type"><span class="fa fa-usd" style="color: black;"></span>
+                            &#xA0;<span translate="global.menu.entities.supply_type">Supply</span></a></li>
                     </ul>
                 </li>
                 <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
@@ -57,9 +85,9 @@
                         &#xA0;<span translate="global.menu.entities.entityTest1">entityTest1</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ADMIN"><a ui-sref="structure"><span class="glyphicon glyphicon-th-large"></span>
                         &#xA0;<span translate="global.menu.entities.structure">structure</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="patient"><span class="glyphicon glyphicon-user" style="color:#009900"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="patient"><span class="fa fa-users" style="color:#009900"></span>
                         &#xA0;<span translate="global.menu.entities.patient">patient</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="doctor"><span class="glyphicon glyphicon-user" style="color:#BC7A00"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="doctor"><span class="fa fa-user-md" style="color:#BC7A00"></span>
                             &#xA0;<span translate="global.menu.entities.doctor">doctor</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="testEntity2"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.testEntity2">testEntity2</span></a></li>

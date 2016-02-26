@@ -1,14 +1,13 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarTreatmentController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
+    .controller('PatientChartController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
                                                          ParseLinks, $filter, Event_reason, Event, Patient,Attachment,Fund) {
         $scope.treatments = [];
         $scope.page = 1;
         $scope.attachmentPage = 1;
         $scope.treatment = null;
         $scope.oldTreatmentPaidPrice = null;
-        $scope.event = null;
         $scope.patient = null;
         $scope.doctors = null;
         $scope.defaultDoctor = null;
@@ -18,11 +17,9 @@ angular.module('windoctorApp')
         $scope.displayAddEditViewPopup = false;
         $scope.displayAddEditViewAttachmentPopup = false;
         $scope.displayTreatmentView = false;
-        $scope.displayAllPatientTreatments = false;
         $scope.displayTreatmentToDelete = false;
         $scope.event_reasons = null;
         $scope.defaultEventReason = null;
-        $scope.selectedDate = null;
         $scope.eventReasonSelected = false;
         $scope.funds;
         $scope.oldFundContainEnoughMoney = true;
@@ -38,35 +35,18 @@ angular.module('windoctorApp')
 
         // Display treatments Begin
         $scope.loadAll = function () {
-            if ($scope.displayAllPatientTreatments === false) {
                 Treatment.query({
-                        eventId: $stateParams.eventId,
+                        patientId: $stateParams.patientId,
                         page: $scope.page,
                         per_page: 5
                     }, function (result, headers) {
-                        console.log("$stateParams.eventId value "+$stateParams.eventId);
-                        $scope.selectedDate = new Date($stateParams.selectedDate);
                         $scope.links = ParseLinks.parse(headers('link'));
                         $scope.treatments = result;
-                        if ($scope.event === null) {
-                            Event.get({id: $stateParams.eventId}, function (result) {
-                                $scope.event = result;
-                            });
-                        }
+                        Patient.get({id: $stateParams.patientId}, function (result) {
+                            $scope.patient = result;
+                        });
                     }
                 );
-            } else {
-                Treatment.query({
-                        patientId: $scope.event.user.id,
-                        page: $scope.page,
-                        per_page: 5
-                    }, function (result, headers) {
-                        $scope.links = ParseLinks.parse(headers('link'));
-                        $scope.treatments = result;
-                    }
-                )
-                ;
-            }
         };
 
         $scope.loadFunds = function () {
@@ -116,11 +96,12 @@ angular.module('windoctorApp')
             $scope.searchCalled = true;
             $scope.search();
         };
-
+        /******************************************************************************************************/
+        /***** Very important. I let the search to use it for see office benefit. But it must change next.*****/
         $scope.search = function () {
             if($scope.searchQuery!==null && $scope.searchQuery!==undefined && $scope.searchQuery.length>0) {
                 TreatmentSearch.query({
-                    query: $scope.searchQuery, eventId: $scope.event.id,
+                    query: $scope.searchQuery, eventId: 0,
                     page: $scope.page, per_page: 5
                 }, function (result, headers) {
                     $scope.links = ParseLinks.parse(headers('link'));
@@ -160,17 +141,6 @@ angular.module('windoctorApp')
         $scope.cancelTreatmentRows = function () {
             $modalInstance.dismiss('cancel');
         };
-        // Treatment to display all or only treatment events
-        $scope.displayAllPatientTreatmentsFunction = function () {
-            $scope.displayAllPatientTreatments = true;
-            $scope.page = 1;
-            $scope.loadPage($scope.page);
-        }
-        $scope.displayPatientTreatmentsEventFunction = function () {
-            $scope.displayAllPatientTreatments = false;
-            $scope.page = 1;
-            $scope.loadPage($scope.page);
-        }
 
         $scope.changeFields = function () {
             console.log("changeFields 0");
@@ -207,23 +177,6 @@ angular.module('windoctorApp')
 
 
         // Add - Edit - View treatments
-
-        $scope.addNewTreatment = function () {
-            $scope.treatment = {
-                treatment_date: $scope.event.event_date,
-                description: null,
-                price: $scope.defaultEventReason.price,
-                paid_price: $scope.defaultEventReason.price,
-                id: null,
-                eventReason : $scope.defaultEventReason,
-                doctor:$scope.defaultDoctor,
-                event: {id: $stateParams.eventId}
-            };
-            $scope.oldTreatmentPaidPrice = null;
-            $scope.attachments=null;
-            $scope.dialogPopupTreatment();
-            $scope.loadFunds();
-        };
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;

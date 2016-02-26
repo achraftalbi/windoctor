@@ -12,9 +12,9 @@
             <div class="col-md-8">
                 <form name="searchForm" class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'global.wordToSearch' | translate }}">
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a Category</span>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search</span>
                     </button>
                 </form>
             </div>
@@ -31,7 +31,7 @@
                         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p translate="windoctorApp.category.delete.question" translate-values="{id: '{{category.id}}'}">Are you sure you want to delete this Category?</p>
+                        <p translate="windoctorApp.category.delete.question" translate-values="{name: '{{category.name}}'}">Are you sure you want to delete this Category?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
@@ -50,14 +50,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.category.name">Name</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="category in categorys">
-                    <td><a ui-sref="category.detail({id:category.id})">{{category.id}}</a></td>
                     <td>{{category.name}}</td>
                     <td>
                         <button type="submit"
@@ -80,7 +78,7 @@
             </tbody>
         </table>
         <nav>
-            <ul class="pagination">
+            <ul class="pagination" ng-show="links['prev'] || links['next']">
                 <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
                 <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
                 <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>

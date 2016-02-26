@@ -16,9 +16,9 @@
                 "question": "Etes-vous certain de vouloir supprimer l'acte ?"
             },
             "detail": {
-                "title": "Treatment"
+                "title": "Acte"
             },
-            "treatment_date": "Treatment_date",
+            "treatment_date": "Date",
             "chooseReason": "Choisissez une raison",
             "description": "Description",
             "price": "Prix",

@@ -12,9 +12,9 @@
             <div class="col-md-8">
                 <form name="searchForm" class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'global.wordToSearch' | translate }}">
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a Patient</span>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search</span>
                     </button>
                 </form>
             </div>
@@ -50,30 +50,28 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.patient.login">Login</th>
+                    <th translate="windoctorApp.patient.picture">Picture</th>
                     <th translate="windoctorApp.patient.firstName">FirstName</th>
                     <th translate="windoctorApp.patient.lastName">LastName</th>
                     <th translate="windoctorApp.patient.email">Email</th>
-                    <th translate="windoctorApp.patient.activated">Activated</th>
-                    <th translate="windoctorApp.patient.blocked">Blocked</th>
-                    <th translate="windoctorApp.patient.picture">Picture</th>
+                    <th translate="windoctorApp.patient.patientChart">Patient chart</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="patient in patients">
-                    <td><a ui-sref="patient.detail({id:patient.id})">{{patient.id}}</a></td>
                     <td>{{patient.login}}</td>
-                    <td>{{patient.firstName}}</td>
-                    <td>{{patient.lastName}}</td>
-                    <td>{{patient.email}}</td>
-                    <td>{{patient.activated}}</td>
-                    <td>{{patient.blocked}}</td>
                     <td>
                         <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 30px;" ng-if="patient.picture"/>
                         {{byteSize(patient.picture)}}
                     </td>
+                    <td>{{patient.firstName}}</td>
+                    <td>{{patient.lastName}}</td>
+                    <td>{{patient.email}}</td>
+                    <td><a translate="windoctorApp.patient.chart"
+                           ui-sref="patient.patientChart({patientId:patient.id})"
+                        /></td>
                     <td>
                         <button type="submit"
                                 ui-sref="patient.detail({id:patient.id})"
@@ -93,9 +91,22 @@
                     </td>
                 </tr>
             </tbody>
+            <nav>
+                <ul class="pagination" ng-show="links['prev'] || links['next']">
+                    <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
+                    <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
+                    <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
+                    <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                    <li class="active"><a>{{page}}</a></li>
+                    <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                    <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
+                    <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
+                    <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+                </ul>
+            </nav>
         </table>
         <nav>
-            <ul class="pagination">
+            <ul class="pagination" ng-show="links['prev'] || links['next']">
                 <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
                 <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
                 <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>

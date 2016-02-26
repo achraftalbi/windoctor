@@ -2,20 +2,23 @@
     "windoctorApp": {
         "fund" : {
             "home": {
-                "title": "Funds",
-                "createLabel": "Créer un nouveau Fund",
-                "createOrEditLabel": "Créer ou éditer un Fund"
+                "title": "Caisses",
+                "createLabel": "Créer une nouvelle caisse",
+                "createOrEditLabel": "Créer ou éditer une caisse"
             },
+            "created": "Une nouvelle caisse a été créé avec la description {{ param }}",
+            "updated": "La caisse avec la description {{ param }} a été mis à jour",
+            "deleted": "La caisse avec la description {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Fund {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer la caisse avec la description {{ description }} ?"
             },
             "detail": {
-                "title": "Fund"
+                "title": "Caisse"
             },
             "description": "Description",
-            "amount": "Amount",
+            "amount": "Montant",
             "supply_type": "Approvisionnement",
-            "histories": "Historiques",
+            "historicals": "Historiques",
             "fund_fund_history": "Fund_fund_history"
         }
     }

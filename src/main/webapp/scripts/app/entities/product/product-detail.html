@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="windoctorApp.product.detail.title">Product</span> {{product.id}}</h2>
+    <h2><span translate="windoctorApp.product.detail.title">Product :</span> {{product.name}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -63,7 +63,7 @@
                     <span translate="windoctorApp.product.product">product</span>
                 </td>
                 <td>
-                    <a class="form-control-static" ui-sref="category.detail({id:product.product.id})">{{product.product.name}}</a>
+                    <span class="form-control-static">{{product.product.name}}</span>
                 </td>
             </tr>
             </tbody>

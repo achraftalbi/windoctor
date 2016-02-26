@@ -128,6 +128,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/products/**").hasAuthority(AuthoritiesConstants.ASSISTANT)
             .antMatchers("/api/users/**").hasAuthority(AuthoritiesConstants.ASSISTANT)
             .antMatchers("/api/patients/**").hasAuthority(AuthoritiesConstants.ASSISTANT)
+            .antMatchers("/api/eventsNotification/**").hasAuthority(AuthoritiesConstants.ASSISTANT)
             //end
             .antMatchers("/api/**").authenticated()
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)

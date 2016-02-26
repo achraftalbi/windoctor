@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="windoctorApp.treatment.detail.title">Treatment</span> {{selectedFundHistory.treatment.id}}</h2>
+    <h2><span translate="windoctorApp.treatment.detail.title">Treatment</span></h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -47,7 +47,7 @@
                     <span translate="windoctorApp.treatment.eventReason">eventReason</span>
                 </td>
                 <td>
-                    <a class="form-control-static" ui-sref="event_reason.detail({id:treatment.eventReason.id})">{{selectedFundHistory.treatment.eventReason.description}}</a>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.eventReason.description}}</span>
                 </td>
             </tr>
             </tbody>

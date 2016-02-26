@@ -15,18 +15,18 @@
             "detail": {
                 "title": "Fund_history"
             },
-            "old_amount": "Old_amount",
-            "new_amount": "New_amount",
-            "type_operation": "Type_operation",
-            "amount_movement": "Amount_movement",
-            "fund": "fund",
-            "treatment": "treatment",
-            "supply_type": "Supply",
+            "old_amount": "Old amount",
+            "new_amount": "New amount",
+            "type_operation": "Type operation",
+            "amount_movement": "Amount movement",
+            "fund": "Fund",
+            "treatment": "Acte",
+            "supply_type": "Supply/Removal",
             "movementCause": "Movement cause",
             "credit": "Credit",
             "debit": "Debit",
             "fundHistoryName": "History of the fund {{fundName}}",
-            "product": "product"
+            "product": "Material"
         }
     }
 }

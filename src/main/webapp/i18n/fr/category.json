@@ -2,15 +2,18 @@
     "windoctorApp": {
         "category" : {
             "home": {
-                "title": "Categorys",
-                "createLabel": "Créer un nouveau Category",
-                "createOrEditLabel": "Créer ou éditer un Category"
+                "title": "Catégories",
+                "createLabel": "Créer un nouveau catégorie",
+                "createOrEditLabel": "Créer ou éditer un catégorie"
             },
+            "created": "Une nouvelle catégorie a été créé avec le nom {{ param }}",
+            "updated": "La catégorie avec le nom {{ param }} a été mis à jour",
+            "deleted": "La catégorie avec le nom {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Category {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer la catégorie {{ name }} ?"
             },
             "detail": {
-                "title": "Category"
+                "title": "Catégorie :"
             },
             "name": "Name",
             "product": "Product"

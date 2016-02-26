@@ -14,4 +14,7 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
     @Query("select c from Category c where c.structure.id = ?1")
     Page<Category> findAll(Long structure_id, Pageable var1);
+    @Query("select c from Category c  where c.structure.id = ?2 and" +
+        " ( lower(c.name) like lower(?1) ) ")
+    Page<Category> findAllMatchString(String query , Long structureId, Pageable var1);
 }

@@ -16,9 +16,9 @@
                 "question": "Are you sure you want to delete the act ?"
             },
             "detail": {
-                "title": "Treatment"
+                "title": "Act"
             },
-            "treatment_date": "Treatment_date",
+            "treatment_date": "Date",
             "chooseReason": "Choose a reason",
             "description": "Description",
             "price": "Price",

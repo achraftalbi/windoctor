@@ -10,7 +10,7 @@
                 "question": "Etes-vous certain de vouloir supprimer le Patient {{ id }} ?"
             },
             "detail": {
-                "title": "Patient"
+                "title": "Patient :"
             },
             "login": "Identifiant",
             "password": "Mot de passe",
@@ -19,7 +19,19 @@
             "email": "Email",
             "activated": "Activaté",
             "blocked": "Blocké",
-            "picture": "Picture"
+            "picture": "Picture",
+            "birthDate": "Date de naissance",
+            "phoneNumber": "Numéro de téléphone",
+            "diseases": "Maladies",
+            "facebook": "Facebook",
+            "messages": {
+                "success": "<strong>Patient sauvegarder!</strong>",
+                "error": {
+                    "fail": "<strong>L'ajout du patient à échoué!</strong>",
+                    "userexists": "<strong>Login name already registered!</strong> Please choose another one.",
+                    "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                }
+            }
         }
     }
 }

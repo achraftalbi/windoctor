@@ -6,17 +6,8 @@
         <div class="row">
             <div class="col-md-4">
                 <button class="btn btn-primary" ui-sref="supply_type.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.supply_type.home.createLabel">Create a new Supply_type</span>
+                    <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.supply_type.home.createLabel">Create a new supply/removal</span>
                 </button>
-            </div>
-            <div class="col-md-8">
-                <form name="searchForm" class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
-                    </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a Supply_type</span>
-                    </button>
-                </form>
             </div>
         </div>
     </div>
@@ -50,14 +41,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
                     <th translate="windoctorApp.supply_type.description">Description</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="supply_type in supply_types">
-                    <td><a ui-sref="supply_type.detail({id:supply_type.id})">{{supply_type.id}}</a></td>
                     <td>{{supply_type.description}}</td>
                     <td>
                         <button type="submit"
@@ -69,11 +58,6 @@
                                 ui-sref="supply_type.edit({id:supply_type.id})"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="delete(supply_type.id)"
-                                class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
                         </button>
                     </td>
                 </tr>

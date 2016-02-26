@@ -1,6 +1,7 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.*;
 import com.winbit.windoctor.repository.Fund_historyRepository;
 import com.winbit.windoctor.repository.ProductRepository;
@@ -89,7 +90,7 @@ public class ProductResource {
         saveFundHistory(product, oldFundAmount);
 
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("product", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("product", result.getName().toString()))
                 .body(result);
     }
 
@@ -108,7 +109,7 @@ public class ProductResource {
         // Add the product amount to the old fund and decrease it from the current one.
         Product productBeforeSave = productRepository.findOne(product.getId());
         Fund oldFund = productBeforeSave.getFund();
-        log.info("oldFund value "+oldFund);
+        log.info("oldFund value " + oldFund);
         if(oldFund!=null && oldFund.getAmount()!=null){
             log.info("oldFund before "+oldFund.getAmount().doubleValue());
             BigDecimal oldFundAmount = new BigDecimal(productBeforeSave.getFund().getAmount().doubleValue());
@@ -139,7 +140,7 @@ public class ProductResource {
         saveFundHistory(product, oldFundAmount);
 
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("product", product.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("product", product.getName().toString()))
                 .body(result);
     }
 
@@ -205,10 +206,18 @@ public class ProductResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Product> search(@PathVariable String query) {
+    /*public List<Product> search(@PathVariable String query) {
         return StreamSupport
             .stream(productSearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
+    }*/
+    public ResponseEntity<List<Product>> search(@PathVariable String query,@RequestParam(value = "page" , required = false) Integer offset,
+                                             @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Product> page;
+        page = productRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/products", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 

@@ -2,19 +2,22 @@
     "windoctorApp": {
         "event_reason" : {
             "home": {
-                "title": "Event_reasons",
-                "createLabel": "Créer un nouveau Event_reason",
-                "createOrEditLabel": "Créer ou éditer un Event_reason"
+                "title": "Actes",
+                "createLabel": "Créer un nouveau acte",
+                "createOrEditLabel": "Créer ou éditer un acte"
             },
+            "created": "Un nouveau acte a été créé avec le nom {{ param }}",
+            "updated": "La acte avec le nom {{ param }} a été mis à jour",
+            "deleted": "La acte avec le nom {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Event_reason {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer l'acte {{ description }} ?"
             },
             "detail": {
-                "title": "Event_reason"
+                "title": "Acte :"
             },
             "description": "Description",
-            "price": "price",
-            "eventReason": "EventReason",
+            "price": "Prix",
+            "eventReason": "Acte",
             "treatment": "Treatment"
         }
     }

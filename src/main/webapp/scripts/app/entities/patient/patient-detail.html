@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span translate="windoctorApp.patient.detail.title">Patient</span> {{patient.id}}</h2>
+    <h2><span translate="windoctorApp.patient.detail.title">Patient :</span> {{patient.lastName}} {{patient.firstName}}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -16,6 +16,14 @@
                 </td>
                 <td>
                     <span class="form-control-static">{{patient.login}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.patient.picture">Picture</span>
+                </td>
+                <td>
+                    <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-width: 100%;" ng-if="patient.picture" class="img-circle"/>
                 </td>
             </tr>
             <tr>
@@ -44,26 +52,10 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="windoctorApp.patient.activated">Activated</span>
-                </td>
-                <td>
-                    <span class="form-control-static">{{patient.activated}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
                     <span translate="windoctorApp.patient.blocked">Blocked</span>
                 </td>
                 <td>
                     <span class="form-control-static">{{patient.blocked}}</span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span translate="windoctorApp.patient.picture">Picture</span>
-                </td>
-                <td>
-                    <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-width: 100%;" ng-if="patient.picture" class="img-circle"/>
                 </td>
             </tr>
             </tbody>

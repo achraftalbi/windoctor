@@ -2,15 +2,18 @@
     "windoctorApp": {
         "supply_type" : {
             "home": {
-                "title": "Supply_types",
-                "createLabel": "Créer un nouveau Supply_type",
-                "createOrEditLabel": "Créer ou éditer un Supply_type"
+                "title": "Approvisionnement/Retrait",
+                "createLabel": "Créer un nouveau approvisionnement/retrait",
+                "createOrEditLabel": "Créer ou éditer un approvisionnement/retrait"
             },
+            "created": "Un nouvelle approvisionnement/retrait a été créé avec la description {{ param }}",
+            "updated": "L'approvisionnement/retrait avec le description {{ param }} a été mis à jour",
+            "deleted": "L'approvisionnement/retrait avec le description {{ param }} a été supprimé",
             "delete": {
-                "question": "Etes-vous certain de vouloir supprimer le Supply_type {{ id }} ?"
+                "question": "Etes-vous certain de vouloir supprimer l'approvisionnement/retrait {{ description }} ?"
             },
             "detail": {
-                "title": "Supply_type"
+                "title": "Approvisionnement/Retrait"
             },
             "description": "Description"
         }

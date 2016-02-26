@@ -1,7 +1,11 @@
 package com.winbit.windoctor.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.winbit.windoctor.domain.util.BooleanToStringConverter;
+import com.winbit.windoctor.domain.util.CustomDateTimeDeserializer;
+import com.winbit.windoctor.domain.util.CustomDateTimeSerializer;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
@@ -119,6 +123,61 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "MAX_EVENTS_REACHED")
     private Boolean maxEventsReached;
+
+    @NotNull
+    @Size(min = 9, max = 9)
+    @Pattern(regexp = "^[0-9]*$")
+    @Column(name = "PHONE_NUMBER", length = 9, nullable = false)
+    private String phoneNumber;
+
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    @Column(name = "birthDate", nullable = true)
+    private DateTime birthDate;
+
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "FACEBOOK", length = 100, nullable = true)
+    private String facebook;
+
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "DISEASES", length = 200, nullable = true)
+    private String diseases;
+
+    public DateTime getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(DateTime birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getDiseases() {
+        return diseases;
+    }
+
+    public void setDiseases(String diseases) {
+        this.diseases = diseases;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public void setFacebook(String facebook) {
+        this.facebook = facebook;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public Boolean getCurrentUserPatient() {
         return currentUserPatient;

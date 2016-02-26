@@ -1,184 +1,409 @@
+<div ng-show="!captureAnImageScreen">
+    <form name="editForm" role="form" novalidate show-validation>
 
-<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                    ng-click="clear()">&times;</button>
+            <h4 class="modal-title" id="myPatientLabel" translate="windoctorApp.patient.home.createOrEditLabel">Create
+                or
+                edit a Patient</h4>
 
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="clear()">&times;</button>
-        <h4 class="modal-title" id="myPatientLabel" translate="windoctorApp.patient.home.createOrEditLabel">Create or edit a Patient</h4>
-        <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
-            The password and its confirmation do not match!
-        </div>
-
-    </div>
-    <div class="modal-body">
-        <jh-alert-error></jh-alert-error>
-
-        <div class="form-group">
-            <label translate="windoctorApp.patient.login" for="field_login">Login</label>
-            <input type="text" class="form-control" name="login" id="field_login"
-                    ng-model="patient.login"
-                    required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[a-z0-9]*$/">
-
-            <div ng-show="editForm.login.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.login.$error.required" translate="entity.validation.required">
-                    This field is required.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.login.$error.minlength" translate="entity.validation.minlength" translate-value-min="1">
-                    This field is required to be at least 1 characters.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.login.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
-                    This field cannot be longer than 50 characters.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.login.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="^[a-z0-9]*$">
-                    This field should follow pattern "^[a-z0-9]*$".
-                </p>
+            <div class="alert alert-danger" ng-show="error" translate="windoctorApp.patient.messages.error.fail">
+                <strong>Registration of patient failed!</strong> Please try again later.
             </div>
-        </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.password" for="field_password">Password</label>
-            <input type="password" class="form-control" name="password" id="field_password"
-                    ng-model="patient.password"
-                    required ng-minlength="8" ng-maxlength="20">
 
-            <div ng-show="editForm.password.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.password.$error.required" translate="entity.validation.required">
-                    This field is required.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.password.$error.minlength" translate="entity.validation.minlength" translate-value-min="8">
-                    This field is required to be at least 8 characters.
-                </p>
-                <p class="help-block"
-                    ng-show="editForm.password.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="20">
-                    This field cannot be longer than 20 characters.
-                </p>
+            <div class="alert alert-danger" ng-show="errorUserExists"
+                 translate="windoctorApp.patient.messages.error.userexists">
+                <strong>Login name for patient already registered!</strong> Please choose another one.
             </div>
-            <password-strength-bar password-to-check="patient.password"></password-strength-bar>
-        </div>
-        <div class="form-group">
-            <label for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
-            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
-                   ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
-            <div ng-show="editForm.confirmPassword.$dirty && form.confirmPassword.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.confirmPassword.$error.required" translate="global.messages.validate.confirmpassword.required">
-                    Your confirmation password is required.
-                </p>
-                <p class="help-block"
-                   ng-show="editForm.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
-                    Your confirmation password is required to be at least 5 characters.
-                </p>
-                <p class="help-block"
-                   ng-show="editForm.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
-                    Your confirmation password cannot be longer than 50 characters.
-                </p>
-            </div>
-        </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.firstName" for="field_firstName">FirstName</label>
-            <input type="text" class="form-control" name="firstName" id="field_firstName"
-                    ng-model="patient.firstName"
-                    ng-maxlength="50">
 
-            <div ng-show="editForm.firstName.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.firstName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
-                    This field cannot be longer than 50 characters.
-                </p>
+            <div class="alert alert-danger" ng-show="errorEmailExists"
+                 translate="windoctorApp.patient.messages.error.emailexists">
+                <strong>E-mail for patient is already in use!</strong> Please choose another one.
             </div>
-        </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.lastName" for="field_lastName">LastName</label>
-            <input type="text" class="form-control" name="lastName" id="field_lastName"
-                    ng-model="patient.lastName"
-                    ng-maxlength="50">
 
-            <div ng-show="editForm.lastName.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.lastName.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="50">
-                    This field cannot be longer than 50 characters.
-                </p>
+            <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
+                The password and its confirmation do not match!
             </div>
-        </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.email" for="field_email">Email</label>
-            <input type="email" class="form-control" name="email" id="field_email"
-                    ng-model="patient.email"
-                    ng-maxlength="100" ng-minlength="5">
 
-            <div ng-show="editForm.email.$dirty && editForm.email.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.email.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="100">
-                    This field cannot be longer than 100 characters.
-                </p>
-                <p class="help-block"
-                   ng-show="editForm.email.$error.email" translate="global.messages.validate.email.invalid">
-                    Your e-mail is invalid.
-                </p>
-                <p class="help-block"
-                   ng-show="editForm.email.$error.minlength" translate="global.messages.validate.email.minlength">
-                    Your e-mail is required to be at least 5 characters.
-                </p>
-            </div>
         </div>
-        <div class="form-group" ngf-drop ngf-change="setPicture($files, patient)" ngf-accept="'image/*'">
-            <label translate="windoctorApp.patient.picture" for="field_picture">Picture</label>
-            <div>
-                <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 100px;" ng-if="patient.picture"/>
-                <div class="help-block clearfix">
-                    <span class="pull-left">{{byteSize(patient.picture)}}</span>
-                    <button ng-click="patient.picture=null"
-                            ng-if="patient.picture"
-                            class="btn btn-default btn-xs pull-right">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+        <div class="modal-body">
+            <jh-alert-error></jh-alert-error>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.login" for="field_login">Login</label>
+                        <input type="text" class="form-control" name="login" id="field_login"
+                               ng-model="patient.login"
+                               required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[a-z0-9]*$/">
+
+                        <div ng-show="editForm.login.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.pattern" translate="entity.validation.pattern"
+                               translate-value-pattern="^[a-z0-9]*$">
+                                This field should follow pattern "^[a-z0-9]*$".
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.password" for="field_password">Password</label>
+                        <input type="password" class="form-control" name="password" id="field_password"
+                               ng-model="patient.password"
+                               required ng-minlength="8" ng-maxlength="20">
+
+                        <div ng-show="editForm.password.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.password.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.password.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="8">
+                                This field is required to be at least 8 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.password.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="20">
+                                This field cannot be longer than 20 characters.
+                            </p>
+                        </div>
+                        <password-strength-bar password-to-check="patient.password"></password-strength-bar>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label for="confirmPassword" translate="global.form.confirmpassword">New password
+                            confirmation</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
+                               placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                               ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
+
+                        <div ng-show="editForm.confirmPassword.$dirty && form.confirmPassword.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.confirmPassword.$error.required"
+                               translate="global.messages.validate.confirmpassword.required">
+                                Your confirmation password is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.confirmPassword.$error.minlength"
+                               translate="global.messages.validate.confirmpassword.minlength">
+                                Your confirmation password is required to be at least 5 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.confirmPassword.$error.maxlength"
+                               translate="global.messages.validate.confirmpassword.maxlength">
+                                Your confirmation password cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <button type="file" ngf-select class="btn btn-default btn-block"
-                        ngf-change="setPicture($files, patient)" accept="image/*" translate="entity.action.addimage">
-                    Add image
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.firstName" for="field_firstName">FirstName</label>
+                        <input type="text" class="form-control" name="firstName" id="field_firstName"
+                               ng-model="patient.firstName" required
+                               ng-maxlength="50">
+
+                        <div ng-show="editForm.firstName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.firstName.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.lastName" for="field_lastName">LastName</label>
+                        <input type="text" class="form-control" name="lastName" id="field_lastName"
+                               ng-model="patient.lastName" required
+                               ng-maxlength="50">
+
+                        <div ng-show="editForm.lastName.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.lastName.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="50">
+                                This field cannot be longer than 50 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.email" for="field_email">Email</label>
+                        <input type="email" class="form-control" name="email" id="field_email"
+                               ng-model="patient.email" required
+                               ng-maxlength="100" ng-minlength="5">
+
+                        <div ng-show="editForm.email.$dirty && editForm.email.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="100">
+                                This field cannot be longer than 100 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.email" translate="global.messages.validate.email.invalid">
+                                Your e-mail is invalid.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.email.$error.minlength"
+                               translate="global.messages.validate.email.minlength">
+                                Your e-mail is required to be at least 5 characters.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ngf-drop ngf-change="setPicture($files, patient)" ngf-accept="'image/*'">
+                    <label translate="windoctorApp.patient.picture" for="field_picture">Picture</label>
+
+                    <div>
+                        <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 100px;"
+                             ng-if="patient.picture"/>
+
+                        <div class="help-block clearfix">
+                            <span class="pull-left">{{byteSize(patient.picture)}}</span>
+                            <button ng-click="patient.picture=null"
+                                    ng-if="patient.picture"
+                                    class="btn btn-default btn-xs pull-right">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-xs-6">
+                                <button type="file" ngf-select class="btn btn-default btn-block"
+                                        ngf-change="setPicture($files, patient)" accept="image/*"
+                                        translate="entity.action.addimage">
+                                    Add image
+                                </button>
+                            </div>
+                            <div class="form-group col-xs-6">
+                                <button class="btn btn-default btn-block"
+                                        ng-click="captureAnImage()"
+                                        translate="entity.action.captureAnImage">
+                                    Capture image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control" name="picture" id="field_picture"
+                           ng-model="patient.picture"
+                           maxbytes="1000000">
+
+                    <div ng-show="editForm.picture.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.picture.$error.maxbytes" translate="entity.validation.maxbytes"
+                           translate-value-max="1000000">
+                            This field cannot be more than 1000000.
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-4">
+                        <div>
+                            <label translate="windoctorApp.patient.birthDate">Birth date</label>
+                        </div>
+                        <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
+                               date-change="changeDate" readonly name="birthDate"
+                               ng-model="dateValue" max-date="maxDateValue">
+                        <span class="fa fa-calendar"/>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.phoneNumber" for="field_phoneNumber">Phone number</label>
+
+                        <div class="form-group form-inline">
+                            <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                                   ng-model="patient.phoneNumber"
+                                   required ng-minlength="9" ng-maxlength="9" ng-pattern="/^[0-9]*$/">
+                            <span class="fa fa-phone"/>
+                        </div>
+                        <div ng-show="editForm.phoneNumber.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="9">
+                                This field is required to be at least 9 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="9">
+                                This field cannot be longer than 9 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.phoneNumber.$error.pattern" translate="entity.validation.pattern"
+                               translate-value-pattern="^[0-9]*$">
+                                This field should follow pattern "^[0-9]*$".
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.diseases" for="field_diseases">Diseases</label>
+                        <input type="text" class="form-control" name="diseases" id="field_diseases"
+                               ng-model="patient.diseases"
+                               required ng-minlength="1" ng-maxlength="200">
+
+                        <div ng-show="editForm.diseases.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.diseases.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.diseases.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.diseases.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="200">
+                                This field cannot be longer than 200 characters.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label for="langKey" translate="global.menu.language">Language</label>
+                        <select id="langKey" name="langKey" class="form-control" ng-model="patient.langKey"
+                                ng-controller="LanguageController"
+                                ng-options="code as (code | findLanguageFromKey) for code in languages"></select>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                            <label translate="windoctorApp.patient.facebook" for="field_facebook">Facebook</label>
+
+                            <div class="form-group form-inline">
+                                <input type="text" class="form-control" name="facebook" id="field_facebook"
+                                       ng-model="patient.facebook"
+                                       required ng-minlength="1" ng-maxlength="100">
+                                <span class="field fa fa-facebook-f"/>
+                            </div>
+                            <div ng-show="editForm.facebook.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.facebook.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+
+                                <p class="help-block"
+                                   ng-show="editForm.facebook.$error.minlength" translate="entity.validation.minlength"
+                                   translate-value-min="1">
+                                    This field is required to be at least 1 characters.
+                                </p>
+
+                                <p class="help-block"
+                                   ng-show="editForm.facebook.$error.maxlength" translate="entity.validation.maxlength"
+                                   translate-value-max="100">
+                                    This field cannot be longer than 100 characters.
+                                </p>
+                            </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-md-4">
+                        <label translate="windoctorApp.patient.blocked">Blocked</label>
+                        <div >
+                            <i class="fa fa-toggle-on inactive" style="font-size:40px;"
+                               ng-if="patient.blocked == true"
+                               ng-click="changeBlockStatus();">
+                            </i>
+                            <i class="fa fa-toggle-on fa-rotate-180 active" style="font-size:40px;"
+                               ng-if="patient.blocked == false"
+                               ng-click="changeBlockStatus();">
+                            </i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                    translate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" ng-disabled="editForm.$invalid" ng-click="save()" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                 </button>
             </div>
-            <input type="hidden" class="form-control" name="picture" id="field_picture"
-                   ng-model="patient.picture"
-                   maxbytes="1000000">
+        </div>
+    </form>
+</div>
+<div ng-show="captureAnImageScreen">
+    <div>
+        <div class="alert alert-error ng-scope" ng-show="webcamError" style="">
+            <span>Webcam could not be started. Did you give access to it?</span>
+        </div>
+        <div class="row embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+            <webcam channel="channel"
+                    on-streaming="onSuccess()"
+                    on-error="onError(err)"
+                    placeholder="'../../../../assets/images/ajax-loader.gif'"
+                    on-stream="onStream(stream)"></webcam>
+        </div>
+        <div ng-show="false">
+            <canvas id="snapshot" width="700" height="700"/>
+        </div>
 
-            <div ng-show="editForm.picture.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.picture.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="1000000">
-                    This field cannot be more than 1000000.
-                </p>
+    </div>
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+        <div class="form-group col-xs-6 col-md-4">
+        </div>
+        <div class="form-group col-xs-6 col-md-4">
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <button class="btn btn-default btn-block btn-success"
+                            ng-click="makeSnapshot()"
+                            translate="entity.action.capture">Capture
+                    </button>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <button class="btn btn-default"
+                            ng-click="cancelImageCapture()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                        translate="entity.action.cancel">Cancel</span>
+                    </button>
+
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.activated" for="field_activated">Activated</label>
-            <input type="checkbox" class="form-control" name="activated" id="field_activated"
-                    ng-model="patient.activated"
-                >
-
-        </div>
-        <div class="form-group">
-            <label translate="windoctorApp.patient.blocked" for="field_blocked">Blocked</label>
-            <input type="checkbox" class="form-control" name="blocked" id="field_blocked"
-                    ng-model="patient.blocked"
-                    >
-
-        </div>
-        <div class="form-group">
-            <label for="langKey" translate="global.menu.language">Language</label>
-            <select id="langKey" name="langKey" class="form-control" ng-model="patient.langKey" ng-controller="LanguageController" ng-options="code as (code | findLanguageFromKey) for code in languages"></select>
-        </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
-        </button>
-    </div>
-</form>
+</div>
+

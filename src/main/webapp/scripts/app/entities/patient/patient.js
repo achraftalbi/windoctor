@@ -60,7 +60,7 @@ angular.module('windoctorApp')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {login: null, password: null, firstName: null, lastName: null, email: null, activated: null, blocked: null, picture: null, langKey:'fr', id: null};
+                                return {login: null, password: null, firstName: null, lastName: null, email: null, activated: true, blocked: false, picture: null, langKey:'fr', id: null};
                             }
                         }
                     }).result.then(function(result) {
@@ -68,6 +68,36 @@ angular.module('windoctorApp')
                     }, function() {
                         $state.go('patient');
                     })
+                }]
+            })
+            .state('patient.patientChart', {
+                parent: 'patient',
+                url: '/treatments/{patientId}',
+                data: {
+                    roles: ['ROLE_ASSISTANT'],
+                    pageTitle: 'windoctorApp.treatment.home.title'
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/patient/patientChart.html',
+                        controller: 'PatientChartController',
+                        size: 'lg',
+                        resolve: {
+                            translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                                $translatePartialLoader.addPart('treatment');
+                                $translatePartialLoader.addPart('attachment');
+                                $translatePartialLoader.addPart('global');
+                                return $translate.refresh();
+                            }],
+                            entity: function () {
+                                return {description: null, id: null};
+                            }
+                        }
+                    }).result.then(function(result) {
+                            $state.go('patient', null, { reload: true });
+                        }, function() {
+                            $state.go('patient');
+                        })
                 }]
             })
             .state('patient.edit', {

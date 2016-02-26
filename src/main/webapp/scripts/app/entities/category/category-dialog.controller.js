@@ -1,11 +1,10 @@
 'use strict';
 
 angular.module('windoctorApp').controller('CategoryDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Category', 'Product',
-        function($scope, $stateParams, $modalInstance, entity, Category, Product) {
+    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Category',
+        function($scope, $stateParams, $modalInstance, entity, Category) {
 
         $scope.category = entity;
-        $scope.products = Product.query();
         $scope.load = function(id) {
             Category.get({id : id}, function(result) {
                 $scope.category = result;

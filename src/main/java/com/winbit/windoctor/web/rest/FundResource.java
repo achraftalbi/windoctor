@@ -66,14 +66,15 @@ public class FundResource {
         if (fund.getFund().getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new fund cannot already have an ID").body(null);
         }
-        BigDecimal oldFundAmount = fundRepository.findOne(fund.getFund().getId()).getAmount();
+        BigDecimal oldFundAmount;
+        oldFundAmount = fund.getFund().getId()==null?new BigDecimal(0l):fundRepository.findOne(fund.getFund().getId()).getAmount();
         fund.getFund().setStructure(new Structure());
         fund.getFund().getStructure().setId(SecurityUtils.getCurrerntStructure());
         Fund result = fundRepository.save(fund.getFund());
         fundSearchRepository.save(result);
         saveFundHistory(fund,oldFundAmount);
         return ResponseEntity.created(new URI("/api/funds/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("fund", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("fund", result.getDescription().toString()))
                 .body(result);
     }
 
@@ -95,7 +96,7 @@ public class FundResource {
         fundSearchRepository.save(fund.getFund());
         saveFundHistory(fund,oldFundAmount);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("fund", fund.getFund().getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("fund", fund.getFund().getDescription().toString()))
                 .body(result);
     }
 

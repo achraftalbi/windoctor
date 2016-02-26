@@ -1,12 +1,24 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('Event_reasonController', function ($scope, Event_reason, Event_reasonSearch) {
+    .controller('Event_reasonController', function ($scope, Event_reason, Event_reasonSearch, ParseLinks) {
         $scope.event_reasons = [];
-        $scope.loadAll = function() {
-            Event_reason.query(function(result) {
-               $scope.event_reasons = result;
+        $scope.page = 1;
+        $scope.searchCalled = false;
+        $scope.loadAll = function () {
+            Event_reason.query({page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.event_reasons = result;
+                console.log('event_reasons length'+$scope.event_reasons.length)
             });
+        };
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            if($scope.searchCalled){
+                $scope.loadAllSearch();
+            }else{
+                $scope.loadAll();
+            }
         };
         $scope.loadAll();
 
@@ -27,10 +39,17 @@ angular.module('windoctorApp')
         };
 
         $scope.search = function () {
-            Event_reasonSearch.query({query: $scope.searchQuery}, function(result) {
+            $scope.page = 1;
+            $scope.searchCalled = true;
+            $scope.loadAllSearch();
+        };
+
+        $scope.loadAllSearch = function () {
+            Event_reasonSearch.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
                 $scope.event_reasons = result;
-            }, function(response) {
-                if(response.status === 404) {
+            }, function (response) {
+                if (response.status === 404) {
                     $scope.loadAll();
                 }
             });

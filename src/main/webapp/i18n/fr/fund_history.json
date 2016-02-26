@@ -12,18 +12,18 @@
             "detail": {
                 "title": "Fund_history"
             },
-            "old_amount": "Old_amount",
-            "new_amount": "New_amount",
-            "type_operation": "Type_operation",
-            "amount_movement": "Amount_movement",
-            "fund": "fund",
-            "treatment": "treatment",
-            "supply_type": "Approvisionnement",
+            "old_amount": "Ancien montant",
+            "new_amount": "Nouveau montant",
+            "type_operation": "Type operation",
+            "amount_movement": "Amount movement",
+            "fund": "Caisse",
+            "treatment": "Acte",
+            "supply_type": "Approvisionnement/Retrait",
             "movementCause": "Cause du mouvement",
             "credit": "Crédit",
             "debit": "Débit",
             "fundHistoryName": "Historique de la caisse {{fundName}}",
-            "product": "product"
+            "product": "Matériel"
         }
     }
 }

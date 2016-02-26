@@ -1,12 +1,18 @@
 package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.winbit.windoctor.config.Constants;
+import com.winbit.windoctor.domain.Category;
 import com.winbit.windoctor.domain.Event_reason;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.Event_reasonRepository;
 import com.winbit.windoctor.repository.search.Event_reasonSearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
+import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,10 +57,12 @@ public class Event_reasonResource {
         if (event_reason.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new event_reason cannot already have an ID").body(null);
         }
+        event_reason.setStructure(new Structure());
+        event_reason.getStructure().setId(SecurityUtils.getCurrerntStructure());
         Event_reason result = event_reasonRepository.save(event_reason);
         event_reasonSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/event_reasons/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("event_reason", result.getId().toString()))
+                .headers(HeaderUtil.createEntityCreationAlert("event_reason", result.getDescription().toString()))
                 .body(result);
     }
 
@@ -70,10 +78,12 @@ public class Event_reasonResource {
         if (event_reason.getId() == null) {
             return create(event_reason);
         }
+        event_reason.setStructure(new Structure());
+        event_reason.getStructure().setId(SecurityUtils.getCurrerntStructure());
         Event_reason result = event_reasonRepository.save(event_reason);
         event_reasonSearchRepository.save(event_reason);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("event_reason", event_reason.getId().toString()))
+                .headers(HeaderUtil.createEntityUpdateAlert("event_reason", event_reason.getDescription().toString()))
                 .body(result);
     }
 
@@ -84,10 +94,19 @@ public class Event_reasonResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event_reason> getAll() {
+    /*public List<Event_reason> getAll() {
         log.debug("REST request to get all Event_reasons");
         return event_reasonRepository.findAll();
+    }*/
+    public ResponseEntity<List<Event_reason>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                                 @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        log.debug("REST request to get Event_reasons page per_page");
+        Page<Event_reason> page = event_reasonRepository.findAll(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/event_reasons", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 
     /**
      * GET  /event_reasons/:id -> get the "id" event_reason.
@@ -127,9 +146,13 @@ public class Event_reasonResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event_reason> search(@PathVariable String query) {
-        return StreamSupport
-            .stream(event_reasonSearchRepository.search(queryString(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    public ResponseEntity<List<Event_reason>> search(@PathVariable String query,@RequestParam(value = "page" , required = false) Integer offset,
+                                                 @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Event_reason> page;
+        page = event_reasonRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, SecurityUtils.getCurrerntStructure(),PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/event_reasons", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
 }

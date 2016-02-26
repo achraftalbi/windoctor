@@ -11,7 +11,6 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th translate="global.field.id">ID</th>
                         <th translate="windoctorApp.fund_history.old_amount">Old_amount</th>
                         <th translate="windoctorApp.fund_history.new_amount">New_amount</th>
                         <th translate="windoctorApp.fund_history.type_operation">Type_operation</th>
@@ -22,7 +21,6 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="fund_history in fund_historys">
-                        <td><a ui-sref="fund_history.detail({id:fund_history.id})">{{fund_history.id}}</a></td>
                         <td>{{fund_history.old_amount}}</td>
                         <td>{{fund_history.new_amount}}</td>
                         <td>

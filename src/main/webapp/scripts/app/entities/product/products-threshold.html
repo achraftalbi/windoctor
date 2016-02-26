@@ -10,20 +10,18 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th translate="global.field.id">ID</th>
                         <th translate="windoctorApp.product.name">Name</th>
                         <th translate="windoctorApp.product.image">Image</th>
                         <th translate="windoctorApp.product.price">Price</th>
                         <th translate="windoctorApp.product.totalPrice">Total price</th>
                         <th translate="windoctorApp.product.amount">Amount</th>
                         <th translate="windoctorApp.product.threshold">Threshold</th>
-                        <th translate="windoctorApp.product.product">product</th>
+                        <th translate="windoctorApp.product.product">Category</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="product in productsThreshold">
-                        <td><a ui-sref="product.detail({id:product.id})">{{product.id}}</a></td>
                         <td>{{product.name}}</td>
                         <td>
                             <img data-ng-src="{{'data:image/*;base64,' + product.image}}" style="max-height: 30px;"
@@ -32,11 +30,9 @@
                         </td>
                         <td>{{product.price}}</td>
                         <td>{{product.price * product.amount}}</td>
-                        <td><span class="label label-danger">{{product.amount}}</span></td>
+                        <td style="background-color: darkred;color: white;">{{product.amount}}</td>
                         <td>{{product.threshold}}</td>
-                        <td>
-                            <a ui-sref="category.detail({id:product.product.id})">{{product.product.name}}</a>
-                        </td>
+                        <td>{{product.product.name}}</td>
                         <td>
                             <button type="submit"
                                     ui-sref="product.detail({id:product.id})"
@@ -55,7 +51,7 @@
                     </tbody>
                 </table>
                 <nav>
-                    <ul class="pagination">
+                    <ul class="pagination" ng-show="linksThreshold['prev'] || linksThreshold['next']">
                         <li ng-show="linksThreshold['first']" ng-click="loadPageThreshold(linksThreshold['first'])"><a>
                             &lt;&lt;</a></li>
                         <li ng-show="linksThreshold['prev']" ng-click="loadPageThreshold(linksThreshold['prev'])"><a>
