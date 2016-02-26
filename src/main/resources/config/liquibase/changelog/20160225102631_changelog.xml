@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1456396024621-1">
+       <addColumn tableName="JHI_USER">
+           <column name="PHONE_NUMBER" type="varchar(9)">
+               <constraints nullable="false"/>
+           </column>
+           <column name="birthDate" type="timestamp">
+               <constraints nullable="true"/>
+           </column>
+           <column name="FACEBOOK" type="varchar(100)">
+               <constraints nullable="true"/>
+           </column>
+           <column name="DISEASES" type="varchar(200)">
+               <constraints nullable="true"/>
+           </column>
+       </addColumn>
+   </changeSet>
+</databaseChangeLog>
