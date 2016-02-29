@@ -1,5 +1,6 @@
 package com.winbit.windoctor.service;
 
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
@@ -217,9 +218,11 @@ public class UserService {
 
         Optional<User> rst = userRepository.findOneByLogin(patientUpdated.getLogin());
         User patient = rst.get();
-        String encryptedPassword = passwordEncoder.encode(patientUpdated.getPassword());
-        // new user gets initially a generated password
-        patient.setPassword(encryptedPassword);
+        if(!Constants.HELPER_PASSWORD.equals(patient.getPassword())){
+            String encryptedPassword = passwordEncoder.encode(patientUpdated.getPassword());
+            // new user updated its password
+            patient.setPassword(encryptedPassword);
+        }
         patient.setFirstName(patientUpdated.getFirstName());
         patient.setLastName(patientUpdated.getLastName());
         patient.setBirthDate(patientUpdated.getBirthDate());

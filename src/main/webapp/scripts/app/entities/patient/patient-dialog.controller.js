@@ -10,13 +10,19 @@ angular.module('windoctorApp').controller('PatientDialogController',
             $scope.dateValue = moment(new Date()).utc();
             $scope.maxDateValue =  moment(new Date()).utc();
             $scope.patient = entity;
+            $scope.password=null;
+            $scope.confirmPassword=null;
+            $scope.password = 'Empty_Password_1';
+            $scope.confirmPassword = 'Empty_Password_1';
+            console.log('$scope.patient.login '+$scope.patient.login);
             $scope.captureAnImageScreen = false;
             $scope.load = function (id) {
-                Patient.get({id: id}, function (result) {
-                    $scope.patient = result;
-                });
+                if($stateParams.id !== null && $stateParams.id !==undefined){
+                    Patient.get({id: id}, function (result) {
+                        $scope.patient = result;
+                    });
+                }
             };
-
             $scope.initBirthDate = function () {
                 $scope.maxDateValue = moment(new Date()).utc();
             };
@@ -44,14 +50,21 @@ angular.module('windoctorApp').controller('PatientDialogController',
             }
 
             $scope.save = function () {
-                if ($scope.patient.password !== $scope.confirmPassword) {
+                if ($scope.password !== $scope.confirmPassword) {
                     $scope.doNotMatch = 'ERROR';
                 } else {
                     $scope.patient.birthDate = new Date($scope.dateValue);
+                    $scope.patient.password = $scope.password;
                     if ($scope.patient.id != null) {
                         Patient.update($scope.patient, onSaveFinished, onSaveFailed);
                     } else {
-                        Patient.save($scope.patient, onSaveFinished, onSaveFailed);
+                        if($scope.password!=='Empty_Password_1'){
+                            Patient.save($scope.patient, onSaveFinished, onSaveFailed);
+                        }else{
+                            $scope.doNotMatch = 'ERROR';
+                            $scope.password=null;
+                            $scope.confirmPassword=null;
+                        }
                     }
                 }
             };

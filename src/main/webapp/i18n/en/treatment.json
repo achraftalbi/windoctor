@@ -29,10 +29,13 @@
             "doctor": "Doctor",
             "fund": "Fund",
             "fundAmount": "Fund amount",
+            "total": "Total",
             "chooseFund": "Choose a fund to see this field",
             "theAmountOfNewOrOldFundNotEnough": "The amount of the current fund or the old fund is not enough.",
             "priceLessThanPaidPrice": "The paid price must be less than price.",
-            "eventReason": "Oral hygiene"
+            "firstDate": "First date",
+            "lastDate": "Last date",
+            "eventReason": "Acts"
         }
     }
 }

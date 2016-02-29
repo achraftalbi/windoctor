@@ -84,7 +84,7 @@
             "eventStatus": "Status",
             "treatments": "Acts",
             "manageTreatments": "Manage acts",
-            "eventReason": "Oral hygiene"
+            "eventReason": "Acts"
         }
     }
 }

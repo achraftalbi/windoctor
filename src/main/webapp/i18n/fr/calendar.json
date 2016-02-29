@@ -73,7 +73,7 @@
             "eventStatus": "Status",
             "treatments": "Actes",
             "manageTreatments": "Gestion des actes",
-            "eventReason": "Hygiène bucco-dentaire"
+            "eventReason": "Actes"
         }
     }
 }

@@ -3,6 +3,28 @@
 angular.module('windoctorApp')
     .config(function ($stateProvider) {
         $stateProvider
+            .state('benefits', {
+                parent: 'entity',
+                url: '/benefits',
+                data: {
+                    roles: ['ROLE_USER'],
+                    pageTitle: 'windoctorApp.treatment.home.title'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/treatment/treatment-benefits.html',
+                        controller: 'TreatmentBenefitsController'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('treatment');
+                        $translatePartialLoader.addPart('attachment');
+                        $translatePartialLoader.addPart('global');
+                        return $translate.refresh();
+                    }]
+                }
+            })
             .state('treatment', {
                 parent: 'entity',
                 url: '/treatments',

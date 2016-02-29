@@ -118,11 +118,14 @@ public class PatientResource {
     @Timed
     public ResponseEntity<User> get(@PathVariable Long id) {
         log.debug("REST request to get Patient : {}", id);
-        return Optional.ofNullable(userRepository.findOne(id))
+        ResponseEntity<User> patientTmp = Optional.ofNullable(userRepository.findOne(id))
             .map(patient -> new ResponseEntity<>(
                 patient,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        log.info("patient login "+patientTmp.getBody().getLogin());
+        log.info("patient password "+patientTmp.getBody().getPassword());
+        return patientTmp;
     }
 
     /**

@@ -24,6 +24,8 @@
             "phoneNumber": "Numéro de téléphone",
             "diseases": "Maladies",
             "facebook": "Facebook",
+            "patientChart": "Fiche patient",
+            "chart": "Fiche",
             "messages": {
                 "success": "<strong>Patient sauvegarder!</strong>",
                 "error": {

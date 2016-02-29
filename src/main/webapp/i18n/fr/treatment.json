@@ -29,10 +29,13 @@
             "doctor": "Docteur",
             "fund": "Caisse",
             "fundAmount": "Montant de la caisse",
+            "total": "Total",
             "chooseFund": "Choisissez une caisse pour voir ce champs",
             "theAmountOfNewOrOldFundNotEnough": "Le montant dans la caisse courante ou l'anciènne caisse n'est pas assez.",
             "priceLessThanPaidPrice": "Le prix payé doit être moins que le prix.",
-            "eventReason": "Hygiène bucco-dentaire"
+            "firstDate": "First date",
+            "lastDate": "Last date",
+            "eventReason": "Actes"
         }
     }
 }

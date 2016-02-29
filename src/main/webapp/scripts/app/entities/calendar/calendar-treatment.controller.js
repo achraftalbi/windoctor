@@ -7,6 +7,8 @@ angular.module('windoctorApp')
         $scope.page = 1;
         $scope.attachmentPage = 1;
         $scope.treatment = null;
+        $scope.treatmentTotal = null;
+        $scope.oldTreatmentPrice = null;
         $scope.oldTreatmentPaidPrice = null;
         $scope.event = null;
         $scope.patient = null;
@@ -63,6 +65,12 @@ angular.module('windoctorApp')
                     }, function (result, headers) {
                         $scope.links = ParseLinks.parse(headers('link'));
                         $scope.treatments = result;
+                        if($scope.page===1 && $scope.treatments!==null &&
+                            $scope.treatments!=undefined && $scope.treatments.length>0){
+                            $scope.treatmentTotal = $scope.treatments[$scope.treatments.length-1];
+                        }else if($scope.page>1){
+                            $scope.treatments.push($scope.treatmentTotal);
+                        }
                     }
                 )
                 ;
@@ -219,6 +227,7 @@ angular.module('windoctorApp')
                 doctor:$scope.defaultDoctor,
                 event: {id: $stateParams.eventId}
             };
+            $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
             $scope.attachments=null;
             $scope.dialogPopupTreatment();
@@ -226,6 +235,7 @@ angular.module('windoctorApp')
         };
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
+            $scope.oldTreatmentPrice = $scope.treatment.price;
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
             $scope.oldFund = $scope.treatment.fund;
             $scope.dialogPopupTreatment();
@@ -276,6 +286,17 @@ angular.module('windoctorApp')
             $scope.treatment=result;
             $scope.loadPage($scope.page);
             $scope.oldFund = $scope.treatment.fund;
+            if($scope.oldTreatmentPrice===null){
+                $scope.treatmentTotal.price = $scope.treatmentTotal.price + $scope.treatment.price;
+            }else{
+                $scope.treatmentTotal.price = $scope.treatmentTotal.price + ($scope.treatment.price - $scope.oldTreatmentPrice);
+            }
+            if($scope.oldTreatmentPaidPrice===null){
+                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + $scope.treatment.paid_price;
+            }else{
+                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + ($scope.treatment.paid_price - $scope.oldTreatmentPaidPrice);
+            }
+            $scope.oldTreatmentPrice = $scope.treatment.price;
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
             $scope.loadFunds();
             $scope.loadAllAttachments(1);

@@ -95,7 +95,7 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="treatment in treatments">
-                            <td>
+                            <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.description }}"
@@ -106,8 +106,14 @@
                                     {{ treatment.description | limitTo: 10 }}{{treatment.description.length > 10 ? '...' : ''}}
                                 </span>
                             </td>
-                            <td>{{treatment.price}}</td>
-                            <td>{{treatment.paid_price}}</td>
+                            <td ng-show="treatment.id===-1" translate="windoctorApp.treatment.total"
+                                style="background-color: black;;color: white;">Total</td>
+                            <td ng-show="treatment.id!==-1">{{treatment.price}}</td>
+                            <td ng-show="treatment.id===-1"
+                                style="background-color: black;;color: white;">{{treatment.price}}</td>
+                            <td ng-show="treatment.id!==-1">{{treatment.paid_price}}</td>
+                            <td ng-show="treatment.id===-1"
+                                style="background-color: black;;color: white;">{{treatment.paid_price}}</td>
                             <td style="background-color: darkgreen;;color: white;"
                                 ng-show="(treatment.price - treatment.paid_price)===0">
                                 {{treatment.price - treatment.paid_price}}
@@ -116,7 +122,7 @@
                                 ng-show="(treatment.price - treatment.paid_price)>0">
                                 {{treatment.price - treatment.paid_price}}
                             </td>
-                            <td>
+                            <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.eventReason.description }}"
@@ -127,7 +133,9 @@
                                     {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
                                 </span>
                             </td>
-                            <td>
+                            <td ng-show="treatment.id===-1"
+                                style="background-color: black;;color: white;"></td>
+                            <td ng-show="treatment.id!==-1">
                                 <button ng-click="viewTreatmentDetail(treatment)"
                                         data-toggle="tooltip"
                                         tooltip="{{ 'entity.action.view' | translate }}"
@@ -145,6 +153,8 @@
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
                             </td>
+                            <td ng-show="treatment.id===-1"
+                                style="background-color: black;;color: white;"></td>
                         </tr>
                         </tbody>
                     </table>

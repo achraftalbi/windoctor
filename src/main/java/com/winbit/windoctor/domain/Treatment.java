@@ -33,7 +33,13 @@ public class Treatment implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Treatment(){
+    }
 
+    public Treatment(BigDecimal price, BigDecimal paid_price){
+        this.price = price;
+        this.paid_price = paid_price;
+    }
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)

@@ -16,6 +16,9 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,9 +30,7 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -70,8 +71,8 @@ public class TreatmentResource {
      * POST  /treatments -> Create a new treatment.
      */
     @RequestMapping(value = "/treatments",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Treatment> create(@Valid @RequestBody Treatment treatment) throws URISyntaxException {
         log.debug("REST request to save Treatment : {}", treatment);
@@ -93,9 +94,9 @@ public class TreatmentResource {
 
 
         return ResponseEntity.created(new URI("/api/treatments/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("treatment",
-                    treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
-                .body(result);
+            .headers(HeaderUtil.createEntityCreationAlert("treatment",
+                treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+            .body(result);
     }
 
     /**
@@ -114,15 +115,15 @@ public class TreatmentResource {
         // Mange funds with treatments Begin
         Treatment treatmentBeforeSave = treatmentRepository.findOne(treatment.getId());
         Fund oldFund = treatmentBeforeSave.getFund();
-        log.info("oldFund value "+oldFund);
-        if(oldFund!=null && oldFund.getAmount()!=null){
+        log.info("oldFund value " + oldFund);
+        if (oldFund != null && oldFund.getAmount() != null) {
             BigDecimal oldFundAmount = new BigDecimal(treatmentBeforeSave.getFund().getAmount().doubleValue());
             log.info("oldFund before " + oldFund.getAmount().doubleValue());
             oldFund.setAmount(new BigDecimal(oldFund.getAmount().doubleValue() - treatmentBeforeSave.getPaid_price().doubleValue()));
             log.info("oldFund after " + oldFund.getAmount().doubleValue());
 
             //Manage the case the some funds
-            if(oldFund.getId().equals(treatment.getFund().getId())) {
+            if (oldFund.getId().equals(treatment.getFund().getId())) {
                 oldFund.setAmount(new BigDecimal(oldFund.getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
             }
 
@@ -135,7 +136,7 @@ public class TreatmentResource {
         log.info("treatment.getFund() before " + treatment.getFund().getAmount().doubleValue());
         log.info("treatment.getPaid_price().doubleValue() before " + treatment.getPaid_price().doubleValue());
         log.info("Add " + new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
-        if(oldFund==null || (!oldFund.getId().equals(treatment.getFund().getId()))) {
+        if (oldFund == null || (!oldFund.getId().equals(treatment.getFund().getId()))) {
             BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
             treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
             treatment.setFund(fundRepository.save(treatment.getFund()));
@@ -148,12 +149,11 @@ public class TreatmentResource {
         // Mange funds with treatments End
 
 
-
         Treatment result = treatmentRepository.save(treatment);
         treatmentSearchRepository.save(treatment);
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("treatment",
-                    treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+            .headers(HeaderUtil.createEntityUpdateAlert("treatment",
+                treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
             .body(result);
     }
 
@@ -161,21 +161,30 @@ public class TreatmentResource {
      * GET  /treatments -> get all the treatments.
      */
     @RequestMapping(value = "/treatments",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Treatment>> getAll(@RequestParam(value = "eventId" , required = false) Long eventId, @RequestParam(value = "patientId" , required = false) Long patientId,@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit)
+    public ResponseEntity<List<Treatment>> getAll(@RequestParam(value = "eventId", required = false) Long eventId, @RequestParam(value = "patientId", required = false) Long patientId, @RequestParam(value = "page", required = false) Integer offset,
+                                                  @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<Treatment> page = null;
-        if (patientId!=null){
-            log.debug("patientId part -> eventId:"+eventId+" patientId:"+patientId);
+        if (patientId != null) {
+            log.debug("patientId part -> eventId:" + eventId + " patientId:" + patientId);
+            Pageable pageable = PaginationUtil.generatePageRequest(offset, limit);
             page = treatmentRepository.findByPatient(patientId, PaginationUtil.generatePageRequest(offset, limit));
-        }else if (eventId!=null){
-            log.debug("eventId part -> eventId:"+eventId+" patientId:"+patientId);
+            if (Constants.FIRST_PAGE.equals(offset)) {
+                Treatment totalPatientTreatments = treatmentRepository.findTotalPatientTreatments(patientId);
+                totalPatientTreatments.setId(-1l);
+                log.info("Total paid price :" + totalPatientTreatments.getPrice());
+                List<Treatment> newTreatmentList= new ArrayList<Treatment>(page.getContent());
+                newTreatmentList.add(totalPatientTreatments);
+                page = new PageImpl<Treatment>(newTreatmentList,pageable,page.getTotalElements());
+            }
+        } else if (eventId != null) {
+            log.debug("eventId part -> eventId:" + eventId + " patientId:" + patientId);
             page = treatmentRepository.findByEvent(eventId, PaginationUtil.generatePageRequest(offset, limit));
-        }else{
-            log.debug("last part -> eventId:"+eventId+" patientId:"+patientId);
+        } else {
+            log.debug("last part -> eventId:" + eventId + " patientId:" + patientId);
             page = treatmentRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         }
 
@@ -184,11 +193,42 @@ public class TreatmentResource {
     }
 
     /**
+     * GET  /treatments -> get all the treatments.
+     */
+    @RequestMapping(value = "/benefits",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Treatment>> getAll(@RequestParam(value = "firstDate", required = false) String firstDate,
+                                                  @RequestParam(value = "lastDate", required = false) String lastDate,
+                                                  @RequestParam(value = "doctorId", required = false) Long doctorId,
+                                                  @RequestParam(value = "page", required = false) Integer offset,
+                                                  @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page<Treatment> page = null;
+            Pageable pageable = PaginationUtil.generatePageRequest(offset, limit);
+        DateTime firstDateTmp = FunctionsUtil.convertStringToDateTimeUTC(firstDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN);
+        DateTime lastDateTmp = FunctionsUtil.convertStringToDateTimeUTC(lastDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN);
+            page = treatmentRepository.findByFirstLastDatesDoctor(firstDateTmp, lastDateTmp.plusDays(1), SecurityUtils.getCurrerntStructure(), doctorId, pageable);
+            if (Constants.FIRST_PAGE.equals(offset)) {
+                Treatment totalPatientTreatments = treatmentRepository.findTotalByFirstLastDatesDoctor(firstDateTmp, lastDateTmp.plusDays(1), SecurityUtils.getCurrerntStructure(), doctorId);
+                totalPatientTreatments.setId(-1l);
+                log.info("Total paid price :" + totalPatientTreatments.getPrice());
+                List<Treatment> newTreatmentList= new ArrayList<Treatment>(page.getContent());
+                newTreatmentList.add(totalPatientTreatments);
+                page = new PageImpl<Treatment>(newTreatmentList,pageable,page.getTotalElements());
+            }
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/benefits", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * GET  /treatments/:id -> get the "id" treatment.
      */
     @RequestMapping(value = "/treatments/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Treatment> get(@PathVariable Long id) {
         log.debug("REST request to get Treatment : {}", id);
@@ -203,8 +243,8 @@ public class TreatmentResource {
      * DELETE  /treatments/:id -> delete the "id" treatment.
      */
     @RequestMapping(value = "/treatments/{id}",
-            method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Treatment : {}", id);
@@ -223,17 +263,17 @@ public class TreatmentResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Treatment>> search(@PathVariable String query,@RequestParam(value = "eventId" , required = false) Long eventId,@RequestParam(value = "page" , required = false) Integer offset,
-                                             @RequestParam(value = "per_page", required = false) Integer limit)
+    public ResponseEntity<List<Treatment>> search(@PathVariable String query, @RequestParam(value = "eventId", required = false) Long eventId, @RequestParam(value = "page", required = false) Integer offset,
+                                                  @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<Treatment> page;
-        page = treatmentRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, eventId,PaginationUtil.generatePageRequest(offset, limit));
+        page = treatmentRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, eventId, PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/treatments", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 
-    public void saveFundHistory(Treatment treatment, BigDecimal oldFundAmount){
+    public void saveFundHistory(Treatment treatment, BigDecimal oldFundAmount) {
         Fund_history fund_history = new Fund_history();
         fund_history.setFund(treatment.getFund());
         fund_history.setNew_amount(treatment.getFund().getAmount());
@@ -241,7 +281,7 @@ public class TreatmentResource {
         fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
         fund_history.setType_operation(fund_history.getAmount_movement().doubleValue() >= 0d ? true : false);
         fund_history.setTreatment(treatment);
-        Optional<User>  user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         fund_history.setCreated_by(user.isPresent() ? user.get() : null);
         fund_history.setCreation_date(new DateTime());
         fund_historyRepository.save(fund_history);

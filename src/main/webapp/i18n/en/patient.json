@@ -27,6 +27,8 @@
             "phoneNumber": "Phone number",
             "diseases": "Diseases",
             "facebook": "Facebook",
+            "patientChart": "Patient chart",
+            "chart": "Chart",
             "messages": {
                 "success": "<strong>Patient saved!</strong>",
                 "error": {

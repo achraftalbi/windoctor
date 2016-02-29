@@ -1,6 +1,6 @@
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
+<nav class="navbar navbar-default " role="navigation" >
+    <div class="container" >
+        <div class="navbar-header" >
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
@@ -9,64 +9,88 @@
             </button>
             <a class="navbar-brand" href="#/"><span translate="global.title">WinDoctor</span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse" ng-switch="isAuthenticated()">
-            <ul class="nav navbar-nav nav-pills navbar-right">
-                <li ui-sref-active="active">
-                    <a ui-sref="home">
-                        <span class="glyphicon glyphicon-home" style="color: blue;"></span>
-                        <span translate="global.menu.home">Home</span>
-                    </a>
+        <div class="collapse navbar-collapse navbar-default" id="navbar-collapse" ng-switch="isAuthenticated()">
+            <ul class="nav navbar-nav nav-pills navbar-right" >
+                <li ui-sref-active="active" id="nav-home" class="text-center"><a ui-sref="home" style="padding-bottom: 2px;padding-top: 2px;">
+                    <i class="fa fa-home fa-2x text-center" style="color: orangered;"></i><br>
+                    <span translate="global.menu.home">Home</span>
+                </a>
                 </li>
-                <li ui-sref-active="active"  ng-switch-when="true">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
-                        <span class="glyphicon  glyphicon-calendar" style="color: green;"></span>
-                        &#xA0;<span translate="global.menu.entities.calendar">Calendar</span>
-                        <b class="caret"></b>
+                <li ng-class="{active: $state.includes('calendar') || $state.includes('event') || $state.includes('event_reason')}"
+                    has-role="ROLE_PATIENT" id="nav-calendar" ng-switch-when="true" class="text-center" >
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                    <i class="fa fa-calendar fa-2x text-center" style="color: palevioletred;"></i><br>
+                    <span translate="global.menu.entities.calendar">Calendar</span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="calendar"><span class="glyphicon glyphicon-calendar" style="color: green;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_PATIENT"><a ui-sref="calendar"><span class="fa fa-calendar fa-1x text-center" style="color: palevioletred;"></span>
                             &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event"><span class="glyphicon glyphicon-ban-circle" style="color: black;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event"><span class="fa fa-ban fa-1x text-center" style="color: black;"></span>
                             &#xA0;<span translate="global.menu.entities.blockOfDays">Block of days</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="glyphicon glyphicon-align-left" style="color: black;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="fa fa-align-left fa-1x" style="color: black;"></span>
                             &#xA0;<span translate="global.menu.entities.event_reason">Acts</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active"  ng-switch-when="true">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
-                        <span class="glyphicon  glyphicon-object-align-bottom" style="color: green;"></span>
+                <li ng-class="{active: $state.includes('product') || $state.includes('category')}"
+                    id="nav-materials" ng-switch-when="true" has-role="ROLE_ASSISTANT" class="text-center">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                    <i class="fa fa-cubes fa-2x text-center" style="color: peru;"></i><br>
                         &#xA0;<span translate="global.menu.entities.product">Materials</span>
-                        <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="product"><span class="glyphicon glyphicon-object-align-bottom" style="color: green;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="product"><span class="fa fa-cubes fa-1x text-center" style="color: peru;"></span>
                             &#xA0;<span translate="global.menu.entities.product">Materials</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="category"><span class="glyphicon glyphicon-folder-open" style="color: black;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="category"><span class="fa fa-folder-open fa-1x text-center" style="color: maroon;"></span>
                             &#xA0;<span translate="global.menu.entities.category">Categories</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active"  ng-switch-when="true">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" >
-                        <span class="fa fa-archive" style="color: green;"></span>
+                <li ng-class="{active: $state.includes('fund') || $state.includes('supply_type')}"
+                    id="nav-funds" ng-switch-when="true" has-role="ROLE_ASSISTANT" class="text-center">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-bank fa-2x text-center" style="color: forestgreen;"></i><br>
                         &#xA0;<span translate="global.menu.entities.fund">Funds</span>
-                        <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="fund"><span class="fa fa-archive" style="color: green;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="fund"><span class="fa fa-bank fa-1x text-center" style="color: green;"></span>
                             &#xA0;<span translate="global.menu.entities.fund">Funds</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="supply_type"><span class="fa fa-usd" style="color: black;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="supply_type"><span class="fa fa-usd fa-1x text-center" style="color: black;"></span>
                             &#xA0;<span translate="global.menu.entities.supply_type">Supply</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active" ng-switch-when="true" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                <span>
-                                    <span class="glyphicon glyphicon-th-list"></span>
-                                    <span class="hidden-tablet" translate="global.menu.entities.main">
-                                        Entities
-                                    </span>
-                                    <b class="caret"></b>
-                                </span>
+                <li ng-class="{active: $state.includes('patient')}"
+                    id="nav-users" ng-switch-when="true" has-role="ROLE_ASSISTANT" class="text-center">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-users fa-2x text-center" style="color: royalblue;"></i><br>
+                        &#xA0;<span translate="global.menu.entities.users">Users</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="patient"><span class="fa fa-users fa-1x text-center" style="color: skyblue;"></span>
+                            &#xA0;<span translate="global.menu.entities.patient">Patients</span></a></li>
+                    </ul>
+                </li>
+                <li ng-class="{active: $state.includes('dashboard') || $state.includes('benefits')}"
+                    id="nav-dashbord" has-role="ROLE_DOCTOR" ng-switch-when="true" class="text-center">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-bar-chart-o fa-2x text-center" style="background: linear-gradient(to bottom, red 20%,green 30%,#000000 20%,white 30%,white 100%);"></i><br>
+                        &#xA0;<span translate="global.menu.entities.dashboard">Dashboard</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ui-sref-active="active" has-role="ROLE_DOCTOR"><a ui-sref="dashboard"><span class="fa fa-line-chart fa-1x text-center" style="color: indianred;"></span>
+                            &#xA0;<span translate="global.menu.entities.statistics">Statistics</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_DOCTOR"><a ui-sref="benefits"><span class="fa fa-money fa-1x text-center" style="color: darkgreen;"></span>
+                            &#xA0;<span translate="global.menu.entities.benefits">Benefits</span></a></li>
+                    </ul>
+                </li>
+                <li ui-sref-active="active"  id="nav-entities" ng-switch-when="true" has-role="ROLE_ADMIN" class="text-center">
+                    <a ui-sref-active="active" class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-th-list fa-2x text-center"></i><br>
+                        &#xA0;<span translate="global.menu.entities.main">Entities</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="category"><span class="glyphicon glyphicon-asterisk"></span>
@@ -97,7 +121,6 @@
                         &#xA0;<span translate="global.menu.entities.testEntity4">testEntity4</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="testEntity5"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.testEntity5">testEntity5</span></a></li>
-
                         <li ui-sref-active="active" ><a ui-sref="treatment"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.treatment">treatment</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="attachment"><span class="glyphicon glyphicon-asterisk"></span>
@@ -119,15 +142,11 @@
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li ng-class="{active: $state.includes('account')}" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                <span>
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                    <span class="hidden-tablet" translate="global.menu.account.main">
-                                        Account
-                                    </span>
-                                    <b class="caret"></b>
-                                </span>
+                <li ng-class="{active: $state.includes('account')}" class="text-center" id="nav-account">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-user fa-2x text-center" ></i><br>
+                        &#xA0;<span translate="global.menu.account.main">Account</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings"><span class="glyphicon glyphicon-wrench"></span>
@@ -145,13 +164,11 @@
                             &#xA0;<span translate="global.menu.account.register">Register</span></a></li>
                     </ul>
                 </li>
-                <li ng-class="{active: $state.includes('admin')}"  ng-switch-when="true" has-role="ROLE_ADMIN" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                <span>
-                                    <span class="glyphicon glyphicon-tower"></span>
-                                    <span class="hidden-tablet" translate="global.menu.admin.main">Administration</span>
-                                    <b class="caret"></b>
-                                </span>
+                <li ng-class="{active: $state.includes('admin')}"  ng-switch-when="true" has-role="ROLE_ADMIN"  class="text-center" id="nav-admin">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="glyphicon glyphicon-tower fa-1x text-center" ></i><br>
+                        &#xA0;<span translate="global.menu.admin.main">Admin</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>
@@ -168,13 +185,11 @@
                             &#xA0;<span translate="global.menu.admin.apidocs">API</span></a></li>
                     </ul>
                 </li>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
-                                <span>
-                                    <span class="glyphicon glyphicon-flag"></span>
-                                    <span class="hidden-tablet" translate="global.menu.language">Language</span>
-                                    <b class="caret"></b>
-                                </span>
+                <li ui-sref-active="active" ng-controller="LanguageController" class="text-center" id="nav-language">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-flag fa-2x text-center" ></i><br>
+                        &#xA0;<span class="hidden-tablet" translate="global.menu.language">Language</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li active-menu="{{language}}" ng-repeat="language in languages">
@@ -182,11 +197,13 @@
                         </li>
                     </ul>
                 </li>
-                <li class="dropdown trigger" ng-switch-when="true"  ng-controller="EventRequestController">
-                        <a id="dLabel" role="button" data-toggle="dropdown" >
-                            <i class="glyphicon glyphicon-bell notifications-params">  <span class="badge badge-notify glyphicon" ng-style="notificationCountColor()">{{eventsCount}}</span>
-                            </i>
-                        </a>
+                <li ng-switch-when="true" has-role="ROLE_ASSISTANT" ng-controller="EventRequestController"  class="text-center" id="nav-notifications">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href=""
+                       style="padding-bottom: 2px;padding-top: 2px;">
+                        <i class="fa fa-bell fa-2x text-center" >
+                            <span class="badge badge-notify" ng-style="notificationCountColor()">{{eventsCount}}</span>
+                        </i><br>
+                    </a>
 
                         <ul class="dropdown-menu drop"  ng-click="$event.stopPropagation()" >
 

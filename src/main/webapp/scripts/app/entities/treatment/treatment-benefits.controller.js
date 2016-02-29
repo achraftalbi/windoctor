@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('PatientChartController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
+    .controller('TreatmentBenefitsController', function ($scope, $stateParams, Treatment,Benefits, TreatmentSearch, Doctor,
                                                          ParseLinks, $filter, Event_reason, Event, Patient,Attachment,Fund) {
         $scope.treatments = [];
         $scope.page = 1;
@@ -12,6 +12,7 @@ angular.module('windoctorApp')
         $scope.oldTreatmentPrice = null;
         $scope.patient = null;
         $scope.doctors = null;
+        $scope.doctorBenefit = null;
         $scope.defaultDoctor = null;
         $scope.treatmentToDelete = null;
 
@@ -34,11 +35,19 @@ angular.module('windoctorApp')
         $scope.viewSelectedAttachment = false;
         $scope.priceLessThanPaidPrice = false;
         $scope.captureAnImageScreen = false;
+        var date = new Date();
+        $scope.firstDate = moment(new Date(date.getFullYear(), date.getMonth(), 1)).utc();
+        $scope.lastDate = moment(new Date(date.getFullYear(), date.getMonth()+1, 0)).utc();
+        console.log('$scope.firstDate '+$scope.firstDate.format().split('T')[0]);
+        console.log('$scope.lastDate '+$scope.lastDate.format().split('T')[0]);
 
         // Display treatments Begin
-        $scope.loadAll = function () {
-                Treatment.query({
-                        patientId: $stateParams.patientId,
+        $scope.searchBenefits = function () {
+            Benefits.query({
+                        firstDate:$scope.firstDate.format().split('T')[0],
+                        lastDate:$scope.lastDate.format().split('T')[0],
+                        doctorId:$scope.doctorBenefit!==null && $scope.doctorBenefit!==undefined
+                        && $scope.doctorBenefit.id!==null?$scope.doctorBenefit.id:null,
                         page: $scope.page,
                         per_page: 5
                     }, function (result, headers) {
@@ -50,14 +59,30 @@ angular.module('windoctorApp')
                         }else if($scope.page>1){
                             $scope.treatments.push($scope.treatmentTotal);
                         }
-                        Patient.get({id: $stateParams.patientId}, function (result) {
-                            $scope.patient = result;
-                        });
                         console.log('$scope.treatmentTotal.id '+$scope.treatmentTotal.id);
                     }
                 );
         };
-
+        $scope.initDoctors = function () {
+            if ($scope.doctors === null) {
+                Doctor.query(function (result, headers) {
+                        $scope.doctors = result;
+                        console.log(" $scope.defaultDoctor 3 "+$scope.defaultDoctor);
+                        if($scope.doctors!==null && $scope.doctors.length > 0){
+                            $scope.defaultDoctor = $scope.doctors[0]
+                            console.log(" $scope.defaultDoctor 4 "+$scope.defaultDoctor);
+                        }
+                        if($scope.treatment!==null){
+                            $scope.treatment.doctor = $scope.defaultDoctor;
+                        }
+                    }
+                );
+            }
+        }
+        $scope.loadAll = function () {
+            $scope.searchBenefits();
+            $scope.initDoctors();
+        }
         $scope.loadFunds = function () {
             Fund.query(function (result, headers) {
                     $scope.funds = result;
@@ -73,6 +98,22 @@ angular.module('windoctorApp')
             );
 
         };
+        $scope.changeFirstDate = function (modelName, newDate) {
+            console.log(modelName + ' has had a date change. New value is TEST  ' + newDate.format());
+            console.log(modelName + ' has had a date change. New value is ' + newDate.format().split('T')[0] + 'T00:00:00+00:00');
+            $scope.firstDate = moment(new Date(newDate.format().split('T')[0] + 'T00:00:00+00:00')).utc();
+            console.log(modelName + ' has had a date change. $scope.dateValue ' + new Date(moment(new Date($scope.firstDate)).utc()));
+        }
+
+        $scope.changeLastDate = function (modelName, newDate) {
+            console.log(modelName + ' has had a date change. New value is TEST  ' + newDate.format());
+            console.log(modelName + ' has had a date change. New value is ' + newDate.format().split('T')[0] + 'T00:00:00+00:00');
+            $scope.lastDate = moment(new Date(newDate.format().split('T')[0] + 'T00:00:00+00:00')).utc();
+            console.log(modelName + ' has had a date change. $scope.dateValue ' + new Date(moment(new Date($scope.lastDate)).utc()));
+        }
+
+
+
         $scope.delete = function (id) {
             Treatment.get({id: id}, function (result) {
                 $scope.treatmentToDelete = result;
@@ -147,9 +188,6 @@ angular.module('windoctorApp')
             $scope.displayTreatmentToDelete = false;
             $scope.displayTreatments = true;
         };
-        $scope.cancelTreatmentRows = function () {
-            $modalInstance.dismiss('cancel');
-        };
 
         $scope.changeFields = function () {
             console.log("changeFields 0");
@@ -217,23 +255,6 @@ angular.module('windoctorApp')
                 );
             }
         }
-        $scope.initDoctors = function () {
-            if ($scope.doctors === null) {
-                Doctor.query(function (result, headers) {
-                        $scope.doctors = result;
-                        console.log(" $scope.defaultDoctor 3 "+$scope.defaultDoctor);
-                        if($scope.doctors!==null && $scope.doctors.length > 0){
-                            $scope.defaultDoctor = $scope.doctors[0]
-                            console.log(" $scope.defaultDoctor 4 "+$scope.defaultDoctor);
-                        }
-                        if($scope.treatment!==null){
-                            $scope.treatment.doctor = $scope.defaultDoctor;
-                        }
-                    }
-                );
-            }
-        }
-
         var onSaveTreatmentFinished = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.treatment=result;

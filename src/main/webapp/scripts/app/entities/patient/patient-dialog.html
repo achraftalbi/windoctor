@@ -66,7 +66,7 @@
                     <div class="form-group col-xs-6 col-md-4">
                         <label translate="windoctorApp.patient.password" for="field_password">Password</label>
                         <input type="password" class="form-control" name="password" id="field_password"
-                               ng-model="patient.password"
+                               ng-model="password"
                                required ng-minlength="8" ng-maxlength="20">
 
                         <div ng-show="editForm.password.$invalid">
@@ -87,7 +87,7 @@
                                 This field cannot be longer than 20 characters.
                             </p>
                         </div>
-                        <password-strength-bar password-to-check="patient.password"></password-strength-bar>
+                        <password-strength-bar password-to-check="password"></password-strength-bar>
                     </div>
                     <div class="form-group col-xs-6 col-md-4">
                         <label for="confirmPassword" translate="global.form.confirmpassword">New password
@@ -126,7 +126,7 @@
 
                         <div ng-show="editForm.firstName.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                               ng-show="editForm.firstName.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
 
@@ -145,7 +145,7 @@
 
                         <div ng-show="editForm.lastName.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
+                               ng-show="editForm.lastName.$error.required" translate="entity.validation.required">
                                 This field is required.
                             </p>
 
@@ -164,8 +164,8 @@
 
                         <div ng-show="editForm.email.$dirty && editForm.email.$invalid">
                             <p class="help-block"
-                               ng-show="editForm.login.$error.required" translate="entity.validation.required">
-                                This field is required.
+                               ng-show="editForm.email.$error.required" translate="entity.validation.required">
+                                This field is email.
                             </p>
 
                             <p class="help-block"

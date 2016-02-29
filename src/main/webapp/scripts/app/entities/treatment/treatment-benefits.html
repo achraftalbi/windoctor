@@ -2,126 +2,46 @@
     <div>
         <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
             <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form" novalidate show-validation>
-                <h2> <span translate="windoctorApp.patient.patientChart">Patient chart</span>
+                <h2> <span translate="global.menu.entities.benefits">Patient chart</span>
                     {{patient.firstName}} {{patient.lastName}}</h2>
                 <jh-alert></jh-alert>
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-xs-6 col-sm-3">
                             <div>
-                                <table class="table table-no-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th translate="entity.detail.field">Field</th>
-                                        <th translate="entity.detail.value">Value</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.firstName">FirstName</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.firstName}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.lastName">LastName</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.lastName}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.birthDate">Birth date</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.birthDate | date:'yyyy-MM-dd' : '+0000'}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.phoneNumber">Phone number</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.phoneNumber}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.diseases">Diseases</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.diseases}}</span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <span translate="windoctorApp.treatment.firstDate">First date</span>
+                                <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
+                                       date-change="changeFirstDate" readonly name="firstDate"
+                                       ng-model="firstDate" >
+                                <span class="fa fa-calendar"/>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-xs-6 col-sm-3">
                             <div>
-                                <table class="table table-no-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th translate="entity.detail.field">Field</th>
-                                        <th translate="entity.detail.value">Value</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.login">Login</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.login}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.email">Email</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.email}}</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <strong translate="windoctorApp.patient.facebook">facebook</strong>
-                                        </td>
-                                        <td>
-                                            <span class="form-control-static">{{patient.facebook}}</span>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                <span translate="windoctorApp.treatment.lastDate">Last date</span>
+                                <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
+                                       date-change="changeLastDate" readonly name="lastDate"
+                                       ng-model="lastDate" >
+                                <span class="fa fa-calendar"/>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-xs-6 col-sm-3">
+                            <div>
+                                <span translate="windoctorApp.treatment.doctor"
+                                       for="field_doctor">doctor</span>
+                                <select class="form-control" id="field_doctorBenefit" name="doctorBenefit"
+                                        ng-model="doctorBenefit"
+                                        ng-options="doctor as doctor.firstName +' '+ doctor.lastName for doctor in doctors track by doctor.id">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-3">
                             <div class="center-block">
-
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <p class="text-center font-bold" translate="global.image">
-                                                Patient</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}"
-                                                 style="max-width: 100%;" ng-if="patient.picture"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <p class="text-center"></p>
-                                        </td>
-                                    </tr>
-                                </table>
+                                <button class="btn btn-info" ng-click="search()"><span
+                                    class="fa fa-search"></span>
+                                    <span translate="entity.action.search">Search</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -236,12 +156,6 @@
                             <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
                         </ul>
                     </nav>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelTreatmentRows()">
-                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-                        translate="entity.action.cancel">Cancel</span>
-                    </button>
                 </div>
             </form>
         </div>
