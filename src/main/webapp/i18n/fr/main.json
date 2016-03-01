@@ -13,6 +13,7 @@
             "chat": "JHipster public chat room",
             "contact": "Contactez-nous sur Twitter @java_hipster"
         },
+        "start": "Commencez la découverte",
         "like": "Si vous aimez JHipster, donnez nous une étoile sur",
         "github": "Github"
     }

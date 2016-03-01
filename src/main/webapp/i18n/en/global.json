@@ -40,6 +40,7 @@
                 "mailType": "MailType",
                 "fund": "Funds",
                 "blockOfDays": "Block days",
+                "block": "Block",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply",
                 "test6Entity": "Test6Entity",
