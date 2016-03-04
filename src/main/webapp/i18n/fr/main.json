@@ -1,6 +1,6 @@
 {
     "main": {
-        "title": "Bienvenue dans WinDoctor !",
+        "title": "Bienvenue dans Cabinet !",
         "subtitle": "Ceci est votre page d'accueil",
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\"."

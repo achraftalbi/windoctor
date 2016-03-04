@@ -7,12 +7,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/"><span translate="global.title">WinDoctor</span> <span class="navbar-version">v{{VERSION}}</span></a>
+            <a class="navbar-brand" href="#/"><span translate="global.title">Office</span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
         <div class="collapse navbar-collapse navbar-default" id="navbar-collapse" ng-switch="isAuthenticated()">
             <ul class="nav navbar-nav nav-pills navbar-right" >
                 <li ui-sref-active="active" id="nav-home" class="text-center"><a ui-sref="home" style="padding-bottom: 2px;padding-top: 2px;">
-                    <i class="fa fa-home fa-2x text-center" style="color: orangered;"></i><br>
+                    <i class="fa fa-home fa-2x text-center" ></i><br>
                     <span translate="global.menu.home">Home</span>
                 </a>
                 </li>
@@ -28,7 +28,7 @@
                             &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event"><span class="fa fa-ban fa-1x text-center" style="color: black;"></span>
                             &#xA0;<span translate="global.menu.entities.blockOfDays">Block of days</span></a></li>
-                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="fa fa-align-left fa-1x" style="color: black;"></span>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="fa fa-align-left fa-1x" style="color: orangered;"></span>
                             &#xA0;<span translate="global.menu.entities.event_reason">Acts</span></a></li>
                     </ul>
                 </li>
@@ -105,22 +105,12 @@
                         &#xA0;<span translate="global.menu.entities.event_reason">event_reason</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="calendar"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.calendar">Calendar</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="entityTest1"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.entityTest1">entityTest1</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ADMIN"><a ui-sref="structure"><span class="glyphicon glyphicon-th-large"></span>
                         &#xA0;<span translate="global.menu.entities.structure">structure</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="patient"><span class="fa fa-users" style="color:#009900"></span>
                         &#xA0;<span translate="global.menu.entities.patient">patient</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="doctor"><span class="fa fa-user-md" style="color:#BC7A00"></span>
                             &#xA0;<span translate="global.menu.entities.doctor">doctor</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="testEntity2"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.testEntity2">testEntity2</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="testEntity3"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.testEntity3">testEntity3</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="testEntity4"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.testEntity4">testEntity4</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="testEntity5"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.testEntity5">testEntity5</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="treatment"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.treatment">treatment</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="attachment"><span class="glyphicon glyphicon-asterisk"></span>
@@ -137,8 +127,6 @@
                         &#xA0;<span translate="global.menu.entities.fund_history">fund_history</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="supply_type"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.supply_type">supply_type</span></a></li>
-                        <li ui-sref-active="active" ><a ui-sref="test6Entity"><span class="glyphicon glyphicon-asterisk"></span>
-                        &#xA0;<span translate="global.menu.entities.test6Entity">test6Entity</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>

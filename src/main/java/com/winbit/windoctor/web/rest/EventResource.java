@@ -186,7 +186,7 @@ public class EventResource {
         log.debug("REST request to get all Event");
         List<Event> listEventsFounded = eventRepository.findAllEvents(SecurityUtils.getCurrerntStructure());
         List<Event> listEvents = new ArrayList<Event>();
-        log.info("TimeZone " + TimeZone.getDefault().getID());
+        log.info("TimeZone test URI " + TimeZone.getDefault().getID());
         for (Event event : listEventsFounded) {
             Event eventTmp = new Event();
             eventTmp.setId(event.getId());

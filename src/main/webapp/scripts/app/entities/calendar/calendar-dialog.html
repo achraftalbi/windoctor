@@ -64,16 +64,6 @@
                 </p>
             </div>
         </div>
-        <div class="form-group">
-            <label translate="windoctorApp.calendar.eventReason" >eventReason</label>
-            <ui-select ng-model="event.eventReason" theme="select2" class="form-control" title="{{ 'entity.action.choose' | translate }}" ng-disabled="disabled" style="min-width: 300px;">
-                <ui-select-match placeholder="{{ 'entity.action.select' | translate }}">{{$select.selected.description}}</ui-select-match>
-                <ui-select-choices repeat="event_reason in event_reasons | filter: $select.search">
-                    <span ng-bind-html="event_reason.id | highlight: $select.search"></span>
-                    <small ng-bind-html="event_reason.description | highlight: $select.search"></small>
-                </ui-select-choices>
-            </ui-select>
-        </div>
         <div class="form-group" ng-show="!account.currentUserPatient">
             <label translate="windoctorApp.calendar.patient" for="field_patient">Patient</label>
 

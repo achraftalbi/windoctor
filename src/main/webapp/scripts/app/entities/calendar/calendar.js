@@ -25,29 +25,6 @@ angular.module('windoctorApp')
                     }]
                 }
             })
-            .state('calendar.detail', {
-                parent: 'calendar',
-                url: '/event_reason/{id}',
-                data: {
-                    roles: ['ROLE_DOCTOR'],
-                    pageTitle: 'windoctorApp.event_reason.detail.title'
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/entities/event_reason/event_reason-detail.html',
-                        controller: 'Event_reasonDetailController'
-                    }
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('event_reason');
-                        return $translate.refresh();
-                    }],
-                    entity: ['$stateParams', 'Event_reason', function($stateParams, Event_reason) {
-                        return Event_reason.get({id : $stateParams.id});
-                    }]
-                }
-            })
             .state('calendar.rows', {
                 parent: 'calendar',
                 url: '/calendar-events/{selectedDate}',

@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "WinDoctor",
+        "title": "Office",
         "year": "Year",
         "month": "Month",
         "week": "Week {{ day }}",
@@ -21,13 +21,8 @@
                 "status": "Status",
                 "event": "Event",
                 "event_reason": "Acts",
-                "entityTest1": "EntityTest1",
                 "structure": "Structure",
                 "patient": "Patients",
-                "testEntity2": "TestEntity2",
-                "testEntity3": "TestEntity3",
-                "testEntity4": "TestEntity4",
-                "testEntity5": "TestEntity5",
                 "users": "Users",
                 "doctor": "Doctor",
                 "treatment": "Treatment",
@@ -43,7 +38,6 @@
                 "block": "Block",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply",
-                "test6Entity": "Test6Entity",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

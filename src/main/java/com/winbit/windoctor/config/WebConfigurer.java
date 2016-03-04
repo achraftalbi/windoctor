@@ -4,6 +4,7 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
 import com.winbit.windoctor.web.filter.CachingHttpHeadersFilter;
+import com.winbit.windoctor.web.filter.ChangeURIPathFilter;
 import com.winbit.windoctor.web.filter.StaticResourcesProductionFilter;
 import com.winbit.windoctor.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
@@ -51,7 +53,13 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initStaticResourcesProductionFilter(servletContext, disps);
             initGzipFilter(servletContext, disps);
         }
+        //initChangeURIPathFilter(servletContext, disps);
         log.info("Web application fully configured");
+    }
+
+    @Bean
+    public Filter shallowEtagHeaderFilter() {
+        return new ChangeURIPathFilter();
     }
 
     /**
@@ -89,13 +97,31 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     /**
      * Initializes the static resources production Filter.
      */
+    private void initChangeURIPathFilter(ServletContext servletContext,
+                                                     EnumSet<DispatcherType> disps) {
+
+        log.debug("Registering static resources path Filter");
+        FilterRegistration.Dynamic changeURIPathFilter =
+            servletContext.addFilter("changeURIPathFilter",
+                new ChangeURIPathFilter());
+
+        changeURIPathFilter.addMappingForUrlPatterns(null, false, "/portal/");
+        /*changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/index.html");
+        changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
+        changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");*/
+        changeURIPathFilter.setAsyncSupported(true);
+    }
+
+    /**
+     * Initializes the static resources production Filter.
+     */
     private void initStaticResourcesProductionFilter(ServletContext servletContext,
                                                      EnumSet<DispatcherType> disps) {
 
         log.debug("Registering static resources production Filter");
         FilterRegistration.Dynamic staticResourcesProductionFilter =
-                servletContext.addFilter("staticResourcesProductionFilter",
-                        new StaticResourcesProductionFilter());
+            servletContext.addFilter("staticResourcesProductionFilter",
+                new StaticResourcesProductionFilter());
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");

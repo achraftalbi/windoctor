@@ -64,7 +64,6 @@
                             <th translate="windoctorApp.calendar.description">Description</th>
                             <th ng-show="!account.currentUserPatient"
                                 translate="windoctorApp.calendar.treatments">treatments</th>
-                            <th translate="windoctorApp.calendar.eventReason">eventReason</th>
                             <th translate="windoctorApp.calendar.eventStatus">eventStatus</th>
                             <th></th>
                         </tr>
@@ -125,17 +124,8 @@
                             </td>
                             <td ng-show="!account.currentUserPatient"><a ng-click="cancelEventRows()"
                                    ui-sref="calendar.treatment({eventId:event.id,selectedDate:selectedDate})"
-                                   translate="windoctorApp.calendar.manageTreatments">Manage treatments</a></td>
-                            <td>
-                                <span ng-show="event.eventReason.description.length > 10"
-                                      data-toggle="tooltip"
-                                      tooltip="{{ event.eventReason.description }}"
-                                      tooltip-placement="bottom-right">
-                                    {{ event.eventReason.description | limitTo: 10 }}{{event.eventReason.description.length > 10 ? '...' : ''}}
-                                </span>
-                                <span ng-show="event.eventReason.description.length <= 10">
-                                    {{ event.eventReason.description | limitTo: 10 }}{{event.eventReason.description.length > 10 ? '...' : ''}}
-                                </span>
+                                   translate="windoctorApp.calendar.manageTreatments">Manage treatments</a>
+
                             </td>
                             <div>
                                 <td style="background-color: #adadad;color: white;"

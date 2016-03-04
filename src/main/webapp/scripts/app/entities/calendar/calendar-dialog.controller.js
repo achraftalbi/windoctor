@@ -1,13 +1,12 @@
 'use strict';
 
 angular.module('windoctorApp').controller('CalendarDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event', 'EventDTO', 'Status', 'Event_reason', 'Patient', 'ParseLinks', 'PatientSearch', '$filter', 'Principal',
-        function ($scope, $stateParams, $modalInstance, entity, Event, EventDTO, Status, Event_reason, Patient, ParseLinks, PatientSearch, $filter, Principal) {
+    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Event', 'EventDTO', 'Status', 'Patient', 'ParseLinks', 'PatientSearch', '$filter', 'Principal',
+        function ($scope, $stateParams, $modalInstance, entity, Event, EventDTO, Status , Patient, ParseLinks, PatientSearch, $filter, Principal) {
 
             $scope.event = entity;
             $scope.eventDTO;
             $scope.statuss = Status.query();
-            $scope.event_reasons = Event_reason.query();
             $scope.patients = Patient.query();
             $scope.count = 0;
             $scope.showListPatients = false;
