@@ -44,7 +44,7 @@
                 <tr>
                     <th translate="windoctorApp.fund.description">Description</th>
                     <th translate="windoctorApp.fund.amount">Amount</th>
-                    <th translate="windoctorApp.fund.historicals">Historicals</th>
+                    <th translate="windoctorApp.fund.historicals"  has-role="ROLE_DOCTOR" >Historicals</th>
                     <th></th>
                 </tr>
             </thead>
@@ -52,7 +52,7 @@
                 <tr ng-repeat="fund in funds">
                     <td>{{fund.description}}</td>
                     <td>{{fund.amount}}</td>
-                        <td><a ng-click="displayHistoricals(fund)"><span translate="entity.action.display"> Display</span></a></td>
+                        <td  has-role="ROLE_DOCTOR" ><a ng-click="displayHistoricals(fund)"><span translate="entity.action.display"> Display</span></a></td>
                     <td>
                         <button type="submit"
                                 ui-sref="fund.detail({id:fund.id})"

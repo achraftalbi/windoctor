@@ -127,7 +127,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Size(min = 9, max = 9)
     @Pattern(regexp = "^[0-9]*$")
-    @Column(name = "PHONE_NUMBER", length = 9, nullable = false)
+    @Column(name = "PHONE_NUMBER", length = 9, nullable = true)
     private String phoneNumber;
 
     @NotNull

@@ -1,6 +1,6 @@
 {
     "main": {
-        "title": "Welcome to Office !",
+        "title": "Welcome to WinDoctor !",
         "subtitle": "The first digital solution to manage your medical office easly.",
         "logged": {
             "message": "You are logged in as user \"{{username}}\"."

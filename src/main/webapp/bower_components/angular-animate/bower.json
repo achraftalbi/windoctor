@@ -1,7 +1,7 @@
 {
   "name": "angular-animate",
   "version": "1.4.7",
-  "main": "./angular-animate.js",
+  "main": "./angular-animate.min.js",
   "ignore": [],
   "dependencies": {
     "angular": "1.4.7"

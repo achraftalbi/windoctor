@@ -51,12 +51,12 @@ public interface EventRepository extends JpaRepository<Event,Long> {
      * @param es - event status code
      * @return event list
      */
-    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+    /*@Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
         "and ms.activated = true " +
         "and e.creationMailSent = false " +
         "and e.eventStatus.id = ?4 "+
         "and e.creation_date between ?2 and ?3")
-    List<Event> getAllNewelyCreatedEvents(Long emailCode, DateTime start, DateTime end, Long es);
+    List<Event> getAllNewelyCreatedEvents(Long emailCode, DateTime start, DateTime end, Long es);*/
 
     /**
      * Get all canceled event on all structure that accept emailing after event cancelation
@@ -65,11 +65,11 @@ public interface EventRepository extends JpaRepository<Event,Long> {
      * @param es - event status code
      * @return event list
      */
-    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+    /*@Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
         "and ms.activated = true " +
         "and e.canceledMailSent = false " +
         "and e.eventStatus.id = ?2")
-    List<Event> getAllCanceledEvents(Long emailCode, Long es);
+    List<Event> getAllCanceledEvents(Long emailCode, Long es);*/
 
     /**
      * Get all event for before reminding
@@ -79,12 +79,12 @@ public interface EventRepository extends JpaRepository<Event,Long> {
      * @param date - reminding date
      * @return event list
      */
-    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+    /*@Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
         "and ms.activated = true " +
         "and e.remindBeforeMail = false " +
         "and e.eventStatus.id = ?2 " +
         "and e.event_date < ?3")
-    List<Event> getAllEventBeforeReminding(Long emailCode, Long es, DateTime date);
+    List<Event> getAllEventBeforeReminding(Long emailCode, Long es, DateTime date);*/
 
     /**
      * Get all event for after reminding
@@ -94,11 +94,11 @@ public interface EventRepository extends JpaRepository<Event,Long> {
      * @param date - reminding date
      * @return event list
      */
-    @Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
+    /*@Query("select e from Event e, MailSetting ms where e.user.structure = ms.structure and ms.mail_type.id = ?1 " +
         "and ms.activated = true " +
         "and e.remindAfterMail = false " +
         "and e.eventStatus.id = ?2 " +
         "and e.event_date > ?3")
-    List<Event> getAllEventAfterReminding(Long emailCode, Long es, DateTime date);
+    List<Event> getAllEventAfterReminding(Long emailCode, Long es, DateTime date);*/
 
 }

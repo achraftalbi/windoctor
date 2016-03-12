@@ -116,7 +116,7 @@ public class DoctorResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Secured({AuthoritiesConstants.ADMIN,AuthoritiesConstants.DOCTOR})
+    //@Secured({AuthoritiesConstants.ADMIN,AuthoritiesConstants.DOCTOR})
     public ResponseEntity<List<User>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {

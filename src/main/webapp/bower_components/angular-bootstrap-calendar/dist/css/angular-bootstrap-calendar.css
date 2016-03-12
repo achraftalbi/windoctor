@@ -347,30 +347,8 @@
 .event-info {
     background-color: dodgerblue;
 }
-.event-request {
-    background: url("../../../../assets/images/request-icon.png") no-repeat center top;
-    border-radius: 0px;
-    border: 0px;
-    -webkit-box-shadow: inset 0px 0px 0px 0px rgb(255, 170, 4);
-    box-shadow:0px;
-    width: 15px;
-    height: 15px;
-    background-color: inherit;
-    margin-right: 2px;
-    margin-bottom: 2px;
-}
-.event-visit {
-    background: url("../../../../assets/images/success.png") no-repeat center top;
-    border-radius: 0px;
-    border: 0px;
-    -webkit-box-shadow: inset 0px 0px 0px 0px darkgreen;
-    box-shadow:0px;
-    width: 15px;
-    height: 15px;
-    background-color: inherit;
-    margin-right: 2px;
-    margin-bottom: 2px;
-}
+
+
 .event-warning {
   background-color: #e3bc08;
 }

@@ -35,7 +35,7 @@ public class Status implements Serializable {
 
     @NotNull
     @Size(min = 1, max = 100)
-    @Column(name = "description_fr", length = 100, nullable = false)
+    @Column(name = "description_fr", length = 100)
     private String descriptionFr;
 
     @OneToMany(mappedBy = "eventStatus")

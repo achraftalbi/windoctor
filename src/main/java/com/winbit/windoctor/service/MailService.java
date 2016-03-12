@@ -33,10 +33,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * Service for sending e-mails.
@@ -49,9 +46,6 @@ import java.util.TimeZone;
 public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
-
-    @Inject
-    private Environment env;
 
     @Inject
     private JavaMailSenderImpl javaMailSender;
@@ -74,18 +68,23 @@ public class MailService {
     @Inject
     private StructureRepository structureRepository;
 
+    @Inject
+    private Environment env;
+
     /**
      * System default email address that sends the e-mails.
      */
-    private InternetAddress from;
+    private String from;
+    private String personal;
 
     @PostConstruct
     public void init() {
-        try {
-            from = new InternetAddress(env.getProperty("mail.from"));
-        } catch (AddressException a) {
+        //try {
+            //from = new InternetAddress(env.getProperty("mail.from"));
+            from= env.getProperty("mail.from");
+        /*} catch (AddressException a) {
             log.error("AddressException internetAddress " + from + a);
-        }
+        }*/
     }
 
     @Async
@@ -99,7 +98,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
-            message.setFrom(from);
+            message.setFrom(from,personal);
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -154,7 +153,7 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("eventdate", DateUtil.formatDate(e.getEvent_date()));
         context.setVariable("structure", e.getUser().getStructure());
-        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs(locale));
         String content = templateEngine.process("eventCreationEmail", context);
         String subject = messageSource.getMessage("email.event.creation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -169,7 +168,7 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("eventdate", DateUtil.formatDate(e.getEvent_date()));
         context.setVariable("structure", e.getUser().getStructure());
-        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs(locale));
         String content = templateEngine.process("eventCancelationEmail", context);
         String subject = messageSource.getMessage("email.event.cancelation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -184,7 +183,7 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("eventdate", DateUtil.formatDate(e.getEvent_date()));
         context.setVariable("structure", e.getUser().getStructure());
-        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs(locale));
         String content = templateEngine.process("remaidingBeforeEventMail", context);
         String subject = messageSource.getMessage("email.event.reminding.before.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
@@ -199,14 +198,19 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("eventdate", DateUtil.getFormattedTime(e.getEvent_date()));
         context.setVariable("structure", e.getUser().getStructure());
-        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+        context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs(locale));
         String content = templateEngine.process("remaidingAfterEventMail", context);
         String subject = messageSource.getMessage("email.event.reminding.after.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
-    private String getBaseUrlOnAsynchronousJobs() {
-        return env.getProperty("email.hostname") + ":" + env.getProperty("server.port");
+    private String getBaseUrlOnAsynchronousJobs(Locale locale) {
+        if((env.getActiveProfiles()!=null) && (env.getActiveProfiles().length > 0) &&
+            (Arrays.asList(env.getActiveProfiles()).contains(Constants.SPRING_PROFILE_PRODUCTION))){
+            return env.getProperty("email.hostname") + ":" + env.getProperty("server.port");
+        }else{
+            return messageSource.getMessage("email.server",null,locale);
+        }
     }
 
     /************************************************************************************************************/
@@ -225,16 +229,17 @@ public class MailService {
             context.setVariable("user", user);
             context.setVariable("structure", structure);
             context.setVariable("date", FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale));
-            context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs());
+            context.setVariable("baseUrl", getBaseUrlOnAsynchronousJobs(locale));
             context.setVariable("unencryptedPassword", unencryptedPassword);
             String content = templateEngine.process("patientAccountCreationEmail", context);
             Object[] subjectVariables = {structure.getName()};
             String subject = messageSource.getMessage("email.patient.creation.title", subjectVariables, locale);
-            try {
+            /*try {
                 from.setPersonal(structure.getName());
             } catch (UnsupportedEncodingException u) {
                 log.error("UnsupportedEncodingException sendPatientCreationAccountEmail personnel :" + structure.getName() + u);
-            }
+            }*/
+            personal = structure.getName();
             sendEmail(user.getEmail(), subject, content, false, true);
             //}
         }
@@ -252,11 +257,12 @@ public class MailService {
             context.setVariable("structure", usedForTreatment.getUser().getStructure());
             context.setVariable("date", FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale));
             Object[] subjectVariables = {usedForTreatment.getUser().getStructure().getName()};
-            try {
+            /*try {
                 from.setPersonal(usedForTreatment.getUser().getStructure().getName());
             } catch (UnsupportedEncodingException u) {
                 log.error("UnsupportedEncodingException sendAppointmentCreationEmail personnel :" + usedForTreatment.getUser().getStructure().getName() + u);
-            }
+            }*/
+            personal = usedForTreatment.getUser().getStructure().getName();
             if (oldEvent == null) {
                 log.debug("sendEventEmail e-mail to oldEvent == null '{}'", usedForTreatment.getUser().getEmail());
                 if (newEvent != null &&
@@ -336,11 +342,12 @@ public class MailService {
             context.setVariable("structure", eventVar.getUser().getStructure());
             context.setVariable("date", FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale));
             Object[] subjectVariables = {eventVar.getUser().getStructure().getName()};
-            try {
+            /*try {
                 from.setPersonal(eventVar.getUser().getStructure().getName());
             } catch (UnsupportedEncodingException u) {
                 log.error("UnsupportedEncodingException sendAppointmentCreationEmail personnel :" + eventVar.getUser().getStructure().getName() + u);
-            }
+            }*/
+            personal = eventVar.getUser().getStructure().getName();
             sendAppointmentRecallEmail(eventVar, context, subjectVariables, locale);
         }
     }

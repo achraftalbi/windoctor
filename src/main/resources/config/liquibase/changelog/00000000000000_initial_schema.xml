@@ -68,7 +68,7 @@
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="priority" type="bigint">
+            <column name="priority" type="integer">
                 <constraints nullable="false"/>
             </column>
         </createTable>

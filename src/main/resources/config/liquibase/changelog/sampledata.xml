@@ -17,15 +17,6 @@
             <column name="name" type="string"/>
         </loadData>
         <loadData encoding="UTF-8"
-                  file="config/liquibase/windoctor-sampledata/mailtypes.csv"
-                  separator=";"
-                  tableName="mail_type">
-            <column name="id" type="numeric"/>
-            <column name="label" type="string"/>
-            <column name="description" type="string"/>
-            <column name="content" type="string"/>
-        </loadData>
-        <loadData encoding="UTF-8"
                   file="config/liquibase/windoctor-sampledata/event_status.csv"
                   separator=";"
                   tableName="STATUS">

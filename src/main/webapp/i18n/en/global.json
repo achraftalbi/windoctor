@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "Office",
+        "title": "WinDoctor",
         "year": "Year",
         "month": "Month",
         "week": "Week {{ day }}",
@@ -27,12 +27,10 @@
                 "doctor": "Doctor",
                 "treatment": "Treatment",
                 "attachment": "Attachment",
-                "mailSetting": "MailSetting",
                 "dashboard": "Dashboard",
                 "statistics": "Statistics",
                 "benefits": "Benefits",
                 "calendar": "Calendar",
-                "mailType": "MailType",
                 "fund": "Funds",
                 "blockOfDays": "Block days",
                 "block": "Block",

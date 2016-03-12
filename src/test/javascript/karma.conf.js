@@ -20,6 +20,14 @@ module.exports = function (config) {
             'main/webapp/bower_components/bootstrap/dist/js/bootstrap.js',
             'main/webapp/bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js',
             'main/webapp/bower_components/angular-cache-buster/angular-cache-buster.js',
+            'main/webapp/bower_components/ui-select/dist/select.js',
+            'main/webapp/bower_components/webcam/dist/webcam.min.js',
+            'main/webapp/bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js',
+            'main/webapp/bower_components/angular-datepicker/dist/angular-datepicker.js',
+            'main/webapp/bower_components/angular-animate/angular-animate.min.js',
+            'main/webapp/bower_components/angular-loading-bar/build/loading-bar.js',
+            'main/webapp/bower_components/Chart.js/Chart.js',
+            'main/webapp/bower_components/angular-chart.js/dist/angular-chart.js',
             'main/webapp/bower_components/angular-cookies/angular-cookies.js',
             'main/webapp/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
             'main/webapp/bower_components/angular-local-storage/dist/angular-local-storage.js',
@@ -54,12 +62,12 @@ module.exports = function (config) {
         reporters: ['dots', 'jenkins', 'coverage', 'progress'],
 
         jenkinsReporter: {
-            
+
             outputFile: '../target/test-results/karma/TESTS-results.xml'
         },
 
         coverageReporter: {
-            
+
             dir: '../target/test-results/coverage',
             reporters: [
                 {type: 'lcov', subdir: 'report-lcov'}

@@ -5,7 +5,7 @@
    <changeSet author="achraftalbi (generated)" id="1456396024621-1">
        <addColumn tableName="JHI_USER">
            <column name="PHONE_NUMBER" type="varchar(9)">
-               <constraints nullable="false"/>
+               <constraints nullable="true"/>
            </column>
            <column name="birthDate" type="timestamp">
                <constraints nullable="true"/>

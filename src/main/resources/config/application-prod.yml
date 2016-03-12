@@ -1,5 +1,5 @@
 server:
-    port: 8080
+    port: 8642
 
 email:
     hostname: http://localhost
@@ -44,7 +44,7 @@ spring:
     data:
         elasticsearch:
             cluster-name:
-            cluster-nodes: localhost:9200
+            cluster-nodes:
     thymeleaf:
         mode: XHTML
         cache: true

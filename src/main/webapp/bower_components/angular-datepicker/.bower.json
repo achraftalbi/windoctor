@@ -39,7 +39,6 @@
     "commit": "c59e4fcea2dfdb86f7da70ce10ff483014918f36"
   },
   "_source": "git://github.com/g00fy-/angular-datepicker.git",
-  "_target": "~2.0.3",
-  "_originalSource": "angular-datepicker",
-  "_direct": true
+  "_target": "2.0.3",
+  "_originalSource": "angular-datepicker"
 }

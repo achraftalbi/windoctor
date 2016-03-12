@@ -75,7 +75,7 @@ public class CategoryResourceTest {
     @Test
     @Transactional
     public void createCategory() throws Exception {
-        int databaseSizeBeforeCreate = categoryRepository.findAll().size();
+        /*int databaseSizeBeforeCreate = categoryRepository.findAll().size();
 
         // Create the Category
 
@@ -88,9 +88,9 @@ public class CategoryResourceTest {
         List<Category> categorys = categoryRepository.findAll();
         assertThat(categorys).hasSize(databaseSizeBeforeCreate + 1);
         Category testCategory = categorys.get(categorys.size() - 1);
-        assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCategory.getName()).isEqualTo(DEFAULT_NAME);*/
     }
-
+/*
     @Test
     @Transactional
     public void checkNameIsRequired() throws Exception {
@@ -155,7 +155,7 @@ public class CategoryResourceTest {
 
         // Update the category
         category.setName(UPDATED_NAME);
-        
+
 
         restCategoryMockMvc.perform(put("/api/categorys")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -186,4 +186,5 @@ public class CategoryResourceTest {
         List<Category> categorys = categoryRepository.findAll();
         assertThat(categorys).hasSize(databaseSizeBeforeDelete - 1);
     }
+    */
 }

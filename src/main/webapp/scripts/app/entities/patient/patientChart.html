@@ -179,8 +179,8 @@
                                       tooltip-placement="bottom-right">
                                     {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
                                 </span>
-                                <span ng-show="treatment.eventReason.description.length <= 10">
-                                    {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
+                                <span ng-show="treatment.eventReason===null || (treatment.eventReason.description.length <= 10)">
+                                    {{ treatment.eventReason.description}}
                                 </span>
                             </td>
                             <td ng-show="treatment.id===-1"

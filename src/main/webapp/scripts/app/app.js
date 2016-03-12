@@ -4,9 +4,9 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                'mwl.calendar', // Add calendar to my application
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
-               'angular-loading-bar', 'ngAnimate', //Used for inclufing loading bar
-                'datePicker','ui.select','ngSanitize','webcam','camera',
-    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
+            //Used for inclufing loading bar
+                'datePicker','ui.select','ngSanitize','webcam',
+    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll' ,'ngAnimate', 'angular-loading-bar'])
 
     .run(function ($rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {
         $rootScope.ENV = ENV;

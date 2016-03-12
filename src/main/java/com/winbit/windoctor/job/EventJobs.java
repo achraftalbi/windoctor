@@ -26,16 +26,16 @@ public final class EventJobs {
 
     private final Logger log = LoggerFactory.getLogger(EventJobs.class);
 
-    @Inject
+   /* @Inject
     private EventRepository eventRepository;
 
     @Inject
     private MailService mailService;
 
     @Inject
-    private Environment env;
+    private Environment env;*/
 
-    //@Scheduled(cron = "*/10 * * * * *")
+    //@Scheduled(cron = "* * * * * *")
     /*public void notifyEventCreationEmailJob() {
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
@@ -160,9 +160,9 @@ public final class EventJobs {
         }
     }*/
 
-    @Scheduled(cron = "0 0 1 * * *")
+    /*@Scheduled(cron = "0 0 1 * * *")
     public void appointmentsRecallEmailJob() {
         mailService.sendAppointmentJobRecall();
-    }
+    }*/
 
 }

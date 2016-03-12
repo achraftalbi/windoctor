@@ -6,7 +6,7 @@
    <changeSet author="achraftalbi (generated)" id="1451293964762-1">
        <addColumn tableName="STATUS">
            <column name="description_fr" type="varchar(100)">
-               <constraints nullable="false" />
+               <constraints nullable="true" />
            </column>
        </addColumn>
    </changeSet>
