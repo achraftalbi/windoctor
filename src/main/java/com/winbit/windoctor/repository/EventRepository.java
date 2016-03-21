@@ -38,7 +38,7 @@ public interface EventRepository extends JpaRepository<Event,Long> {
     @Query("select e from Event e where e.eventStatus.id = ?1 and e.user.structure.id = ?2 order by e.event_date desc")
     Page<Event> findAllEventsBlock(Long statusType, Long structure_id, Pageable var1);
 
-    @Query("select e from Event e where e.user.id = ?1")
+    @Query("select e from Event e where e.user.id = ?1 and e.eventStatus.id = 7")
     List<Event> findByPatient(Long patientId);
 
     /**

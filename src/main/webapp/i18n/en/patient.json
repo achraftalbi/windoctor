@@ -4,7 +4,9 @@
             "home": {
                 "title": "Patients",
                 "createLabel": "Create a new Patient",
-                "createOrEditLabel": "Create or edit a Patient"
+                "createOrEditLabel": "Create or edit a Patient",
+                "necessaryInformations": "Informations necessary to fillfull",
+                "optionalInformations": "Informations not necessary and optional"
             },
             "created": "A new Patient is created with identifier {{ param }}",
             "updated": "A Patient is updated with identifier {{ param }}",
@@ -25,7 +27,11 @@
             "picture": "Picture",
             "birthDate": "Birth date",
             "phoneNumber": "Phone number",
+            "phoneNumberPatternError": "The phone number should follow the example : {{pattern}}.",
             "diseases": "Diseases",
+            "allergies": "Allergies",
+            "mutualAssurance": "Mutual and/or assurance",
+            "profession": "Profession",
             "facebook": "Facebook",
             "patientChart": "Patient chart",
             "chart": "Chart",

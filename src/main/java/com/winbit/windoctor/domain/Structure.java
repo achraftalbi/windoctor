@@ -51,6 +51,19 @@ public class Structure implements Serializable {
     @JsonIgnore
     private DateTime creation_date;
 
+    @Min(value = 1)
+    @Max(value = 1000)
+    @Column(name = "TYPESTRUCTURE")
+    private Long typeStructure;
+
+    public Long getTypeStructure() {
+        return typeStructure;
+    }
+
+    public void setTypeStructure(Long typeStructure) {
+        this.typeStructure = typeStructure;
+    }
+
     public DateTime getCreation_date() {
         return creation_date;
     }

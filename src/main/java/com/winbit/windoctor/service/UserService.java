@@ -1,6 +1,5 @@
 package com.winbit.windoctor.service;
 
-import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.AuthorityRepository;
@@ -11,7 +10,7 @@ import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.util.RandomUtil;
-import com.winbit.windoctor.web.rest.dto.UserDTO;
+import com.winbit.windoctor.web.rest.dto.PatientDTO;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -94,7 +93,7 @@ public class UserService {
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-       return userRepository.findOneByEmail(mail)
+       return userRepository.findOneByEmailAndStructure(mail, structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
            .filter(user -> user.getActivated() == true)
            .map(user -> {
                user.setResetKey(RandomUtil.generateResetKey());
@@ -130,7 +129,7 @@ public class UserService {
         return newUser;
     }
 
-    public User createPatientInformation(UserDTO patientCreated) {
+    public User createPatientInformation(PatientDTO patientCreated) {
 
         User patient = new User();
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
@@ -143,8 +142,13 @@ public class UserService {
         patient.setLastName(patientCreated.getLastName());
         patient.setBirthDate(patientCreated.getBirthDate());
         patient.setDiseases(patientCreated.getDiseases());
+        patient.setAllergies(patientCreated.getAllergies());
+        patient.setMutualAssurance(patientCreated.getMutualAssurance());
+        patient.setProfession(patientCreated.getProfession());
         patient.setFacebook(patientCreated.getFacebook());
-        patient.setPhoneNumber(patientCreated.getPhoneNumber());
+        int phoneNumberSize = patientCreated.getPhoneNumber().length();
+        patient.setPhoneNumber(patientCreated.getPhoneNumber()==null?patientCreated.getPhoneNumber()
+            :patientCreated.getPhoneNumber().substring(4,phoneNumberSize-1));
         patient.setEmail(patientCreated.getEmail());
         patient.setLangKey(patientCreated.getLangKey());
         Long structureId = sessionService.getCurrentStructure();
@@ -214,21 +218,29 @@ public class UserService {
         return doctor;
     }
 
-    public User updatePatientInformation(UserDTO patientUpdated) {
+    public User updatePatientInformation(PatientDTO patientUpdated) {
 
-        Optional<User> rst = userRepository.findOneByLogin(patientUpdated.getLogin());
+        Optional<User> rst = userRepository.findOneById(patientUpdated.getId());
         User patient = rst.get();
-        if(!Constants.HELPER_PASSWORD.equals(patient.getPassword())){
+        if(patientUpdated.getPassword()!=null
+            && patientUpdated.getPassword().length()>0){
             String encryptedPassword = passwordEncoder.encode(patientUpdated.getPassword());
             // new user updated its password
             patient.setPassword(encryptedPassword);
+        }else{
+            patient.setPassword(patient.getPassword());
         }
         patient.setFirstName(patientUpdated.getFirstName());
         patient.setLastName(patientUpdated.getLastName());
         patient.setBirthDate(patientUpdated.getBirthDate());
         patient.setDiseases(patientUpdated.getDiseases());
+        patient.setAllergies(patientUpdated.getAllergies());
+        patient.setMutualAssurance(patientUpdated.getMutualAssurance());
+        patient.setProfession(patientUpdated.getProfession());
         patient.setFacebook(patientUpdated.getFacebook());
-        patient.setPhoneNumber(patientUpdated.getPhoneNumber());
+        int phoneNumberSize = patientUpdated.getPhoneNumber().length();
+        patient.setPhoneNumber(patientUpdated.getPhoneNumber()==null?patientUpdated.getPhoneNumber()
+            :patientUpdated.getPhoneNumber().substring(4,phoneNumberSize-1));
         patient.setEmail(patientUpdated.getEmail());
         patient.setLangKey(patientUpdated.getLangKey());
         // new user is not active

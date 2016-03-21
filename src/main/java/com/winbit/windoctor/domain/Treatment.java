@@ -80,6 +80,19 @@ public class Treatment implements Serializable {
     @ManyToOne
     private Fund fund;
 
+    @Min(value = 1)
+    @Max(value = 100000)
+    @Column(name = "ELEMENT")
+    private Long element;
+
+    public Long getElement() {
+        return element;
+    }
+
+    public void setElement(Long element) {
+        this.element = element;
+    }
+
     public Fund getFund() {
         return fund;
     }

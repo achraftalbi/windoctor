@@ -4,6 +4,6 @@ angular.module('windoctorApp')
 
 .constant('ENV', 'dev')
 
-.constant('VERSION', '0.0.1-SNAPSHOT')
+.constant('VERSION', 'v.1.0')
 
 ;

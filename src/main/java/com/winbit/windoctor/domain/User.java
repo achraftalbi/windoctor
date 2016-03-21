@@ -124,28 +124,60 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "MAX_EVENTS_REACHED")
     private Boolean maxEventsReached;
 
-    @NotNull
-    @Size(min = 9, max = 9)
+    @Size(min = 0, max = 9)
     @Pattern(regexp = "^[0-9]*$")
     @Column(name = "PHONE_NUMBER", length = 9, nullable = true)
     private String phoneNumber;
 
-    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "birthDate", nullable = true)
     private DateTime birthDate;
 
-    @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 0, max = 100)
     @Column(name = "FACEBOOK", length = 100, nullable = true)
     private String facebook;
 
-    @NotNull
-    @Size(min = 1, max = 200)
+    @Size(min = 0, max = 200)
     @Column(name = "DISEASES", length = 200, nullable = true)
     private String diseases;
+
+    @Size(min = 0, max = 200)
+    @Column(name = "ALLERGIES", length = 200, nullable = true)
+    private String allergies;
+
+    @Size(min = 0, max = 200)
+    @Column(name = "MUTUALASSURANCE", length = 200, nullable = true)
+    private String mutualAssurance;
+
+    @Size(min = 0, max = 200)
+    @Column(name = "PROFESSION", length = 200, nullable = true)
+    private String profession;
+
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
+
+    public String getMutualAssurance() {
+        return mutualAssurance;
+    }
+
+    public void setMutualAssurance(String mutualAssurance) {
+        this.mutualAssurance = mutualAssurance;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
+    }
 
     public DateTime getBirthDate() {
         return birthDate;

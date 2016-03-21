@@ -9,20 +9,26 @@ angular.module('windoctorApp').controller('PatientDialogController',
             $scope.errorEmailExists = null;
             $scope.dateValue = moment(new Date()).utc();
             $scope.maxDateValue =  moment(new Date()).utc();
-            $scope.patient = entity;
-            $scope.password=null;
-            $scope.confirmPassword=null;
-            $scope.password = 'Empty_Password_1';
-            $scope.confirmPassword = 'Empty_Password_1';
-            console.log('$scope.patient.login '+$scope.patient.login);
+            $scope.patient =entity;
+            $scope.passwordUpdate=null;
+            $scope.passwordNew=null;
+            $scope.newPatient = false;
+            $scope.test=null;
             $scope.captureAnImageScreen = false;
             $scope.load = function (id) {
                 if($stateParams.id !== null && $stateParams.id !==undefined){
-                    Patient.get({id: id}, function (result) {
+                    Patient.get({id: $stateParams.id}, function (result) {
                         $scope.patient = result;
+                        $scope.passwordNew=$scope.patient.id===null||$scope.patient.id===undefined?null:'wrongpassword';
+                        $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
+                        $scope.newPatient = true;
                     });
+                }else if($scope.patient.id===null||$scope.patient.id===undefined){
+                    $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
+                    $scope.newPatient = false;
                 }
             };
+            $scope.load();
             $scope.initBirthDate = function () {
                 $scope.maxDateValue = moment(new Date()).utc();
             };
@@ -50,22 +56,13 @@ angular.module('windoctorApp').controller('PatientDialogController',
             }
 
             $scope.save = function () {
-                if ($scope.password !== $scope.confirmPassword) {
-                    $scope.doNotMatch = 'ERROR';
+                $scope.patient.birthDate = new Date($scope.dateValue);
+                if ($scope.patient.id != null) {
+                    $scope.patient.password = $scope.passwordUpdate;
+                    Patient.update($scope.patient, onSaveFinished, onSaveFailed);
                 } else {
-                    $scope.patient.birthDate = new Date($scope.dateValue);
-                    $scope.patient.password = $scope.password;
-                    if ($scope.patient.id != null) {
-                        Patient.update($scope.patient, onSaveFinished, onSaveFailed);
-                    } else {
-                        if($scope.password!=='Empty_Password_1'){
-                            Patient.save($scope.patient, onSaveFinished, onSaveFailed);
-                        }else{
-                            $scope.doNotMatch = 'ERROR';
-                            $scope.password=null;
-                            $scope.confirmPassword=null;
-                        }
-                    }
+                    $scope.patient.password = $scope.passwordNew;
+                    Patient.save($scope.patient, onSaveFinished, onSaveFailed);
                 }
             };
 

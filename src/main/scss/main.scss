@@ -6354,3 +6354,30 @@ i.inactive {color: #e52126
     position: relative;
     cursor: pointer; cursor: hand;
 }
+
+
+/*  Those css where token from angular-bootstrap-calendar because it doesn't appears collectely in production*/
+.event-visit {
+    background: url("../images/success.png") no-repeat center top;
+    border-radius: 0px;
+    border: 0px;
+    -webkit-box-shadow: inset 0px 0px 0px 0px darkgreen;
+    box-shadow:0px;
+    width: 15px;
+    height: 15px;
+    background-color: inherit;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}
+.event-request {
+    background: url("../images/request-icon.png") no-repeat center top;
+    border-radius: 0px;
+    border: 0px;
+    -webkit-box-shadow: inset 0px 0px 0px 0px rgb(255, 170, 4);
+    box-shadow:0px;
+    width: 15px;
+    height: 15px;
+    background-color: inherit;
+    margin-right: 2px;
+    margin-bottom: 2px;
+}

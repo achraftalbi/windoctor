@@ -4,14 +4,14 @@ import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Doctor;
 import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.DoctorRepository;
+import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.UserRepository;
-import com.winbit.windoctor.repository.search.DoctorSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.MailService;
 import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
 import com.winbit.windoctor.web.rest.dto.DoctorDTO;
-import com.winbit.windoctor.web.rest.dto.UserDTO;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.HttpUtils;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
@@ -25,19 +25,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Doctor.
@@ -53,6 +47,9 @@ public class DoctorResource {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private StructureRepository structureRepository;
 
     @Inject
     private UserService userService;
@@ -76,7 +73,7 @@ public class DoctorResource {
 
         return userRepository.findOneByLogin(doctor.getLogin())
             .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmail(doctor.getEmail())
+            .orElseGet(() -> userRepository.findOneByEmailAndStructure(doctor.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
                     .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
                     .orElseGet(() -> {
                         User user = userService.createDoctorInformation(doctor.getLogin(), doctor.getPassword(),

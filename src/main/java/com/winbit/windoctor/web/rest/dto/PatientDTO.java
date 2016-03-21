@@ -8,14 +8,12 @@ import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
 import org.joda.time.DateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Lob;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-public class UserDTO {
+public class PatientDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 100;
@@ -27,8 +25,7 @@ public class UserDTO {
     @Size(min = 1, max = 50)
     private String login;
 
-    @NotNull
-    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
+    @Size(min = 0, max = PASSWORD_MAX_LENGTH)
     private String password;
 
     @Size(max = 50)
@@ -57,8 +54,8 @@ public class UserDTO {
 
     private Boolean maxEventsReached;
 
-    @Size(min = 0, max = 14)
-    @Pattern(regexp = "00212^[0-9]*$")
+    @Size(min = 14, max = 14)
+    @Pattern(regexp = "^00212[0-9]*$")
     private String phoneNumber;
 
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -69,11 +66,35 @@ public class UserDTO {
     @Size(min = 0, max = 100)
     private String facebook;
 
-    @Size(min = 0, max = 200)
+    @NotNull
+    @Size(min = 1, max = 200)
     private String diseases;
+
+    @NotNull
+    @Size(min = 1, max = 200)
+    private String allergies;
+
+    @NotNull
+    @Size(min = 1, max = 200)
+    private String mutualAssurance;
+
+    @Size(min = 0, max = 200)
+    private String profession;
 
     public String getDiseases() {
         return diseases;
+    }
+
+    public String getAllergies() {
+        return allergies;
+    }
+
+    public String getMutualAssurance() {
+        return mutualAssurance;
+    }
+
+    public String getProfession() {
+        return profession;
     }
 
     public String getFacebook() {
@@ -88,11 +109,11 @@ public class UserDTO {
         return birthDate;
     }
 
-    public UserDTO() {
+    public PatientDTO() {
     }
 
-    public UserDTO(String login, String password, String firstName, String lastName, String email, String langKey,
-                   List<String> roles, Boolean blocked, byte[] picture, Boolean activated) {
+    public PatientDTO(String login, String password, String firstName, String lastName, String email, String langKey,
+                      List<String> roles, Boolean blocked, byte[] picture, Boolean activated) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -105,8 +126,8 @@ public class UserDTO {
         this.activated = activated;
     }
 
-    public UserDTO(Long id, String login, String password, String firstName, String lastName, String email, String langKey,
-                   List<String> roles, Boolean currentUserPatient, Boolean maxEventsReached) {
+    public PatientDTO(Long id, String login, String password, String firstName, String lastName, String email, String langKey,
+                      List<String> roles, Boolean currentUserPatient, Boolean maxEventsReached) {
         this.id = id;
         this.login = login;
         this.password = password;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('SettingsController', function ($scope, Principal, Auth, Language, $translate) {
+    .controller('SettingsController', function ($scope, Principal, Auth, Language, $translate,moment) {
         $scope.success = null;
         $scope.error = null;
         Principal.identity(true).then(function(account) {
@@ -18,6 +18,7 @@ angular.module('windoctorApp')
                 Language.getCurrent().then(function(current) {
                     if ($scope.settingsAccount.langKey !== current) {
                         $translate.use($scope.settingsAccount.langKey);
+                        moment.locale($scope.settingsAccount.langKey);
                     }
                 });
             }).catch(function() {

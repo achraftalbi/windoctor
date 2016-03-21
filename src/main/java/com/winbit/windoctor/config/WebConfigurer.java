@@ -53,7 +53,13 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             initStaticResourcesProductionFilter(servletContext, disps);
             initGzipFilter(servletContext, disps);
         }
-        //initChangeURIPathFilter(servletContext, disps);
+        /*******************************************************************************************************************************************/
+        /*******************************************************************************************************************************************/
+        /***********WINDOCTOR - This filter was introduced to test a behaviour of giving the client the name of its structure in the URL.***********/
+        /***********WINDOCTOR - This behavior was abandonned                                                                             ***********/
+        /*******************************************************************************************************************************************/
+        /*******************************************************************************************************************************************/
+        //initChangeURIPathFilter(servletContext);
         log.info("Web application fully configured");
     }
 
@@ -97,18 +103,17 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     /**
      * Initializes the static resources production Filter.
      */
-    private void initChangeURIPathFilter(ServletContext servletContext,
-                                                     EnumSet<DispatcherType> disps) {
-
+    private void initChangeURIPathFilter(ServletContext servletContext) {
+        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.ASYNC);
         log.debug("Registering static resources path Filter");
         FilterRegistration.Dynamic changeURIPathFilter =
             servletContext.addFilter("changeURIPathFilter",
                 new ChangeURIPathFilter());
 
-        changeURIPathFilter.addMappingForUrlPatterns(null, false, "/portal/");
-        /*changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
-        changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");*/
+        //changeURIPathFilter.addMappingForUrlPatterns(null, false, "/p");
+        changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/*");
+        //changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
+        //changeURIPathFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         changeURIPathFilter.setAsyncSupported(true);
     }
 

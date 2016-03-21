@@ -14,6 +14,7 @@ angular.module('windoctorApp')
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
                         $translate.use(account.langKey);
+                        moment.locale(account.langKey);
                         $translate.refresh();
                         deferred.resolve(data);
                     });

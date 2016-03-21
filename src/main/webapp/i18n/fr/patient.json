@@ -4,7 +4,9 @@
             "home": {
                 "title": "Patients",
                 "createLabel": "Créer un nouveau Patient",
-                "createOrEditLabel": "Créer ou éditer un Patient"
+                "createOrEditLabel": "Créer ou éditer un Patient",
+                "necessaryInformations": "Informations nécessaire et obligatoire à remplir",
+                "optionalInformations": "Informations optionnelles et non obligatoires"
             },
             "delete": {
                 "question": "Etes-vous certain de vouloir supprimer le Patient {{ id }} ?"
@@ -22,7 +24,11 @@
             "picture": "Picture",
             "birthDate": "Date de naissance",
             "phoneNumber": "Numéro de téléphone",
+            "phoneNumberPatternError": "Le numéro de téléphone doit être comme l'exemple : {{pattern}}.",
             "diseases": "Maladies",
+            "allergies": "Allergies",
+            "mutualAssurance": "Mutuelle et/ou assurance",
+            "profession": "Profession",
             "facebook": "Facebook",
             "patientChart": "Fiche patient",
             "chart": "Fiche",

@@ -70,6 +70,24 @@ public class ChangeURIPathFilter implements Filter {
         }else{
             chain.doFilter(request, response);
         }*/
+        /*log.info("modify display URI requestURI " + requestURI);
+        //String newURI = requestURI;
+        //modifiedRequest = new RequestWrapper(httpRequest,"/");
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        if (requestURI.indexOf("test") >= 0 && httpServletRequest.getSession().getAttribute("STRUCTURE_SET_IN_SESSION")==null) {
+            httpServletRequest.getSession().setAttribute("STRUCTURE_SET_IN_SESSION",true);
+            request.getRequestDispatcher("/").forward(request, response);
+            log.info("first");
+        }else if (requestURI.equals("/") &&
+            httpServletRequest.getSession().getAttribute("STRUCTURE_SET_IN_SESSION")==null) {
+            request.getRequestDispatcher("/404.html").forward(request, response);
+            log.info("third");
+        }else{
+            httpServletRequest.getSession().setAttribute("STRUCTURE_SET_IN_SESSION",null);
+            chain.doFilter(request, response);
+            log.info("fourth");
+        }*/
         chain.doFilter(request, response);
     }
 
@@ -79,7 +97,8 @@ public class ChangeURIPathFilter implements Filter {
      */
     class RequestWrapper extends HttpServletRequestWrapper {
 
-        private String originalDestination, newDestinationAgent;
+        private String originalValue;
+        private String newValue;
 
         /*
          * Constructor
@@ -97,14 +116,29 @@ public class ChangeURIPathFilter implements Filter {
         public String getRequestURI() {
             String originalURI = super.getRequestURI();
 
-            StringBuffer newURI = new StringBuffer();
+            /*StringBuffer newURI = new StringBuffer();
 
             newURI.append(originalURI.substring(0, originalURI.indexOf(originalDestination)));
             newURI.append(newDestinationAgent);
             newURI.append(originalURI.substring(originalURI.indexOf(originalDestination) + originalDestination.length(),
                 originalURI.length()));
 
-            return newURI.toString();
+            return newURI.toString();*/
+            log.info("originalURI old "+originalURI);
+            //originalURI = originalURI==null?originalURI:originalURI.replaceAll("test","");
+            log.info("originalURI new " + originalURI);
+            //return originalURI.toString();
+            String s = super.getRequestURI();
+            if (StringUtils.equals(s, originalValue))
+                return originalValue.replaceAll("test","");
+            else
+                return s;
+        }
+
+        public RequestWrapper(HttpServletRequest request, String newValue) {
+            super(request);
+            this.newValue = newValue;
+            this.originalValue = request.getRequestURI();
         }
 
         /**
@@ -114,10 +148,10 @@ public class ChangeURIPathFilter implements Filter {
          * @param originalDestination
          * @param newDestination
          */
-        protected void changeDestinationAgent(String originalDestination, String newDestination) {
+        /*protected void changeDestinationAgent(String originalDestination, String newDestination) {
             this.originalDestination = originalDestination;
             this.newDestinationAgent = newDestination;
-        }
+        }*/
 
     }
 }

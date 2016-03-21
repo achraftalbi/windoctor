@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('LanguageController', function ($scope, $translate, Language, tmhDynamicLocale) {
+    .controller('LanguageController', function ($scope, $translate, Language, tmhDynamicLocale,moment) {
         $scope.changeLanguage = function (languageKey) {
             $translate.use(languageKey);
             tmhDynamicLocale.set(languageKey);
+            moment.locale(languageKey);
         };
 
         Language.getAll().then(function (languages) {

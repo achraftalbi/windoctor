@@ -2,20 +2,17 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.config.Constants;
-import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.User;
+import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.UserSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
-import com.winbit.windoctor.service.MailService;
-import com.winbit.windoctor.service.SessionService;
 import com.winbit.windoctor.service.UserService;
-import com.winbit.windoctor.web.rest.dto.UserDTO;
+import com.winbit.windoctor.web.rest.dto.PatientDTO;
 import com.winbit.windoctor.web.rest.util.ErrorCodes;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
-import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -26,15 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Patient.
@@ -49,6 +41,9 @@ public class PatientResource {
     private UserRepository userRepository;
 
     @Inject
+    private StructureRepository structureRepository;
+
+    @Inject
     private UserService userService;
 
     @Inject
@@ -61,20 +56,32 @@ public class PatientResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
+    public ResponseEntity<?> create(@Valid @RequestBody PatientDTO patient) throws URISyntaxException {
         log.debug("REST request to save Patient : {}", patient);
-        return userRepository.findOneByLogin(patient.getLogin())
-            .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmail(patient.getEmail())
-                    .map(user -> new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED, HttpStatus.BAD_REQUEST))
-                    .orElseGet(() -> {
-                        User user = userService.createPatientInformation(patient);
-                        userSearchRepository.save(user);
+        if(patient.getEmail()==null || patient.getEmail().length()==0){
+            return userRepository.findOneByLogin(patient.getLogin())
+                .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
+                .orElseGet(() -> {
+                            User user = userService.createPatientInformation(patient);
+                            userSearchRepository.save(user);
 
 
-                        return new ResponseEntity<>(HttpStatus.CREATED);
-                    })
-            );
+                            return new ResponseEntity<>(HttpStatus.CREATED);
+                        });
+        }else{
+            return userRepository.findOneByLogin(patient.getLogin())
+                .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
+                .orElseGet(() -> userRepository.findOneByEmailAndStructure(patient.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
+                        .map(user -> new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED, HttpStatus.BAD_REQUEST))
+                        .orElseGet(() -> {
+                            User user = userService.createPatientInformation(patient);
+                            userSearchRepository.save(user);
+
+
+                            return new ResponseEntity<>(HttpStatus.CREATED);
+                        })
+                );
+        }
     }
 
     /**
@@ -84,7 +91,7 @@ public class PatientResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> update(@Valid @RequestBody UserDTO patient) throws URISyntaxException {
+    public ResponseEntity<?> update(@Valid @RequestBody PatientDTO patient) throws URISyntaxException {
         log.debug("REST request to update Patient : {}", patient);
         //TODO - mbf 27092015 - manage exception !
         User user = userService.updatePatientInformation(patient);

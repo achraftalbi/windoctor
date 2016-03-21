@@ -23,9 +23,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByResetKey(String resetKey);
 
-    Optional<User> findOneByEmail(String email);
+    //@Query("select u from User where u.email= ?1 and u.structure.id = ?2")
+    Optional<User> findOneByEmailAndStructure(String email, Structure structure);
 
     Optional<User> findOneByLogin(String login);
+
+    Optional<User> findOneById(Long id);
 
     @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2")
     Page<User> findAll(String role, Long id, Pageable var1);

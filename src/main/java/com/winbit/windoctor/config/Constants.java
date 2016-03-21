@@ -33,7 +33,6 @@ public final class Constants {
     //Treatment constants
     public static final String TOTAL = "Total";
     public static final Integer FIRST_PAGE = 1;
-    public static final String HELPER_PASSWORD = "Empty_Password_1";
 
     //WinDoctor application format
     public static final String GLOBAL_DATE_FORMAT = "yy/MM/yyyy";

@@ -5,10 +5,7 @@ import com.winbit.windoctor.domain.Authority;
 import com.winbit.windoctor.domain.Event;
 import com.winbit.windoctor.domain.PersistentToken;
 import com.winbit.windoctor.domain.User;
-import com.winbit.windoctor.repository.AuthorityRepository;
-import com.winbit.windoctor.repository.EventRepository;
-import com.winbit.windoctor.repository.PersistentTokenRepository;
-import com.winbit.windoctor.repository.UserRepository;
+import com.winbit.windoctor.repository.*;
 import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.service.MailService;
@@ -22,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.winbit.windoctor.web.rest.util.FunctionsUtil;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -53,6 +50,9 @@ public class AccountResource {
     private PersistentTokenRepository persistentTokenRepository;
 
     @Inject
+    private StructureRepository structureRepository;
+
+    @Inject
     private MailService mailService;
 
     @Inject
@@ -68,7 +68,7 @@ public class AccountResource {
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {
         return userRepository.findOneByLogin(userDTO.getLogin())
             .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> userRepository.findOneByEmail(userDTO.getEmail())
+            .orElseGet(() -> userRepository.findOneByEmailAndStructure(userDTO.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
                 .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
                     User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
