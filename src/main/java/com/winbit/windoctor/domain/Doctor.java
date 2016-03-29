@@ -24,38 +24,38 @@ public class Doctor implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 
     @NotNull
     @Size(min = 1, max = 50)
-    @Pattern(regexp = "^[a-z0-9]*$")        
+    @Pattern(regexp = "^[a-z0-9]*$")
     @Column(name = "login", length = 50, nullable = false)
     private String login;
 
     @NotNull
-    @Size(min = 8, max = 100)        
+    @Size(min = 8, max = 100)
     @Column(name = "password", length = 100, nullable = false)
     private String password;
 
-    @Size(max = 50)        
+    @Size(max = 50)
     @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Size(max = 50)        
+    @Size(max = 50)
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Size(max = 100)        
+    @Size(max = 100)
     @Column(name = "email", length = 100)
     private String email;
-    
+
     @Column(name = "activated")
     private Boolean activated;
-    
+
     @Column(name = "blocked")
     private Boolean blocked;
 
-    @Size(max = 1000000)        
+    @Size(max = 250000)
     @Lob
     @Column(name = "picture")
     private byte[] picture;

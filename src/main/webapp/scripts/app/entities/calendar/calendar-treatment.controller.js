@@ -1,97 +1,207 @@
 'use strict';
+angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
+    function ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+              Event_reason, Event, Patient,Attachment,Fund) {
 
-angular.module('windoctorApp')
-    .controller('CalendarTreatmentController', function ($scope, $stateParams, $modalInstance, Treatment, TreatmentSearch, Doctor,
-                                                         ParseLinks, $filter, Event_reason, Event, Patient,Attachment,Fund) {
-        $scope.treatments = [];
-        $scope.page = 1;
-        $scope.attachmentPage = 1;
-        $scope.treatment = null;
-        $scope.treatmentTotal = null;
-        $scope.oldTreatmentPrice = null;
-        $scope.oldTreatmentPaidPrice = null;
-        $scope.event = null;
-        $scope.patient = null;
-        $scope.doctors = null;
-        $scope.defaultDoctor = null;
-        $scope.treatmentToDelete = null;
 
-        $scope.displayTreatments = true;
-        $scope.displayAddEditViewPopup = false;
-        $scope.displayAddEditViewAttachmentPopup = false;
-        $scope.displayTreatmentView = false;
-        $scope.displayAllPatientTreatments = false;
-        $scope.displayTreatmentToDelete = false;
-        $scope.event_reasons = null;
-        $scope.defaultEventReason = null;
-        $scope.selectedDate = null;
-        $scope.eventReasonSelected = false;
-        $scope.funds;
-        $scope.oldFundContainEnoughMoney = true;
-        $scope.oldFund=null;
-        $scope.searchCalled = false;
-        /*Attachments variables */
-        $scope.dispalyAttachments = false;
-        $scope.attachments = null;
-        $scope.attachment = null;
-        $scope.viewSelectedAttachment = false;
-        $scope.priceLessThanPaidPrice = false;
-        $scope.captureAnImageScreen = false;
+        $scope.initVariables = function(){
+            $scope.treatments = [];
+            $scope.treatmentsAll = [];
+            $scope.treatmentsCurrent = [];
+            $scope.treatmentPage = 1;
+            $scope.treatmentPer_Page = 5;
+            $scope.attachmentPage = 1;
+            $scope.treatment = null;
+            $scope.treatmentTotal = null;
+            $scope.oldTreatmentPrice = null;
+            $scope.oldTreatmentPaidPrice = null;
+            $scope.treatmentToDelete = null;
+
+            $scope.displayAddEditViewPopup = false;
+            $scope.displayAddEditViewAttachmentPopup = false;
+            $scope.displayTreatmentView = false;
+            $scope.displayAllPatientTreatments = false;
+            $scope.displayTreatmentToDelete = false;
+            $scope.addNewEventReason = false;
+            $scope.newEventReason = {};
+            $scope.newEventReasonDescNecessary = false;
+            $scope.selectedDate = null;
+            $scope.eventReasonSelected = false;
+            $scope.oldFundContainEnoughMoney = true;
+            $scope.oldFund=null;
+            $scope.searchCalledTreatment = false;
+            /*Attachments variables */
+            $scope.dispalyAttachments = false;
+            $scope.attachments = null;
+            $scope.attachment = null;
+            $scope.viewSelectedAttachment = false;
+            $scope.priceLessThanPaidPrice = false;
+            $scope.captureAnImageScreen = false;
+        }
 
         // Display treatments Begin
-        $scope.loadAll = function () {
-            if ($scope.displayAllPatientTreatments === false) {
-                Treatment.query({
-                        eventId: $stateParams.eventId,
-                        page: $scope.page,
-                        per_page: 5
-                    }, function (result, headers) {
-                        console.log("$stateParams.eventId value "+$stateParams.eventId);
-                        $scope.selectedDate = new Date($stateParams.selectedDate);
-                        $scope.links = ParseLinks.parse(headers('link'));
-                        $scope.treatments = result;
-                        if ($scope.event === null) {
-                            Event.get({id: $stateParams.eventId}, function (result) {
-                                $scope.event = result;
-                            });
+        $scope.loadAllTreatmentsFromServer = function () {
+            Treatment.query({
+                    patientId: $scope.event.user.id
+                }, function (result, headers) {
+                    $scope.selectedDate = new Date($stateParams.selectedDate);
+                    $scope.linksTreatment = ParseLinks.parse(headers('link'));
+                    $scope.treatmentsAll = result;
+                    var orderBy = $filter('orderBy');
+                    $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
+                    if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
+                        && $scope.treatmentsAll.length>0){
+                        //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                        //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                        var length = $scope.treatmentsAll.length-1;
+                        console.log('length treatments '+length);
+                        $scope.treatmentsCurrent=[];
+                        $scope.treatments=[];
+                        for(var i = 0;i<length;i++){
+                                if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
+                                    $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+                                }
                         }
+                        $scope.treatments= $scope.treatmentsAll;
+                        $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     }
-                );
-            } else {
-                Treatment.query({
-                        patientId: $scope.event.user.id,
-                        page: $scope.page,
+                }
+            );
+        };
+        $scope.orderTreatments = function () {
+            var orderBy = $filter('orderBy');
+            $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
+            if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
+                && $scope.treatmentsAll.length>0){
+                //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                $scope.treatmentsCurrent=[];
+                $scope.treatments=[];
+                for(var i = 0;i<$scope.treatmentsAll.length;i++){
+                    if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
+                        $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+                    }
+                }
+                $scope.treatments= $scope.treatmentsAll;
+            }
+        };
+
+        /*$scope.populateTreatments = function () {
+            if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
+                && $scope.treatmentsAll.length>0){
+                var orderBy = $filter('orderBy');
+                $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
+                var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                for(var i = 0;i<$scope.treatmentsAll.length;i++){
+                    if($scope.displayAllPatientTreatments === false){
+                        if(i>=firstElement && i<=lastElement){
+                            $scope.treatments.push($scope.treatments[i]);
+                        }
+                    }else{
+
+                    }
+                }
+            }
+        }*/
+
+        $scope.loadAllTreatments = function () {
+            ///
+            if($scope.treatments === null || $scope.treatments === undefined || $scope.treatments.length===0){
+                $scope.loadAllTreatmentsFromServer();
+            }
+            ///
+
+            if ($scope.displayAllPatientTreatments === false) {
+                /*Treatment.query({
+                        eventId: $scope.event.id,
+                        page: $scope.treatmentPage,
                         per_page: 5
                     }, function (result, headers) {
-                        $scope.links = ParseLinks.parse(headers('link'));
+                        $scope.selectedDate = new Date($stateParams.selectedDate);
+                        $scope.linksTreatment = ParseLinks.parse(headers('link'));
                         $scope.treatments = result;
-                        if($scope.page===1 && $scope.treatments!==null &&
+                        $scope.sort ('description');
+                    }
+                );*/
+                $scope.treatments = $scope.treatmentsCurrent;
+            } else {
+                $scope.treatments = $scope.treatmentsAll;
+                /*Treatment.query({
+                        patientId: $scope.event.user.id,
+                        page: $scope.treatmentPage,
+                        per_page: 5
+                    }, function (result, headers) {
+                        $scope.linksTreatment = ParseLinks.parse(headers('link'));
+                        $scope.treatments = result;
+                        if($scope.treatmentPage===1 && $scope.treatments!==null &&
                             $scope.treatments!=undefined && $scope.treatments.length>0){
                             $scope.treatmentTotal = $scope.treatments[$scope.treatments.length-1];
-                        }else if($scope.page>1){
+                        }else if($scope.treatmentPage>1){
                             $scope.treatments.push($scope.treatmentTotal);
                         }
+
                     }
-                )
-                ;
+                );*/
             }
         };
 
         $scope.loadFunds = function () {
-            Fund.query(function (result, headers) {
-                    $scope.funds = result;
-                    console.log("$scope.treatment.fund 0 ")
-                    if ($scope.funds !== null && $scope.funds.length > 0) {
-                        console.log("$scope.treatment.fund 1 ")
-                        if ($scope.treatment.fund === null || $scope.treatment.fund === undefined) {
-                            $scope.treatment.fund = $scope.funds[0];
-                            console.log("$scope.treatment.fund 2 "+$scope.treatment.fund)
+            if($scope.funds===null || $scope.funds===undefined
+                || $scope.funds.length===0){
+                Fund.query(function (result, headers) {
+                        $scope.funds = result;
+                        console.log("$scope.treatment.fund 0 ")
+                        if($scope.funds!==null && $scope.funds.length > 0){
+                            $scope.defaultFund = $scope.funds[0];
                         }
                     }
-                }
-            );
-
+                );
+            }
         };
+
+        $scope.addNewEventReasonChange = function () {
+            if(!$scope.addNewEventReason ){
+                angular.copy($scope.treatment.event_reason, $scope.newEventReason);
+                $scope.newEventReason.id = null;
+                $scope.newEventReason.description = null;
+                $scope.newEventReason.price = 0;
+            }
+
+            $scope.addNewEventReason = !$scope.addNewEventReason;
+        };
+
+        var onSaveFinishedNewEventReason = function (result) {
+            $scope.addNewEventReason = !$scope.addNewEventReason;
+            $scope.newEventReason.description = null;
+            $scope.newEventReason.price = null;
+            $scope.newEventReasonDescNecessary = false;
+            if($scope.event_reasons===null
+                || $scope.event_reasons===undefined){
+                $scope.event_reasons = [result];
+            }else{
+                $scope.event_reasons.push(result);
+                var orderBy = $filter('orderBy');
+                $scope.event_reasons = orderBy($scope.event_reasons, 'description', false);
+            }
+        };
+
+        $scope.saveNewEventReason = function () {
+            console.log('$scope.newEventReasonDescription '+$scope.newEventReason.description);
+            console.log('$scope.newEventReasonPrice '+$scope.newEventReason.price);
+            if($scope.newEventReason.description === null
+                || $scope.newEventReason.description === undefined
+                || $scope.newEventReason.description.length===0 ){
+                $scope.newEventReasonDescNecessary = true;
+            } else {
+                $scope.newEventReasonDescNecessary = false;
+                if($scope.newEventReason.price === null){
+                    $scope.newEventReason.price = 0;
+                }
+                Event_reason.save($scope.newEventReason, onSaveFinishedNewEventReason);
+            }
+        };
+
         $scope.delete = function (id) {
             Treatment.get({id: id}, function (result) {
                 $scope.treatmentToDelete = result;
@@ -103,43 +213,42 @@ angular.module('windoctorApp')
         $scope.confirmDelete = function (id) {
             Treatment.delete({id: id},
                 function () {
-                    $scope.loadPage($scope.page);
+                    $scope.loadPageTreatment($scope.treatmentPage);
                     $scope.displayTreatmentToDelete = false;
                     $scope.displayTreatments = true;
                 });
         };
 
         ///////////////////////
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            if($scope.searchCalled){
-                $scope.search();
+        $scope.loadPageTreatment = function (page) {
+            $scope.treatmentPage = page;
+            if($scope.searchCalledTreatment){
+                $scope.searchTreatments();
             }else{
-                $scope.loadAll();
+                $scope.loadAllTreatments();
             }
         };
-        $scope.loadAll();
-        $scope.searchPatient = function () {
-            $scope.page = 1;
-            $scope.searchCalled = true;
-            $scope.search();
+        $scope.searchTreatments = function () {
+            $scope.treatmentPage = 1;
+            $scope.searchCalledTreatment = true;
+            $scope.searchTreatments();
         };
 
-        $scope.search = function () {
+        $scope.searchTreatments = function () {
             if($scope.searchQuery!==null && $scope.searchQuery!==undefined && $scope.searchQuery.length>0) {
                 TreatmentSearch.query({
                     query: $scope.searchQuery, eventId: $scope.event.id,
-                    page: $scope.page, per_page: 5
+                    page: $scope.treatmentPage, per_page: 5
                 }, function (result, headers) {
-                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.linksTreatment = ParseLinks.parse(headers('link'));
                     $scope.treatments = result;
                 }, function (response) {
                     if (response.status === 404) {
-                        $scope.loadAll();
+                        $scope.loadAllTreatments();
                     }
                 });
             }else{
-                $scope.loadAll();
+                $scope.loadAllTreatments();
             }
         };
 
@@ -147,7 +256,7 @@ angular.module('windoctorApp')
         //////////////////////
 
         $scope.refresh = function () {
-            $scope.loadAll();
+            $scope.loadAllTreatments();
             $scope.clear();
         };
 
@@ -166,18 +275,22 @@ angular.module('windoctorApp')
             $scope.displayTreatments = true;
         };
         $scope.cancelTreatmentRows = function () {
-            $modalInstance.dismiss('cancel');
+            //$modalInstance.dismiss('cancel');
         };
         // Treatment to display all or only treatment events
         $scope.displayAllPatientTreatmentsFunction = function () {
             $scope.displayAllPatientTreatments = true;
-            $scope.page = 1;
-            $scope.loadPage($scope.page);
+            $scope.displayTreatments = true;
+            $scope.displayAddEditViewPopup=false;
+            $scope.treatmentPage = 1;
+            $scope.loadPageTreatment($scope.treatmentPage);
         }
         $scope.displayPatientTreatmentsEventFunction = function () {
             $scope.displayAllPatientTreatments = false;
-            $scope.page = 1;
-            $scope.loadPage($scope.page);
+            $scope.displayTreatments = true;
+            $scope.displayAddEditViewPopup=false;
+            $scope.treatmentPage = 1;
+            $scope.loadPageTreatment($scope.treatmentPage);
         }
 
         $scope.changeFields = function () {
@@ -217,6 +330,7 @@ angular.module('windoctorApp')
         // Add - Edit - View treatments
 
         $scope.addNewTreatment = function () {
+            console.log('$scope.defaultEventReason '+$scope.defaultEventReason);
             $scope.treatment = {
                 treatment_date: $scope.event.event_date,
                 description: null,
@@ -224,8 +338,9 @@ angular.module('windoctorApp')
                 paid_price: $scope.defaultEventReason.price,
                 id: null,
                 eventReason : $scope.defaultEventReason,
+                fund : $scope.defaultFund,
                 doctor:$scope.defaultDoctor,
-                event: {id: $stateParams.eventId}
+                event: {id: $scope.event.id}
             };
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
@@ -250,22 +365,22 @@ angular.module('windoctorApp')
         }
 
         $scope.initEventReasons = function () {
-            if ($scope.event_reasons === null) {
+            if($scope.event_reasons===null || $scope.event_reasons===undefined
+                || $scope.event_reasons.length===0){
                 Event_reason.query(function (result, headers) {
                         $scope.event_reasons = result;
                         if($scope.event_reasons!==null && $scope.event_reasons.length > 0){
-                            $scope.defaultEventReason = $scope.event_reasons[0]
+                            $scope.defaultEventReason = $scope.event_reasons[0];
                             console.log(" $scope.defaultEventReason a "+$scope.defaultEventReason);
-                        }
-                        if($scope.treatment!==null){
-                            $scope.treatment.eventReason = $scope.defaultEventReason;
                         }
                     }
                 );
             }
         }
+
         $scope.initDoctors = function () {
-            if ($scope.doctors === null) {
+            if($scope.doctors===null || $scope.doctors===undefined
+                || $scope.doctors.length===0){
                 Doctor.query(function (result, headers) {
                         $scope.doctors = result;
                         console.log(" $scope.defaultDoctor 3 "+$scope.defaultDoctor);
@@ -273,18 +388,16 @@ angular.module('windoctorApp')
                             $scope.defaultDoctor = $scope.doctors[0]
                             console.log(" $scope.defaultDoctor 4 "+$scope.defaultDoctor);
                         }
-                        if($scope.treatment!==null){
-                            $scope.treatment.doctor = $scope.defaultDoctor;
-                        }
                     }
                 );
             }
         }
 
-        var onSaveTreatmentFinished = function (result) {
+
+        var onSaveTreatmentFinishedUpdate = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.treatment=result;
-            $scope.loadPage($scope.page);
+            $scope.loadPageTreatment($scope.treatmentPage);
             $scope.oldFund = $scope.treatment.fund;
             if($scope.oldTreatmentPrice===null){
                 $scope.treatmentTotal.price = $scope.treatmentTotal.price + $scope.treatment.price;
@@ -302,6 +415,36 @@ angular.module('windoctorApp')
             $scope.loadAllAttachments(1);
         };
 
+        var onSaveTreatmentFinished = function (result) {
+            $scope.$emit('windoctorApp:treatmentUpdate', result);
+            $scope.treatment=result;
+            $scope.loadPageTreatment($scope.treatmentPage);
+            $scope.oldFund = $scope.treatment.fund;
+            if($scope.oldTreatmentPrice===null){
+                $scope.treatmentTotal.price = $scope.treatmentTotal.price + $scope.treatment.price;
+            }else{
+                $scope.treatmentTotal.price = $scope.treatmentTotal.price + ($scope.treatment.price - $scope.oldTreatmentPrice);
+            }
+            if($scope.oldTreatmentPaidPrice===null){
+                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + $scope.treatment.paid_price;
+            }else{
+                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + ($scope.treatment.paid_price - $scope.oldTreatmentPaidPrice);
+            }
+            $scope.oldTreatmentPrice = $scope.treatment.price;
+            $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
+
+            // New feature
+            $scope.treatmentsAll.push($scope.treatment);
+            $scope.orderTreatments();
+
+
+            $scope.loadFunds();
+            $scope.loadAllAttachments(1);
+            if($scope.event.eventStatus.id === 1){
+                $scope.event.eventStatus.id = 3;
+            }
+        };
+
         $scope.saveTreatmentAndClose = function () {
             $scope.saveTreatment();
             $scope.displayAddEditViewPopup = false;
@@ -315,7 +458,7 @@ angular.module('windoctorApp')
 
         $scope.saveTreatment = function () {
             if ($scope.treatment.id != null) {
-                $scope.treatment = Treatment.update($scope.treatment, onSaveTreatmentFinished);
+                $scope.treatment = Treatment.update($scope.treatment, onSaveTreatmentFinishedUpdate);
             } else {
                 $scope.treatment = Treatment.save($scope.treatment, onSaveTreatmentFinished);
             }
@@ -445,121 +588,151 @@ angular.module('windoctorApp')
             $scope.viewSelectedAttachment = false;
         };
 
+
         /********************************************************************************/
         /********************************************************************************/
-        /***********************                                       ******************/
-        /***********************      Manage live capture image        ******************/
-        /***********************                                       ******************/
-        /********************************************************************************/
+        /**************************           Paginator        **************************/
         /********************************************************************************/
         /********************************************************************************/
 
-        $scope.captureAnImage= function () {
-            $scope.captureAnImageScreen = true;
+        /*$scope.pageSize = 4;
+        $scope.allItems = $scope.treatments;
+        $scope.reverse = false;
+        $scope.searched = function (valLists,toSearch) {
+            return _.filter(valLists,
+                function (i) {
+                    return searchUtil(i, toSearch);
+                });
         };
-        $scope.cancelImageCapture= function () {
-            $scope.captureAnImageScreen = false;
-        };
 
-        var _video = null,
-            patData = null;
-
-        $scope.patOpts = {x: 0, y: 0, w: 25, h: 25};
-
-        // Setup a channel to receive a video property
-        // with a reference to the video element
-        // See the HTML binding in main.html
-        $scope.channel = {};
-
-        $scope.webcamError = false;
-        $scope.onError = function (err) {
-            $scope.$apply(
-                function() {
-                    $scope.webcamError = err;
+        $scope.paged = function (valLists,pageSize)
+        {
+            var retVal = [];
+            for (var i = 0; i < valLists.length; i++) {
+                if (i % pageSize === 0) {
+                    retVal[Math.floor(i / pageSize)] = [valLists[i]];
+                } else {
+                    retVal[Math.floor(i / pageSize)].push(valLists[i]);
                 }
-            );
-        };
-
-        $scope.onSuccess = function () {
-            // The video element contains the captured camera data
-            _video = $scope.channel.video;
-            $scope.$apply(function() {
-                $scope.patOpts.w = _video.width;
-                $scope.patOpts.h = _video.height;
-                //$scope.showDemos = true;
-            });
-        };
-
-        $scope.onStream = function (stream) {
-            // You could do something manually with the stream.
-        };
-
-        $scope.makeSnapshot = function() {
-            if (_video) {
-                var patCanvas = document.querySelector('#snapshot');
-                if (!patCanvas) return;
-
-                patCanvas.width = _video.width;
-                patCanvas.height = _video.height;
-                var ctxPat = patCanvas.getContext('2d');
-
-                var idata = getVideoData($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
-                ctxPat.putImageData(idata, 0, 0);
-
-                sendSnapshotToServer(patCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream") );
-
-                patData = idata;
-                $scope.captureAnImageScreen = false;
             }
+            return retVal;
         };
-
-        /**
-         * Redirect the browser to the URL given.
-         * Used to download the image by passing a dataURL string
-         */
-        $scope.downloadSnapshot = function downloadSnapshot(dataURL) {
-            window.location.href = dataURL;
-        };
-
-        var getVideoData = function getVideoData(x, y, w, h) {
-            var hiddenCanvas = document.createElement('canvas');
-            hiddenCanvas.width = _video.width;
-            hiddenCanvas.height = _video.height;
-            var ctx = hiddenCanvas.getContext('2d');
-            ctx.drawImage(_video, 0, 0, _video.width, _video.height);
-            return ctx.getImageData(x, y, w, h);
-        };
-
-        /**
-         * This function could be used to send the image data
-         * to a backend server that expects base64 encoded images.
-         *
-         * In this example, we simply store it in the scope for display.
-         */
-        var sendSnapshotToServer = function sendSnapshotToServer(imgBase64) {
-            $scope.setImage ([dataURItoBlob(imgBase64)], $scope.attachment);
-
-        };
-
-        function dataURItoBlob(dataURI) {
-            // convert base64/URLEncoded data component to raw binary data held in a string
-            var byteString;
-            if (dataURI.split(',')[0].indexOf('base64') >= 0)
-                byteString = atob(dataURI.split(',')[1]);
-            else
-                byteString = unescape(dataURI.split(',')[1]);
-
-            // separate out the mime component
-            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-            // write the bytes of the string to a typed array
-            var ia = new Uint8Array(byteString.length);
-            for (var i = 0; i < byteString.length; i++) {
-                ia[i] = byteString.charCodeAt(i);
-            }
-
-            return new Blob([ia], {type:mimeString});
+        $scope.resetAll = function () {
+            $scope.filteredList = $scope.allItems;
+            $scope.newEmpId = '';
+            $scope.newDescription = '';
+            $scope.newEventReasonDescription = '';
+            $scope.searchText = '';
+            $scope.currentPage = 0;
+            $scope.Header = ['','',''];
         }
 
-    })
-;
+
+        $scope.add = function () {
+            $scope.allItems.push({
+                EmpId: $scope.newEmpId,
+                name: $scope.newDescription,
+                Email: $scope.newEventReasonDescription
+            });
+            $scope.resetAll();
+        }
+
+        $scope.search = function () {
+            $scope.filteredList =
+                $scope.searched($scope.allItems, $scope.searchText);
+
+            if ($scope.searchText == '') {
+                $scope.filteredList = $scope.allItems;
+            }
+            $scope.pagination();
+        }
+
+
+        // Calculate Total Number of Pages based on Search Result
+        $scope.pagination = function () {
+            $scope.filteredList = $scope.treatments;
+            console.log('$scope.filteredList '+$scope.filteredList);
+            $scope.ItemsByPage = $scope.paged( $scope.filteredList, $scope.pageSize );
+        };
+
+        $scope.setPage = function () {
+            $scope.currentPage = this.n;
+        };
+
+        $scope.firstPage = function () {
+            $scope.currentPage = 0;
+        };
+
+        $scope.lastPage = function () {
+            $scope.currentPage = $scope.ItemsByPage.length - 1;
+        };
+
+        $scope.range = function (input, total) {
+            var ret = [];
+            if (!total) {
+                total = input;
+                input = 0;
+            }
+            for (var i = input; i < total; i++) {
+                if (i != 0 && i != total - 1) {
+                    ret.push(i);
+                }
+            }
+            return ret;
+        };
+
+        $scope.sort = function(sortBy){
+            $scope.resetAll();
+
+            $scope.columnToOrder = sortBy;
+
+            //$Filter - Standard Service
+            $scope.filteredList = $filter('orderBy')($scope.filteredList, ['-treatment_date','-id'], false);
+            var iconName;
+            if($scope.reverse)
+                iconName = 'glyphicon glyphicon-chevron-up';
+            else
+                iconName = 'glyphicon glyphicon-chevron-down';
+
+            if(sortBy === 'EmpId')
+            {
+                $scope.Header[0] = iconName;
+            }
+            else if(sortBy === 'name')
+            {
+                $scope.Header[1] = iconName;
+            }else {
+                $scope.Header[2] = iconName;
+            }
+
+            $scope.reverse = !$scope.reverse;
+
+            $scope.pagination();
+        };
+
+        //By Default sort ny Name
+
+        function searchUtil(item, toSearch) {
+            return (item.description.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.eventReason.description.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.EmpId == toSearch) ? true : false;
+        }
+        */
+
+
+
+
+
+
+
+
+        $scope.initTreatmentPage = function () {
+            $scope.initVariables();
+            $scope.loadAllTreatmentsFromServer();
+            $scope.initEventReasons();
+            $scope.loadFunds();
+            $scope.initDoctors();
+            console.log('displayTreatmentsPage values '+$scope.displayTreatmentsPage);
+            console.log('displayTreatments values '+$scope.displayTreatments);
+        }
+
+        $scope.initTreatmentPage();
+    };

@@ -145,6 +145,7 @@
             "minbytes": "Ce champs doit être inférieur à {{min}} bytes.",
             "maxbytes": "Ce champs doit être supérieur à {{max}} bytes.",
             "pattern": "Ce champs doit suivre l'expression régulière {{pattern}}.",
+            "pattern2": "Ce champs doit contenir des majuscules, des miniscules ou des nombres.",
             "number": "Ce champs doit être un nombre.",
             "datetimelocal": "Ce champs doit être une date et une heure."
         }

@@ -22,7 +22,11 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-folder-open" ></span>global.menu.entities.category'// angular-breadcrumb's configuration
                 }
+
             })
             .state('category.detail', {
                 parent: 'entity',

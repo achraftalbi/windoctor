@@ -7,7 +7,7 @@ angular.module('windoctorApp')
                 parent: 'account',
                 url: '/login',
                 data: {
-                    roles: [], 
+                    roles: [],
                     pageTitle: 'login.title'
                 },
                 views: {
@@ -21,6 +21,10 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('login');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="glyphicon glyphicon-log-in" ></span>global.menu.account.login'// angular-breadcrumb's configuration
                 }
+
             });
     });

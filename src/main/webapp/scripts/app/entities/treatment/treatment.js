@@ -23,7 +23,11 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-money" ></span>global.menu.entities.benefits'// angular-breadcrumb's configuration
                 }
+
             })
             .state('treatment', {
                 parent: 'entity',

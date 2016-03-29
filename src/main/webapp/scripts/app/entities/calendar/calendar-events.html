@@ -1,30 +1,40 @@
-<div>
+<div ng-show="displayEventsPage">
     <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
-        <div class="panel panel-empty">
+        <div >
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <button type="button"
+                            onclick="window.history.back()"
+                            class="btn btn-info">
+                        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                    </button>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                </div>
+            </div>
             <form name="editForm" role="form" novalidate show-validation>
                 <h2 translate="windoctorApp.calendar.home.dayEventsTitle"
-                    translate-values="{day: '{{ selectedDateObject | date:'dd/MM/yyyy' : '+0000' }}'}">Appointments and
+                    translate-values="{day: '{{ selectedDateObject | date:'dd/MM/yyyy'}}'}">Appointments and
                     visits for day</h2>
                 <jh-alert></jh-alert>
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4">
-                            <button class="btn btn-primary" ng-click="cancelEventRows()"
-                                    ng-show="!account.currentUserPatient"
-                                    ui-sref="calendar.newEventAppointment({selectedDate:selectedDate})">
+                            <button class="btn btn-primary" ng-click="addEvent(1)"
+                                    ng-show="userNotPatient">
                                 <span class="glyphicon glyphicon-flash"></span> <span
                                 translate="windoctorApp.calendar.home.createAppointmentLabel">Create a new appointment</span>
                             </button>
-                            <button class="btn btn-warning" ng-click="cancelEventRows()" ng-show="userCanAddRequest"
-                                    ui-sref="calendar.newEventRequest({selectedDate:selectedDate})">
+                            <button class="btn btn-warning" ng-click="addEvent(7)" ng-show="userCanAddRequest">
                                 <span class="glyphicon glyphicon-flash"></span> <span
                                 translate="windoctorApp.calendar.home.createRequestLabel">Create a new request</span>
                             </button>
                         </div>
                         <div class="col-md-4">
-                            <button class="btn btn-success" ng-click="cancelEventRows()"
-                                    ng-show="!account.currentUserPatient"
-                                    ui-sref="calendar.newEventVisit({selectedDate:selectedDate})">
+                            <button class="btn btn-success" ng-click="addEvent(8)"
+                                    ng-show="userNotPatient">
                                 <span class="glyphicon glyphicon-flash"></span> <span
                                 translate="windoctorApp.calendar.home.createVisitLabel">Create a new Visit</span>
                             </button>
@@ -62,7 +72,7 @@
                             <th translate="windoctorApp.calendar.patient">Patient</th>
                             <th translate="windoctorApp.calendar.event_date">Event_date</th>
                             <th translate="windoctorApp.calendar.description">Description</th>
-                            <th ng-show="!account.currentUserPatient"
+                            <th ng-show="userNotPatient"
                                 translate="windoctorApp.calendar.treatments">treatments</th>
                             <th translate="windoctorApp.calendar.eventStatus">eventStatus</th>
                             <th></th>
@@ -101,7 +111,7 @@
                                         <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
                                              style="max-width: 25%;max-height: 28%;" ng-if="event.user.picture"
                                              class="img-circle"/>
-                                        {{event.user.firstName}} {{event.user.lastName}}
+                                        <strong>{{event.user.firstName}} {{event.user.lastName}}</strong>
                                 </span>
                                 <span ng-show="account.currentUserPatient && account.id!==event.user.id"
                                       translate="windoctorApp.calendar.anonymous">Anonymous</span>
@@ -122,10 +132,8 @@
                                     {{ event.description | limitTo: 10 }}{{event.description.length > 10 ? '...' : ''}}
                                 </span>
                             </td>
-                            <td ng-show="!account.currentUserPatient"><a ng-click="cancelEventRows()"
-                                   ui-sref="calendar.treatment({eventId:event.id,selectedDate:selectedDate})"
+                            <td ng-show="!account.currentUserPatient"><a ng-click="displayManageTreatmentsPage(event)"
                                    translate="windoctorApp.calendar.manageTreatments">Manage treatments</a>
-
                             </td>
                             <div>
                                 <td style="background-color: #adadad;color: white;"
@@ -190,9 +198,8 @@
                                 </td>
                             </div>
                             <td>
-                                <button type="submit" ng-click="cancelEventRows()"
+                                <button ng-click="editEvent(event)"
                                         ng-disabled="account.currentUserPatient && (account.id!==event.user.id || (account.id===event.user.id && event.eventStatus.id!==7))"
-                                        ui-sref="calendar.edit({id:event.id,selectedDate:selectedDate})"
                                         data-toggle="tooltip"
                                         tooltip="{{ 'entity.action.edit' | translate }}"
                                         tooltip-class="pencilClass"
@@ -217,25 +224,20 @@
                     </table>
                     <nav>
                         <ul class="pagination" ng-show="links['prev'] || links['next']">
-                            <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
-                            <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
-                            <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
-                            <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
+                            <li ng-show="links['first']" ng-click="loadPageEvents(links['first'])"><a>&lt;&lt;</a></li>
+                            <li ng-show="links['prev']" ng-click="loadPageEvents(links['prev'])"><a>&lt;</a></li>
+                            <li ng-show="page > 2" ng-click="loadPageEvents(page - 2)"><a>{{page - 2}}</a></li>
+                            <li ng-show="page > 1" ng-click="loadPageEvents(page - 1)"><a>{{page - 1}}</a></li>
                             <li class="active"><a>{{page}}</a></li>
-                            <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
-                            <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a>
+                            <li ng-show="page < links['last']" ng-click="loadPageEvents(page + 1)"><a>{{page + 1}}</a></li>
+                            <li ng-show="page < links['last'] - 1" ng-click="loadPageEvents(page + 2)"><a>{{page + 2}}</a>
                             </li>
-                            <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
-                            <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+                            <li ng-show="links['next']" ng-click="loadPageEvents(links['next'])"><a>&gt;</a></li>
+                            <li ng-show="links['last']" ng-click="loadPageEvents(links['last'])"><a>&gt;&gt;</a></li>
                         </ul>
                     </nav>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelEventRows()">
-                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-                        translate="entity.action.cancel">Cancel</span>
-                    </button>
-                </div>
+
             </form>
         </div>
     </div>
@@ -265,4 +267,10 @@
             </form>
         </div>
     </div>
+</div>
+<div ng-show="displayDialogEventPage">
+    <ng-include src="'scripts/app/entities/calendar/calendar-dialog.html'"></ng-include>
+</div>
+<div ng-show="displayTreatmentsPage">
+    <ng-include src="'scripts/app/entities/calendar/calendar-treatments.html'"></ng-include>
 </div>

@@ -32,6 +32,12 @@ public class Status implements Serializable {
     @Column(name = "description", length = 100, nullable = false)
     private String description;
 
+    public Status(){
+    }
+
+    public Status(Long id){
+        this.id = id;
+    }
 
     @NotNull
     @Size(min = 1, max = 100)

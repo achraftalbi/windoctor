@@ -46,7 +46,7 @@
             </div>
             <input type="hidden" class="form-control" name="image" id="field_image"
                     ng-model="attachment.image"
-                    required maxbytes="1000000">
+                    required maxbytes="250000">
 
             <div ng-show="editForm.image.$invalid">
                 <p class="help-block"
@@ -54,18 +54,18 @@
                     This field is required.
                 </p>
                 <p class="help-block"
-                   ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="1000000">
-                    This field cannot be more than 1000000.
+                   ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="250000">
+                    This field cannot be more than 250000.
                 </p>
             </div>
         </div>
         <div class="form-group">
             <label translate="windoctorApp.attachment.treatment" for="field_treatment">treatment</label>
-            
+
             <select class="form-control" id="field_treatment" name="treatment" ng-model="attachment.treatment" ng-options="treatment as treatment.id for treatment in treatments track by treatment.id">
                 <option value=""></option>
             </select>
-            
+
         </div>
     </div>
     <div class="modal-footer">

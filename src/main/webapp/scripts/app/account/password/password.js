@@ -21,6 +21,10 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('password');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="glyphicon glyphicon-lock" ></span>global.menu.account.password'// angular-breadcrumb's configuration
                 }
+
             });
     });

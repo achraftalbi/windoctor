@@ -2,7 +2,12 @@
 
 angular.module('windoctorApp')
     .controller('NavbarController', function ($scope, $location, $state, Auth, Principal, ENV) {
-        $scope.isAuthenticated = Principal.isAuthenticated;
+        Principal.identity().then(function(account) {
+            $scope.account = account;
+            $scope.isAuthenticated = Principal.isAuthenticated;
+            $scope.structureName = Principal.structureName;
+        });
+
         $scope.$state = $state;
         $scope.inProduction = ENV === 'prod';
 
@@ -10,4 +15,5 @@ angular.module('windoctorApp')
             Auth.logout();
             $state.go('home');
         };
+
     });

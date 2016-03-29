@@ -207,9 +207,9 @@ public class MailService {
     private String getBaseUrlOnAsynchronousJobs(Locale locale) {
         if((env.getActiveProfiles()!=null) && (env.getActiveProfiles().length > 0) &&
             (Arrays.asList(env.getActiveProfiles()).contains(Constants.SPRING_PROFILE_PRODUCTION))){
-            return env.getProperty("email.hostname") + ":" + env.getProperty("server.port");
-        }else{
             return messageSource.getMessage("email.server",null,locale);
+        }else{
+            return env.getProperty("email.hostname") + ":" + env.getProperty("server.port");
         }
     }
 
@@ -251,6 +251,7 @@ public class MailService {
         log.debug("sendEventEmail e-mail to '{}'", usedForTreatment.getUser().getEmail());
         if (usedForTreatment.getUser().getStructure() != null) {
             log.debug("sendEventEmail e-mail to usedForTreatment.getUser().getStructure() != null '{}'", usedForTreatment.getUser().getEmail());
+
             Locale locale = Locale.forLanguageTag(usedForTreatment.getUser().getLangKey());
             Context context = new Context(locale);
             context.setVariable("user", usedForTreatment.getUser());

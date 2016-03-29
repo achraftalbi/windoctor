@@ -160,7 +160,7 @@
                             </div>
                             <input type="hidden" class="form-control" name="image" id="field_image"
                                    ng-model="attachment.image" ng-show="!viewSelectedAttachment"
-                                   required maxbytes="1000000">
+                                   required maxbytes="250000">
                             <img data-ng-src="{{'data:image/*;base64,' + attachment.image}}"
                                  ng-show="viewSelectedAttachment"
                                  style="max-width: 100%;" ng-if="attachment.image"/>
@@ -174,8 +174,8 @@
 
                                 <p class="help-block"
                                    ng-show="editAttachmentForm.image.$error.maxbytes"
-                                   translate="entity.validation.maxbytes" translate-value-max="1000000">
-                                    This field cannot be more than 1000000.
+                                   translate="entity.validation.maxbytes" translate-value-max="250000">
+                                    This field cannot be more than 250000.
                                 </p>
                             </div>
                         </div>
@@ -219,7 +219,7 @@
                 <div class="form-group col-xs-6 col-md-4">
                 </div>
                 <div class="form-group col-xs-6 col-md-4">
-                    <div class="row">
+                    <div class="row" style="padding-top: 15px">
                         <div class="form-group col-xs-6 col-md-4">
                             <button class="btn btn-default btn-block btn-success"
                                     ng-click="makeSnapshot()"

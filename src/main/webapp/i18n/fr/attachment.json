@@ -16,6 +16,7 @@
                 "title": "Attachment"
             },
             "description": "Description",
+            "message": "Vous devez sauvegarder avant de gérer les images des radios.",
             "image": "Image",
             "treatment": "Acte"
         }

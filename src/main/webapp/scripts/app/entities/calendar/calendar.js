@@ -23,6 +23,9 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-calendar" ></span>global.menu.entities.calendar'// angular-breadcrumb's configuration
                 }
             })
             .state('calendar.rows', {
@@ -31,25 +34,27 @@ angular.module('windoctorApp')
                 data: {
                     roles: ['ROLE_DOCTOR'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal','$filter', function($stateParams, $state, $modal,$filter) {
-                    $modal.open({
+                views: {
+                    'content@': {
                         templateUrl: 'scripts/app/entities/calendar/calendar-events.html',
-                        controller: 'CalendarEventsController',
-                        size: 'lg',
-                        resolve: {
-                            entity: function () {
-                                //$stateParams.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
-                                $stateParams.selectedDate = new Date($stateParams.selectedDate)+'';
-                                console.log("selectedDate rows "+$stateParams.selectedDate);
-                                return {description: null, id: null};
-                            }
-                        }
-                    }).result.then(function(result) {
-                            $state.go('calendar', null, { reload: true });
-                        }, function() {
-                            $state.go('calendar',{ reload: true });
-                        })
-                }]
+                        controller: 'CalendarEventsController'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('calendar');
+                        $translatePartialLoader.addPart('patient');
+                        $translatePartialLoader.addPart('treatment');
+                        $translatePartialLoader.addPart('attachment');
+                        $translatePartialLoader.addPart('event_reason');
+                        $translatePartialLoader.addPart('global');
+                        return $translate.refresh();
+                    }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-th-list" ></span>windoctorApp.calendar.home.dayEventsActsTitle'// angular-breadcrumb's configuration
+                }
+
             })
             .state('calendar.patientDetail', {
                 parent: 'calendar',

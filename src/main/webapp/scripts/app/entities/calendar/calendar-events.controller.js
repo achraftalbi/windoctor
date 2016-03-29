@@ -1,27 +1,36 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarEventsController', function ($scope, $stateParams, $modalInstance, Event, EventSearch, ParseLinks, $filter, Principal,$translate) {
+    .controller('CalendarEventsController', function ($scope, $stateParams, Event, EventSearch,EventDTO, Patient, ParseLinks,
+                                                      PatientSearch, $filter, Principal,$translate,Treatment, TreatmentSearch,
+                                                      Doctor,Event_reason,Attachment,Fund) {
         $scope.events = [];
         $scope.page = 1;
+        $scope.numberPageEvents = 5;
         $scope.selectedDate = null;
         $scope.selectedDateString = null;
         $scope.account = null;
         $scope.userCanAddRequest = false;
+        $scope.userNotPatient = false;
         $scope.eventsEmpty = false;
         $scope.selectedDateObject = new Date($stateParams.selectedDate);
         $scope.searchCalled = false;
+        $scope.displayEventsPage = true;
+        $scope.displayDialogEventPage = false;
+        $scope.displayTreatmentsPage = false;
         console.log('selectedDateString '+$scope.selectedDateString);
         $scope.loadAll = function () {
-            console.info('first $stateParams.selectedDate' + $stateParams.selectedDate);
+            $scope.events = [];
+            $scope.eventsEmpty = false;
             Event.query({
                 selectedDate: $stateParams.selectedDate + '',
                 page: $scope.page,
-                per_page: 5
+                per_page: $scope.numberPageEvents
             }, function (result, headers) {
                 $scope.selectedDate = $filter('date')($stateParams.selectedDate, 'MMM dd yyyy');
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.events = result;
+                console.log('$scope.events.length '+$scope.events.length);
                 if($scope.events!==null && $scope.events!== undefined && $scope.events.length===0){
                     $scope.eventsEmpty = true;
                 }
@@ -33,11 +42,12 @@ angular.module('windoctorApp')
             console.log('$scope.account.currentUserPatient ' + $scope.account.currentUserPatient);
             console.log('$scope.account.maxEventsReached ' + $scope.account.maxEventsReached);
             $scope.userCanAddRequest = $scope.account.currentUserPatient && !$scope.account.maxEventsReached;
+            $scope.userNotPatient = !$scope.account.currentUserPatient;
         });
 
         $("a").tooltip();
 
-        $scope.loadPage = function (page) {
+        $scope.loadPageEvents = function (page) {
             $scope.page = page;
             if($scope.searchCalled){
                 $scope.loadAllSearch();
@@ -95,9 +105,43 @@ angular.module('windoctorApp')
             $scope.clear();
         };
 
-        $scope.cancelEventRows = function () {
-            $scope.$emit('windoctorApp:eventUpdate');
-            $modalInstance.dismiss('cancel');
+        $scope.returnToEventsPage = function () {
+            $scope.displayEventsPage = true;
+            $scope.displayDialogEventPage = false;
+            $scope.showListPatients=false;
+            //Treat treatment page
+            $scope.displayTreatmentsPage = false;
+        };
+
+        $scope.editEvent = function (event) {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.event=event;
+            console.log('$scope.event.id '+$scope.event.id);
+            $scope.displayEventsPage = false;
+            $scope.displayDialogEventPage = true;
+            angular.module('windoctorApp').expandCalendarEventsControllerToDialog
+            ($scope, $stateParams, Event, EventDTO , Patient, ParseLinks, PatientSearch, $filter, Principal);
+        };
+
+        $scope.addEvent = function (status) {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.event = {event_date: null, description: null, id: null,eventStatus:{id:status}};
+            $scope.displayEventsPage = false;
+            $scope.displayDialogEventPage = true;
+            angular.module('windoctorApp').expandCalendarEventsControllerToDialog
+            ($scope, $stateParams, Event, EventDTO , Patient, ParseLinks, PatientSearch, $filter, Principal);
+        };
+
+        $scope.displayManageTreatmentsPage = function (event) {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.event=event;
+            $scope.displayEventsPage = false;
+            $scope.displayTreatmentsPage = true;
+            $scope.displayTreatments = true;
+            console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
+            angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
+            ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+                Event_reason, Event, Patient,Attachment,Fund);
         };
 
         //End Patient pages treatement
@@ -133,10 +177,14 @@ angular.module('windoctorApp')
         };
 
         $scope.save = function (event) {
-            if (event.id != null) {
-                Event.update(event, onSaveFinished);
+            var eventTmp = {};
+            //var userTmp = {};
+            angular.copy(event, eventTmp);
+            eventTmp.user={id:event.user.id};
+            if (eventTmp.id != null) {
+                Event.update(eventTmp, onSaveFinished);
             } else {
-                Event.save(event, onSaveFinished);
+                Event.save(eventTmp, onSaveFinished);
             }
         };
 
@@ -168,5 +216,112 @@ angular.module('windoctorApp')
             return $scope.messageToDeleted;
         };
 
+        /******************************************************************************************/
+        /******************************************************************************************/
+        /***********************                                                 ******************/
+        /***********************      Manage live capture image  attachment      ******************/
+        /***********************                                                 ******************/
+        /******************************************************************************************/
+        /******************************************************************************************/
+        /******************************************************************************************/
+
+        $scope.captureAnImage= function () {
+            $scope.captureAnImageScreen = true;
+        };
+        $scope.cancelImageCapture= function () {
+            $scope.captureAnImageScreen = false;
+        };
+
+        var _video = null,
+            patData = null;
+
+        $scope.patOpts = {x: 0, y: 0, w: 25, h: 25};
+
+        // Setup a channel to receive a video property
+        // with a reference to the video element
+        // See the HTML binding in main.html
+        $scope.channel = {};
+
+        $scope.webcamError = false;
+        $scope.onError = function (err) {
+            $scope.$apply(
+                function() {
+                    $scope.webcamError = err;
+                }
+            );
+        };
+
+        $scope.onSuccess = function () {
+            // The video element contains the captured camera data
+            _video = $scope.channel.video;
+            $scope.$apply(function() {
+                $scope.patOpts.w = _video.width;
+                $scope.patOpts.h = _video.height;
+                //$scope.showDemos = true;
+            });
+        };
+
+        $scope.onStream = function (stream) {
+            // You could do something manually with the stream.
+        };
+
+        $scope.makeSnapshot = function() {
+            if (_video) {
+                var patCanvas = document.querySelector('#snapshot');
+                if (!patCanvas) return;
+
+                patCanvas.width = _video.width;
+                patCanvas.height = _video.height;
+                var ctxPat = patCanvas.getContext('2d');
+
+                var idata = getVideoData($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
+                ctxPat.putImageData(idata, 0, 0);
+
+                sendSnapshotToServer(patCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream") );
+
+                patData = idata;
+                $scope.captureAnImageScreen = false;
+            }
+        };
+
+        var getVideoData = function getVideoData(x, y, w, h) {
+            var hiddenCanvas = document.createElement('canvas');
+            hiddenCanvas.width = _video.width;
+            hiddenCanvas.height = _video.height;
+            var ctx = hiddenCanvas.getContext('2d');
+            ctx.drawImage(_video, 0, 0, _video.width, _video.height);
+            return ctx.getImageData(x, y, w, h);
+        };
+
+        /**
+         * This function could be used to send the image data
+         * to a backend server that expects base64 encoded images.
+         *
+         * In this example, we simply store it in the scope for display.
+         */
+        var sendSnapshotToServer = function sendSnapshotToServer(imgBase64) {
+            $scope.setImage ([dataURItoBlob(imgBase64)], $scope.attachment);
+
+        };
+
+        function dataURItoBlob(dataURI) {
+            // convert base64/URLEncoded data component to raw binary data held in a string
+            var byteString;
+            if (dataURI.split(',')[0].indexOf('base64') >= 0)
+                byteString = atob(dataURI.split(',')[1]);
+            else
+                byteString = unescape(dataURI.split(',')[1]);
+
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+            // write the bytes of the string to a typed array
+            var ia = new Uint8Array(byteString.length);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+
+            return new Blob([ia], {type:mimeString});
+        };
 
     });

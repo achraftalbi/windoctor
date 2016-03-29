@@ -2,6 +2,7 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.collect.Lists;
+import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.repository.StructureRepository;
 import com.winbit.windoctor.repository.search.StructureSearchRepository;
@@ -23,6 +24,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class StructureResource {
             return ResponseEntity.badRequest().header("Failure", "A new structure cannot already have an ID").body(null);
         }
         structure.setCreation_date(new DateTime());
+        structure.setMaxEventsPatientCanAdd(new BigDecimal(Constants.DEFAULT_MAX_EVENTS_PATIENT_CAN_ADD));
         Structure result = structureRepository.save(structure);
         structureSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/structures/" + result.getId()))

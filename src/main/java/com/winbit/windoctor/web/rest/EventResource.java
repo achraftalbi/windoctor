@@ -125,7 +125,7 @@ public class EventResource {
         }
         Event oldEvent = eventRepository.findOne(event.getId());
         Event result = eventRepository.save(event);
-        eventSearchRepository.save(event);
+        //eventSearchRepository.save(event);
         ResponseEntity<Event> responseEntity;
 
         if(event.getEventStatus().getId()!=null){
@@ -185,7 +185,7 @@ public class EventResource {
     public List<Event> getAll() {
         log.debug("REST request to get all Event");
         List<Event> listEventsFounded = eventRepository.findAllEvents(SecurityUtils.getCurrerntStructure());
-        List<Event> listEvents = new ArrayList<Event>();
+        /*List<Event> listEvents = new ArrayList<Event>();
         log.info("TimeZone test URI " + TimeZone.getDefault().getID());
         for (Event event : listEventsFounded) {
             Event eventTmp = new Event();
@@ -195,8 +195,8 @@ public class EventResource {
             eventTmp.setEvent_date(event.getEvent_date().withZoneRetainFields(DateTimeZone.forID(TimeZone.getDefault().getID())));
             listEvents.add(eventTmp);
             log.info("New events event_date change " + event.getEvent_date());
-        }
-        return listEvents;
+        }*/
+        return listEventsFounded;
     }
 
     /**
@@ -228,20 +228,18 @@ public class EventResource {
     public ResponseEntity<List<Event>> getAll(@RequestParam(value = "selectedDate", required = false) String selectedDate, @RequestParam(value = "page", required = false) Integer offset,
                                               @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        log.debug("REST request to get events page per_page");
+        log.info("REST request to get events page per_page");
         Page<Event> page = null;
-        log.debug("selectedDate " + selectedDate);
+        log.info("selectedDate " + selectedDate);
         if (selectedDate == null) {
-            log.debug("selectedDate 1 " + selectedDate);
+            log.info("selectedDate 1 " + selectedDate);
             page = eventRepository.findAll(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
         } else {
             selectedDate = selectedDate.split("GMT")[0].trim();
             DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
-            log.debug("first date:" + dateTimeInUTC + " segond date:" + dateTimeInUTC.plusDays(1));
+            log.info("first date:" + dateTimeInUTC + " segond date:" + dateTimeInUTC.plusDays(1));
             page = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
-            for (Event event : page) {
-                log.debug("event founded " + event.getEvent_date());
-            }
+            log.info("event list page.getContent().size()"+page.getContent().size());
         }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -288,7 +286,8 @@ public class EventResource {
             selectedDate = selectedDate.split("GMT")[0].trim();
             DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
             eventList = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure());
-            eventDTO.setEventList(eventList);
+            // I commented this list because this affected the load of data
+            //eventDTO.setEventList(eventList);
             Long startHour = 6l;
             Long endHour = 24l;
             eventDTO.setStartDateList(new ArrayList<String>());
@@ -420,7 +419,13 @@ public class EventResource {
         log.debug("REST request to get events query "+query);
         selectedDate = selectedDate.split("GMT")[0].trim();
         DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
-        page = eventSearchRepository.search(query,dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        // This function was omitted for problems found with elasticsearcg
+        //page = eventSearchRepository.search(query,dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        if(query==null || query.length()==0){
+            page = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        }else {
+            page = eventRepository.search(Constants.PERCENTAGE + query + Constants.PERCENTAGE, dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/events", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

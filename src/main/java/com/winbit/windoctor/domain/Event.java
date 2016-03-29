@@ -9,14 +9,17 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
+import java.util.TimeZone;
 
 
 /**
@@ -32,6 +35,14 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public Event()
+    {}
+    public Event(Event e){
+        this.id = e.getId();
+        this.eventStatus = new Status(e.getEventStatus().getId());
+        this.id = e.getId();
+        this.setEvent_date(e.getEvent_date().withZoneRetainFields(DateTimeZone.forID(TimeZone.getDefault().getID())));
+    }
 
     @NotNull
     /*@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime",

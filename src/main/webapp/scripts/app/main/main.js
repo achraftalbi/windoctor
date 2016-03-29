@@ -20,6 +20,10 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('main');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-home" ></span>global.menu.home'// angular-breadcrumb's configuration
                 }
+
             });
     });

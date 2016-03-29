@@ -32,7 +32,7 @@ public class Product implements Serializable {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @Size(max = 1000000)
+    @Size(max = 250000)
     @Lob
     @Column(name = "image")
     private byte[] image;

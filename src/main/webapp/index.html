@@ -34,6 +34,7 @@
 <div ng-show="{{ENV === 'dev'}}" class="development" ng-cloak=""></div>
 <div ui-view="navbar" ng-cloak=""></div>
 <div class="container">
+    <div  ncy-breadcrumb></div>
     <div class="well" ui-view="content"></div>
 
     <div class="footer text-center">
@@ -80,6 +81,7 @@
 <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/bootstrap-sass/assets/javascripts/bootstrap.js"></script>
+<script src="bower_components/angular-breadcrumb/release/angular-breadcrumb.js"></script>
 <script src="bower_components/json3/lib/json3.js"></script>
 <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
 <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>

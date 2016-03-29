@@ -104,6 +104,7 @@ public class Event_reasonResource {
         log.debug("REST request to get Event_reasons page per_page");
         Page<Event_reason> page = event_reasonRepository.findAll(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/event_reasons", offset, limit);
+        log.info("Event_reason size list " + page.getSize());
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 

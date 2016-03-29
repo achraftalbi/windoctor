@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label for="login" translate="global.form.username">Login</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
-                           ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
+                           ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[A-Za-z0-9]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" translate="register.messages.validate.login.required">

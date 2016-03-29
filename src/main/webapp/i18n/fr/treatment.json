@@ -5,9 +5,9 @@
                 "title": "Actes à la date {{ date }}",
                 "createLabel": "Créer un nouveau acte",
                 "createOrEditLabel": "Créer ou éditer un acte",
-                "displayAllPatientTreatments": "Afficher tout les actes du patient",
-                "displayPatientTreatmentsAppointment": "Afficher seulement les actes de ce rendez vous",
-                "displayPatientTreatmentsVisit": "Afficher seulement les actes de cette visite"
+                "displayAllPatientTreatments": "Tout les actes",
+                "displayPatientTreatmentsAppointment": "Actes courant",
+                "displayPatientTreatmentsVisit": "Actes courant"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",
             "updated": "Un acte avec l'heure {{ param }} a été mis à jour",
@@ -35,7 +35,12 @@
             "priceLessThanPaidPrice": "Le prix payé doit être moins que le prix.",
             "firstDate": "First date",
             "lastDate": "Last date",
-            "eventReason": "Actes"
+            "eventReason": "Actes",
+            "eventReasonDescription": "Description",
+            "eventReasonPrice": "Prix",
+            "eventReasonADDMessage": "Ajouter un acte",
+            "eventReasonHideMessage": "Annuler l'ajout de l'acte",
+            "eventReasonAdd": "Ajouter acte"
         }
     }
 }

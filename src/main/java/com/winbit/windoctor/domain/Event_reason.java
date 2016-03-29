@@ -46,7 +46,7 @@ public class Event_reason implements Serializable {
     @NotNull
 
     @Min(value = 0)
-    @Max(value = 10000000)
+    @Max(value = 2500000)
     @Column(name = "price", precision=10, scale=2, nullable = false)
     private BigDecimal price;
 

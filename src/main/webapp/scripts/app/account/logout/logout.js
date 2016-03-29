@@ -14,6 +14,10 @@ angular.module('windoctorApp')
                         templateUrl: 'scripts/app/main/main.html',
                         controller: 'LogoutController'
                     }
+                },
+                ncyBreadcrumb: {
+                    label: 'global.menu.account.logout'// angular-breadcrumb's configuration
                 }
+
             });
     });

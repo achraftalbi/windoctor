@@ -40,6 +40,7 @@ module.exports = function (config) {
             'main/webapp/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
             'main/webapp/bower_components/angular-ui-router/release/angular-ui-router.js',
             'main/webapp/bower_components/bootstrap-sass/assets/javascripts/bootstrap.js',
+            'main/webapp/bower_components/angular-breadcrumb/release/angular-breadcrumb.js',
             'main/webapp/bower_components/json3/lib/json3.js',
             'main/webapp/bower_components/ng-file-upload/ng-file-upload.js',
             'main/webapp/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',

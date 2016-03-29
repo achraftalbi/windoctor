@@ -145,6 +145,7 @@
             "minbytes": "This field should be more than {{min}} bytes.",
             "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "This field should follow pattern {{pattern}}.",
+            "pattern2": "This field must contain uppercase and lowercase letters or numbers.",
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time."
         }

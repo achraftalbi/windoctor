@@ -35,7 +35,7 @@ public class Fund implements Serializable {
 
     @NotNull
     @Min(value = 0)
-    @Max(value = 1000000000)
+    @Max(value = 250000000)
     @Column(name = "amount", precision=10, scale=2, nullable = false)
     private BigDecimal amount;
 

@@ -21,6 +21,10 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('settings');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="glyphicon glyphicon-wrench" ></span>global.menu.account.settings'// angular-breadcrumb's configuration
                 }
+
             });
     });

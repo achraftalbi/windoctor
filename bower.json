@@ -28,6 +28,7 @@
     "angular-translate-storage-cookie": "2.7.0",
     "angular-ui-router": "0.2.15",
     "bootstrap-sass": "3.3.5",
+    "angular-breadcrumb": "0.4.1",
     "jquery": "2.1.4",
     "json3": "3.3.2",
     "modernizr": "2.8.3",

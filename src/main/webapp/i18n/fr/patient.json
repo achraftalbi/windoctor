@@ -21,7 +21,7 @@
             "email": "Email",
             "activated": "Activaté",
             "blocked": "Blocké",
-            "picture": "Picture",
+            "picture": "Photo",
             "birthDate": "Date de naissance",
             "phoneNumber": "Numéro de téléphone",
             "phoneNumberPatternError": "Le numéro de téléphone doit être comme l'exemple : {{pattern}}.",

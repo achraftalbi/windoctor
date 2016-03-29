@@ -40,6 +40,13 @@ angular.module('windoctorApp')
                 _identity = identity;
                 _authenticated = identity !== null;
             },
+            structureName: function () {
+                if (angular.isDefined(_identity)) {
+                    return _identity.structureName;
+                }else{
+                    return null;
+                }
+            },
             identity: function (force) {
                 var deferred = $q.defer();
 

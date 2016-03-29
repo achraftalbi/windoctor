@@ -26,7 +26,11 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-bank" ></span>global.menu.entities.fund'// angular-breadcrumb's configuration
                 }
+
             })
             .state('fund.detail', {
                 parent: 'entity',

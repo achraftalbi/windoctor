@@ -1,11 +1,11 @@
 {
     "main": {
         "title": "Welcome to WinDoctor !",
-        "subtitle": "The first digital solution to manage your medical office easly.",
+        "subtitle": "You are in the office : \"{{structureName}}\"",
         "logged": {
             "message": "You are logged in as user \"{{username}}\"."
         },
-        "question": "If you have any question about WinDoctor contact +212 6 08 08 08 08",
+        "question": "If you need any support please contact {{support}} and for questions about WinDoctor thank you to contact {{contact}}",
         "link": {
             "homepage": "JHipster homepage",
             "stackoverflow": "JHipster on Stack Overflow",

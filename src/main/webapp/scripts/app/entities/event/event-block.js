@@ -22,7 +22,11 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-ban" ></span>global.menu.entities.blockOfDays'// angular-breadcrumb's configuration
                 }
+
             })
             .state('event.detail', {
                 parent: 'entity',

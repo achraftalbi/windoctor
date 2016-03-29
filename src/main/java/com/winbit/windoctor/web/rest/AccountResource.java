@@ -136,6 +136,7 @@ public class AccountResource {
                         getMaxEventsPatientCanAdd().intValue());
                     log.info("User maxEventsReached "+maxEventsReached);
                 }
+
                 return new ResponseEntity<>(
                     new UserDTO(
                         user.getId(),
@@ -147,7 +148,8 @@ public class AccountResource {
                         user.getLangKey(),
                         roles,
                         currentUserPatient,
-                        maxEventsReached
+                        maxEventsReached,
+                        user.getStructure()
                     ),
                 HttpStatus.OK);
             })

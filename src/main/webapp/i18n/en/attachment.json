@@ -16,6 +16,7 @@
                 "title": "Attachment"
             },
             "description": "Description",
+            "message": "You must save before manage radios images.",
             "image": "Image",
             "treatment": "Acts"
         }

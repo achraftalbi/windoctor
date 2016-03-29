@@ -50,10 +50,10 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th translate="windoctorApp.patient.login">Login</th>
                     <th translate="windoctorApp.patient.picture">Picture</th>
                     <th translate="windoctorApp.patient.firstName">FirstName</th>
                     <th translate="windoctorApp.patient.lastName">LastName</th>
+                    <th translate="windoctorApp.patient.login">Login</th>
                     <th translate="windoctorApp.patient.email">Email</th>
                     <th translate="windoctorApp.patient.patientChart">Patient chart</th>
                     <th></th>
@@ -61,13 +61,12 @@
             </thead>
             <tbody>
                 <tr ng-repeat="patient in patients">
-                    <td>{{patient.login}}</td>
                     <td>
                         <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 30px;" ng-if="patient.picture"/>
-                        {{byteSize(patient.picture)}}
                     </td>
-                    <td>{{patient.firstName}}</td>
-                    <td>{{patient.lastName}}</td>
+                    <td><strong>{{patient.firstName}}</strong></td>
+                    <td><strong>{{patient.lastName}}</strong></td>
+                    <td>{{patient.login}}</td>
                     <td>{{patient.email}}</td>
                     <td><a translate="windoctorApp.patient.chart"
                            ui-sref="patient.patientChart({patientId:patient.id})"

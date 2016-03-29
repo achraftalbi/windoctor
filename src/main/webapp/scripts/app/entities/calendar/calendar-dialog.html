@@ -1,10 +1,19 @@
-<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+<form name="editFormCalendarDialog" role="form" novalidate  show-validation>
 
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="clear()">&times;</button>
-        <h4 class="modal-title" id="myEventLabel" translate="windoctorApp.calendar.home.createOrEditLabel">Create or
-            edit a Event</h4>
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-4">
+                <button type="button"
+                        ng-click="returnToEventsPage()"
+                        class="btn btn-info">
+                    <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                </button>
+            </div>
+            <div class="form-group col-xs-6 col-md-4">
+            </div>
+            <div class="form-group col-xs-6 col-md-4">
+            </div>
+        </div>
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
@@ -13,11 +22,11 @@
             <div class="form-group col-xs-6 col-md-4">
                 <label translate="windoctorApp.calendar.startDate" for="startDate">Start date</label>
                 <input data-hide-on-select="true" class="form-control pickerstartdate" name="startDateField"
-                       id="startDate" required ng-init="callDataPicker()" ng-model="startDateValue" type="text" readonly/>
+                       id="startDate" required ng-model="startDateValue" type="text" readonly/>
                 <div  data-selected="pickerdate1" />
-                <div ng-show="editForm.startDateField.$invalid">
+                <div ng-show="editFormCalendarDialog.startDateField.$invalid">
                     <p class="help-block"
-                       ng-show="editForm.startDateField.$error.required" translate="entity.validation.required">
+                       ng-show="editFormCalendarDialog.startDateField.$error.required" translate="entity.validation.required">
                         This field is required.
                     </p>
                 </div>
@@ -28,9 +37,9 @@
                 <input data-hide-on-select="true" class="form-control pickerenddate" name="endDateField"
                        id="endDate" required ng-model="endDateValue" type="text" readonly/>
                 <div data-selected="pickerdate2" />
-                <div ng-show="editForm.endDateField.$invalid">
+                <div ng-show="editFormCalendarDialog.endDateField.$invalid">
                     <p class="help-block"
-                       ng-show="editForm.endDateField.$error.required" translate="entity.validation.required">
+                       ng-show="editFormCalendarDialog.endDateField.$error.required" translate="entity.validation.required">
                         This field is required.
                     </p>
                 </div>
@@ -55,37 +64,47 @@
                    ng-model="event.description"
                    ng-maxlength="1000">
 
-            <div ng-show="editForm.description.$invalid">
+            <div ng-show="editFormCalendarDialog.description.$invalid">
 
                 <p class="help-block"
-                   ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
+                   ng-show="editFormCalendarDialog.description.$error.maxlength" translate="entity.validation.maxlength"
                    translate-value-max="1000">
                     This field cannot be longer than 1000 characters.
                 </p>
             </div>
         </div>
         <div class="form-group" ng-show="!account.currentUserPatient">
-            <label translate="windoctorApp.calendar.patient" for="field_patient">Patient</label>
-
-            <div>
-                <input type="text" class="form-control" name="patient" id="field_patient"
-                       ng-model="event.user.firstName" required ng-hide="true">
-
-                <div>
-                    {{event.user.firstName}} {{event.user.lastName}}
-                    <a ng-show="event.user && !showListPatients" class="btn btn-primary btn-sm"
-                       translate="windoctorApp.calendar.changePatient"
-                       ng-click="displayListPatients()">Change Patient</a>
-                    <a ng-show="!event.user && !showListPatients" class="btn btn-primary btn-sm"
-                       translate="windoctorApp.calendar.addPatient"
-                       ng-click="displayListPatients()">Add Patient</a>
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4" style="text-align: right; padding-top: 5px">
+                    <label translate="windoctorApp.calendar.patient" for="field_patient">Patient</label>
                 </div>
-            </div>
-            <div ng-show="editForm.patient.$invalid">
-                <p class="help-block"
-                   ng-show="editForm.patient.$error.required" translate="entity.validation.required">
-                    This field is required.
-                </p>
+                <div class="form-group col-xs-6 col-md-4">
+                    <div>
+                        <input type="text" class="form-control" name="patient" id="field_patient"
+                               ng-model="event.user.firstName" required ng-hide="true">
+
+                        <div>
+                            <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
+                                 style="max-width: 25%;max-height: 28%;" ng-if="event.user.picture"
+                                 class="img-circle"/>
+                            {{event.user.firstName}} {{event.user.lastName}}
+                            <a ng-show="event.user && !showListPatients" class="btn btn-primary btn-sm"
+                               translate="windoctorApp.calendar.changePatient"
+                               ng-click="displayListPatients()">Change Patient</a>
+                            <a ng-show="!event.user && !showListPatients" class="btn btn-primary btn-sm"
+                               translate="windoctorApp.calendar.addPatient"
+                               ng-click="displayListPatients()">Add Patient</a>
+                        </div>
+                    </div>
+                    <div ng-show="editFormCalendarDialog.patient.$invalid">
+                        <p class="help-block"
+                           ng-show="editFormCalendarDialog.patient.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                </div>
             </div>
         </div>
     </div>
@@ -155,16 +174,16 @@
                     </table>
                     <nav>
                         <ul class="pagination">
-                            <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
-                            <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
-                            <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
-                            <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
-                            <li class="active"><a>{{page}}</a></li>
-                            <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
-                            <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a>
+                            <li ng-show="linksPatients['first']" ng-click="loadPagePatients(linksPatients['first'])"><a>&lt;&lt;</a></li>
+                            <li ng-show="linksPatients['prev']" ng-click="loadPagePatients(linksPatients['prev'])"><a>&lt;</a></li>
+                            <li ng-show="pagePatients > 2" ng-click="loadPagePatients(pagePatients - 2)"><a>{{pagePatients - 2}}</a></li>
+                            <li ng-show="pagePatients > 1" ng-click="loadPagePatients(pagePatients - 1)"><a>{{pagePatients - 1}}</a></li>
+                            <li class="active"><a>{{pagePatients}}</a></li>
+                            <li ng-show="pagePatients < linksPatients['last']" ng-click="loadPagePatients(pagePatients + 1)"><a>{{pagePatients + 1}}</a></li>
+                            <li ng-show="pagePatients < linksPatients['last'] - 1" ng-click="loadPagePatients(pagePatients + 2)"><a>{{pagePatients + 2}}</a>
                             </li>
-                            <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
-                            <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
+                            <li ng-show="linksPatients['next']" ng-click="loadPagePatients(linksPatients['next'])"><a>&gt;</a></li>
+                            <li ng-show="linksPatients['last']" ng-click="loadPagePatients(linksPatients['last'])"><a>&gt;&gt;</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -173,12 +192,13 @@
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+        <button  class="btn btn-default" data-dismiss="modal" ng-click="clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-            translate="entity.action.cancel">Cancel</span>
+            translate="entity.action.close">Close</span>
         </button>
-        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        <button  ng-disabled="editFormCalendarDialog.$invalid" ng-click="saveEventDialog(event)" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save and close</span>
         </button>
     </div>
+
 </form>

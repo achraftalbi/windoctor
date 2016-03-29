@@ -6,6 +6,8 @@ angular.module('windoctorApp')
         $scope.loadAll = function () {
 
             EventAll.query(function (result) {
+                $scope.calendarEvts = [];
+                $scope.events = [];
                 $scope.calendarEvts = result;
                 var cuurentDate = new Date();
                 console.log(" new Tdate 1 " + moment(cuurentDate).format('HH:mm')+' +00:00');
@@ -15,6 +17,7 @@ angular.module('windoctorApp')
                     var startDate = $scope.calendarEvts[i].event_date;
                     var endDate = $scope.calendarEvts[i].event_date_end;
                     console.log(" teeest $scope.calendarEvts[i].event_date  " + $scope.calendarEvts[i].event_date);
+                    console.log(" teeest $scope.calendarEvts[i].eventStatus.id  " + $scope.calendarEvts[i].eventStatus.id);
                     $scope.events.push({
                         title: angular.isUndefined($scope.calendarEvts[i].eventReason)
                         || $scope.calendarEvts[i].eventReason === null ? '' : $scope.calendarEvts[i].eventReason.description,
@@ -38,6 +41,7 @@ angular.module('windoctorApp')
                 console.log("current 1 language " + $translate.use());
             });
         };
+
         $scope.loadAll();
 
         $scope.delete = function (event) {
@@ -115,6 +119,7 @@ angular.module('windoctorApp')
         $scope.cellClicked = function (date, view) {
             // Show modal etc to add a new event. date is the start of the month, day, hour etc depending on which view you're on.
             //$('#deleteEvent_reasonConfirmation').modal('show');
+            console.log('selectedDate first one '+date);
             $state.go(view, {selectedDate: date});
         };
         /*

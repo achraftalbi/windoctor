@@ -36,7 +36,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private Long id;
 
     @NotNull
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[A-Za-z0-9]*$")
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     private String login;
@@ -83,7 +83,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "blocked")
     private Boolean blocked;
 
-    @Size(max = 1000000)
+    @Size(max = 250000)
     @Lob
     @Column(name = "picture")
     private byte[] picture;

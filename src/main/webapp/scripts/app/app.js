@@ -5,7 +5,8 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
             //Used for inclufing loading bar
-                'ngLocale',
+               'ngLocale',
+               'ncy-angular-breadcrumb',
                 'datePicker','ui.select','ngSanitize','webcam',
     'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll' ,'ngAnimate', 'angular-loading-bar'])
 
@@ -108,4 +109,44 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
     })
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
         cfpLoadingBarProvider.latencyThreshold = 1;
-    }]);
+    }])
+    .config(function($breadcrumbProvider) {
+        $breadcrumbProvider.setOptions({
+            translations: true,
+            template: '<ol class="breadcrumb">'+
+            '<div style="font-size:18px;">' +
+                '<span ng-repeat="step in steps" >' +
+            '<a  ng-bind-html="step.ncyBreadcrumbLabel.replace(step.ncyBreadcrumbLabel.split(\'>\')[2],\'\')" href="{{step.ncyBreadcrumbLink}}" ng-show="!$last"></a>&nbsp;<a href="{{step.ncyBreadcrumbLink}}" ng-show="!$last">{{step.ncyBreadcrumbLabel.split(\'>\')[2]|translate}}</a><span  ng-show="!$last">&nbsp;&nbsp;>&nbsp;</span>'+
+            '<span  ng-bind-html="step.ncyBreadcrumbLabel.replace(step.ncyBreadcrumbLabel.split(\'>\')[2],\'\')" ng-show="$last"></span>&nbsp;<span ng-show="$last" >{{step.ncyBreadcrumbLabel.split(\'>\')[2]|translate}}&nbsp;</span>'+
+                '</span>' +
+            '</div>'+
+            '</ol>'
+
+        });
+    }
+);
+angular.module('windoctorApp').factory('filteredListService', function () {
+
+
+    this.searched = function (valLists,toSearch) {
+        return _.filter(valLists,
+            function (i) {
+                /* Search Text in all 3 fields */
+                return searchUtil(i, toSearch);
+            });
+    };
+
+    this.paged = function (valLists,pageSize)
+    {
+        var retVal = [];
+        for (var i = 0; i < valLists.length; i++) {
+            if (i % pageSize === 0) {
+                retVal[Math.floor(i / pageSize)] = [valLists[i]];
+            } else {
+                retVal[Math.floor(i / pageSize)].push(valLists[i]);
+            }
+        }
+        return retVal;
+    };
+
+});

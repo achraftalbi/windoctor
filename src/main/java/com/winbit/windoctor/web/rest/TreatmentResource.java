@@ -172,14 +172,14 @@ public class TreatmentResource {
             log.debug("patientId part -> eventId:" + eventId + " patientId:" + patientId);
             Pageable pageable = PaginationUtil.generatePageRequest(offset, limit);
             page = treatmentRepository.findByPatient(patientId, PaginationUtil.generatePageRequest(offset, limit));
-            if (Constants.FIRST_PAGE.equals(offset)) {
+            //if (Constants.FIRST_PAGE.equals(offset)) {
                 Treatment totalPatientTreatments = treatmentRepository.findTotalPatientTreatments(patientId);
                 totalPatientTreatments.setId(-1l);
                 log.info("Total paid price :" + totalPatientTreatments.getPrice());
                 List<Treatment> newTreatmentList= new ArrayList<Treatment>(page.getContent());
                 newTreatmentList.add(totalPatientTreatments);
                 page = new PageImpl<Treatment>(newTreatmentList,pageable,page.getTotalElements());
-            }
+            //}
         } else if (eventId != null) {
             log.debug("eventId part -> eventId:" + eventId + " patientId:" + patientId);
             page = treatmentRepository.findByEvent(eventId, PaginationUtil.generatePageRequest(offset, limit));

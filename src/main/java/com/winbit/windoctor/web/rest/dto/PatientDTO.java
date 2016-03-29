@@ -20,7 +20,7 @@ public class PatientDTO {
 
     private Long id;
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[A-Za-z0-9]*$")
     @NotNull
     @Size(min = 1, max = 50)
     private String login;
@@ -47,7 +47,7 @@ public class PatientDTO {
 
     private Boolean activated;
 
-    @Size(max = 1000000)
+    @Size(max = 250000)
     private byte[] picture;
 
     private Boolean currentUserPatient;

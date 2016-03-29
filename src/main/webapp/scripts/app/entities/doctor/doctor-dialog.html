@@ -158,12 +158,12 @@
             </div>
             <input type="hidden" class="form-control" name="picture" id="field_picture"
                     ng-model="doctor.picture"
-                    maxbytes="1000000">
+                    maxbytes="250000">
 
             <div ng-show="editForm.picture.$invalid">
                 <p class="help-block"
-                   ng-show="editForm.picture.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="1000000">
-                    This field cannot be more than 1000000.
+                   ng-show="editForm.picture.$error.maxbytes" translate="entity.validation.maxbytes" translate-value-max="250000">
+                    This field cannot be more than 250000.
                 </p>
             </div>
         </div>

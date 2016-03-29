@@ -5,9 +5,9 @@
                 "title": "Acts at date {{ date }}",
                 "createLabel": "Create a new act",
                 "createOrEditLabel": "Create or edit an act",
-                "displayAllPatientTreatments": "Display all patient acts",
-                "displayPatientTreatmentsAppointment": "Display only current appointment acts",
-                "displayPatientTreatmentsVisit": "Display only current visit acts"
+                "displayAllPatientTreatments": "All acts",
+                "displayPatientTreatmentsAppointment": "Current acts",
+                "displayPatientTreatmentsVisit": "Current acts"
             },
             "created": "A new act is created with time {{ param }}",
             "updated": "An act with time {{ param }} is updated ",
@@ -35,7 +35,12 @@
             "priceLessThanPaidPrice": "The paid price must be less than price.",
             "firstDate": "First date",
             "lastDate": "Last date",
-            "eventReason": "Acts"
+            "eventReason": "Acts",
+            "eventReasonDescription": "Description",
+            "eventReasonPrice": "Price",
+            "eventReasonADDMessage": "Add an act",
+            "eventReasonHideMessage": "Cancel adding of the act",
+            "eventReasonAdd": "Add act"
         }
     }
 }

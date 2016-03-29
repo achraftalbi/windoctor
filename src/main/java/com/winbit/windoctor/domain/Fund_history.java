@@ -36,13 +36,13 @@ public class Fund_history implements Serializable {
 
     @NotNull
     @Min(value = 0)
-    @Max(value = 1000000000)
+    @Max(value = 250000000)
     @Column(name = "old_amount", precision=10, scale=2, nullable = false)
     private BigDecimal old_amount;
 
     @NotNull
     @Min(value = 0)
-    @Max(value = 1000000000)
+    @Max(value = 250000000)
     @Column(name = "new_amount", precision=10, scale=2, nullable = false)
     private BigDecimal new_amount;
 
@@ -50,8 +50,8 @@ public class Fund_history implements Serializable {
     private Boolean type_operation;
 
     @NotNull
-    @Min(value = -1000000000)
-    @Max(value = 1000000000)
+    @Min(value = -250000000)
+    @Max(value = 250000000)
     @Column(name = "amount_movement", precision=10, scale=2, nullable = false)
     private BigDecimal amount_movement;
 

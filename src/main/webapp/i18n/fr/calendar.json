@@ -4,6 +4,7 @@
             "home": {
                 "title": "Events",
                 "dayEventsTitle": "Rendez vous et visites pour la journée {{ day }}",
+                "dayEventsActsTitle": "Gestion des événements et des actes",
                 "createAppointmentLabel": "Créer un nouveau rendez vous",
                 "createVisitLabel": "Créer une nouvelle visite",
                 "createRequestLabel": "Create a new request",

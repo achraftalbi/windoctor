@@ -18,8 +18,6 @@
                     <button type="submit" ng-disabled="editForm.$invalid" ng-click="save()" class="btn btn-primary">
                         <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                     </button>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                            ng-click="clear()">&times;</button>
                 </div>
 
             </div>
@@ -63,7 +61,7 @@
                         <label translate="windoctorApp.patient.login" for="field_login">Login</label>
                         <input type="text" class="form-control" name="login" id="field_login"
                                ng-model="patient.login"
-                               required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[a-z0-9]*$/">
+                               required ng-minlength="1" ng-maxlength="50" ng-pattern="/^[A-Za-z0-9]*$/">
 
                         <div ng-show="editForm.login.$invalid">
                             <p class="help-block"
@@ -84,9 +82,9 @@
                             </p>
 
                             <p class="help-block"
-                               ng-show="editForm.login.$error.pattern" translate="entity.validation.pattern"
+                               ng-show="editForm.login.$error.pattern" translate="entity.validation.pattern2"
                                translate-value-pattern="^[a-z0-9]*$">
-                                This field should follow pattern "^[a-z0-9]*$".
+                                This field should follow pattern "^[A-Za-z0-9]*$".
                             </p>
                         </div>
                     </div>
@@ -327,13 +325,13 @@
                     </div>
                     <input type="hidden" class="form-control" name="picture" id="field_picture"
                            ng-model="patient.picture"
-                           maxbytes="1000000">
+                           maxbytes="250000">
 
                     <div ng-show="editForm.picture.$invalid">
                         <p class="help-block"
                            ng-show="editForm.picture.$error.maxbytes" translate="entity.validation.maxbytes"
-                           translate-value-max="1000000">
-                            This field cannot be more than 1000000.
+                           translate-value-max="250000">
+                            This field cannot be more than 250000.
                         </p>
                     </div>
                 </div>

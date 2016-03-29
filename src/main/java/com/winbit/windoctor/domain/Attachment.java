@@ -24,14 +24,14 @@ public class Attachment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
 
-    @Size(max = 400)        
+
+    @Size(max = 400)
     @Column(name = "description", length = 400)
     private String description;
 
     @NotNull
-    @Size(max = 1000000)        
+    @Size(max = 250000)
     @Lob
     @Column(name = "image", nullable = false)
     private byte[] image;

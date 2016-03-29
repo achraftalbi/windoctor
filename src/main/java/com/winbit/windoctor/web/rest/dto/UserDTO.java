@@ -2,6 +2,7 @@ package com.winbit.windoctor.web.rest.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.winbit.windoctor.domain.Structure;
 import com.winbit.windoctor.domain.util.CustomDateTimeDeserializer;
 import com.winbit.windoctor.domain.util.CustomDateTimeSerializer;
 import org.hibernate.annotations.Type;
@@ -22,7 +23,7 @@ public class UserDTO {
 
     private Long id;
 
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[A-Za-z0-9]*$")
     @NotNull
     @Size(min = 1, max = 50)
     private String login;
@@ -50,7 +51,7 @@ public class UserDTO {
 
     private Boolean activated;
 
-    @Size(max = 1000000)
+    @Size(max = 250000)
     private byte[] picture;
 
     private Boolean currentUserPatient;
@@ -71,6 +72,12 @@ public class UserDTO {
 
     @Size(min = 0, max = 200)
     private String diseases;
+
+    private String structureName;
+
+    public String getStructureName() {
+        return structureName;
+    }
 
     public String getDiseases() {
         return diseases;
@@ -106,7 +113,7 @@ public class UserDTO {
     }
 
     public UserDTO(Long id, String login, String password, String firstName, String lastName, String email, String langKey,
-                   List<String> roles, Boolean currentUserPatient, Boolean maxEventsReached) {
+                   List<String> roles, Boolean currentUserPatient, Boolean maxEventsReached, Structure structure) {
         this.id = id;
         this.login = login;
         this.password = password;
@@ -117,6 +124,7 @@ public class UserDTO {
         this.roles = roles;
         this.currentUserPatient = currentUserPatient;
         this.maxEventsReached = maxEventsReached;
+        this.structureName = structure.getName();
     }
 
     public Long getId() {
