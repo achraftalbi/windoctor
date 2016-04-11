@@ -14,6 +14,8 @@
             },
             "value": "Value",
             "selectYear":"Sélectionneer une année :",
+            "profit":"Profit",
+            "allPatients":"Tous les patients",
             "descriptionEn": "DescriptionEn",
             "descriptionFr": "DescriptionFr"
         }

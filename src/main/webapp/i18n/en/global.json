@@ -4,10 +4,13 @@
         "year": "Year",
         "month": "Month",
         "week": "Week {{ day }}",
+        "simpleWeek": "week",
+        "dayBlocked": "This day is blocked",
         "previous": "Previous",
         "next": "Next",
         "today": "Today",
         "to": "to",
+        "of": "of",
         "wordToSearch": "Word to search",
         "cheeeese": "Cheeeese",
         "image": "Image",
@@ -127,6 +130,7 @@
             "saveAndClose": "Save and close",
             "view": "View",
             "choose": "Choose",
+            "refresh": "Refresh",
             "display": "Display"
         },
         "detail": {

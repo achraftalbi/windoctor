@@ -222,15 +222,21 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
         };
 
         $scope.loadAllSearchPatient = function () {
-            PatientSearch.query({query: $scope.searchQueryPatient,
-                page: $scope.pagePatients, per_page: 5}, function (result, headers) {
-                $scope.linksPatients = ParseLinks.parse(headers('link'));
-                $scope.patients = result;
-            }, function (response) {
-                if (response.status === 404) {
-                    $scope.loadAllPatients();
-                }
-            });
+            console.log('call SearchPatient'+$scope.searchPatientDialogText.description);
+            if($scope.searchPatientDialogText.description!==null && $scope.searchPatientDialogText.description!==undefined
+                && $scope.searchPatientDialogText.description.length>0){
+                PatientSearch.query({query: $scope.searchPatientDialogText.description,
+                    page: $scope.pagePatients, per_page: 5}, function (result, headers) {
+                    $scope.linksPatients = ParseLinks.parse(headers('link'));
+                    $scope.patients = result;
+                }, function (response) {
+                    if (response.status === 404) {
+                        $scope.loadAllPatients();
+                    }
+                });
+            }else{
+                $scope.loadAllPatients();
+            }
         };
 
         $scope.displayListPatients = function () {

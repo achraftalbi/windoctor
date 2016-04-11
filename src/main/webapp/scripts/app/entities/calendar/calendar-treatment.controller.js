@@ -20,7 +20,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayAddEditViewPopup = false;
             $scope.displayAddEditViewAttachmentPopup = false;
             $scope.displayTreatmentView = false;
-            $scope.displayAllPatientTreatments = false;
+            $scope.displayAllPatientTreatments = true;
             $scope.displayTreatmentToDelete = false;
             $scope.addNewEventReason = false;
             $scope.newEventReason = {};
@@ -41,12 +41,14 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
         // Display treatments Begin
         $scope.loadAllTreatmentsFromServer = function () {
+            console.log('length event used '+$scope.event.id);
             Treatment.query({
                     patientId: $scope.event.user.id
                 }, function (result, headers) {
                     $scope.selectedDate = new Date($stateParams.selectedDate);
                     $scope.linksTreatment = ParseLinks.parse(headers('link'));
                     $scope.treatmentsAll = result;
+                    $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     var orderBy = $filter('orderBy');
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
                     if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
@@ -57,13 +59,19 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                         console.log('length treatments '+length);
                         $scope.treatmentsCurrent=[];
                         $scope.treatments=[];
-                        for(var i = 0;i<length;i++){
+
+                        if($scope.event!==null && $scope.event.id!==null && $scope.event.id!==undefined){
+                            for(var i = 0;i<length;i++){
+                                console.log('curent tre 1 '+(($scope.treatmentsAll[i].event!==null && $scope.treatmentsAll[i].event!==undefined
+                                && $scope.treatmentsAll[i].event.id!==null && $scope.treatmentsAll[i].event.id!==undefined)?$scope.treatmentsAll[i].event.id:'Total'));
                                 if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
+                                    console.log('curent tre 2 '+i);
                                     $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
                                 }
+                            }
                         }
+                        $scope.displayAllPatientTreatments = true;
                         $scope.treatments= $scope.treatmentsAll;
-                        $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     }
                 }
             );
@@ -111,7 +119,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.loadAllTreatmentsFromServer();
             }
             ///
-
+            if($scope.event.id===null){
+                $scope.displayAllPatientTreatments =true;
+            }
             if ($scope.displayAllPatientTreatments === false) {
                 /*Treatment.query({
                         eventId: $scope.event.id,
@@ -237,8 +247,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.searchTreatments = function () {
             if($scope.searchQuery!==null && $scope.searchQuery!==undefined && $scope.searchQuery.length>0) {
                 TreatmentSearch.query({
-                    query: $scope.searchQuery, eventId: $scope.event.id,
-                    page: $scope.treatmentPage, per_page: 5
+                    query: $scope.searchQuery, patientId: $scope.event.user.id
                 }, function (result, headers) {
                     $scope.linksTreatment = ParseLinks.parse(headers('link'));
                     $scope.treatments = result;
@@ -418,6 +427,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         var onSaveTreatmentFinished = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.treatment=result;
+            console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
             $scope.loadPageTreatment($scope.treatmentPage);
             $scope.oldFund = $scope.treatment.fund;
             if($scope.oldTreatmentPrice===null){
@@ -436,7 +446,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             // New feature
             $scope.treatmentsAll.push($scope.treatment);
             $scope.orderTreatments();
-
+            $scope.displayAllPatientTreatments = true;
 
             $scope.loadFunds();
             $scope.loadAllAttachments(1);
@@ -553,7 +563,6 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
         var onSaveAttachmentFinished = function (result) {
             $scope.$emit('windoctorApp:attachmentUpdate', result);
-            $scope.$emit('windoctorApp:eventUpdate', result.event);
             $scope.loadAllAttachments($scope.attachmentPage);
             $scope.displayAddEditViewAttachmentPopup = false;
         };
@@ -588,6 +597,117 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.viewSelectedAttachment = false;
         };
 
+
+        $scope.hexToRgb = function (color) {
+            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            color = color.replace(shorthandRegex, function(m, r, g, b) {
+                return r + r + g + g + b + b;
+            });
+
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : {
+                r: 0,
+                g: 0,
+                b: 0
+            };
+        }
+
+
+        $scope.myCanvas = function () {
+            /*var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+            var img = document.getElementById("scream");
+            ctx.drawImage(img,10,10,30,30);
+            var imgData=ctx.getImageData(10, 10, 30, 30);
+            for (var i=0;i<imgData.data.length;i+=4)
+            {
+                imgData.data[i]= 34 | imgData.data[i];
+                imgData.data[i+1]= 139 | imgData.data[i+1];
+                imgData.data[i+2]= 34 | imgData.data[i+2];
+            }
+            ctx.putImageData(imgData,10,10,30,30);*/
+
+
+
+            var imageObj = document.getElementById("scream");
+            var canvas = document.getElementById('myCanvas');
+            var context = canvas.getContext('2d');
+            var x = 50;
+            var y = 50;
+            context.drawImage(imageObj, x, y);
+
+            var imageData = context.getImageData(x, y, canvas.width,canvas.height);
+            var data = imageData.data;
+            var rgbColor = $scope.hexToRgb('#00ff00');
+
+            for(var i = 0; i < data.length; i += 4) {
+                if(data[i+3] == 0)
+                    continue;
+                data[i + 0] = rgbColor.r;
+                data[i + 1] = rgbColor.g;
+                data[i + 2] = rgbColor.b;
+                data[i + 3] = 255;
+
+                /*// red
+                data[i] = 255 - data[i];
+                // green
+                data[i + 1] = 255 - data[i + 1];
+                // blue
+                data[i + 2] = 255 - data[i + 2];*/
+            }
+
+            // overwrite original image
+            context.putImageData(imageData, x, y);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            var imageObj2 = document.getElementById("scream");
+            var canvas2 = document.getElementById('myCanvas');
+            var context2 = canvas.getContext('2d');
+            var x2 = 100;
+            var y2 = 100;
+            context2.drawImage(imageObj2, x2, y2);
+
+            var imageData2 = context2.getImageData(x2, y2, canvas2.width,canvas2.height);
+            var data2 = imageData2.data;
+
+            for(i = 0; i < data2.length; i += 4) {
+                // red
+                data2[i] = 255 - data2[i];
+                // green
+                data2[i + 1] = 255 - data2[i + 1];
+                // blue
+                data2[i + 2] = 255 - data2[i + 2];
+            }
+
+            // overwrite original image
+            context2.putImageData(imageData2, x2, y2);
+
+
+        }
 
         /********************************************************************************/
         /********************************************************************************/

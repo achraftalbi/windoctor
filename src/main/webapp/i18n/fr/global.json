@@ -4,10 +4,13 @@
         "year": "Année",
         "month": "Mois",
         "week": "Semaine {{ day }}",
+        "simpleWeek": "semaine",
+        "dayBlocked": "Ce jour est bloqué.",
         "previous": "Précédent",
         "next": "Suivant",
         "today": "Aujourd'hui",
         "to": "à",
+        "of": "de",
         "wordToSearch": "Mot à chercher",
         "cheeeese": "Cheeeese",
         "image": "Image",
@@ -127,6 +130,7 @@
             "saveAndClose": "Sauvegarder et fermer",
             "view": "Voir",
             "choose": "Choisisser",
+            "refresh": "Rafraîchir",
             "display": "Afficher"
         },
         "detail": {

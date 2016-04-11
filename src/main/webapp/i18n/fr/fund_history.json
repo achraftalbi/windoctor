@@ -12,6 +12,8 @@
             "detail": {
                 "title": "Fund_history"
             },
+            "creation_date": "Date de création",
+            "created_by": "Créé par",
             "old_amount": "Ancien montant",
             "new_amount": "Nouveau montant",
             "type_operation": "Type operation",

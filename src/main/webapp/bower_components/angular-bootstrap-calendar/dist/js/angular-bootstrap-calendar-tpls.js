@@ -172,7 +172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	angular
 	  .module('mwl.calendar')
-	  .controller('MwlCalendarCtrl', ["$scope", "$log", "$timeout", "$attrs", "$locale", "moment", "calendarTitle", function($scope, $log, $timeout, $attrs, $locale, moment, calendarTitle) {
+	  .controller('MwlCalendarCtrl', ["$scope", "$log", "$timeout", "$attrs", "$locale", "moment", "calendarTitle","$state","$translate", function($scope, $log, $timeout, $attrs, $locale, moment, calendarTitle,$state,$translate) {
 
 	    var vm = this;
 
@@ -198,6 +198,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 
 	    };
+
+            vm.cellClicked = function (day, view,weekView) {
+                // Show modal etc to add a new event. date is the start of the month, day, hour etc depending on which view you're on.
+                //$('#deleteEvent_reasonConfirmation').modal('show');
+
+                var blockedDay = false;
+                weekView.events.forEach(function(event) {
+                    if(moment(day.date).year()===moment(event.startsAt).year()
+                    && moment(day.date).month()===moment(event.startsAt).month()
+                    && moment(day.date).day()===moment(event.startsAt).day()){
+                        console.log('true day');
+                        if (event.type==='block') {
+                            blockedDay = true;
+                        }
+                    }
+                });
+                if(!blockedDay) {
+                    $state.go(view, {selectedDate: day.date});
+                }else{
+                    alert($translate.instant('global.dayBlocked'));
+                }
+
+            };
 
 	    var previousDate = moment(vm.currentDay);
 	    var previousView = vm.view;
@@ -535,7 +558,8 @@ return /******/ (function(modules) { // webpackBootstrap
                         });
                     }
                 });
-            });	      //Auto open the calendar to the current day if set
+            });
+            //Auto open the calendar to the current day if set
 	      if (vm.autoOpen) {
 	        vm.view.forEach(function(day) {
 	          if (day.inMonth && moment(vm.currentDay).startOf('day').isSame(day.date) && !vm.openDayIndex) {
@@ -731,7 +755,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	          vm.dayViewEnd,
 	          vm.dayViewSplit
 	        );
-	      } else {
+              /*vm.view.forEach(function(day) {
+                  console.log('MwlCalendarWeekCtrl 1');
+                  day.events.forEach(function(eventIn) {
+                      console.log('MwlCalendarWeekCtrl 1');
+                      if (eventIn.type==='block') {
+                          console.log('MwlCalendarWeekCtrl 2');
+                          day.highlightClassDay = 'day-highlight-day dh-event-' + eventIn.type;
+                          $('.day-highlight-day').click(function (ev) {
+                              console.log('MwlCalendarWeekCtrl 2');
+                              ev.preventDefault(); ev.stopPropagation(); ev.stopImmediatePropagation();return false;
+                          });
+                      }
+                  });
+              });*/
+          } else {
 	        vm.view = calendarHelper.getWeekView(vm.events, vm.currentDay);
 	      }
 	    });
@@ -809,7 +847,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 28 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"cal-week-box\" ng-class=\"{'cal-day-box': vm.showTimes}\">\n  <div class=\"cal-row-fluid cal-row-head\">\n\n    <div\n      class=\"cal-cell1\"\n      ng-repeat=\"day in vm.view.days track by $index\"\n      ng-class=\"{\n        'cal-day-weekend': day.isWeekend,\n        'cal-day-past': day.isPast,\n        'cal-day-today': day.isToday,\n        'cal-day-future': day.isFuture}\"\n      mwl-element-dimensions=\"vm.dayColumnDimensions\">\n\n      <span ng-bind=\"day.weekDayLabel\"></span>\n      <br>\n      <small>\n        <span\n          data-cal-date\n          ng-click=\"vm.calendarCtrl.drillDown(day.date)\"\n          class=\"pointer\"\n          ng-bind=\"day.dayLabel\">\n        </span>\n      </small>\n\n    </div>\n\n  </div>\n\n  <div class=\"cal-day-panel clearfix\" ng-style=\"{height: vm.showTimes ? (vm.dayViewHeight + 'px') : 'auto'}\">\n\n    <mwl-calendar-hour-list\n      day-view-start=\"vm.dayViewStart\"\n      day-view-end=\"vm.dayViewEnd\"\n      day-view-split=\"vm.dayViewSplit\"\n      current-day=\"vm.currentDay\"\n      ng-if=\"vm.showTimes\">\n    </mwl-calendar-hour-list>\n\n    <div class=\"row\">\n      <div class=\"col-xs-12\">\n        <div\n          class=\"cal-row-fluid \"\n          ng-repeat=\"event in vm.view.events track by event.$id\">\n          <div\n            ng-class=\"'cal-cell' + (vm.showTimes ? 1 : event.daySpan) + ' cal-offset' + event.dayOffset + ' day-highlight dh-event-' + event.type + ' ' + event.cssClass\"\n            ng-style=\"{top: vm.showTimes ? ((event.top + 2) + 'px') : 'auto', position: vm.showTimes ? 'absolute' : 'inherit'}\"\n            data-event-class\n            mwl-draggable=\"event.draggable === true\"\n            axis=\"vm.showTimes ? 'xy' : 'x'\"\n            snap-grid=\"vm.showTimes ? {x: vm.dayColumnDimensions.width, y: 30} : {x: vm.dayColumnDimensions.width}\"\n            on-drag=\"vm.tempTimeChanged(event, y)\"\n            on-drag-end=\"vm.weekDragged(event, x, y)\"\n            mwl-resizable=\"event.resizable === true && event.endsAt && !vm.showTimes\"\n            resize-edges=\"{left: true, right: true}\"\n            on-resize-end=\"vm.weekResized(event, edge, x)\">\n            <strong ng-bind=\"(event.tempStartsAt || event.startsAt) | calendarDate:'time':true\" ng-show=\"vm.showTimes\"></strong>\n            <a\n              href=\"javascript:;\"\n              ng-click=\"vm.onEventClick({calendarEvent: event})\"\n              class=\"event-item\"\n              ng-bind-html=\"vm.$sce.trustAsHtml(event.title)\"\n              tooltip-html-unsafe=\"{{ event.title }}\"\n              tooltip-placement=\"left\"\n              tooltip-append-to-body=\"true\">\n            </a>\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n</div>\n";
+	module.exports = "<div class=\"cal-week-box\" ng-class=\"{'cal-day-box': vm.showTimes}\">\n  <div class=\"cal-row-fluid cal-row-head\">\n\n   <div\n      class=\"cal-cell1\"\n      ng-repeat=\"day in vm.view.days track by $index\"\n      ng-class=\"{\n        'cal-day-weekend': day.isWeekend,\n        'cal-day-past': day.isPast,\n        'cal-day-today': day.isToday,\n        'cal-day-future': day.isFuture}\"\n      mwl-element-dimensions=\"vm.dayColumnDimensions\">\n\n   <a class=\" {{ day.highlightClassDay }}\"  ng-click=\"vm.calendarCtrl.cellClicked(day,'calendar.rows',vm.view)\"\n >\n\n     <span ng-bind=\"day.weekDayLabel\"></span>\n      <br>\n      <small>\n        <span\n          data-cal-date\n                 class=\"pointer\"\n          ng-bind=\"day.dayLabel\">\n        </span>\n      </small>\n\n   </a>\n\n  </div>\n\n  </div>\n\n  <div class=\"cal-day-panel clearfix\" ng-style=\"{height: vm.showTimes ? 400 : 'auto'}\" style=\"overflow: scroll;height:400px\" >\n\n    <mwl-calendar-hour-list\n      day-view-start=\"vm.dayViewStart\"\n      day-view-end=\"vm.dayViewEnd\"\n      day-view-split=\"vm.dayViewSplit\"\n      current-day=\"vm.currentDay\"\n      ng-if=\"vm.showTimes\">\n    </mwl-calendar-hour-list>\n\n    <div class=\"row\">\n      <div class=\"col-xs-12\">\n        <div\n          class=\"cal-row-fluid \"\n          ng-repeat=\"event in vm.view.events track by event.$id\">\n          <div\n            ng-class=\"'cal-cell' + (vm.showTimes ? 1 : event.daySpan) + ' cal-offset' + event.dayOffset + ' day-highlight dh-event-' + event.type + ' ' + event.cssClass\"\n            ng-style=\"{top: vm.showTimes ? ((event.top + 2) + 'px') : 'auto', position: vm.showTimes ? 'absolute' : 'inherit', height: event.height + 'px'}\"\n            data-event-class\n            mwl-draggable=\"event.draggable === true\"\n            axis=\"vm.showTimes ? 'xy' : 'x'\"\n            snap-grid=\"vm.showTimes ? {x: vm.dayColumnDimensions.width, y: 30} : {x: vm.dayColumnDimensions.width}\"\n            on-drag=\"vm.tempTimeChanged(event, y)\"\n            on-drag-end=\"vm.weekDragged(event, x, y)\"\n            mwl-resizable=\"event.resizable === true && event.endsAt && !vm.showTimes\"\n            resize-edges=\"{left: true, right: true}\"\n            on-resize-end=\"vm.weekResized(event, edge, x)\">\n            <a\n              href=\"javascript:;\"\n              ng-click=\"vm.onEventClick({calendarEvent: event})\"\n              class=\"event-item\"\n              ng-bind-html=\"vm.$sce.trustAsHtml(event.title)\"\n              tooltip-html-unsafe=\"{{ event.title }}\"\n              tooltip-placement=\"left\"\n      style=\"padding-top: 200px\"        tooltip-append-to-body=\"true\">\n            </a>\n          </div>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n</div>\n";
 
 /***/ },
 /* 29 */
@@ -1515,7 +1553,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      angular: {
 	        date: {
 	          hour: 'ha',
-	          day: 'd MMM',
+	          day: 'd MMMM',
 	          month: 'MMMM',
 	          weekDay: 'EEEE',
 	          time: 'HH:mm',
@@ -1784,6 +1822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function getWeekView(events, currentDay) {
 
+
 	      var startOfWeek = moment(currentDay).startOf('week');
 	      var endOfWeek = moment(currentDay).endOf('week');
 	      var dayCounter = startOfWeek.clone();
@@ -1975,7 +2014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function week(currentDay) {
 	      var weekTitleLabel = calendarConfig.titleFormats.week;
-	      return weekTitleLabel.replace('{week}', moment(currentDay).week()).replace('{year}', moment(currentDay).format('YYYY'));
+	      return weekTitleLabel.replace('{week}', moment(currentDay).week()).replace('{year}', moment(currentDay).format('YYYY')).replace('{month}', moment(currentDay).format('MMMM'));
 	    }
 
 	    function month(currentDay) {

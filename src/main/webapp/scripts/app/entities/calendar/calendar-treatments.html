@@ -12,10 +12,15 @@
                 <div class="form-group col-xs-6 col-md-4">
                 </div>
                 <div class="form-group col-xs-6 col-md-4">
+                    <button type="button"
+                            ng-click="loadAllTreatmentsFromServer()"
+                            class="btn btn-info">
+                        <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
+                    </button>
                 </div>
             </div>
             <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form" novalidate show-validation>
-                <h2 translate="windoctorApp.treatment.home.title"
+                <h2 translate="windoctorApp.treatment.home.title" ng-show="event!==null && event.id!==null"
                     translate-values="{date: '{{ event.event_date | date:'EEEE, MMMM d, y HH:mm' }}'}">Acts at
                     date </h2>
                 <jh-alert></jh-alert>
@@ -139,7 +144,16 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" ng-show="false">
+                            <div class="sepia" >
+                                <img id="scream"  ng-click="myCanvas()" style="background: linear-gradient(to bottom, red 20%,green 30%,#000000 20%,white 30%,white 100%);" src="../../../../assets/images/elements/teethschame/28.png" alt="The Scream" width="20" height="20">
+                                <img id="scream2"  style="background: linear-gradient(to bottom, red 20%,green 30%,#000000 20%,white 30%,white 100%);" src="../../../../assets/images/elements/teethschame/28.png" alt="The Scream" width="20" height="20">
+                            </div>
+                            <canvas id="myCanvas" height="300"
+                                    style="border:1px solid #d3d3d3;">
+                                <span>Your browser does not support the HTML5 canvas tag.</span></canvas>
+                            <p><button ng-click="myCanvas()">Try it</button></p>
+
                         </div>
                     </div>
                 </div>
@@ -153,7 +167,7 @@
                     </div>
                     <div class="form-group col-xs-6 col-md-3">
                         <button class="btn btn-primary"
-                                ng-click="displayPatientTreatmentsEventFunction()">
+                                ng-click="displayPatientTreatmentsEventFunction()" ng-show="event!==null && event.id!==null">
                             <span class="glyphicon glyphicon-eye-open"></span>
                                     <span ng-show="event.eventStatus.id===8"
                                           translate="windoctorApp.treatment.home.displayPatientTreatmentsVisit">Current acts</span>
@@ -162,8 +176,8 @@
                         </button>
                     </div>
                     <div class="form-group col-xs-6 col-md-3">
-                        <button class="btn btn-primary" ng-click="addNewTreatment()">
-                            <span class="glyphicon glyphicon-flash"></span> <span
+                        <button class="btn btn-primary" ng-click="addNewTreatment()" ng-show="event!==null && event.id!==null">
+                            <span class="fa fa-plus"></span> <span
                             translate="windoctorApp.treatment.home.createLabel">Create a new Treatment</span>
                         </button>
                     </div>
@@ -206,6 +220,7 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
+                                        <th translate="windoctorApp.treatment.treatment_date">Date</th>
                                         <th translate="windoctorApp.treatment.description">Description</th>
                                         <th translate="windoctorApp.treatment.price">Price</th>
                                         <th translate="windoctorApp.treatment.paid_price">Paid price</th>
@@ -216,6 +231,9 @@
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="treatment in treatments">
+                                        <td ng-show="treatment.id===-1"
+                                            style="background-color: black;;color: white;"></td>
+                                        <td ng-show="treatment.id!==-1">{{treatment.treatment_date | date:'dd/MM/yyyy HH:mm'}}</td>
                                         <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.description.length > 10"
                                       data-toggle="tooltip"

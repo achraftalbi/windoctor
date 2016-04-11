@@ -1,44 +1,59 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarController', function ($scope, Event, EventAll, EventSearch, $modal, moment, $state, $translate, $filter) {
+    .controller('CalendarController', function ($scope, Event, EventAll, EventSearch, $modal, moment, $state, $translate, $filter,calendarConfig,Principal) {
         $scope.calendarEvts = [];
+        $scope.account;
         $scope.loadAll = function () {
+            Principal.identity(false).then(function (account) {
+                $scope.account = account;
+                EventAll.query(function (result) {
+                    $scope.calendarEvts = [];
+                    $scope.events = [];
+                    $scope.calendarEvts = result;
+                    //calendarConfig.dateFormatter = 'moment';
+                    //calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';
+                    calendarConfig.displayAllMonthEvents = true;
+                    calendarConfig.displayEventEndTimes = true;
+                    calendarConfig.showTimesOnWeekView = true;
+                    calendarConfig.dateFormats.hour = 'HH:mm';
+                    calendarConfig.titleFormats.week = '{month} '+$translate.instant('global.simpleWeek')+' {week} '+$translate.instant('global.of')+' {year}';
+                    var cuurentDate = new Date();
 
-            EventAll.query(function (result) {
-                $scope.calendarEvts = [];
-                $scope.events = [];
-                $scope.calendarEvts = result;
-                var cuurentDate = new Date();
-                console.log(" new Tdate 1 " + moment(cuurentDate).format('HH:mm')+' +00:00');
-                console.log(" new Tdate XX " + moment(cuurentDate).utc().format('MMMM Do YYYY,  HH:mm z')+' +00:00');
-                console.log(" new Tdate 2 " + new Date(moment(cuurentDate).format('MMMM Do YYYY, HH:mm:ss')+' +00:00'));
-                for (var i = 0; i < $scope.calendarEvts.length; i++) {
-                    var startDate = $scope.calendarEvts[i].event_date;
-                    var endDate = $scope.calendarEvts[i].event_date_end;
-                    console.log(" teeest $scope.calendarEvts[i].event_date  " + $scope.calendarEvts[i].event_date);
-                    console.log(" teeest $scope.calendarEvts[i].eventStatus.id  " + $scope.calendarEvts[i].eventStatus.id);
-                    $scope.events.push({
-                        title: angular.isUndefined($scope.calendarEvts[i].eventReason)
-                        || $scope.calendarEvts[i].eventReason === null ? '' : $scope.calendarEvts[i].eventReason.description,
-                        type: $scope.calendarEvts[i].eventStatus === null ? 'Not applicable' :
-                            ($scope.calendarEvts[i].eventStatus.id === 1 ? 'info' :
-                                ($scope.calendarEvts[i].eventStatus.id === 2 ? 'special' :
-                                    ($scope.calendarEvts[i].eventStatus.id === 3 ? 'success' :
-                                        ($scope.calendarEvts[i].eventStatus.id === 4 ? 'important' :
-                                            ($scope.calendarEvts[i].eventStatus.id === 7 ? 'request' :
-                                                ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' :
-                                                    ($scope.calendarEvts[i].eventStatus.id === 9 ? 'block' :
-                                                        ($scope.calendarEvts[i].eventStatus.id === 10 ? 'special' :
-                                                            ($scope.calendarEvts[i].eventStatus.id === 11 ? 'special' :
-                                                        'Not applicable'))))))))),
-                        //angular.isUndefined($scope.calendarEvts[i].eventStatus)
-                        //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
-                        startsAt: startDate//,
-                        //endsAt: endDate
-                    })
-                }
-                console.log("current 1 language " + $translate.use());
+                    for (var i = 0; i < $scope.calendarEvts.length; i++) {
+                        var startDate = new Date($filter('date')($scope.calendarEvts[i].event_date, 'yyyy-MM-dd HH:mm', '+0000'));
+                        var endDate = new Date($filter('date')($scope.calendarEvts[i].event_date_end, 'yyyy-MM-dd HH:mm', '+0000'));
+                        var interval = 'De ' + $filter('date')(startDate, 'HH:mm') +' à '+ $filter('date')(endDate, 'HH:mm');
+
+                        var patient = ($scope.calendarEvts[i].user!==null && $scope.calendarEvts[i].user!==undefined ?
+                        'Patient :'+$scope.calendarEvts[i].user.firstName+', '+$scope.calendarEvts[i].user.lastName:'');
+                        var description = ($scope.calendarEvts[i].description!==null && $scope.calendarEvts[i].description!==undefined ?
+                            $scope.calendarEvts[i].description:'');
+                        console.log('$scope.account.currentUserPatient calendar '+$scope.account.currentUserPatient);
+                        if ($scope.account.currentUserPatient){
+                            interval='';patient='';description='';
+                        }
+                        $scope.events.push({
+                            title: '<span style="margin-top: -10px;">'+interval+'</span><p>'+patient+'</p><p>'+description+'</p>',
+                            type: $scope.calendarEvts[i].eventStatus === null ? 'Not applicable' :
+                                ($scope.calendarEvts[i].eventStatus.id === 1 ? 'info' :
+                                    ($scope.calendarEvts[i].eventStatus.id === 2 ? 'special' :
+                                        ($scope.calendarEvts[i].eventStatus.id === 3 ? 'success' :
+                                            ($scope.calendarEvts[i].eventStatus.id === 4 ? 'important' :
+                                                ($scope.calendarEvts[i].eventStatus.id === 7 ? 'request' :
+                                                    ($scope.calendarEvts[i].eventStatus.id === 8 ? 'visit' :
+                                                        ($scope.calendarEvts[i].eventStatus.id === 9 ? 'block' :
+                                                            ($scope.calendarEvts[i].eventStatus.id === 10 ? 'special' :
+                                                                ($scope.calendarEvts[i].eventStatus.id === 11 ? 'special' :
+                                                                    'Not applicable'))))))))),
+                            //angular.isUndefined($scope.calendarEvts[i].eventStatus)
+                            //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
+                            startsAt: startDate,
+                            endsAt: endDate
+                        })
+                    }
+                    console.log("current 1 language " + $translate.use());
+                });
             });
         };
 

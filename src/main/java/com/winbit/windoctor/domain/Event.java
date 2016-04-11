@@ -41,7 +41,13 @@ public class Event implements Serializable {
         this.id = e.getId();
         this.eventStatus = new Status(e.getEventStatus().getId());
         this.id = e.getId();
-        this.setEvent_date(e.getEvent_date().withZoneRetainFields(DateTimeZone.forID(TimeZone.getDefault().getID())));
+        this.setEvent_date(e.getEvent_date());
+        this.setEvent_date_end(e.getEvent_date_end());
+        User patient = new User();
+        patient.setFirstName(e.getUser().getFirstName());
+        patient.setLastName(e.getUser().getLastName());
+        this.setUser(patient);
+        this.setDescription(e.getDescription());
     }
 
     @NotNull

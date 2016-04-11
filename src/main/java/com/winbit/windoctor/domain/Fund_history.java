@@ -29,6 +29,26 @@ import java.util.Objects;
 @Document(indexName="fund_history")
 public class Fund_history implements Serializable {
 
+    public Fund_history(){}
+
+    public Fund_history(Fund_history fund_history){
+        this.id = fund_history.getId();
+        this.old_amount = fund_history.getOld_amount();
+        this.new_amount = fund_history.getNew_amount();
+        this.type_operation = fund_history.getType_operation();
+        this.amount_movement = fund_history.getAmount_movement();
+        this.fund = fund_history.getFund();
+        this.treatment = fund_history.getTreatment();
+        this.product = fund_history.getProduct();
+        this.supply_type = fund_history.getSupply_type();
+        this.created_by = fund_history.getCreated_by();
+        this.creation_date = fund_history.getCreation_date();
+
+        if(this.created_by!=null){
+            this.created_by.setPicture(null);
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

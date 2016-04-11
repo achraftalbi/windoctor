@@ -1,5 +1,4 @@
 'use strict';
-
 angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pascalprecht.translate',
                'mwl.calendar', // Add calendar to my application
                'ui.bootstrap', // for modal dialogs
@@ -110,6 +109,9 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
         cfpLoadingBarProvider.latencyThreshold = 1;
     }])
+    /*.config(['calendarConfig', function(calendarConfig) {
+        calendarConfig.showTimesOnWeekView = true;
+    }])*/
     .config(function($breadcrumbProvider) {
         $breadcrumbProvider.setOptions({
             translations: true,

@@ -1,5 +1,4 @@
-<form name="editFormCalendarDialog" role="form" novalidate  show-validation>
-
+<form name="editFormCalendarDialog" novalidate  show-validation>
     <div class="modal-header">
         <div class="row">
             <div class="form-group col-xs-6 col-md-4">
@@ -18,6 +17,8 @@
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
 
+        <div class="row">
+        </div>
         <div class="row" ng-show="!visit">
             <div class="form-group col-xs-6 col-md-4">
                 <label translate="windoctorApp.calendar.startDate" for="startDate">Start date</label>
@@ -117,25 +118,25 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8">
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" ng-model="searchQueryPatient"
-                                                   id="searchQueryPatient" placeholder="{{ 'global.wordToSearch' | translate }}">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="padding: 20px;padding-bottom: 35px">
-                                            <ul class="btn btn-info" style="margin-right: 30px">
-                                                <li ng-click="searchPatient()">
-                                                    <span class="glyphicon glyphicon-search">  <span translate="entity.action.search">Search</span></span>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+                            <form name="searchFormPatient" class="form-inline">
+                                <div class="row">
+                                    <div class="form-group col-xs-6 col-sm-3">
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-3">
+                                        <input type="text" class="form-control" ng-model="searchPatientDialogText.description"
+                                               id="searchPatientDialogText" placeholder="{{ 'global.wordToSearch' | translate }}">
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-3">
+                                        <ul class="btn btn-info"">
+                                            <li ng-click="searchPatient()">
+                                                <span class="glyphicon glyphicon-search">  <span translate="entity.action.search">Search</span></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group col-xs-6 col-sm-3">
+                                    </div>
+                                </div>
+                                </form>
                         </div>
                     </div>
                 </div>

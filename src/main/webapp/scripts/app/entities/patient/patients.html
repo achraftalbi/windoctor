@@ -1,4 +1,4 @@
-<div>
+<div ng-show="displayPatientPage">
 
     <h2 translate="windoctorApp.patient.home.title">Patients</h2>
     <jh-alert></jh-alert>
@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-4">
                 <button class="btn btn-primary" ui-sref="patient.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.patient.home.createLabel">Create a new Patient</span>
+                    <span class="fa fa-plus"></span> <span translate="windoctorApp.patient.home.createLabel">Create a new Patient</span>
                 </button>
             </div>
             <div class="col-md-8">
@@ -69,7 +69,7 @@
                     <td>{{patient.login}}</td>
                     <td>{{patient.email}}</td>
                     <td><a translate="windoctorApp.patient.chart"
-                           ui-sref="patient.patientChart({patientId:patient.id})"
+                           ng-click="displayPatientChartPage(patient)"
                         /></td>
                     <td>
                         <button type="submit"
@@ -113,4 +113,7 @@
             </ul>
         </nav>
     </div>
+</div>
+<div ng-show="displayChartPage">
+    <ng-include src="'scripts/app/entities/calendar/calendar-treatments.html'"></ng-include>
 </div>

@@ -17,6 +17,7 @@ angular.module('windoctorApp')
         $scope.searchCalled = false;
         $scope.displayEventsPage = true;
         $scope.displayDialogEventPage = false;
+        $scope.searchQueryPatientDialog='';
         $scope.displayTreatmentsPage = false;
         console.log('selectedDateString '+$scope.selectedDateString);
         $scope.loadAll = function () {
@@ -117,6 +118,7 @@ angular.module('windoctorApp')
             //$scope.$emit('windoctorApp:eventUpdate');
             $scope.event=event;
             console.log('$scope.event.id '+$scope.event.id);
+            $scope.searchPatientDialogText = { description: null};
             $scope.displayEventsPage = false;
             $scope.displayDialogEventPage = true;
             angular.module('windoctorApp').expandCalendarEventsControllerToDialog
@@ -126,7 +128,9 @@ angular.module('windoctorApp')
         $scope.addEvent = function (status) {
             //$scope.$emit('windoctorApp:eventUpdate');
             $scope.event = {event_date: null, description: null, id: null,eventStatus:{id:status}};
+            $scope.searchPatientDialogText = { description: null};
             $scope.displayEventsPage = false;
+            $scope.searchQueryPatientDialog='';
             $scope.displayDialogEventPage = true;
             angular.module('windoctorApp').expandCalendarEventsControllerToDialog
             ($scope, $stateParams, Event, EventDTO , Patient, ParseLinks, PatientSearch, $filter, Principal);

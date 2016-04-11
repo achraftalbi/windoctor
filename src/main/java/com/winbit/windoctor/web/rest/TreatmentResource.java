@@ -171,7 +171,11 @@ public class TreatmentResource {
         if (patientId != null) {
             log.debug("patientId part -> eventId:" + eventId + " patientId:" + patientId);
             Pageable pageable = PaginationUtil.generatePageRequest(offset, limit);
-            page = treatmentRepository.findByPatient(patientId, PaginationUtil.generatePageRequest(offset, limit));
+            if(offset == null || limit==null){
+                page = treatmentRepository.findByPatient(patientId, null);
+            }else{
+                page = treatmentRepository.findByPatient(patientId, PaginationUtil.generatePageRequest(offset, limit));
+            }
             //if (Constants.FIRST_PAGE.equals(offset)) {
                 Treatment totalPatientTreatments = treatmentRepository.findTotalPatientTreatments(patientId);
                 totalPatientTreatments.setId(-1l);
@@ -263,11 +267,11 @@ public class TreatmentResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Treatment>> search(@PathVariable String query, @RequestParam(value = "eventId", required = false) Long eventId, @RequestParam(value = "page", required = false) Integer offset,
+    public ResponseEntity<List<Treatment>> search(@PathVariable String query, @RequestParam(value = "patientId", required = false) Long patientId, @RequestParam(value = "page", required = false) Integer offset,
                                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<Treatment> page;
-        page = treatmentRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, eventId, PaginationUtil.generatePageRequest(offset, limit));
+        page = treatmentRepository.findAllMatchString(Constants.PERCENTAGE + query + Constants.PERCENTAGE, patientId, PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/_search/treatments", offset, limit);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

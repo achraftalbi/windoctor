@@ -24,8 +24,8 @@ public interface TreatmentRepository extends JpaRepository<Treatment,Long> {
     Treatment findTotalPatientTreatments(Long patientId);
     @Query("select new Treatment(sum(t.price),sum(t.paid_price)) from Treatment t where t.event.user.structure.id = ?3 and (t.treatment_date between ?1 and ?2) and (?4 is null or t.doctor.id=?4) order by t.treatment_date asc")
     Treatment findTotalByFirstLastDatesDoctor(DateTime firstDate, DateTime lastDate, Long structure_id, Long doctorId);
-    @Query("select t from Treatment t where t.event.id = ?2 and" +
+    @Query("select t from Treatment t where t.event.user.id = ?2 and" +
         " ( lower(t.description) like lower(?1) or lower(t.eventReason.description) like lower(?1) or lower(t.price) like lower(?1) or lower(t.paid_price) like lower(?1)) ")
-    Page<Treatment> findAllMatchString(String query, Long eventId, Pageable var1);
+    Page<Treatment> findAllMatchString(String query, Long patientId, Pageable var1);
 
 }

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('DashboardController', function ($scope, Dashboard, DashboardSearch, ParseLinks,Language) {
+    .controller('DashboardController', function ($scope, Dashboard, DashboardSearch, ParseLinks,Language,$translate) {
         $scope.dashboardDTO;
         $scope.dashboards = [];
         $scope.lineLabels = [];
@@ -122,7 +122,7 @@ angular.module('windoctorApp')
         // Dashboard developpement
         //$scope.lineLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","November","December"];
         //$scope.series = ['Series A', 'Series B'];
-        $scope.lineSeries = ['Profit'];
+        $scope.lineSeries = [$translate.instant('windoctorApp.dashboard.profit')];
         /*$scope.data = [
          [65, 59, 80, 81, 56, 55, 40],
          [28, 48, 40, 19, 86, 27, 90]
@@ -143,7 +143,7 @@ angular.module('windoctorApp')
 
 
         //$scope.barLabels = ["January", "February", "March", "April", "May", "June", "July","August","September","November","December"];
-        $scope.barSeries = ['All patients'];//,'New patients','Old patients'];
+        $scope.barSeries = [$translate.instant('windoctorApp.dashboard.allPatients')];//,'New patients','Old patients'];
         /*$scope.data = [
          [65, 59, 80, 81, 56, 55, 40],
          [28, 48, 40, 19, 86, 27, 90]
