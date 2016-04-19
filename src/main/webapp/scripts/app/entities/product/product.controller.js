@@ -1,17 +1,30 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('ProductController', function ($scope, Product, ProductSearch, ParseLinks) {
+    .controller('ProductController', function ($scope, Product, ProductSearch,$stateParams,Category,Fund,Principal, ParseLinks) {
         $scope.products = [];
         $scope.productsThreshold = [];
         $scope.page = 1;
         $scope.pageThreshold = 1;
         $scope.searchCalled = false;
+        $scope.displayStock= true;
+        $scope.editOrAddProduct= false;
+        $scope.funds=null;
         $scope.loadAll = function () {
             Product.query({typeProductToGet:1,page: $scope.page, per_page: 5}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.products = result;
+                $scope.categorys = Category.query();
+                $scope.loadFunds();
             });
+        };
+        $scope.loadFunds = function () {
+            if($scope.funds===null || $scope.funds===undefined){
+                Fund.query(function (result, headers) {
+                        $scope.funds = result;
+                    }
+                );
+            }
         };
         $scope.loadAllThreshold = function () {
             Product.query({typeProductToGet:2,page: $scope.page, per_page: 5}, function (result, headers) {
@@ -26,6 +39,25 @@ angular.module('windoctorApp')
             }else{
                 $scope.loadAll();
             }
+        };
+
+        $scope.editProduct = function (product) {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.product=product;
+            $scope.displayStock= false;
+            $scope.editOrAddProduct= true;
+            angular.module('windoctorApp').expandProductController
+            ($scope, $stateParams, Product, Category, Fund,Principal);
+        };
+
+        $scope.addProduct = function () {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.product = {name: null, image: null, price: null, amount: null, id: null};
+            $scope.product.fund =  $scope.funds[0];
+            $scope.displayStock = false;
+            $scope.editOrAddProduct = true;
+            angular.module('windoctorApp').expandProductController
+            ($scope, $stateParams, Product, Category, Fund,Principal);
         };
 
         $scope.loadPageThreshold = function (page) {

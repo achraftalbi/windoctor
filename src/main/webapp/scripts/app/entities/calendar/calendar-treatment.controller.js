@@ -318,13 +318,13 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     $scope.oldFundContainEnoughMoney = true;
                 console.log("changeFields 4");
             }
-            if(( $scope.treatment.price - $scope.treatment.paid_price) < 0){
+            /*if(( $scope.treatment.price - $scope.treatment.paid_price) < 0){
                 console.log("1 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
                 $scope.priceLessThanPaidPrice = true;
             }else{
                 console.log("2 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
                 $scope.priceLessThanPaidPrice = false;
-            }
+            }*/
 
             console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
             console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );

@@ -264,6 +264,10 @@
                                             ng-show="(treatment.price - treatment.paid_price)>0">
                                             {{treatment.price - treatment.paid_price}}
                                         </td>
+                                        <td style="background-color: yellow;color: black;"
+                                            ng-show="(treatment.price - treatment.paid_price)<0">
+                                            {{treatment.price - treatment.paid_price}}
+                                        </td>
                                         <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"

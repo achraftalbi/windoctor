@@ -20,7 +20,7 @@
             "entities": {
                 "main": "Entités",
                 "category": "Catégories",
-                "product": "Matérieaux",
+                "product": "Stock",
                 "status": "Status",
                 "event": "Event",
                 "event_reason": "Actes",

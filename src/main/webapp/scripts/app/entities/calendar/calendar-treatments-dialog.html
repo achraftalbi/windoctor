@@ -177,11 +177,6 @@
                         This field should be a number.
                     </p>
                 </div>
-                <div ng-show="priceLessThanPaidPrice">
-                    <p class="help-block" translate="windoctorApp.treatment.priceLessThanPaidPrice">
-                        The paid price must be less than price.
-                    </p>
-                </div>
             </div>
         </div>
         <div class="row" ng-show="addNewEventReason">
@@ -269,13 +264,13 @@
             translate="entity.action.close">Close</span>
         </button>
         <button type="button" ng-click="saveTreatment()"
-                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney || priceLessThanPaidPrice"
+                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney"
                 ng-show="!displayTreatmentView"
                 class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
         </button>
         <button type="button" ng-click="saveTreatmentAndClose()" ng-show="!displayTreatmentView"
-                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney || priceLessThanPaidPrice"
+                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney"
                 class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save and close</span>
         </button>

@@ -23,7 +23,6 @@ angular.module('windoctorApp')
                     for (var i = 0; i < $scope.calendarEvts.length; i++) {
                         var startDate = new Date($filter('date')($scope.calendarEvts[i].event_date, 'yyyy-MM-dd HH:mm', '+0000'));
                         var endDate = new Date($filter('date')($scope.calendarEvts[i].event_date_end, 'yyyy-MM-dd HH:mm', '+0000'));
-                        var interval = 'De ' + $filter('date')(startDate, 'HH:mm') +' à '+ $filter('date')(endDate, 'HH:mm');
 
                         var patient = ($scope.calendarEvts[i].user!==null && $scope.calendarEvts[i].user!==undefined ?
                         'Patient :'+$scope.calendarEvts[i].user.firstName+', '+$scope.calendarEvts[i].user.lastName:'');
@@ -31,10 +30,10 @@ angular.module('windoctorApp')
                             $scope.calendarEvts[i].description:'');
                         console.log('$scope.account.currentUserPatient calendar '+$scope.account.currentUserPatient);
                         if ($scope.account.currentUserPatient){
-                            interval='';patient='';description='';
+                            patient='';description='';
                         }
                         $scope.events.push({
-                            title: '<span style="margin-top: -10px;">'+interval+'</span><p>'+patient+'</p><p>'+description+'</p>',
+                            title: '<p>'+patient+'</p><p>'+description+'</p>',
                             type: $scope.calendarEvts[i].eventStatus === null ? 'Not applicable' :
                                 ($scope.calendarEvts[i].eventStatus.id === 1 ? 'info' :
                                     ($scope.calendarEvts[i].eventStatus.id === 2 ? 'special' :
@@ -49,7 +48,9 @@ angular.module('windoctorApp')
                             //angular.isUndefined($scope.calendarEvts[i].eventStatus)
                             //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
                             startsAt: startDate,
-                            endsAt: endDate
+                            endsAt: endDate,
+                            draggable: true,
+                            resizable: true
                         })
                     }
                     console.log("current 1 language " + $translate.use());

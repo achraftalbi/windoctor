@@ -2,7 +2,7 @@
     "windoctorApp": {
         "product" : {
             "home": {
-                "title": "Matériaux",
+                "title": "Stock",
                 "createLabel": "Créer un nouveau matériel",
                 "createOrEditLabel": "Créer ou éditer un matériel"
             },
