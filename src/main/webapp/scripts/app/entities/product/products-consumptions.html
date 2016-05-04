@@ -1,0 +1,186 @@
+<div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 translate="windoctorApp.consumption.home.title" class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+            <jh-alert></jh-alert>
+            <div>
+                <div class="row">
+                    <div class="form-group col-sm-3">
+                        <button ng-show="!addConsumptionField && !editConsumptionField " type="submit"
+                                ng-disabled="product.id===null"
+                                ng-click="addConsumption()"
+                                class="btn btn-primary btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-plus" translate="entity.action.add">Ajouter</span>&nbsp;<span
+                            ></span>
+                        </button>
+                        <button ng-show="addConsumptionField || editConsumptionField" type="submit"
+                                ng-click="cancelConsumption()"
+                                class="btn btn-danger btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-minus" translate="entity.action.cancel">Cancel</span>&nbsp;<span
+                            ></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="padding: 15px;padding-top:0px;padding-bottom:0px;"
+                     ng-show="addConsumptionField || editConsumptionField">
+                    <form name="editFormConsumption" role="form" novalidate show-validation>
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.consumption.amount"
+                                                   for="field_amount">Quantity</label>
+                                            <input type="number" class="form-control" name="amount_consumption"
+                                                   id="field_amount"
+                                                   ng-model="consumption.amount" ng-change="changeAmount()"
+                                                   required min="0">
+
+                                            <div ng-show="editFormConsumption.amount_consumption.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormConsumption.amount_consumption.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormConsumption.amount_consumption.$error.min"
+                                                   translate="entity.validation.min"
+                                                   translate-value-min="0">
+                                                    This field should be more than 0.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormConsumption.amount_consumption.$error.number"
+                                                   translate="entity.validation.number">
+                                                    This field should be a number.
+                                                </p>
+                                            </div>
+                                            <div ng-show="!productContainEnoughAmount">
+                                                <p class="help-block"
+                                                   translate="windoctorApp.consumption.amountGreaterThanProductAmount">
+                                                    The amount to add is more than the total amount of the product.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.consumption.relative_date">Relative date</label>
+
+                                            <div>
+                                                <input type="text" format="L" view='date' min-view="date" date-time
+                                                       ng-required="false"
+                                                       date-change="changeDateConsumption" readonly name="relative_date"
+                                                       ng-model="dateValueConsumption">
+                                                <span class="fa fa-calendar"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <button type="button" ng-click="saveConsumption()" style="margin-top:20px;"
+                                                    ng-disabled="editFormConsumption.amount_consumption.$invalid  || !productContainEnoughAmount"
+                                                    class="btn btn-primary">
+                                                <span class="fa fa-plus fa-1x"></span>&nbsp;<span
+                                                translate="entity.action.save">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead ng-show="consumptions!==null && consumptions!==undefined && consumptions.length>0">
+                    <tr>
+                        <th translate="windoctorApp.consumption.creation_date">Creation date</th>
+                        <th translate="windoctorApp.consumption.relative_date">Relative date</th>
+                        <th translate="windoctorApp.consumption.amount">Amount</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="consumption in consumptions">
+                        <td>{{consumption.creation_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{consumption.relative_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{consumption.amount}}</td>
+                        <td>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.edit' | translate }}"
+                                    tooltip-class="pencilClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="editConsumption(consumption)"
+                                    class="btn btn-primary btn-sm">
+                                <span class="fa fa-pencil"></span>&nbsp;<span
+                                ></span>
+                            </button>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.delete' | translate }}"
+                                    tooltip-class="deleteClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="deleteConsumption(consumption)"
+                                    class="btn btn-danger btn-sm">
+                                <span class="fa fa-remove"></span>&nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination" ng-show="linksConsumption['prev'] || linksConsumption['next']">
+                        <li ng-show="linksConsumption['first']" ng-click="loadPageConsumption(linksConsumption['first'])"><a>&lt;&lt;</a>
+                        </li>
+                        <li ng-show="linksConsumption['prev']" ng-click="loadPageConsumption(linksConsumption['prev'])"><a>
+                            &lt;</a></li>
+                        <li ng-show="pageConsumption > 2" ng-click="loadPageConsumption(pageConsumption - 2)"><a>{{pageConsumption -
+                            2}}</a></li>
+                        <li ng-show="pageConsumption > 1" ng-click="loadPageConsumption(pageConsumption - 1)"><a>{{pageConsumption -
+                            1}}</a></li>
+                        <li class="active"><a>{{pageConsumption}}</a></li>
+                        <li ng-show="pageConsumption < linksConsumption['last']"
+                            ng-click="loadPageConsumption(pageConsumption + 1)"><a>{{pageConsumption + 1}}</a></li>
+                        <li ng-show="pageConsumption < linksConsumption['last'] - 1"
+                            ng-click="loadPageConsumption(pageConsumption + 2)"><a>{{pageConsumption + 2}}</a></li>
+                        <li ng-show="linksConsumption['next']" ng-click="loadPageConsumption(linksConsumption['next'])"><a>
+                            &gt;</a></li>
+                        <li ng-show="linksConsumption['last']" ng-click="loadPageConsumption(linksConsumption['last'])"><a>&gt;&gt;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteConsumptionConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteFormConsumption" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="closeDeleteConsumption()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="windoctorApp.consumption.delete.question" translate-values="{creation_date: '{{consumption.creation_date | date:'yyyy-MM-dd' : '+0000'}}'}">Are you sure you want to delete this Consumption?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                ng-click="closeDeleteConsumption()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="button" ng-disabled="deleteFormConsumption.$invalid" class="btn btn-danger"
+                                ng-click="confirmDeleteConsumption(consumption)">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

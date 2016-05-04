@@ -11,72 +11,6 @@
 
         <div class="row">
             <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
-                <input type="text" class="form-control" name="description" id="field_description"
-                       ng-model="treatment.description" ng-show="!displayTreatmentView"
-                       ng-maxlength="1000">
-                <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.description}}</span>
-
-                <div ng-show="editForm.description.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
-                       translate-value-max="1000">
-                        This field cannot be longer than 1000 characters.
-                    </p>
-                </div>
-            </div>
-            <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.fund" for="field_fund">Fund</label>
-                <select class="form-control" id="field_fund" name="fund" ng-model="treatment.fund"
-                        ng-change="changeFields()"
-                        ng-options="fund as fund.description for fund in funds track by fund.id" required>
-                    <option value=""></option>
-                </select>
-
-                <div ng-show="editForm.fund.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.fund.$error.required" translate="entity.validation.required">
-                        This field is required.
-                    </p>
-                </div>
-                <div ng-show="!oldFundContainEnoughMoney">
-                    <p class="help-block" translate="windoctorApp.treatment.theAmountOfNewOrOldFundNotEnough">
-                        Le prix totale est supérieur à la somme de la caisse.
-                    </p>
-                </div>
-            </div>
-            <div class="form-group col-xs-6 col-md-3" ng-show="false">
-                <label translate="windoctorApp.treatment.fundAmount">Fund amount</label>
-
-                <div>
-                    <span ng-show="treatment.fund"
-                          class="form-control-static">{{treatment.fund.amount}}</span>
-                    <span ng-show="!treatment.fund"
-                          translate="windoctorApp.treatment.chooseFund"
-                          class="form-control-static">Choose a fund to see this field</span>
-                </div>
-            </div>
-            <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.doctor"
-                       for="field_doctor">doctor</label>
-                <select class="form-control" id="field_doctor" name="doctor"
-                        ng-change="valueChanged()" ng-show="!displayTreatmentView"
-                        ng-model="treatment.doctor"
-                        ng-options="doctor as doctor.firstName +' '+ doctor.lastName for doctor in doctors track by doctor.id">
-                    <option value=""></option>
-                </select>
-                <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.doctor.firstName}} {{treatment.doctor.lastName}}</span>
-
-                <div ng-show="editForm.doctor.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.doctor.$error.required" translate="entity.validation.required">
-                        This field is required.
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-xs-6 col-md-3">
                 <label translate="windoctorApp.treatment.eventReason">eventReason</label>
                 <ui-select ng-model="treatment.eventReason" theme="select2" class="form-control"
                            ng-change="reasonValueChanged()"
@@ -179,73 +113,168 @@
                 </div>
             </div>
         </div>
-        <div class="row" ng-show="addNewEventReason">
-            <div class="form-group col-xs-6">
-                <div class="form-group col-xs-6 col-md-4">
-                    <label translate="windoctorApp.treatment.eventReasonDescription"
-                           for="field_description_event_reason">Description</label>
-                    <input type="text" class="form-control" name="description_event_reason"
-                           id="field_description_event_reason"
-                           ng-model="newEventReason.description"
-                           ng-minlength="1" ng-maxlength="200">
+        <div  ng-show="addNewEventReason">
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-6">
+                        <label translate="windoctorApp.treatment.eventReasonDescription"
+                               for="field_description_event_reason">Description</label>
+                        <input type="text" class="form-control" name="description_event_reason"
+                               id="field_description_event_reason"
+                               ng-model="newEventReason.description"
+                               ng-minlength="1" ng-maxlength="200">
 
-                    <div ng-show="editForm.description_event_reason.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.description_event_reason.$error.minlength"
-                           translate="entity.validation.minlength"
-                           translate-value-min="1">
-                            This field is required to be at least 1 characters.
-                        </p>
+                        <div ng-show="editForm.description_event_reason.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.description_event_reason.$error.minlength"
+                               translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
 
-                        <p class="help-block"
-                           ng-show="editForm.description_event_reason.$error.maxlength"
-                           translate="entity.validation.maxlength"
-                           translate-value-max="200">
-                            This field cannot be longer than 200 characters.
-                        </p>
+                            <p class="help-block"
+                               ng-show="editForm.description_event_reason.$error.maxlength"
+                               translate="entity.validation.maxlength"
+                               translate-value-max="200">
+                                This field cannot be longer than 200 characters.
+                            </p>
+                        </div>
+                        <div ng-show="newEventReasonDescNecessary">
+                            <p class="help-block" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+                        </div>
                     </div>
-                    <div ng-show="newEventReasonDescNecessary">
-                        <p class="help-block" translate="entity.validation.required">
-                            This field is required.
-                        </p>
+                    <div class="form-group col-xs-6">
+                        <label translate="windoctorApp.treatment.eventReasonPrice"
+                               for="field_price_event_reason">Price</label>
+                        <input type="number" class="form-control" name="price_event_reason" id="field_price_event_reason"
+                               ng-model="newEventReason.price"
+                               min="0" max="10000000">
+
+                        <div ng-show="editForm.price_event_reason.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.price_event_reason.$error.min" translate="entity.validation.min"
+                               translate-value-min="0">
+                                This field should be more than 0.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.price_event_reason.$error.max" translate="entity.validation.max"
+                               translate-value-max="10000000">
+                                This field cannot be more than 10000000.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.price_event_reason.$error.number" translate="entity.validation.number">
+                                This field should be a number.
+                            </p>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group col-xs-6 col-md-4">
-                    <label translate="windoctorApp.treatment.eventReasonPrice"
-                           for="field_price_event_reason">Price</label>
-                    <input type="number" class="form-control" name="price_event_reason" id="field_price_event_reason"
-                           ng-model="newEventReason.price"
-                           min="0" max="10000000">
-
-                    <div ng-show="editForm.price_event_reason.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.price_event_reason.$error.min" translate="entity.validation.min"
-                           translate-value-min="0">
-                            This field should be more than 0.
-                        </p>
-
-                        <p class="help-block"
-                           ng-show="editForm.price_event_reason.$error.max" translate="entity.validation.max"
-                           translate-value-max="10000000">
-                            This field cannot be more than 10000000.
-                        </p>
-
-                        <p class="help-block"
-                           ng-show="editForm.price_event_reason.$error.number" translate="entity.validation.number">
-                            This field should be a number.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group col-xs-6 col-md-4">
-                    <button type="button" ng-click="saveNewEventReason()" style="margin-top:20px;"
-                            ng-disabled="editForm.description_event_reason.$invalid || editForm.price_event_reason.$invalid"
-                            class="btn btn-primary">
-                        <span class="fa fa-plus fa-1x"></span>&nbsp;<span
-                        translate="windoctorApp.treatment.eventReasonAdd">Add act</span>
-                    </button>
                 </div>
             </div>
-            <div class="form-group col-xs-6">
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <div class="form-group col-xs-6">
+                        <label translate="windoctorApp.event_reason.categoryAct">Category of the act</label>
+                        <ui-select ng-model="newEventReason.categoryAct" theme="select2" class="form-control"
+                                   name="categoryAct"
+                                   title="{{ 'entity.action.choose' | translate }}" ng-disabled="disabled"
+                            >
+                            <ui-select-match placeholder="{{ 'entity.action.select' | translate }}">
+                                {{$select.selected.name}}
+                            </ui-select-match>
+                            <ui-select-choices repeat="categoryAct in categoryActs | filter: $select.search">
+                                <small ng-bind-html="categoryAct.name | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <button type="button" ng-click="saveNewEventReason()" style="margin-top:20px;"
+                                ng-disabled="editForm.description_event_reason.$invalid || editForm.price_event_reason.$invalid"
+                                class="btn btn-primary">
+                            <span class="fa fa-plus fa-1x"></span>&nbsp;<span
+                            translate="windoctorApp.treatment.eventReasonAdd">Add act</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-6 col-md-3">
+                <label translate="windoctorApp.treatment.categoryAct">Category of the act</label>
+                    <span ng-show="displayTreatmentView"
+                          class="form-control-static">{{treatment.eventReason.categoryAct.name}}</span>
+
+                <div ng-show="treatment.eventReason && !displayTreatmentView">
+                    <span>{{treatment.eventReason.categoryAct.name}}</span></div>
+                <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
+                    translate="windoctorApp.treatment.chooseReason">Choose an act</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-3">
+                <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
+                <input type="text" class="form-control" name="description" id="field_description"
+                       ng-model="treatment.description" ng-show="!displayTreatmentView"
+                       ng-maxlength="1000">
+                <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.description}}</span>
+
+                <div ng-show="editForm.description.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.description.$error.maxlength" translate="entity.validation.maxlength"
+                       translate-value-max="1000">
+                        This field cannot be longer than 1000 characters.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-3">
+                <label translate="windoctorApp.treatment.fund" for="field_fund">Fund</label>
+                <select class="form-control" id="field_fund" name="fund" ng-model="treatment.fund"
+                        ng-change="changeFields()"
+                        ng-options="fund as fund.description for fund in funds track by fund.id" required>
+                    <option value=""></option>
+                </select>
+
+                <div ng-show="editForm.fund.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.fund.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
+                <div ng-show="!oldFundContainEnoughMoney">
+                    <p class="help-block" translate="windoctorApp.treatment.theAmountOfNewOrOldFundNotEnough">
+                        Le prix totale est supérieur à la somme de la caisse.
+                    </p>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-3" ng-show="false">
+                <label translate="windoctorApp.treatment.fundAmount">Fund amount</label>
+
+                <div>
+                    <span ng-show="treatment.fund"
+                          class="form-control-static">{{treatment.fund.amount}}</span>
+                    <span ng-show="!treatment.fund"
+                          translate="windoctorApp.treatment.chooseFund"
+                          class="form-control-static">Choose a fund to see this field</span>
+                </div>
+            </div>
+            <div class="form-group col-xs-6 col-md-3">
+                <label translate="windoctorApp.treatment.doctor"
+                       for="field_doctor">doctor</label>
+                <select class="form-control" id="field_doctor" name="doctor"
+                        ng-change="valueChanged()" ng-show="!displayTreatmentView"
+                        ng-model="treatment.doctor"
+                        ng-options="doctor as doctor.firstName +' '+ doctor.lastName for doctor in doctors track by doctor.id">
+                    <option value=""></option>
+                </select>
+                <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.doctor.firstName}} {{treatment.doctor.lastName}}</span>
+
+                <div ng-show="editForm.doctor.$invalid">
+                    <p class="help-block"
+                       ng-show="editForm.doctor.$error.required" translate="entity.validation.required">
+                        This field is required.
+                    </p>
+                </div>
             </div>
         </div>
         <div class="row">

@@ -49,6 +49,9 @@ angular.module('windoctorApp')
                     entity: ['$stateParams', 'Category', function($stateParams, Category) {
                         return Category.get({id : $stateParams.id});
                     }]
+                },
+                ncyBreadcrumb: {
+                    label: '<span class="fa fa-folder-open" ></span>global.menu.entities.category'// angular-breadcrumb's configuration
                 }
             })
             .state('category.new', {

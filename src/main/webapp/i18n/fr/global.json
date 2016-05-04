@@ -19,7 +19,7 @@
             "home": "Accueil",
             "entities": {
                 "main": "Entités",
-                "category": "Catégories",
+                "category": "Catégories du stock",
                 "product": "Stock",
                 "status": "Status",
                 "event": "Event",
@@ -39,6 +39,13 @@
                 "block": "Blocker",
                 "fund_history": "Fund_history",
                 "supply_type": "Approvisionnement",
+                "purchase": "Purchase",
+                "consumption": "Consumption",
+                "categoryAct": "Catégories des actes",
+                "categoryCharge": "Catégories des charges",
+                "charge": "Charges",
+                "entry": "Entry",
+                "internalManagement": "Gestion interne",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -120,6 +127,7 @@
             "captureAnImage": "Capturer une image",
             "capture": "Capturer",
             "back": "Retour",
+            "add": "Ajouter",
             "cancel": "Annuler",
             "close": "Fermer",
             "edit": "Editer",

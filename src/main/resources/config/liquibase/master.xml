@@ -48,5 +48,14 @@
     <include file="classpath:config/liquibase/changelog/20160320114947_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160320222721_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160320225758_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160424052409_added_entity_Purchase.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160424052750_added_entity_Consumption.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160430180526_added_entity_CategoryAct.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160430180802_added_entity_CategoryCharge.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160430181532_added_entity_Charge.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160430184611_added_entity_Entry.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160501171409_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160501191532_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160502080303_changelog.xml" relativeToChangelogFile="false"/>
     <!-- JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

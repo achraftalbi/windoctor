@@ -60,6 +60,20 @@
                 </p>
             </div>
         </div>
+        <div class="form-group">
+            <label translate="windoctorApp.event_reason.categoryAct">Category of the act</label>
+            <ui-select ng-model="event_reason.categoryAct" theme="select2" class="form-control"
+                       name="categoryAct"
+                       title="{{ 'entity.action.choose' | translate }}" ng-disabled="disabled"
+                >
+                <ui-select-match placeholder="{{ 'entity.action.select' | translate }}">
+                    {{$select.selected.name}}
+                </ui-select-match>
+                <ui-select-choices repeat="categoryAct in categoryActs | filter: $select.search">
+                    <small ng-bind-html="categoryAct.name | highlight: $select.search"></small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">

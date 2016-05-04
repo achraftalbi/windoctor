@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p where p.structure.id = ?1")
     Page<Product> findAll(Long structure_id, Pageable var1);
-    @Query("select p from Product p where p.structure.id = ?1 and (p.threshold>0 and p.amount<p.threshold)")
+    @Query("select p from Product p where p.structure.id = ?1 and (p.threshold>0 and (select coalesce(sum(coalesce(pu.amount,0)),0) from Purchase pu where pu.purchase_product.id=p.id) < p.threshold)")
     Page<Product> findAllThreshold(Long structure_id, Pageable var1);
     @Query("select p from Product p, Category c  where p.product.id=c.id and p.structure.id = ?2 and" +
         " ( lower(p.name) like lower(?1) or lower(p.price) like lower(?1) or lower(p.amount) like lower(?1) " +

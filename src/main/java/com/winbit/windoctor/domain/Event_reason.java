@@ -51,7 +51,18 @@ public class Event_reason implements Serializable {
     private BigDecimal price;
 
     @ManyToOne
+    private CategoryAct categoryAct;
+
+    @ManyToOne
     private Structure structure;
+
+    public CategoryAct getCategoryAct() {
+        return categoryAct;
+    }
+
+    public void setCategoryAct(CategoryAct categoryAct) {
+        this.categoryAct = categoryAct;
+    }
 
     public Structure getStructure() {
         return structure;

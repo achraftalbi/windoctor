@@ -24,6 +24,7 @@
             "fund": "Fund",
             "treatment": "Acte",
             "supply_type": "Supply/Removal",
+            "charge": "Charge",
             "movementCause": "Movement cause",
             "credit": "Credit",
             "debit": "Debit",

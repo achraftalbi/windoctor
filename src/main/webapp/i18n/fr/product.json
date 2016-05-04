@@ -27,6 +27,7 @@
             "fillPriceQuantity": "Remplissez le prix et la quantité pour voir le prix totale",
             "materialsOutStock": "Matériaux en rupture de stock",
             "totalPriceGreaterToFund": "Le prix totale est supérieur à la somme de la caisse.",
+            "purchasesAndConsumptionsMessage": "Vous pouvez ajouter des achats et des consommations après la sauvegarde du produit.",
             "product": "Catégorie"
         }
     }

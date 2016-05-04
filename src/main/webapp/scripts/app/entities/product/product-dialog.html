@@ -1,239 +1,189 @@
 <div ng-show="!captureAnImageScreen">
 
-<form name="editForm" role="form" novalidate show-validation>
+    <form name="editForm" role="form" novalidate show-validation>
 
-    <div class="modal-header" >
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="clear()">&times;</button>
-        <h4 class="modal-title" id="myProductLabel" translate="windoctorApp.product.home.createOrEditLabel">Create or
-            edit a Product</h4>
-    </div>
-    <div class="modal-body">
-        <div >
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                    ng-click="clear()">&times;</button>
+            <h4 class="modal-title" id="myProductLabel" translate="windoctorApp.product.home.createOrEditLabel">Create
+                or
+                edit a Product</h4>
+        </div>
+        <div class="modal-body">
+            <div>
 
-            <jh-alert-error></jh-alert-error>
+                <jh-alert-error></jh-alert-error>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.product.name" for="field_name">Name</label>
+                        <input type="text" class="form-control" name="name" id="field_name"
+                               ng-model="product.name"
+                               required ng-minlength="1" ng-maxlength="100">
 
-            <div class="form-group">
-                <label translate="windoctorApp.product.name" for="field_name">Name</label>
-                <input type="text" class="form-control" name="name" id="field_name"
-                       ng-model="product.name"
-                       required ng-minlength="1" ng-maxlength="100">
+                        <div ng-show="editForm.name.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
 
-                <div ng-show="editForm.name.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.name.$error.required" translate="entity.validation.required">
-                        This field is required.
-                    </p>
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
 
-                    <p class="help-block"
-                       ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength"
-                       translate-value-min="1">
-                        This field is required to be at least 1 characters.
-                    </p>
-
-                    <p class="help-block"
-                       ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength"
-                       translate-value-max="100">
-                        This field cannot be longer than 100 characters.
-                    </p>
-                </div>
-            </div>
-            <div class="form-group" ngf-drop ngf-change="setImage($files, product)" ngf-accept="'image/*'">
-                <label translate="windoctorApp.product.image" for="field_image">Image</label>
-
-                <div>
-                    <img data-ng-src="{{'data:image/*;base64,' + product.image}}" style="max-height: 100px;"
-                         ng-if="product.image"/>
-
-                    <div class="help-block clearfix">
-                        <span class="pull-left">{{byteSize(product.image)}}</span>
-                        <button ng-click="product.image=null"
-                                ng-if="product.image"
-                                class="btn btn-default btn-xs pull-right">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-xs-6">
-                            <button type="file" ngf-select class="btn btn-default btn-block"
-                                    ngf-change="setImage($files, product)" accept="image/*"
-                                    translate="entity.action.addimage">
-                                Add image
-                            </button>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <button class="btn btn-default btn-block"
-                                    ng-click="captureAnImage()"
-                                    translate="entity.action.captureAnImage">
-                                Capture image
-                            </button>
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="100">
+                                This field cannot be longer than 100 characters.
+                            </p>
                         </div>
                     </div>
-                </div>
-                <input type="hidden" class="form-control" name="image" id="field_image"
-                       ng-model="product.image"
-                       maxbytes="250000">
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.product.totalPrice">Total price</label>
 
-                <div ng-show="editForm.image.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes"
-                       translate-value-max="250000">
-                        This field cannot be more than 250000.
-                    </p>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.price" for="field_price">Price</label>
-                    <input type="number" class="form-control" name="price" id="field_price"
-                           ng-model="product.price" ng-change="changeFields()"
-                           required min="0">
-
-                    <div ng-show="editForm.price.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.price.$error.required" translate="entity.validation.required">
-                            This field is required.
-                        </p>
-
-                        <p class="help-block"
-                           ng-show="editForm.price.$error.min" translate="entity.validation.min"
-                           translate-value-min="0">
-                            This field should be more than 0.
-                        </p>
-
-                        <p class="help-block"
-                           ng-show="editForm.price.$error.number" translate="entity.validation.number">
-                            This field should be a number.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.totalPrice">Total price</label>
-
-                    <div>
+                        <div>
                     <span ng-show="(product.price && product.amount)||((product.price===0 && product.amount)
                     || (product.price && product.amount===0) || (product.price===0 && product.amount===0))"
-                          class="form-control-static">{{product.price * product.amount}}</span>
+                          class="form-control-static">{{product.price}}</span>
                     <span ng-show="!((product.price && product.amount)||((product.price===0 && product.amount)
                     || (product.price && product.amount===0) || (product.price===0 && product.amount===0)))"
                           translate="windoctorApp.product.fillPriceQuantity"
                           class="form-control-static">Fill price and quantity to see total price</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.product.amount">Quantity</label>
+
+                        <div>
+                            <span>{{product.amount}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.product.threshold" for="field_threshold">Threshold</label>
+                        <input type="number" class="form-control" name="threshold" id="field_threshold"
+                               ng-model="product.threshold"
+                               required min="0">
+
+                        <div ng-show="editForm.threshold.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.threshold.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.threshold.$error.min" translate="entity.validation.min"
+                               translate-value-min="0">
+                                This field should be more than 0.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.threshold.$error.number" translate="entity.validation.number">
+                                This field should be a number.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.amount" for="field_amount">Quantity</label>
-                    <input type="number" class="form-control" name="amount" id="field_amount"
-                           ng-model="product.amount" ng-change="changeFields()"
-                           required min="0">
+                <div class="row">
+                    <div class="form-group col-xs-6" ngf-drop ngf-change="setImage($files, product)"
+                         ngf-accept="'image/*'">
+                        <label translate="windoctorApp.product.image" for="field_image">Image</label>
 
-                    <div ng-show="editForm.amount.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.amount.$error.required" translate="entity.validation.required">
-                            This field is required.
-                        </p>
+                        <div>
+                            <img data-ng-src="{{'data:image/*;base64,' + product.image}}" style="max-height: 100px;"
+                                 ng-if="product.image"/>
 
-                        <p class="help-block"
-                           ng-show="editForm.amount.$error.min" translate="entity.validation.min"
-                           translate-value-min="0">
-                            This field should be more than 0.
-                        </p>
+                            <div class="help-block clearfix">
+                                <span class="pull-left">{{byteSize(product.image)}}</span>
+                                <button ng-click="product.image=null"
+                                        ng-if="product.image"
+                                        class="btn btn-default btn-xs pull-right">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <button type="file" ngf-select class="btn btn-default btn-block"
+                                            ngf-change="setImage($files, product)" accept="image/*"
+                                            translate="entity.action.addimage">
+                                        Add image
+                                    </button>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <button class="btn btn-default btn-block"
+                                            ng-click="captureAnImage()"
+                                            translate="entity.action.captureAnImage">
+                                        Capture image
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" name="image" id="field_image"
+                               ng-model="product.image"
+                               maxbytes="250000">
 
-                        <p class="help-block"
-                           ng-show="editForm.amount.$error.number" translate="entity.validation.number">
-                            This field should be a number.
-                        </p>
+                        <div ng-show="editForm.image.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes"
+                               translate-value-max="250000">
+                                This field cannot be more than 250000.
+                            </p>
+                        </div>
+
                     </div>
-                </div>
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.threshold" for="field_threshold">Threshold</label>
-                    <input type="number" class="form-control" name="threshold" id="field_threshold"
-                           ng-model="product.threshold"
-                           required min="0">
+                    <div class="form-group col-xs-6">
+                        <div class="row">
+                            <label translate="windoctorApp.product.product" for="field_category">Category</label>
 
-                    <div ng-show="editForm.threshold.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.threshold.$error.required" translate="entity.validation.required">
-                            This field is required.
-                        </p>
+                            <select class="form-control" id="field_category" name="category" ng-model="product.product"
+                                    required
+                                    ng-options="category as category.name for category in categorys track by category.id">
+                                <option value=""></option>
+                            </select>
 
-                        <p class="help-block"
-                           ng-show="editForm.threshold.$error.min" translate="entity.validation.min"
-                           translate-value-min="0">
-                            This field should be more than 0.
-                        </p>
-
-                        <p class="help-block"
-                           ng-show="editForm.threshold.$error.number" translate="entity.validation.number">
-                            This field should be a number.
-                        </p>
+                            <div ng-show="editForm.category.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.category.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.fund" for="field_fund">Fund</label>
-                    <select class="form-control" id="field_fund" name="fund" ng-model="product.fund"
-                            ng-change="changeFields()"
-                            ng-options="fund as fund.description for fund in funds track by fund.id" required>
-                        <option value=""></option>
-                    </select>
-
-                    <div ng-show="editForm.fund.$invalid">
-                        <p class="help-block"
-                           ng-show="editForm.fund.$error.required" translate="entity.validation.required">
-                            This field is required.
-                        </p>
-                    </div>
-                    <div ng-show="!fundContainEnoughMoney">
-                        <p class="help-block" translate="windoctorApp.product.totalPriceGreaterToFund">
-                            Le prix totale est supérieur à la somme de la caisse.
-                        </p>
-                    </div>
-                </div>
-                <div class="form-group col-xs-6">
-                    <label translate="windoctorApp.product.fundAmount">Fund amount</label>
-
-                    <div>
-                    <span ng-show="product.fund"
-                          class="form-control-static">{{product.fund.amount}}</span>
-                    <span ng-show="!product.fund"
-                          translate="windoctorApp.product.chooseFund"
-                          class="form-control-static">Choose a fund to see this field</span>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label translate="windoctorApp.product.product" for="field_category">Category</label>
-
-                <select class="form-control" id="field_category" name="category" ng-model="product.product" required
-                        ng-options="category as category.name for category in categorys track by category.id">
-                    <option value=""></option>
-                </select>
-                <div ng-show="editForm.category.$invalid">
-                    <p class="help-block"
-                       ng-show="editForm.category.$error.required" translate="entity.validation.required">
-                        This field is required.
-                    </p>
                 </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="button" ng-click="save()" ng-disabled="editForm.$invalid"
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+            </button>
+            <button type="button" ng-click="saveAndClose()" ng-disabled="editForm.$invalid"
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save</span>
+            </button>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div ng-show="product.id===null" class="alert alert-warning">
+                <span translate="windoctorApp.product.purchasesAndConsumptionsMessage">You can add purchases and consumptions after the save of the product.</span>
+            </div>
+        </div>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
-            translate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="button" ng-click="save()"ng-disabled="editForm.$invalid || !fundContainEnoughMoney"
-                class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
-        </button>
+    <div class="row">
+        <div class="form-group col-xs-6">
+            <ng-include src="'scripts/app/entities/product/products-purchases.html'"></ng-include>
+        </div>
+        <div class="form-group col-xs-6">
+            <ng-include src="'scripts/app/entities/product/products-consumptions.html'"></ng-include>
+        </div>
+
     </div>
-</form>
-    </div>
+</div>
 <div ng-show="captureAnImageScreen">
     <div>
         <div class="alert alert-error ng-scope" ng-show="webcamError" style="">

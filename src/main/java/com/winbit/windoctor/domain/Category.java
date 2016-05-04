@@ -40,6 +40,9 @@ public class Category implements Serializable {
     @ManyToOne
     private Structure structure;
 
+    //@Transient
+    //private Long removelDue;
+
     public Structure getStructure() {
         return structure;
     }

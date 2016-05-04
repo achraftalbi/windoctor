@@ -226,6 +226,7 @@
                                         <th translate="windoctorApp.treatment.paid_price">Paid price</th>
                                         <th translate="windoctorApp.treatment.remainingPrice">Remaining price</th>
                                         <th translate="windoctorApp.treatment.eventReason">eventReason</th>
+                                        <th translate="windoctorApp.treatment.categoryAct">Category of the act</th>
                                         <th></th>
                                     </tr>
                                     </thead>
@@ -278,7 +279,20 @@
                                 <span ng-show="treatment.eventReason.description.length <= 10">
                                     {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
                                 </span>
+                                            </td>
+                                        <td ng-show="treatment.id!==-1">
+                                <span ng-show="treatment.eventReason.categoryAct.name.length > 10"
+                                      data-toggle="tooltip"
+                                      tooltip="{{ treatment.eventReason.categoryAct.name }}"
+                                      tooltip-placement="bottom-right">
+                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                </span>
+                                <span ng-show="treatment.eventReason.categoryAct.name.length <= 10">
+                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                </span>
                                         </td>
+                                        <td ng-show="treatment.id===-1"
+                                            style="background-color: black;;color: white;"></td>
                                         <td ng-show="treatment.id===-1"
                                             style="background-color: black;;color: white;"></td>
                                         <td ng-show="treatment.id!==-1">

@@ -21,6 +21,7 @@
             "fund": "Caisse",
             "treatment": "Acte",
             "supply_type": "Approvisionnement/Retrait",
+            "charge": "Charge",
             "movementCause": "Cause du mouvement",
             "credit": "Crédit",
             "debit": "Débit",

@@ -1,0 +1,253 @@
+<div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 translate="windoctorApp.purchase.home.title" class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+            <jh-alert></jh-alert>
+            <div>
+                <div class="row">
+                    <div class="form-group col-sm-3">
+                        <button ng-show="!addPurchaseField && !editPurchaseField " type="submit"
+                                ng-disabled="product.id===null"
+                                ng-click="addPurchase()"
+                                class="btn btn-primary btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-plus" translate="entity.action.add">Ajouter</span>&nbsp;<span
+                            ></span>
+                        </button>
+                        <button ng-show="addPurchaseField || editPurchaseField" type="submit"
+                                ng-click="cancelPurchase()"
+                                class="btn btn-danger btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-minus" translate="entity.action.cancel">Cancel</span>&nbsp;<span
+                            ></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="padding: 15px;padding-top:0px;padding-bottom:0px;"
+                     ng-show="addPurchaseField || editPurchaseField">
+                    <form name="editFormPurchase" role="form" novalidate show-validation>
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.purchase.price"
+                                                   for="field_price">Price</label>
+                                            <input type="number" class="form-control" name="price_purchase"
+                                                   id="field_price"
+                                                   ng-model="purchase.price" ng-change="changeFields()"
+                                                   required min="0">
+
+                                            <div ng-show="editFormPurchase.price_purchase.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.price_purchase.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.price_purchase.$error.min"
+                                                   translate="entity.validation.min"
+                                                   translate-value-min="0">
+                                                    This field should be more than 0.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.price_purchase.$error.number"
+                                                   translate="entity.validation.number">
+                                                    This field should be a number.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.purchase.amount"
+                                                   for="field_amount">Quantity</label>
+                                            <input type="number" class="form-control" name="amount_purchase"
+                                                   id="field_amount"
+                                                   ng-model="purchase.amount" ng-change="changeFields()"
+                                                   required min="0">
+
+                                            <div ng-show="editFormPurchase.amount_purchase.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.amount_purchase.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.amount_purchase.$error.min"
+                                                   translate="entity.validation.min"
+                                                   translate-value-min="0">
+                                                    This field should be more than 0.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.amount_purchase.$error.number"
+                                                   translate="entity.validation.number">
+                                                    This field should be a number.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.product.totalPrice">Total price</label>
+
+                                            <div>
+                    <span ng-show="(purchase.price && purchase.amount)||((purchase.price===0 && purchase.amount)
+                    || (purchase.price && purchase.amount===0) || (purchase.price===0 && purchase.amount===0))"
+                          class="form-control-static">{{purchase.price * purchase.amount}}</span>
+                    <span ng-show="!((purchase.price && purchase.amount)||((purchase.price===0 && purchase.amount)
+                    || (purchase.price && purchase.amount===0) || (purchase.price===0 && purchase.amount===0)))"
+                          translate="windoctorApp.product.fillPriceQuantity"
+                          class="form-control-static">Fill price and quantity to see total price</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.purchase.relative_date">Relative date</label>
+
+                                            <div>
+                                                <input type="text" format="L" view='date' min-view="date" date-time
+                                                       ng-required="false"
+                                                       date-change="changeDate" readonly name="relative_date"
+                                                       ng-model="dateValuePurchase">
+                                                <span class="fa fa-calendar"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.product.fund" for="field_fund">Fund</label>
+                                            <select class="form-control" id="field_fund" name="fund_purchase"
+                                                    ng-model="purchase.purchase_fund"
+                                                    ng-change="changeFields()"
+                                                    ng-options="fund as fund.description for fund in funds track by fund.id"
+                                                    required>
+                                                <option value=""></option>
+                                            </select>
+
+                                            <div ng-show="editFormPurchase.fund_purchase.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormPurchase.fund_purchase.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+                                            </div>
+                                            <div ng-show="!fundContainEnoughMoney">
+                                                <p class="help-block"
+                                                   translate="windoctorApp.product.totalPriceGreaterToFund">
+                                                    Le prix totale est supérieur à la somme de la caisse.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <button type="button" ng-click="savePurchase()" style="margin-top:20px;"
+                                                    ng-disabled="editFormPurchase.amount_purchase.$invalid || editFormPurchase.price_purchase.$invalid
+                                    || editFormPurchase.fund_purchase.$invalid || !fundContainEnoughMoney"
+                                                    class="btn btn-primary">
+                                                <span class="fa fa-plus fa-1x"></span>&nbsp;<span
+                                                translate="entity.action.save">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead ng-show="purchases!==null && purchases!==undefined && purchases.length>0">
+                    <tr>
+                        <th translate="windoctorApp.purchase.creation_date">Creation date</th>
+                        <th translate="windoctorApp.purchase.relative_date">Relative date</th>
+                        <th translate="windoctorApp.purchase.price">Price</th>
+                        <th translate="windoctorApp.purchase.amount">Amount</th>
+                        <th translate="windoctorApp.purchase.totalPrice">Total price</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="purchase in purchases">
+                        <td>{{purchase.creation_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{purchase.relative_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{purchase.price}}</td>
+                        <td>{{purchase.amount}}</td>
+                        <td>{{purchase.price * purchase.amount}}</td>
+                        <td>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.edit' | translate }}"
+                                    tooltip-class="pencilClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="editPurchase(purchase)"
+                                    class="btn btn-primary btn-sm">
+                                <span class="fa fa-pencil"></span>&nbsp;<span
+                                ></span>
+                            </button>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.delete' | translate }}"
+                                    tooltip-class="deleteClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="deletePurchase(purchase)"
+                                    class="btn btn-danger btn-sm">
+                                <span class="fa fa-remove"></span>&nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination" ng-show="linksPurchase['prev'] || linksPurchase['next']">
+                        <li ng-show="linksPurchase['first']" ng-click="loadPagePurchase(linksPurchase['first'])"><a>&lt;&lt;</a>
+                        </li>
+                        <li ng-show="linksPurchase['prev']" ng-click="loadPagePurchase(linksPurchase['prev'])"><a>
+                            &lt;</a></li>
+                        <li ng-show="pagePurchase > 2" ng-click="loadPagePurchase(pagePurchase - 2)"><a>{{pagePurchase -
+                            2}}</a></li>
+                        <li ng-show="pagePurchase > 1" ng-click="loadPagePurchase(pagePurchase - 1)"><a>{{pagePurchase -
+                            1}}</a></li>
+                        <li class="active"><a>{{pagePurchase}}</a></li>
+                        <li ng-show="pagePurchase < linksPurchase['last']"
+                            ng-click="loadPagePurchase(pagePurchase + 1)"><a>{{pagePurchase + 1}}</a></li>
+                        <li ng-show="pagePurchase < linksPurchase['last'] - 1"
+                            ng-click="loadPagePurchase(pagePurchase + 2)"><a>{{pagePurchase + 2}}</a></li>
+                        <li ng-show="linksPurchase['next']" ng-click="loadPagePurchase(linksPurchase['next'])"><a>
+                            &gt;</a></li>
+                        <li ng-show="linksPurchase['last']" ng-click="loadPagePurchase(linksPurchase['last'])"><a>&gt;&gt;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deletePurchaseConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteFormPurchase" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="closeDeletePurchase()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="windoctorApp.purchase.delete.question" translate-values="{creation_date: '{{purchase.creation_date | date:'yyyy-MM-dd' : '+0000'}}'}">Are you sure you want to delete this Purchase?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                ng-click="closeDeletePurchase()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="button" ng-disabled="deleteFormPurchase.$invalid" class="btn btn-danger"
+                                ng-click="confirmDeletePurchase(purchase)">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

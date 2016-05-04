@@ -16,6 +16,7 @@
                 "title": "Act :"
             },
             "description": "Description",
+            "categoryAct": "Category of the act",
             "price": "Price",
             "eventReason": "Act",
             "treatment": "Treatment"

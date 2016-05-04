@@ -3,7 +3,7 @@
 angular.module('windoctorApp')
     .controller('CalendarEventsController', function ($scope, $stateParams, Event, EventSearch,EventDTO, Patient, ParseLinks,
                                                       PatientSearch, $filter, Principal,$translate,Treatment, TreatmentSearch,
-                                                      Doctor,Event_reason,Attachment,Fund) {
+                                                      Doctor,Event_reason,Attachment,Fund,CategoryAct) {
         $scope.events = [];
         $scope.page = 1;
         $scope.numberPageEvents = 5;
@@ -36,6 +36,7 @@ angular.module('windoctorApp')
                     $scope.eventsEmpty = true;
                 }
                 console.log('events eventsEmpty '+$scope.eventsEmpty);
+                $scope.categoryActs = CategoryAct.query();
             });
         };
         Principal.identity(true).then(function (account) {

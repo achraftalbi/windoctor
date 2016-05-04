@@ -1,0 +1,253 @@
+<div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 translate="windoctorApp.entry.home.title" class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+            <jh-alert></jh-alert>
+            <div>
+                <div class="row">
+                    <div class="form-group col-sm-3">
+                        <button ng-show="!addEntryField && !editEntryField " type="submit"
+                                ng-disabled="charge.id===null"
+                                ng-click="addEntry()"
+                                class="btn btn-primary btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-plus" translate="entity.action.add">Ajouter</span>&nbsp;<span
+                            ></span>
+                        </button>
+                        <button ng-show="addEntryField || editEntryField" type="submit"
+                                ng-click="cancelEntry()"
+                                class="btn btn-danger btn-sm" style="cursor: pointer; cursor: hand;">
+                            <span class="fa fa-minus" translate="entity.action.cancel">Cancel</span>&nbsp;<span
+                            ></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" style="padding: 15px;padding-top:0px;padding-bottom:0px;"
+                     ng-show="addEntryField || editEntryField">
+                    <form name="editFormEntry" role="form" novalidate show-validation>
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.entry.price"
+                                                   for="field_price">Price</label>
+                                            <input type="number" class="form-control" name="price_entry"
+                                                   id="field_price"
+                                                   ng-model="entry.price" ng-change="changeFields()"
+                                                   required min="0">
+
+                                            <div ng-show="editFormEntry.price_entry.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.price_entry.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.price_entry.$error.min"
+                                                   translate="entity.validation.min"
+                                                   translate-value-min="0">
+                                                    This field should be more than 0.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.price_entry.$error.number"
+                                                   translate="entity.validation.number">
+                                                    This field should be a number.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.entry.amount"
+                                                   for="field_amount">Quantity</label>
+                                            <input type="number" class="form-control" name="amount_entry"
+                                                   id="field_amount"
+                                                   ng-model="entry.amount" ng-change="changeFields()"
+                                                   required min="0">
+
+                                            <div ng-show="editFormEntry.amount_entry.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.amount_entry.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.amount_entry.$error.min"
+                                                   translate="entity.validation.min"
+                                                   translate-value-min="0">
+                                                    This field should be more than 0.
+                                                </p>
+
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.amount_entry.$error.number"
+                                                   translate="entity.validation.number">
+                                                    This field should be a number.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.charge.totalPrice">Total price</label>
+
+                                            <div>
+                    <span ng-show="(entry.price && entry.amount)||((entry.price===0 && entry.amount)
+                    || (entry.price && entry.amount===0) || (entry.price===0 && entry.amount===0))"
+                          class="form-control-static">{{entry.price * entry.amount}}</span>
+                    <span ng-show="!((entry.price && entry.amount)||((entry.price===0 && entry.amount)
+                    || (entry.price && entry.amount===0) || (entry.price===0 && entry.amount===0)))"
+                          translate="windoctorApp.charge.fillPriceQuantity"
+                          class="form-control-static">Fill price and quantity to see total price</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.entry.relative_date">Relative date</label>
+
+                                            <div>
+                                                <input type="text" format="L" view='date' min-view="date" date-time
+                                                       ng-required="false"
+                                                       date-change="changeDate" readonly name="relative_date"
+                                                       ng-model="dateValueEntry">
+                                                <span class="fa fa-calendar"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label translate="windoctorApp.charge.fund" for="field_fund">Fund</label>
+                                            <select class="form-control" id="field_fund" name="fund_entry"
+                                                    ng-model="entry.entry_fund"
+                                                    ng-change="changeFields()"
+                                                    ng-options="fund as fund.description for fund in funds track by fund.id"
+                                                    required>
+                                                <option value=""></option>
+                                            </select>
+
+                                            <div ng-show="editFormEntry.fund_entry.$invalid">
+                                                <p class="help-block"
+                                                   ng-show="editFormEntry.fund_entry.$error.required"
+                                                   translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+                                            </div>
+                                            <div ng-show="!fundContainEnoughMoney">
+                                                <p class="help-block"
+                                                   translate="windoctorApp.charge.totalPriceGreaterToFund">
+                                                    Le prix totale est supérieur à la somme de la caisse.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <button type="button" ng-click="saveEntry()" style="margin-top:20px;"
+                                                    ng-disabled="editFormEntry.amount_entry.$invalid || editFormEntry.price_entry.$invalid
+                                    || editFormEntry.fund_entry.$invalid || !fundContainEnoughMoney"
+                                                    class="btn btn-primary">
+                                                <span class="fa fa-plus fa-1x"></span>&nbsp;<span
+                                                translate="entity.action.save">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead ng-show="entrys!==null && entrys!==undefined && entrys.length>0">
+                    <tr>
+                        <th translate="windoctorApp.entry.creation_date">Creation date</th>
+                        <th translate="windoctorApp.entry.relative_date">Relative date</th>
+                        <th translate="windoctorApp.entry.price">Price</th>
+                        <th translate="windoctorApp.entry.amount">Amount</th>
+                        <th translate="windoctorApp.entry.totalPrice">Total price</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="entry in entrys">
+                        <td>{{entry.creation_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{entry.relative_date | date:'yyyy-MM-dd' : '+0000'}}</td>
+                        <td>{{entry.price}}</td>
+                        <td>{{entry.amount}}</td>
+                        <td>{{entry.price * entry.amount}}</td>
+                        <td>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.edit' | translate }}"
+                                    tooltip-class="pencilClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="editEntry(entry)"
+                                    class="btn btn-primary btn-sm">
+                                <span class="fa fa-pencil"></span>&nbsp;<span
+                                ></span>
+                            </button>
+                            <button type="submit"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.delete' | translate }}"
+                                    tooltip-class="deleteClass"
+                                    tooltip-placement="bottom-left"
+                                    ng-click="deleteEntry(entry)"
+                                    class="btn btn-danger btn-sm">
+                                <span class="fa fa-remove"></span>&nbsp;
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav>
+                    <ul class="pagination" ng-show="linksEntry['prev'] || linksEntry['next']">
+                        <li ng-show="linksEntry['first']" ng-click="loadPageEntry(linksEntry['first'])"><a>&lt;&lt;</a>
+                        </li>
+                        <li ng-show="linksEntry['prev']" ng-click="loadPageEntry(linksEntry['prev'])"><a>
+                            &lt;</a></li>
+                        <li ng-show="pageEntry > 2" ng-click="loadPageEntry(pageEntry - 2)"><a>{{pageEntry -
+                            2}}</a></li>
+                        <li ng-show="pageEntry > 1" ng-click="loadPageEntry(pageEntry - 1)"><a>{{pageEntry -
+                            1}}</a></li>
+                        <li class="active"><a>{{pageEntry}}</a></li>
+                        <li ng-show="pageEntry < linksEntry['last']"
+                            ng-click="loadPageEntry(pageEntry + 1)"><a>{{pageEntry + 1}}</a></li>
+                        <li ng-show="pageEntry < linksEntry['last'] - 1"
+                            ng-click="loadPageEntry(pageEntry + 2)"><a>{{pageEntry + 2}}</a></li>
+                        <li ng-show="linksEntry['next']" ng-click="loadPageEntry(linksEntry['next'])"><a>
+                            &gt;</a></li>
+                        <li ng-show="linksEntry['last']" ng-click="loadPageEntry(linksEntry['last'])"><a>&gt;&gt;</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteEntryConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteFormEntry" >
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="closeDeleteEntry()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="windoctorApp.entry.delete.question" translate-values="{creation_date: '{{entry.creation_date | date:'yyyy-MM-dd' : '+0000'}}'}">Are you sure you want to delete this Entry?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"
+                                ng-click="closeDeleteEntry()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="button" ng-disabled="deleteFormEntry.$invalid" class="btn btn-danger"
+                                ng-click="confirmDeleteEntry(entry)">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

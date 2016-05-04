@@ -31,6 +31,8 @@
                             &#xA0;<span translate="global.menu.entities.blockOfDays">Block of days</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="event_reason"><span class="fa fa-align-left fa-1x" style="color: orangered;"></span>
                             &#xA0;<span translate="global.menu.entities.event_reason">Acts</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="categoryAct"><span class="fa fa-folder-open fa-1x text-center" style="color: maroon;"></span>
+                            &#xA0;<span translate="global.menu.entities.categoryAct">Acts</span></a></li>
                     </ul>
                 </li>
                 <li ng-class="{active: $state.includes('product') || $state.includes('category')}"
@@ -38,13 +40,17 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href=""
                        style="padding-bottom: 2px;padding-top: 2px;">
                     <i class="fa fa-cubes fa-2x text-center" style="color: peru;"></i><br>
-                        &#xA0;<span translate="global.menu.entities.product">Materials</span>
+                        &#xA0;<span translate="global.menu.entities.internalManagement">Gestion interne</span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="product"><span class="fa fa-cubes fa-1x text-center" style="color: peru;"></span>
                             &#xA0;<span translate="global.menu.entities.product">Materials</span></a></li>
                         <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="category"><span class="fa fa-folder-open fa-1x text-center" style="color: maroon;"></span>
-                            &#xA0;<span translate="global.menu.entities.category">Categories</span></a></li>
+                            &#xA0;<span translate="global.menu.entities.category">Categories of stock</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="charge"><span class="fa fa-cubes fa-1x text-center" style="color: #2d6987;"></span>
+                            &#xA0;<span translate="global.menu.entities.charge">Materials</span></a></li>
+                        <li ui-sref-active="active" has-role="ROLE_ASSISTANT"><a ui-sref="categoryCharge"><span class="fa fa-folder-open fa-1x text-center" style="color: maroon;"></span>
+                            &#xA0;<span translate="global.menu.entities.categoryCharge">Categories of stock</span></a></li>
                     </ul>
                 </li>
                 <li ng-class="{active: $state.includes('fund') || $state.includes('supply_type')}"
@@ -124,6 +130,18 @@
                         &#xA0;<span translate="global.menu.entities.fund_history">fund_history</span></a></li>
                         <li ui-sref-active="active" ><a ui-sref="supply_type"><span class="glyphicon glyphicon-asterisk"></span>
                         &#xA0;<span translate="global.menu.entities.supply_type">supply_type</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="purchase"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.purchase">purchase</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="consumption"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.consumption">consumption</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="categoryAct"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.categoryAct">categoryAct</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="categoryCharge"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.categoryCharge">categoryCharge</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="charge"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.charge">charge</span></a></li>
+                        <li ui-sref-active="active" ><a ui-sref="entry"><span class="glyphicon glyphicon-asterisk"></span>
+                        &#xA0;<span translate="global.menu.entities.entry">entry</span></a></li>
                         <!-- JHipster will add entities to the menu here -->
                     </ul>
                 </li>

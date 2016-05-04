@@ -19,6 +19,8 @@ angular.module('windoctorApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('product');
+                        $translatePartialLoader.addPart('consumption');
+                        $translatePartialLoader.addPart('purchase');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]

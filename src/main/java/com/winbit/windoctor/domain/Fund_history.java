@@ -86,6 +86,9 @@ public class Fund_history implements Serializable {
     private Product product;
 
     @ManyToOne
+    private Charge charge;
+
+    @ManyToOne
     private Supply_type supply_type;
 
     @ManyToOne
@@ -97,6 +100,14 @@ public class Fund_history implements Serializable {
     @Column(name = "creation_date", nullable = false)
     @JsonIgnore
     private DateTime creation_date;
+
+    public Charge getCharge() {
+        return charge;
+    }
+
+    public void setCharge(Charge charge) {
+        this.charge = charge;
+    }
 
     public User getCreated_by() {
         return created_by;

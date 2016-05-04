@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('FundController', function ($scope, Fund, FundSearch, ParseLinks,Fund_history) {
+    .controller('FundController', function ($scope, Fund, FundSearch, ParseLinks,Fund_history,Product,Charge) {
         $scope.funds = [];
         $scope.fund_historys = [];
         $scope.page = 1;
@@ -53,7 +53,19 @@ angular.module('windoctorApp')
         };
 
         $scope.displayTheMovementCause = function(fund_history) {
-            $scope.selectedFundHistory = fund_history;
+            if(fund_history.product) {
+                Product.get({id: fund_history.product.id}, function (result) {
+                    fund_history.product = result;
+                    $scope.selectedFundHistory = fund_history;
+                });
+            }if(fund_history.charge){
+                    Charge.get({id: fund_history.charge.id}, function(result) {
+                        fund_history.charge = result;
+                        $scope.selectedFundHistory = fund_history;
+                    });
+            }else{
+                $scope.selectedFundHistory = fund_history;
+            }
         };
 
         $scope.hideTheMovementCause = function() {

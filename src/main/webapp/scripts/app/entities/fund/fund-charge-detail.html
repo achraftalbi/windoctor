@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="windoctorApp.charge.detail.title">Charge</span> {{selectedFundHistory.charge.name}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.charge.name">Name</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.charge.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.charge.image">Image</span>
+                </td>
+                <td>
+                    <img data-ng-src="{{'data:image/*;base64,' + selectedFundHistory.charge.image}}" style="max-width: 100%;" ng-if="selectedFundHistory.charge.image"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.charge.totalPrice">Total price</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.charge.price}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.charge.amount">Amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.charge.amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.charge.categoryCharge">Category des charges</span>
+                </td>
+                <td>
+                    <span class="form-control-static" >{{selectedFundHistory.charge.categoryCharge.name}}</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ng-click="hideTheMovementCause()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

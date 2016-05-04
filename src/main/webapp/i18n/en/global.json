@@ -19,7 +19,7 @@
             "home": "Home",
             "entities": {
                 "main": "Entities",
-                "category": "Categories",
+                "category": "Categories of stock",
                 "product": "Stock",
                 "status": "Status",
                 "event": "Event",
@@ -39,6 +39,13 @@
                 "block": "Block",
                 "fund_history": "Fund_history",
                 "supply_type": "Supply",
+                "purchase": "Purchase",
+                "consumption": "Consumption",
+                "categoryAct": "Categories of acts",
+                "categoryCharge": "Categories of charges",
+                "charge": "Charges",
+                "entry": "Entry",
+                "internalManagement": "Internal management",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -120,6 +127,7 @@
             "captureAnImage": "Capture an image",
             "capture": "Capture",
             "back": "Back",
+            "add": "Add",
             "cancel": "Cancel",
             "close": "Close",
             "delete": "Delete",

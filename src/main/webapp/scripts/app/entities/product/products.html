@@ -53,7 +53,6 @@
                 <tr>
                     <th translate="windoctorApp.product.name">Name</th>
                     <th translate="windoctorApp.product.image">Image</th>
-                    <th translate="windoctorApp.product.price">Price</th>
                     <th translate="windoctorApp.product.totalPrice">Total price</th>
                     <th translate="windoctorApp.product.amount">Amount</th>
                     <th translate="windoctorApp.product.threshold">Threshold</th>
@@ -69,7 +68,6 @@
                         {{byteSize(product.image)}}
                     </td>
                     <td>{{product.price}}</td>
-                    <td>{{product.price * product.amount}}</td>
                     <td>{{product.amount}}</td>
                     <td>{{product.threshold}}</td>
                     <td>{{product.product.name}}</td>
@@ -84,7 +82,7 @@
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
                         </button>
-                        <button type="submit"
+                        <button type="submit" ng-show="false"
                                 ng-click="delete(product.id)"
                                 class="btn btn-danger btn-sm">
                             <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
@@ -109,7 +107,7 @@
     </div>
     <ng-include src="'scripts/app/entities/product/products-threshold.html'"></ng-include>
 </div>
-<div ng-show="editOrAddProduct">
+<div ng-show="editProductField || addProductField">
     <ng-include src="'scripts/app/entities/product/product-dialog.html'"></ng-include>
 </div>
 

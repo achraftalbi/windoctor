@@ -27,6 +27,7 @@
             "fillPriceQuantity": "Fill price and quantity to see total price",
             "materialsOutStock": "Materials out of stock",
             "totalPriceGreaterToFund": "The total price is greater than the sum of the fund.",
+            "purchasesAndConsumptionsMessage": "You can add purchases and consumptions after the save of the product.",
             "product": "Category"
         }
     }

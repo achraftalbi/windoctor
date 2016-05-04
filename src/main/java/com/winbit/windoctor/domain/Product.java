@@ -2,6 +2,8 @@ package com.winbit.windoctor.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -21,6 +23,20 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName="product")
 public class Product implements Serializable {
+
+
+    /*public Product(Product p, BigDecimal totalPrice, BigDecimal totalAmount){
+        this.name = p.getName();
+        this.image = p.getImage();
+        this.threshold = p.getThreshold();
+        this.structure = p.getStructure();
+        this.product = p.getProduct();
+        this.fund = p.getFund();
+
+
+        this.price = totalPrice;
+        this.amount = totalAmount;
+    }*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

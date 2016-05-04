@@ -36,6 +36,7 @@
             "firstDate": "First date",
             "lastDate": "Last date",
             "eventReason": "Acts",
+            "categoryAct": "Category of the act",
             "eventReasonDescription": "Description",
             "eventReasonPrice": "Price",
             "eventReasonADDMessage": "Add an act",

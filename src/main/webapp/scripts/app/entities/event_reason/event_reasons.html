@@ -58,6 +58,7 @@
             <thead>
             <tr>
                 <th translate="windoctorApp.event_reason.description">Description</th>
+                <th translate="windoctorApp.event_reason.categoryAct">Category of act</th>
                 <th translate="windoctorApp.event_reason.price">Price</th>
                 <th></th>
             </tr>
@@ -75,6 +76,7 @@
                                     {{ event_reason.description | limitTo: 10 }}{{event_reason.description.length > 10 ? '...' : ''}}
                                 </span>
                 </td>
+                <td>{{event_reason.categoryAct.name}}</td>
                 <td>{{event_reason.price}}</td>
                 <td>
                     <button type="submit"
