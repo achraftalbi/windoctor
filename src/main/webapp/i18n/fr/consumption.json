@@ -1,0 +1,26 @@
+{
+    "windoctorApp": {
+        "consumption" : {
+            "home": {
+                "title": "Consommations",
+                "createLabel": "Créer une nouvelle consommation",
+                "createOrEditLabel": "Créer ou éditer une consommation"
+            },
+            "created": "Une nouvelle  consommation a été créé à la date {{ param }}",
+            "updated": "Une consommation avec la date de création {{ param }} a été mis à jour.",
+            "deleted": "Une consommation avec la date de création {{ param }} a été supprimé.",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la consommation avec la date de création {{ creation_date }}?"
+            },
+            "detail": {
+                "title": "Consumption"
+            },
+            "amountGreaterThanProductAmount": "La quantité a ajouté est plus grande que la quantité totale du produit.",
+            "amount": "Quantité",
+            "creation_date": "Date de création",
+            "relative_date": "Date relative",
+            "consumption_product": "Consumption_product"
+        }
+    }
+}
+

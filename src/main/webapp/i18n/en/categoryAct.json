@@ -1,0 +1,21 @@
+{
+    "windoctorApp": {
+        "categoryAct" : {
+            "home": {
+                "title": "Categories of acts",
+                "createLabel": "Create a new category of acts",
+                "createOrEditLabel": "Create or edit a category of acts"
+            },
+            "created": "A new category of acts is created with name {{ param }}",
+            "updated": "A category of acts is updated with name {{ param }}",
+            "deleted": "A category of acts is deleted with name {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete category of acts {{ name }}?"
+            },
+            "detail": {
+                "title": "category of acts :"
+            },
+            "name": "Name"
+        }
+    }
+}

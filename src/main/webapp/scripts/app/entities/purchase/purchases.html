@@ -1,0 +1,110 @@
+<div>
+
+    <h2 translate="windoctorApp.purchase.home.title">Purchases</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-primary" ui-sref="purchase.new">
+                    <span class="glyphicon glyphicon-flash"></span> <span translate="windoctorApp.purchase.home.createLabel">Create a new Purchase</span>
+                </button>
+            </div>
+            <div class="col-md-8">
+                <form name="searchForm" class="form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                    </div>
+                    <button class="btn btn-info" ng-click="searchPurchases()"><span class="glyphicon glyphicon-search"></span> <span>searchPurchases a Purchase</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deletePurchaseConfirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="deleteForm" ng-submit="confirmDelete(purchase.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="windoctorApp.purchase.delete.question" translate-values="{id: '{{purchase.id}}'}">Are you sure you want to delete this Purchase?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="global.field.id">ID</th>
+                    <th translate="windoctorApp.purchase.price">Price</th>
+                    <th translate="windoctorApp.purchase.amount">Amount</th>
+                    <th translate="windoctorApp.purchase.creation_date">Creation_date</th>
+                    <th translate="windoctorApp.purchase.relative_date">Relative_date</th>
+                    <th translate="windoctorApp.purchase.purchase_product">purchase_product</th>
+                    <th translate="windoctorApp.purchase.purchase_fund">purchase_fund</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="purchase in purchases">
+                    <td><a ui-sref="purchase.detail({id:purchase.id})">{{purchase.id}}</a></td>
+                    <td>{{purchase.price}}</td>
+                    <td>{{purchase.amount}}</td>
+                    <td>{{purchase.creation_date}}</td>
+                    <td>{{purchase.relative_date}}</td>
+                    <td>
+                        <a ui-sref="product.detail({id:purchase.purchase_product.id})">{{purchase.purchase_product.name}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="fund.detail({id:purchase.purchase_fund.id})">{{purchase.purchase_fund.description}}</a>
+                    </td>
+                    <td>
+                        <button type="submit"
+                                ui-sref="purchase.detail({id:purchase.id})"
+                                class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                        </button>
+                        <button type="submit"
+                                ui-sref="purchase.edit({id:purchase.id})"
+                                class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(purchase.id)"
+                                class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li ng-show="linksPurchase['first']" ng-click="loadPagePurchase(linksPurchase['first'])"><a>&lt;&lt;</a></li>
+                <li ng-show="linksPurchase['prev']" ng-click="loadPagePurchase(linksPurchase['prev'])"><a>&lt;</a></li>
+                <li ng-show="pagePurchase > 2" ng-click="loadPagePurchase(pagePurchase - 2)"><a>{{pagePurchase - 2}}</a></li>
+                <li ng-show="pagePurchase > 1" ng-click="loadPagePurchase(pagePurchase - 1)"><a>{{pagePurchase - 1}}</a></li>
+                <li class="active"><a>{{pagePurchase}}</a></li>
+                <li ng-show="pagePurchase < linksPurchase['last']" ng-click="loadPagePurchase(pagePurchase + 1)"><a>{{pagePurchase + 1}}</a></li>
+                <li ng-show="pagePurchase < linksPurchase['last'] - 1" ng-click="loadPagePurchase(pagePurchase + 2)"><a>{{pagePurchase + 2}}</a></li>
+                <li ng-show="linksPurchase['next']" ng-click="loadPagePurchase(linksPurchase['next'])"><a>&gt;</a></li>
+                <li ng-show="linksPurchase['last']" ng-click="loadPagePurchase(linksPurchase['last'])"><a>&gt;&gt;</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>

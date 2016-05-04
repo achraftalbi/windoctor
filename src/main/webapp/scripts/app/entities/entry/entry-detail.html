@@ -1,0 +1,70 @@
+
+<div>
+    <h2><span translate="windoctorApp.entry.detail.title">Entry</span> {{entry.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.price">Price</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{entry.price}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.amount">Amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{entry.amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.creation_date">Creation_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{entry.creation_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.relative_date">Relative_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{entry.relative_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.charge">charge</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="charge.detail({id:entry.charge.id})">{{entry.charge.name}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.entry.fund">fund</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="fund.detail({id:entry.fund.id})">{{entry.fund.description}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

@@ -1,0 +1,202 @@
+<div ng-show="!captureAnImageScreen">
+
+    <form name="editForm" role="form" novalidate show-validation>
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                    ng-click="clear()">&times;</button>
+            <h4 class="modal-title" id="myChargeLabel" translate="windoctorApp.charge.home.createOrEditLabel">Create
+                or
+                edit a Charge</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+
+                <jh-alert-error></jh-alert-error>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.charge.name" for="field_name">Name</label>
+                        <input type="text" class="form-control" name="name" id="field_name"
+                               ng-model="charge.name"
+                               required ng-minlength="1" ng-maxlength="100">
+
+                        <div ng-show="editForm.name.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                                This field is required.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.minlength" translate="entity.validation.minlength"
+                               translate-value-min="1">
+                                This field is required to be at least 1 characters.
+                            </p>
+
+                            <p class="help-block"
+                               ng-show="editForm.name.$error.maxlength" translate="entity.validation.maxlength"
+                               translate-value-max="100">
+                                This field cannot be longer than 100 characters.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.charge.totalPrice">Total price</label>
+
+                        <div>
+                    <span ng-show="(charge.price && charge.amount)||((charge.price===0 && charge.amount)
+                    || (charge.price && charge.amount===0) || (charge.price===0 && charge.amount===0))"
+                          class="form-control-static">{{charge.price}}</span>
+                    <span ng-show="!((charge.price && charge.amount)||((charge.price===0 && charge.amount)
+                    || (charge.price && charge.amount===0) || (charge.price===0 && charge.amount===0)))"
+                          translate="windoctorApp.charge.fillPriceQuantity"
+                          class="form-control-static">Fill price and quantity to see total price</span>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-3">
+                        <label translate="windoctorApp.charge.amount">Quantity</label>
+
+                        <div>
+                            <span>{{charge.amount}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6" ngf-drop ngf-change="setImage($files, charge)"
+                         ngf-accept="'image/*'">
+                        <label translate="windoctorApp.charge.image" for="field_image">Image</label>
+
+                        <div>
+                            <img data-ng-src="{{'data:image/*;base64,' + charge.image}}" style="max-height: 100px;"
+                                 ng-if="charge.image"/>
+
+                            <div class="help-block clearfix">
+                                <span class="pull-left">{{byteSize(charge.image)}}</span>
+                                <button ng-click="charge.image=null"
+                                        ng-if="charge.image"
+                                        class="btn btn-default btn-xs pull-right">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <button type="file" ngf-select class="btn btn-default btn-block"
+                                            ngf-change="setImage($files, charge)" accept="image/*"
+                                            translate="entity.action.addimage">
+                                        Add image
+                                    </button>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <button class="btn btn-default btn-block"
+                                            ng-click="captureAnImage()"
+                                            translate="entity.action.captureAnImage">
+                                        Capture image
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" class="form-control" name="image" id="field_image"
+                               ng-model="charge.image"
+                               maxbytes="250000">
+
+                        <div ng-show="editForm.image.$invalid">
+                            <p class="help-block"
+                               ng-show="editForm.image.$error.maxbytes" translate="entity.validation.maxbytes"
+                               translate-value-max="250000">
+                                This field cannot be more than 250000.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <div class="row">
+                            <label translate="windoctorApp.charge.categoryCharge" for="field_categoryCharge">Category des charges</label>
+
+                            <select class="form-control" id="field_categoryCharge" name="categoryCharge" ng-model="charge.categoryCharge"
+                                    required
+                                    ng-options="categoryCharge as categoryCharge.name for categoryCharge in categoryCharges track by categoryCharge.id">
+                                <option value=""></option>
+                            </select>
+
+                            <div ng-show="editForm.categoryCharge.$invalid">
+                                <p class="help-block"
+                                   ng-show="editForm.categoryCharge.$error.required" translate="entity.validation.required">
+                                    This field is required.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                translate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="button" ng-click="save()" ng-disabled="editForm.$invalid"
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+            </button>
+            <button type="button" ng-click="saveAndClose()" ng-disabled="editForm.$invalid"
+                    class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save</span>
+            </button>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div ng-show="charge.id===null" class="alert alert-warning">
+                <span translate="windoctorApp.charge.entrysMessage">You can add entrys after the save of the charge.</span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <ng-include src="'scripts/app/entities/charge/charges-entrys.html'"></ng-include>
+        </div>
+    </div>
+</div>
+<div ng-show="captureAnImageScreen">
+    <div>
+        <div class="alert alert-error ng-scope" ng-show="webcamError" style="">
+            <span>Webcam could not be started. Did you give access to it?</span>
+        </div>
+        <div class="row embed-responsive embed-responsive-16by9 col-xs-12 text-center">
+            <webcam channel="channel"
+                    on-streaming="onSuccess()"
+                    on-error="onError(err)"
+                    placeholder="'../../../../assets/images/ajax-loader.gif'"
+                    on-stream="onStream(stream)"></webcam>
+        </div>
+        <div ng-show="false">
+            <canvas id="snapshot" width="700" height="700"/>
+        </div>
+
+    </div>
+    <div class="row">
+        &nbsp;
+    </div>
+    <div class="row">
+        <div class="form-group col-xs-6 col-md-4">
+        </div>
+        <div class="form-group col-xs-6 col-md-4">
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-4">
+                    <button class="btn btn-default btn-block btn-success"
+                            ng-click="makeSnapshot()"
+                            translate="entity.action.capture">Capture
+                    </button>
+                </div>
+                <div class="form-group col-xs-6 col-md-4">
+                    <button class="btn btn-default"
+                            ng-click="cancelImageCapture()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                        translate="entity.action.cancel">Cancel</span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

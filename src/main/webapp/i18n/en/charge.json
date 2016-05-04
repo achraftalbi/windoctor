@@ -1,0 +1,32 @@
+{
+    "windoctorApp": {
+        "charge" : {
+            "home": {
+                "title": "Charges",
+                "createLabel": "Create a new charge",
+                "createOrEditLabel": "Create or edit a charge"
+            },
+            "created": "A new charge is created with name {{ param }}",
+            "updated": "A charge is updated with name {{ param }}",
+            "deleted": "A charge is deleted with name {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete the charge {{ name }}?"
+            },
+            "detail": {
+                "title": "Material :"
+            },
+            "name": "Name",
+            "fund": "Fund",
+            "fundAmount": "Fund amount",
+            "chooseFund": "Choose a fund to see this field",
+            "image": "Image",
+            "price": "Price per unit",
+            "totalPrice": "Total price",
+            "amount": "Quantity",
+            "fillPriceQuantity": "Fill price and quantity to see total price",
+            "totalPriceGreaterToFund": "The total price is greater than the sum of the fund.",
+            "entrysMessage": "You can add entries after the save of the charge.",
+            "categoryCharge": "Category"
+        }
+    }
+}

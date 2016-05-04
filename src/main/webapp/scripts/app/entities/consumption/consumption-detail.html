@@ -1,0 +1,54 @@
+
+<div>
+    <h2><span translate="windoctorApp.consumption.detail.title">Consumption</span> {{consumption.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.consumption.amount">Amount</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{consumption.amount}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.consumption.creation_date">Creation_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{consumption.creation_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.consumption.relative_date">Relative_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{consumption.relative_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.consumption.consumption_product">consumption_product</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="product.detail({id:consumption.consumption_product.id})">{{consumption.consumption_product.name}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

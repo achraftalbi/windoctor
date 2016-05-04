@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "categoryCharge" : {
+            "home": {
+                "title": "Catégories des charges",
+                "createLabel": "Créer une nouvelle catégorie des charges",
+                "createOrEditLabel": "Créer ou éditer une catégorie des charges"
+            },
+            "created": "Une nouvelle catégorie des charges a été créé avec le nom {{ param }}",
+            "updated": "La catégorie des charges avec le nom {{ param }} a été mis à jour",
+            "deleted": "La catégorie des charges avec le nom {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la catégorie des charges {{ name }} ?"
+            },
+            "detail": {
+                "title": "Catégorie des charges :"
+            },
+            "name": "Nom"
+        }
+    }
+}
+

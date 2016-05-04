@@ -1,0 +1,28 @@
+{
+    "windoctorApp": {
+        "entry" : {
+            "home": {
+                "title": "Entrées",
+                "createLabel": "Créer une nouvelle entrée",
+                "createOrEditLabel": "Créer ou éditer une entrée"
+            },
+            "created": "Une nouvelle entrée a été créé à la date {{ param }}",
+            "updated": "Une entrée avec la date de création {{ param }} a été mis à jour.",
+            "deleted": "Une entrée avec la date de création {{ param }} a été supprimé.",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer l'entrée avec la date de création {{ creation_date }}?"
+            },
+            "detail": {
+                "title": "Entrée"
+            },
+            "price": "Prix par unité",
+            "totalPrice": "Prix totale",
+            "amount": "Quantité",
+            "creation_date": "Date de création",
+            "relative_date": "Date relative",
+            "charge": "Charge",
+            "fund": "Fund"
+        }
+    }
+}
+

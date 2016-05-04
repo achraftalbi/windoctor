@@ -1,0 +1,21 @@
+{
+    "windoctorApp": {
+        "categoryCharge" : {
+            "home": {
+                "title": "Categories of charges",
+                "createLabel": "Create a new category of charges",
+                "createOrEditLabel": "Create or edit a category of charges"
+            },
+            "created": "A new category of charges is created with name {{ param }}",
+            "updated": "A category of charges is updated with name {{ param }}",
+            "deleted": "A category of charges is deleted with name {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete category of charges {{ name }}?"
+            },
+            "detail": {
+                "title": "category of charges :"
+            },
+            "name": "Name"
+        }
+    }
+}

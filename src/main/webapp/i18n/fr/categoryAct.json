@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "categoryAct" : {
+            "home": {
+                "title": "Catégories des actes",
+                "createLabel": "Créer une nouvelle catégorie des actes",
+                "createOrEditLabel": "Créer ou éditer une catégorie des actes"
+            },
+            "created": "Une nouvelle catégorie des actes a été créé avec le nom {{ param }}",
+            "updated": "La catégorie des actes avec le nom {{ param }} a été mis à jour",
+            "deleted": "La catégorie des actes avec le nom {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la catégorie des actes {{ name }} ?"
+            },
+            "detail": {
+                "title": "Catégorie des actes :"
+            },
+            "name": "Nom"
+        }
+    }
+}
+

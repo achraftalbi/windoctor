@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1462176211620-1">
+       <addColumn tableName="EVENT_REASON">
+           <column name="categoryact_id" type="bigint"/>
+       </addColumn>
+       <addForeignKeyConstraint baseColumnNames="categoryact_id"
+                                baseTableName="EVENT_REASON"
+                                constraintName="fk_event_reason_categoryact_id"
+                                referencedColumnNames="id"
+                                referencedTableName="CATEGORYACT"/>
+   </changeSet>
+</databaseChangeLog>

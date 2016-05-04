@@ -1,0 +1,33 @@
+{
+    "windoctorApp": {
+        "charge" : {
+            "home": {
+                "title": "Charges",
+                "createLabel": "Créer une nouvelle charge",
+                "createOrEditLabel": "Créer ou éditer une charge"
+            },
+            "created": "Une nouvelle charge est créé avec le nom {{ param }}",
+            "updated": "Une charge est mis à jour avec le nom {{ param }}",
+            "deleted": "Une charge avec le nom {{ param }} est supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer la charge {{ name }} ?"
+            },
+            "detail": {
+                "title": "Charge :"
+            },
+            "name": "Nom",
+            "fund": "Caisse",
+            "fundAmount": "Montant de la caisse",
+            "chooseFund": "Choisissez une caisse pour voir ce champs",
+            "image": "Image",
+            "price": "Prix par unité",
+            "totalPrice": "Prix totale",
+            "amount": "Quantité",
+            "fillPriceQuantity": "Remplissez le prix et la quantité pour voir le prix totale",
+            "totalPriceGreaterToFund": "Le prix totale est supérieur à la somme de la caisse.",
+            "entrysMessage": "Vous pouvez ajouter des entrées après la sauvegarde de la charge.",
+            "categoryCharge": "Catégorie de charge"
+        }
+    }
+}
+

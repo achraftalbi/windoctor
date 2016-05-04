@@ -1,0 +1,118 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myEntryLabel" translate="windoctorApp.entry.home.createOrEditLabel">Create or edit a Entry</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="entry.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label translate="windoctorApp.entry.price" for="field_price">Price</label>
+            <input type="number" class="form-control" name="price" id="field_price"
+                    ng-model="entry.price"
+                    required min="0">
+
+            <div ng-show="editForm.price.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.price.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.price.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.price.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.entry.amount" for="field_amount">Amount</label>
+            <input type="number" class="form-control" name="amount" id="field_amount"
+                    ng-model="entry.amount"
+                    required min="0">
+
+            <div ng-show="editForm.amount.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.amount.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amount.$error.min" translate="entity.validation.min" translate-value-min="0">
+                    This field should be more than 0.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.amount.$error.number" translate="entity.validation.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.entry.creation_date" for="field_creation_date">Creation_date</label>
+            <input type="datetime-local" class="form-control" name="creation_date" id="field_creation_date"
+                    ng-model="entry.creation_date" ng-model-options="{timezone: 'UTC'}"
+                    required>
+
+            <div ng-show="editForm.creation_date.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.creation_date.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.creation_date.$error.datetimelocal" translate="entity.validation.datetimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.entry.relative_date" for="field_relative_date">Relative_date</label>
+            <input type="datetime-local" class="form-control" name="relative_date" id="field_relative_date"
+                    ng-model="entry.relative_date" ng-model-options="{timezone: 'UTC'}"
+                    required>
+
+            <div ng-show="editForm.relative_date.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.relative_date.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.relative_date.$error.datetimelocal" translate="entity.validation.datetimelocal">
+                    This field should be a date and time.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.entry.charge" for="field_charge">charge</label>
+            
+            <select class="form-control" id="field_charge" name="charge" ng-model="entry.charge" ng-options="charge as charge.name for charge in charges track by charge.id">
+                <option value=""></option>
+            </select>
+            
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.entry.fund" for="field_fund">fund</label>
+            
+            <select class="form-control" id="field_fund" name="fund" ng-model="entry.fund" ng-options="fund as fund.description for fund in funds track by fund.id">
+                <option value=""></option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

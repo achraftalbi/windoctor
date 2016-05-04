@@ -1,0 +1,27 @@
+{
+    "windoctorApp": {
+        "purchase" : {
+            "home": {
+                "title": "Purchases",
+                "createLabel": "Create a new Purchase",
+                "createOrEditLabel": "Create or edit a Purchase"
+            },
+            "created": "A new purchase is created at date {{ param }}",
+            "updated": "A purchase is updated with creation date {{ param }}",
+            "deleted": "A purchase is deleted with creation date {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete the purchase with creation date {{ creation_date }}?"
+            },
+            "detail": {
+                "title": "Purchase"
+            },
+            "price": "Price per unit",
+            "totalPrice": "Total price",
+            "amount": "Quantity",
+            "creation_date": "Creation date",
+            "relative_date": "Relative date",
+            "purchase_product": "Purchase_product",
+            "purchase_fund": "Purchase_fund"
+        }
+    }
+}

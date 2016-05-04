@@ -1,0 +1,28 @@
+{
+    "windoctorApp": {
+        "purchase" : {
+            "home": {
+                "title": "Achats",
+                "createLabel": "Créer un nouveau Purchase",
+                "createOrEditLabel": "Créer ou éditer un Purchase"
+            },
+            "created": "Un nouveau achat a été créé à la date {{ param }}",
+            "updated": "Un achat avec la date de création {{ param }} a été mis à jour.",
+            "deleted": "Un achat avec la date de création {{ param }} a été supprimé.",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Purchase avec la date de création {{ creation_date }}?"
+            },
+            "detail": {
+                "title": "Purchase"
+            },
+            "price": "Prix par unité",
+            "totalPrice": "Prix totale",
+            "amount": "Quantité",
+            "creation_date": "Date de création",
+            "relative_date": "Date relative",
+            "purchase_product": "Purchase_product",
+            "purchase_fund": "Purchase_fund"
+        }
+    }
+}
+

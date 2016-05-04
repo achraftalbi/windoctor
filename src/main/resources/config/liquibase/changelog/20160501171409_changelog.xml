@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1462122918282-1">
+       <addColumn tableName="FUND_HISTORY">
+           <column name="charge_id" type="bigint"/>
+       </addColumn>
+       <addForeignKeyConstraint baseColumnNames="charge_id"
+                                baseTableName="FUND_HISTORY"
+                                constraintName="fk_fund_history_charge_id"
+                                referencedColumnNames="id"
+                                referencedTableName="CHARGE"/>
+   </changeSet>
+</databaseChangeLog>
