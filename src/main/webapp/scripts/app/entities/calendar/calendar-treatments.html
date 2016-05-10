@@ -2,27 +2,31 @@
     <div>
         <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
             <div class="row">
-                <div class="form-group col-xs-6 col-md-4">
-                    <button type="button"
-                            ng-click="returnToEventsPage()"
-                            class="btn btn-info">
-                        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
-                    </button>
+                <div class="form-group col-xs-6">
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <button type="button"
+                                    ng-click="returnToEventsPage()"
+                                    class="btn btn-info">
+                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                            </button>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <button type="button"
+                                    ng-click="loadAllTreatmentsFromServer()"
+                                    class="btn btn-info">
+                                <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group col-xs-6 col-md-4">
-                </div>
-                <div class="form-group col-xs-6 col-md-4">
-                    <button type="button"
-                            ng-click="loadAllTreatmentsFromServer()"
-                            class="btn btn-info">
-                        <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
-                    </button>
+                <div class="form-group col-xs-6">
+                    <h2 translate="windoctorApp.treatment.home.title" ng-show="event!==null && event.id!==null"
+                        translate-values="{date: '{{ event.event_date | date:'EEEE, MMMM d, y HH:mm' }}'}">Acts at
+                        date </h2>
                 </div>
             </div>
             <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form" novalidate show-validation>
-                <h2 translate="windoctorApp.treatment.home.title" ng-show="event!==null && event.id!==null"
-                    translate-values="{date: '{{ event.event_date | date:'EEEE, MMMM d, y HH:mm' }}'}">Acts at
-                    date </h2>
                 <jh-alert></jh-alert>
                 <div class="container">
                     <div class="row">
@@ -37,12 +41,6 @@
                                 <div class="form-group col-xs-6">
                                     <div>
                                         <table class="table table-no-bordered"  style="font-size: 14px">
-                                            <thead>
-                                            <tr>
-                                                <th translate="entity.detail.field">Field</th>
-                                                <th translate="entity.detail.value">Value</th>
-                                            </tr>
-                                            </thead>
                                             <tbody>
                                             <tr>
                                                 <td>
@@ -91,12 +89,6 @@
                                 <div class="form-group col-xs-6">
                                     <div>
                                         <table class="table table-no-bordered" style="font-size: 14px" >
-                                            <thead>
-                                            <tr>
-                                                <th translate="entity.detail.field">Field</th>
-                                                <th translate="entity.detail.value">Value</th>
-                                            </tr>
-                                            </thead>
                                             <tbody>
                                             <tr>
                                                 <td>
@@ -144,15 +136,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4" ng-show="false">
-                            <div class="sepia" >
-                                <img id="scream"  ng-click="myCanvas()" style="background: linear-gradient(to bottom, red 20%,green 30%,#000000 20%,white 30%,white 100%);" src="../../../../assets/images/elements/teethschame/28.png" alt="The Scream" width="20" height="20">
-                                <img id="scream2"  style="background: linear-gradient(to bottom, red 20%,green 30%,#000000 20%,white 30%,white 100%);" src="../../../../assets/images/elements/teethschame/28.png" alt="The Scream" width="20" height="20">
-                            </div>
-                            <canvas id="myCanvas" height="300"
+                        <div class="col-md-4" >
+                            <p><button ng-click="myCanvas()">Try it</button></p>
+                            <canvas id="myCanvas" height="400" width="305" ng-click="clickOnCanvas()"
                                     style="border:1px solid #d3d3d3;">
                                 <span>Your browser does not support the HTML5 canvas tag.</span></canvas>
-                            <p><button ng-click="myCanvas()">Try it</button></p>
 
                         </div>
                     </div>

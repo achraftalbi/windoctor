@@ -598,7 +598,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
 
-        $scope.hexToRgb = function (color) {
+        /*$scope.hexToRgb = function (color) {
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             color = color.replace(shorthandRegex, function(m, r, g, b) {
                 return r + r + g + g + b + b;
@@ -614,97 +614,170 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 g: 0,
                 b: 0
             };
-        }
-
+        }*/
 
         $scope.myCanvas = function () {
-            /*var c = document.getElementById("myCanvas");
+
+        }
+        $scope.myCanvas = function () {
+            var c = document.getElementById("myCanvas");
             var ctx = c.getContext("2d");
-            var img = document.getElementById("scream");
-            ctx.drawImage(img,10,10,30,30);
-            var imgData=ctx.getImageData(10, 10, 30, 30);
-            for (var i=0;i<imgData.data.length;i+=4)
-            {
-                imgData.data[i]= 34 | imgData.data[i];
-                imgData.data[i+1]= 139 | imgData.data[i+1];
-                imgData.data[i+2]= 34 | imgData.data[i+2];
+            ctx.clearRect(0, 0, c.width, c.height);
+            //var img = document.getElementById("scream");
+            var typeImg = '.png';
+            var pathNormalImage = '../../../../assets/images/elements/teethschame/';
+            var elements=[
+
+                // Top right Big
+                {id:28,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:200,yDraw:-250,zRotation:40,width:null,height:null,x:null,y:null},
+                {id:27,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:210,yDraw:-215,zRotation:30,width:null,height:null,x:null,y:null},
+                {id:26,img:null,widthDraw:1/3+1/40,heightDraw:1/3+1/40,xDraw:158,yDraw:-239,zRotation:37,width:null,height:null,x:null,y:null},
+                {id:25,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:134,yDraw:-236,zRotation:37,width:null,height:null,x:null,y:null},
+                {id:24,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:132,yDraw:-215,zRotation:31,width:null,height:null,x:null,y:null},
+                {id:23,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:172,yDraw:-137,zRotation:6,width:null,height:null,x:null,y:null},
+                {id:22,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:172,yDraw:-80,zRotation:-11,width:null,height:null,x:null,y:null},
+                {id:21,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:153,yDraw:5,zRotation:-40,width:null,height:null,x:null,y:null},
+
+
+                // Top children
+                {id:65,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:205,yDraw:160,zRotation:-40,width:null,height:null,x:null,y:null},
+                {id:64,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:149,yDraw:188,zRotation:-56,width:null,height:null,x:null,y:null},
+                {id:63,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:221,yDraw:-77,zRotation:6,width:null,height:null,x:null,y:null},
+                {id:62,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:203,yDraw:-42,zRotation:-3,width:null,height:null,x:null,y:null},
+                {id:61,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:153,yDraw:83,zRotation:-40,width:null,height:null,x:null,y:null},
+                {id:51,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:125,yDraw:82,zRotation:-40,width:null,height:null,x:null,y:null},
+                {id:52,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:48,yDraw:132,zRotation:-65,width:null,height:null,x:null,y:null},
+                {id:53,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-35,yDraw:143,zRotation:-87,width:null,height:null,x:null,y:null},
+                {id:64,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-155,yDraw:-120,zRotation:-200,width:null,height:null,x:null,y:null},
+                {id:65,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-159,yDraw:-147,zRotation:-200,width:null,height:null,x:null,y:null},
+                // Bottom children
+                {id:75,img:null,widthDraw:1/3-1/40,heightDraw:1/3-1/40,xDraw:120,yDraw:-292,zRotation:67,width:null,height:null,x:null,y:null},
+                {id:74,img:null,widthDraw:1/3-1/40,heightDraw:1/3-1/40,xDraw:31,yDraw:-330,zRotation:90,width:null,height:null,x:null,y:null},
+                {id:73,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:48,yDraw:-331,zRotation:92,width:null,height:null,x:null,y:null},
+                {id:72,img:null,widthDraw:1/3-1/10,heightDraw:1/3-1/10,xDraw:-111,yDraw:-320,zRotation:125,width:null,height:null,x:null,y:null},
+                {id:71,img:null,widthDraw:1/3-1/10,heightDraw:1/3-1/10,xDraw:-170,yDraw:-289,zRotation:140,width:null,height:null,x:null,y:null},
+                {id:81,img:null,widthDraw:1/3-1/7-1/130,heightDraw:1/3-1/7-1/130,xDraw:-151,yDraw:-289,zRotation:140,width:null,height:null,x:null,y:null},
+                {id:82,img:null,widthDraw:1/3-1/8-1/130,heightDraw:1/3-1/8-1/130,xDraw:-200,yDraw:-243,zRotation:155,width:null,height:null,x:null,y:null},
+                {id:83,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-270,yDraw:-121,zRotation:185,width:null,height:null,x:null,y:null},
+                {id:84,img:null,widthDraw:1/3-1/25,heightDraw:1/3-1/25,xDraw:-266,yDraw:8,zRotation:215,width:null,height:null,x:null,y:null},
+                {id:85,img:null,widthDraw:1/3-1/17,heightDraw:1/3-1/17,xDraw:-238,yDraw:8,zRotation:215,width:null,height:null,x:null,y:null},
+                // Bottom right Big
+                {id:38,img:null,widthDraw:1/2,heightDraw:1/2,xDraw:170,yDraw:-303,zRotation:55,width:null,height:null,x:null,y:null},
+                {id:37,img:null,widthDraw:1/2,heightDraw:1/2,xDraw:147,yDraw:-333,zRotation:65,width:null,height:null,x:null,y:null},
+                {id:36,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:176,yDraw:-333,zRotation:65,width:null,height:null,x:null,y:null},
+                {id:35,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:180,yDraw:-349,zRotation:70,width:null,height:null,x:null,y:null},
+                {id:34,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:187,yDraw:-356,zRotation:73,width:null,height:null,x:null,y:null},
+                {id:33,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:36,yDraw:-415,zRotation:100,width:null,height:null,x:null,y:null},
+                {id:32,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:-75,yDraw:-417,zRotation:120,width:null,height:null,x:null,y:null},
+                {id:31,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-185,yDraw:-380,zRotation:140,width:null,height:null,x:null,y:null},
+                // Bottom left Big
+                {id:41,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-156,yDraw:-380,zRotation:140,width:null,height:null,x:null,y:null},
+                {id:42,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:-244,yDraw:-310,zRotation:160,width:null,height:null,x:null,y:null},
+                {id:43,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-321,yDraw:-190,zRotation:185,width:null,height:null,x:null,y:null},
+                {id:44,img:null,widthDraw:1/2-1/7,heightDraw:1/2-1/7,xDraw:-326,yDraw:-112,zRotation:200,width:null,height:null,x:null,y:null},
+                {id:45,img:null,widthDraw:1/2-1/7,heightDraw:1/2-1/7,xDraw:-301,yDraw:-108,zRotation:200,width:null,height:null,x:null,y:null},
+                {id:46,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-287,yDraw:-58,zRotation:210,width:null,height:null,x:null,y:null},
+                {id:47,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-261,yDraw:-18,zRotation:220,width:null,height:null,x:null,y:null},
+                {id:48,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-230,yDraw:-15,zRotation:220,width:null,height:null,x:null,y:null},
+
+
+
+
+
+                // Top left Big
+                {id:18,img:null,widthDraw:1/3+1/25,heightDraw:1/3+1/25,xDraw:-175,yDraw:60,zRotation:-118,width:null,height:null,x:null,y:null},
+                {id:17,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-136,yDraw:72,zRotation:-112,width:null,height:null,x:null,y:null},
+                {id:16,img:null,widthDraw:1/3+1/40,heightDraw:1/3+1/40,xDraw:-115,yDraw:64,zRotation:-115,width:null,height:null,x:null,y:null},
+                {id:15,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-77,yDraw:70,zRotation:-110,width:null,height:null,x:null,y:null},
+                {id:14,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-40,yDraw:77,zRotation:-103,width:null,height:null,x:null,y:null},
+                {id:13,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:22,yDraw:78,zRotation:-80,width:null,height:null,x:null,y:null},
+                {id:12,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:81,yDraw:54,zRotation:-60,width:null,height:null,x:null,y:null},
+                {id:11,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:123,yDraw:5,zRotation:-40,width:null,height:null,x:null,y:null}
+                /*,
+                */
+
+            ];
+
+            var TO_RADIANS = Math.PI/180;
+            for(var i=0;i<elements.length;i++){
+                var img = new Image();
+                img.src = pathNormalImage+elements[i].id+typeImg;
+                ctx.rotate(elements[i].zRotation*TO_RADIANS);
+                ctx.drawImage(img,elements[i].xDraw,elements[i].yDraw,img.width*elements[i].widthDraw,img.height*elements[i].heightDraw);
+                ctx.restore();
+                ctx.save();
             }
-            ctx.putImageData(imgData,10,10,30,30);*/
 
+            c.onclick = function(e) {
+                if(e.x>0){
+                    //var x = e.x;
+                    //var y = e.y;
+                    //x -= c.offsetLeft;
+                    //y -= c.offsetTop;
+                    //var x = e.offsetLeft;
+                    //var y = e.offsetTop;
 
+                    var rect = c.getBoundingClientRect();
+                    var x= e.clientX - rect.left;
+                     var   y= e.clientY - rect.top;
 
-            var imageObj = document.getElementById("scream");
-            var canvas = document.getElementById('myCanvas');
-            var context = canvas.getContext('2d');
-            var x = 50;
-            var y = 50;
-            context.drawImage(imageObj, x, y);
-
-            var imageData = context.getImageData(x, y, canvas.width,canvas.height);
-            var data = imageData.data;
-            var rgbColor = $scope.hexToRgb('#00ff00');
-
-            for(var i = 0; i < data.length; i += 4) {
-                if(data[i+3] == 0)
-                    continue;
-                data[i + 0] = rgbColor.r;
-                data[i + 1] = rgbColor.g;
-                data[i + 2] = rgbColor.b;
-                data[i + 3] = 255;
-
-                /*// red
-                data[i] = 255 - data[i];
-                // green
-                data[i + 1] = 255 - data[i + 1];
-                // blue
-                data[i + 2] = 255 - data[i + 2];*/
+                    alert('testOKAK '+c.width+' '+c.height+' '+e.x+' '+e.y+' '+c.offsetLeft+' '+c.offsetTop+' '+(e.pageX-899)+' '+(e.pageY-296)+' posx='+x+' posy='+y+' ');
+                }
             }
 
-            // overwrite original image
-            context.putImageData(imageData, x, y);
 
 
+                /*var imageObj = document.getElementById("scream");
+                var canvas = document.getElementById('myCanvas');
+                var context = canvas.getContext('2d');
+                var x = 50;
+                var y = 50;
+                context.drawImage(imageObj, x, y);
 
+                var imageData = context.getImageData(x, y, canvas.width,canvas.height);
+                var data = imageData.data;
+                var rgbColor = $scope.hexToRgb('#00ff00');
 
+                for(var i = 0; i < data.length; i += 4) {
+                    if(data[i+3] == 0)
+                        continue;
+                    data[i + 0] = rgbColor.r;
+                    data[i + 1] = rgbColor.g;
+                    data[i + 2] = rgbColor.b;
+                    data[i + 3] = 255;
 
+                    // red
+                    data[i] = 255 - data[i];
+                    // green
+                    data[i + 1] = 255 - data[i + 1];
+                    // blue
+                    data[i + 2] = 255 - data[i + 2];
+                }
 
+                // overwrite original image
+                context.putImageData(imageData, x, y);
 
+                var imageObj2 = document.getElementById("scream");
+                var canvas2 = document.getElementById('myCanvas');
+                var context2 = canvas.getContext('2d');
+                var x2 = 100;
+                var y2 = 100;
+                context2.drawImage(imageObj2, x2, y2);
 
+                var imageData2 = context2.getImageData(x2, y2, canvas2.width,canvas2.height);
+                var data2 = imageData2.data;
 
+                for(i = 0; i < data2.length; i += 4) {
+                    // red
+                    data2[i] = 255 - data2[i];
+                    // green
+                    data2[i + 1] = 255 - data2[i + 1];
+                    // blue
+                    data2[i + 2] = 255 - data2[i + 2];
+                }
 
-
-
-
-
-
-
-
-
-
-
-
-
-            var imageObj2 = document.getElementById("scream");
-            var canvas2 = document.getElementById('myCanvas');
-            var context2 = canvas.getContext('2d');
-            var x2 = 100;
-            var y2 = 100;
-            context2.drawImage(imageObj2, x2, y2);
-
-            var imageData2 = context2.getImageData(x2, y2, canvas2.width,canvas2.height);
-            var data2 = imageData2.data;
-
-            for(i = 0; i < data2.length; i += 4) {
-                // red
-                data2[i] = 255 - data2[i];
-                // green
-                data2[i + 1] = 255 - data2[i + 1];
-                // blue
-                data2[i + 2] = 255 - data2[i + 2];
-            }
-
-            // overwrite original image
-            context2.putImageData(imageData2, x2, y2);
+                // overwrite original image
+                context2.putImageData(imageData2, x2, y2);*/
 
 
         }
