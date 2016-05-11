@@ -708,6 +708,12 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 ctx.save();
             }
 
+            ctx.moveTo(100, 165);
+            ctx.lineTo(365, -57);
+            ctx.moveTo(116, -100);
+            ctx.lineTo(452, 300);
+            ctx.stroke();
+
             c.onclick = function(e) {
                 if(e.x>0){
                     //var x = e.x;
