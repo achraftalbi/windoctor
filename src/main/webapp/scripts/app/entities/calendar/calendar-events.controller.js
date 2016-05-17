@@ -83,15 +83,19 @@ angular.module('windoctorApp')
         };
 
         $scope.loadAllSearch = function () {
-            EventSearch.query({query: $scope.searchQuery,selectedDate: $stateParams.selectedDate + '',
-                page: $scope.page, per_page: 5}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.events = result;
-            }, function (response) {
-                if (response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
+            if($scope.searchQuery===null || $scope.searchQuery===undefined || $scope.searchQuery===''){
+                $scope.loadAll();
+            }else {
+                EventSearch.query({query: $scope.searchQuery,selectedDate: $stateParams.selectedDate + '',
+                    page: $scope.page, per_page: 5}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.events = result;
+                }, function (response) {
+                    if (response.status === 404) {
+                        $scope.loadAll();
+                    }
+                });
+            }
         };
 
         $scope.refresh = function () {
@@ -117,13 +121,17 @@ angular.module('windoctorApp')
 
         $scope.editEvent = function (event) {
             //$scope.$emit('windoctorApp:eventUpdate');
-            $scope.event=event;
-            console.log('$scope.event.id '+$scope.event.id);
-            $scope.searchPatientDialogText = { description: null};
-            $scope.displayEventsPage = false;
-            $scope.displayDialogEventPage = true;
-            angular.module('windoctorApp').expandCalendarEventsControllerToDialog
-            ($scope, $stateParams, Event, EventDTO , Patient, ParseLinks, PatientSearch, $filter, Principal);
+            if($scope.account.currentUserPatient && ($scope.account.id!==event.user.id || ($scope.account.id===event.user.id && event.eventStatus.id!==7))){
+                return;
+            }else{
+                $scope.event=event;
+                console.log('$scope.event.id '+$scope.event.id);
+                $scope.searchPatientDialogText = { description: null};
+                $scope.displayEventsPage = false;
+                $scope.displayDialogEventPage = true;
+                angular.module('windoctorApp').expandCalendarEventsControllerToDialog
+                ($scope, $stateParams, Event, EventDTO , Patient, ParseLinks, PatientSearch, $filter, Principal);
+            }
         };
 
         $scope.addEvent = function (status) {
@@ -138,15 +146,16 @@ angular.module('windoctorApp')
         };
 
         $scope.displayManageTreatmentsPage = function (event) {
-            //$scope.$emit('windoctorApp:eventUpdate');
-            $scope.event=event;
-            $scope.displayEventsPage = false;
-            $scope.displayTreatmentsPage = true;
-            $scope.displayTreatments = true;
-            console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
-            angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
-            ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
-                Event_reason, Event, Patient,Attachment,Fund);
+            if((!$scope.account.currentUserPatient)){
+                $scope.event=event;
+                $scope.displayEventsPage = false;
+                $scope.displayTreatmentsPage = true;
+                $scope.displayTreatments = true;
+                console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
+                angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
+                ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+                    Event_reason, Event, Patient,Attachment,Fund);
+            }
         };
 
         //End Patient pages treatement

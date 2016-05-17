@@ -21,6 +21,7 @@
             "treatment_date": "Date",
             "chooseReason": "Choisissez une raison",
             "description": "Description",
+            "patient": "Patient",
             "price": "Prix",
             "defaultPrice": "Prix proposer",
             "paid_price": "Prix payé",

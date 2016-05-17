@@ -21,7 +21,7 @@
             </div>
             <form name="editForm" role="form" novalidate show-validation>
                 <h2 translate="windoctorApp.calendar.home.dayEventsTitle"
-                    translate-values="{day: '{{ selectedDateObject | date:'dd/MM/yyyy'}}'}">Appointments and
+                    translate-values="{day: '{{ selectedDateObject | date:'EEEE dd/MM/yyyy'}}'}">Appointments and
                     visits for day</h2>
                 <jh-alert></jh-alert>
                 <div class="container">
@@ -77,41 +77,39 @@
                             <th translate="windoctorApp.calendar.patient">Patient</th>
                             <th translate="windoctorApp.calendar.event_date">Event_date</th>
                             <th translate="windoctorApp.calendar.description">Description</th>
-                            <th ng-show="userNotPatient"
-                                translate="windoctorApp.calendar.treatments">treatments</th>
                             <th translate="windoctorApp.calendar.eventStatus">eventStatus</th>
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="event in events">
-                            <div>
-                                <td style="background-color: dodgerblue;color: white;"
+                            <div >
+                                <td style="background-color: dodgerblue;color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===1">
                                     <span translate="windoctorApp.calendar.appointment.title">Appointment</span>
                                 </td>
-                                <td style="background-color: #800080;color: white;"
+                                <td style="background-color: #800080;color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===2||event.eventStatus.id===10||event.eventStatus.id===11">
                                     <span translate="windoctorApp.calendar.appointment.title">Appointment</span>
                                 </td>
-                                <td style="background-color: darkgreen;color: white;"
+                                <td style="background-color: darkgreen;color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===3">
                                     <span translate="windoctorApp.calendar.appointment.title">Appointment</span>
                                 </td>
-                                <td style="background-color: #ad2121;color: white;"
+                                <td style="background-color: #ad2121;color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===4">
                                     <span translate="windoctorApp.calendar.appointment.title">Appointment</span>
                                 </td>
-                                <td style="background-color: rgb(255, 170, 4);color: white;"
+                                <td style="background-color: rgb(255, 170, 4);color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===7">
                                     <span translate="windoctorApp.calendar.request.title">Request</span>
                                 </td>
-                                <td style="background-color: darkgreen;;color: white;"
+                                <td style="background-color: darkgreen;;color: white;cursor: pointer;" ng-click="editEvent(event)"
                                     ng-show="event.eventStatus.id===8">
                                     <span translate="windoctorApp.calendar.visit.title">Visite</span>
                                 </td>
                             </div>
-                            <td><span
+                            <td ng-click="displayManageTreatmentsPage(event)" style="cursor: pointer;"><span
                                 ng-show="(!account.currentUserPatient) || (account.currentUserPatient && account.id===event.user.id)">
                                         <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
                                              style="max-width: 25%;max-height: 28%;" ng-if="event.user.picture"
@@ -136,9 +134,6 @@
                                 <span ng-show="event.description.length <= 10">
                                     {{ event.description | limitTo: 10 }}{{event.description.length > 10 ? '...' : ''}}
                                 </span>
-                            </td>
-                            <td ng-show="!account.currentUserPatient"><a ng-click="displayManageTreatmentsPage(event)"
-                                   translate="windoctorApp.calendar.manageTreatments">Manage treatments</a>
                             </td>
                             <div>
                                 <td style="background-color: #adadad;color: white;"
@@ -203,16 +198,6 @@
                                 </td>
                             </div>
                             <td>
-                                <button ng-click="editEvent(event)"
-                                        ng-disabled="account.currentUserPatient && (account.id!==event.user.id || (account.id===event.user.id && event.eventStatus.id!==7))"
-                                        data-toggle="tooltip"
-                                        tooltip="{{ 'entity.action.edit' | translate }}"
-                                        tooltip-class="pencilClass"
-                                        tooltip-placement="bottom-left"
-                                        class="btn btn-primary btn-sm">
-                                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
-                                    > </span>
-                                </button>
                                 <button type="submit" ng-show="!account.currentUserPatient && event.eventStatus.id!==8 && event.eventStatus.id!==3"
                                         ng-click="delete(event)"
                                         data-toggle="tooltip"

@@ -22,6 +22,7 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('fund_history');
                         $translatePartialLoader.addPart('product');
                         $translatePartialLoader.addPart('treatment');
+                        $translatePartialLoader.addPart('charge');
                         $translatePartialLoader.addPart('supply_type');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();

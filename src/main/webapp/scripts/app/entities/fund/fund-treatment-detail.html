@@ -3,13 +3,15 @@
     <h2><span translate="windoctorApp.treatment.detail.title">Treatment</span></h2>
     <div class="table-responsive">
         <table class="table table-striped">
-            <thead>
-            <tr>
-                <th translate="entity.detail.field">Field</th>
-                <th translate="entity.detail.value">Value</th>
-            </tr>
-            </thead>
             <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.treatment.patient">Patient</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{selectedFundHistory.treatment.event.user.firstName}}, {{selectedFundHistory.treatment.event.user.lastName}}</span>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <span translate="windoctorApp.treatment.treatment_date">Treatment_date</span>

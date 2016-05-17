@@ -617,16 +617,56 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         }*/
 
         $scope.myCanvas = function () {
+            var TO_RADIANS = Math.PI/180;
+            for(var i=0;i<$scope.elements.length;i++){
+                var img = new Image();
+                img.src = $scope.pathNormalImage+$scope.elements[i].id+$scope.typeImg;
+                $scope.ctx.rotate($scope.elements[i].zRotation*TO_RADIANS);
+                $scope.ctx.drawImage(img,$scope.elements[i].xDraw,$scope.elements[i].yDraw,img.width*$scope.elements[i].widthDraw,img.height*$scope.elements[i].heightDraw);
+                $scope.ctx.restore();
+                $scope.ctx.save();
+            }
 
+            $scope.ctx.moveTo(100, 165);
+            $scope.ctx.lineTo(365, -57);
+            $scope.ctx.moveTo(116, -100);
+            $scope.ctx.lineTo(452, 300);
+            $scope.ctx.stroke();
+            $scope.c.onclick = function(e) {
+                if(e.x>0){
+                    //var x = e.x;
+                    //var y = e.y;
+                    //x -= c.offsetLeft;
+                    //y -= c.offsetTop;
+                    //var x = e.offsetLeft;
+                    //var y = e.offsetTop;
+
+                    var rect = c.getBoundingClientRect();
+                    var x= e.clientX - rect.left;
+                     var   y= e.clientY - rect.top;
+
+                    alert('testOKAK '+c.width+' '+c.height+' '+e.x+' '+e.y+' '+c.offsetLeft+' '+c.offsetTop+' '+(e.pageX-899)+' '+(e.pageY-296)+' posx='+x+' posy='+y+' ');
+                }
+            }
         }
-        $scope.myCanvas = function () {
-            var c = document.getElementById("myCanvas");
-            var ctx = c.getContext("2d");
-            ctx.clearRect(0, 0, c.width, c.height);
-            //var img = document.getElementById("scream");
-            var typeImg = '.png';
-            var pathNormalImage = '../../../../assets/images/elements/teethschame/';
-            var elements=[
+
+        $scope.initCanvas = function () {
+            $scope.c = document.getElementById("myCanvas");
+            $scope.ctx = $scope.c.getContext("2d");
+            $scope.ctx.clearRect(0, 0, c.width, c.height);
+            $scope.typeImg = '.png';
+            $scope.pathNormalImage = '../../../../assets/images/elements/teethschame/';
+            $scope.ctx.fillStyle = "black";
+            $scope.ctx.font = "bold 24px Arial";
+            $scope.ctx.fillText("1", 20, 40);
+            $scope.ctx.fillText("2", 265, 40);
+            $scope.ctx.fillText("3", 265, 340);
+            $scope.ctx.fillText("4", 20, 340);
+            $scope.ctx.fillText("5", 130, 180);
+            $scope.ctx.fillText("6", 165, 180);
+            $scope.ctx.fillText("7", 165, 220);
+            $scope.ctx.fillText("8", 130, 220);
+            $scope.elements=[
 
                 // Top right Big
                 {id:28,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:200,yDraw:-250,zRotation:40,width:null,height:null,x:null,y:null},
@@ -693,101 +733,13 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 {id:13,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:22,yDraw:78,zRotation:-80,width:null,height:null,x:null,y:null},
                 {id:12,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:81,yDraw:54,zRotation:-60,width:null,height:null,x:null,y:null},
                 {id:11,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:123,yDraw:5,zRotation:-40,width:null,height:null,x:null,y:null}
-                /*,
-                */
 
             ];
-
-            var TO_RADIANS = Math.PI/180;
-            for(var i=0;i<elements.length;i++){
-                var img = new Image();
-                img.src = pathNormalImage+elements[i].id+typeImg;
-                ctx.rotate(elements[i].zRotation*TO_RADIANS);
-                ctx.drawImage(img,elements[i].xDraw,elements[i].yDraw,img.width*elements[i].widthDraw,img.height*elements[i].heightDraw);
-                ctx.restore();
-                ctx.save();
-            }
-
-            ctx.moveTo(100, 165);
-            ctx.lineTo(365, -57);
-            ctx.moveTo(116, -100);
-            ctx.lineTo(452, 300);
-            ctx.stroke();
-
-            c.onclick = function(e) {
-                if(e.x>0){
-                    //var x = e.x;
-                    //var y = e.y;
-                    //x -= c.offsetLeft;
-                    //y -= c.offsetTop;
-                    //var x = e.offsetLeft;
-                    //var y = e.offsetTop;
-
-                    var rect = c.getBoundingClientRect();
-                    var x= e.clientX - rect.left;
-                     var   y= e.clientY - rect.top;
-
-                    alert('testOKAK '+c.width+' '+c.height+' '+e.x+' '+e.y+' '+c.offsetLeft+' '+c.offsetTop+' '+(e.pageX-899)+' '+(e.pageY-296)+' posx='+x+' posy='+y+' ');
-                }
-            }
-
-
-
-                /*var imageObj = document.getElementById("scream");
-                var canvas = document.getElementById('myCanvas');
-                var context = canvas.getContext('2d');
-                var x = 50;
-                var y = 50;
-                context.drawImage(imageObj, x, y);
-
-                var imageData = context.getImageData(x, y, canvas.width,canvas.height);
-                var data = imageData.data;
-                var rgbColor = $scope.hexToRgb('#00ff00');
-
-                for(var i = 0; i < data.length; i += 4) {
-                    if(data[i+3] == 0)
-                        continue;
-                    data[i + 0] = rgbColor.r;
-                    data[i + 1] = rgbColor.g;
-                    data[i + 2] = rgbColor.b;
-                    data[i + 3] = 255;
-
-                    // red
-                    data[i] = 255 - data[i];
-                    // green
-                    data[i + 1] = 255 - data[i + 1];
-                    // blue
-                    data[i + 2] = 255 - data[i + 2];
-                }
-
-                // overwrite original image
-                context.putImageData(imageData, x, y);
-
-                var imageObj2 = document.getElementById("scream");
-                var canvas2 = document.getElementById('myCanvas');
-                var context2 = canvas.getContext('2d');
-                var x2 = 100;
-                var y2 = 100;
-                context2.drawImage(imageObj2, x2, y2);
-
-                var imageData2 = context2.getImageData(x2, y2, canvas2.width,canvas2.height);
-                var data2 = imageData2.data;
-
-                for(i = 0; i < data2.length; i += 4) {
-                    // red
-                    data2[i] = 255 - data2[i];
-                    // green
-                    data2[i + 1] = 255 - data2[i + 1];
-                    // blue
-                    data2[i + 2] = 255 - data2[i + 2];
-                }
-
-                // overwrite original image
-                context2.putImageData(imageData2, x2, y2);*/
-
-
+            $scope.myCanvas();
+            $scope.myCanvas();
+            $scope.myCanvas();
         }
-
+        $scope.initCanvas();
         /********************************************************************************/
         /********************************************************************************/
         /**************************           Paginator        **************************/

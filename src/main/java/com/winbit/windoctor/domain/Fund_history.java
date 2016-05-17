@@ -40,6 +40,7 @@ public class Fund_history implements Serializable {
         this.fund = fund_history.getFund();
         this.treatment = fund_history.getTreatment();
         this.product = fund_history.getProduct();
+        this.charge = fund_history.getCharge();
         this.supply_type = fund_history.getSupply_type();
         this.created_by = fund_history.getCreated_by();
         this.creation_date = fund_history.getCreation_date();

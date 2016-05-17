@@ -8,6 +8,7 @@ angular.module('windoctorApp').controller('EventBlockDialogController',
             $scope.statuss = Status.query();
             $scope.event_reasons = Event_reason.query();
             $scope.dateValue= moment(new Date()).utc();
+            $scope.dateEndDayValue = moment(new Date($scope.dateValue.format().split('T')[0]+'T23:59:59+00:00')).utc();
             $scope.minDateValue =  moment(new Date()).utc();
             $scope.account;
             //$scope.editFormBlock.event_date.$setValidity('required', false);
@@ -26,6 +27,7 @@ angular.module('windoctorApp').controller('EventBlockDialogController',
                 console.log(modelName + ' has had a date change. New value is TEST  ' + newDate.format());
                 console.log(modelName + ' has had a date change. New value is ' + newDate.format().split('T')[0]+'T00:00:00+00:00');
                 $scope.dateValue = moment(new Date(newDate.format().split('T')[0]+'T00:00:00+00:00')).utc();
+                $scope.dateEndDayValue = moment(new Date(newDate.format().split('T')[0]+'T23:59:59+00:00')).utc();
                 console.log(modelName + ' has had a date change. $scope.dateValue ' +new Date(moment(new Date($scope.dateValue)).utc()));
             }
 
@@ -65,7 +67,7 @@ angular.module('windoctorApp').controller('EventBlockDialogController',
             $scope.save = function () {
                 console.log('1 save blocked day executed');
                 $scope.event.event_date = new Date($scope.dateValue);
-                $scope.event.event_date_end = new Date($scope.dateValue);
+                $scope.event.event_date_end = new Date($scope.dateEndDayValue);
                 $scope.event.user = {id:$scope.account.id};
                 if ($scope.event.id != null) {
                     Event.update($scope.event, onSaveFinished);

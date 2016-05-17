@@ -182,6 +182,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
                     $scope.changeDataPickerEndDate();
                 });
                 $scope.endDateValue = null;
+                $scope.$apply();
             }
         };
         $scope.changeDataPickerEndDate = function () {
@@ -196,6 +197,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
                 console.log("end endDateUTC " + endDateUTC);
                 $scope.endDateValue = $filter('date')(new Date(endDate), 'HH:mm');
                 console.log("end display 2 endDateValue " + $scope.endDateValue);
+                $scope.$apply();
             }
         };
         //Begin Patient pages treatement

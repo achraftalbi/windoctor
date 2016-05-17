@@ -148,7 +148,7 @@ public class UserService {
         patient.setFacebook(patientCreated.getFacebook());
         int phoneNumberSize = patientCreated.getPhoneNumber().length();
         patient.setPhoneNumber(patientCreated.getPhoneNumber()==null?patientCreated.getPhoneNumber()
-            :patientCreated.getPhoneNumber().substring(4,phoneNumberSize-1));
+            :patientCreated.getPhoneNumber().substring(5,phoneNumberSize));
         patient.setEmail(patientCreated.getEmail());
         patient.setLangKey(patientCreated.getLangKey());
         Long structureId = sessionService.getCurrentStructure();
@@ -240,7 +240,7 @@ public class UserService {
         patient.setFacebook(patientUpdated.getFacebook());
         int phoneNumberSize = patientUpdated.getPhoneNumber().length();
         patient.setPhoneNumber(patientUpdated.getPhoneNumber()==null?patientUpdated.getPhoneNumber()
-            :patientUpdated.getPhoneNumber().substring(4,phoneNumberSize-1));
+            :patientUpdated.getPhoneNumber().substring(5,phoneNumberSize));
         patient.setEmail(patientUpdated.getEmail());
         patient.setLangKey(patientUpdated.getLangKey());
         // new user is not active

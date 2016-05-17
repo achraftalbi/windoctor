@@ -106,14 +106,18 @@ angular.module('windoctorApp')
             $scope.loadAllSearch();
         };
         $scope.loadAllSearch = function () {
-            ProductSearch.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.products = result;
-            }, function (response) {
-                if (response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
+            if($scope.searchQuery===null || $scope.searchQuery===undefined || $scope.searchQuery===''){
+                $scope.loadAll();
+            }else{
+                ProductSearch.query({query: $scope.searchQuery,page: $scope.page, per_page: 5}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.products = result;
+                }, function (response) {
+                    if (response.status === 404) {
+                        $scope.loadAll();
+                    }
+                });
+            }
         };
 
         $scope.refresh = function () {

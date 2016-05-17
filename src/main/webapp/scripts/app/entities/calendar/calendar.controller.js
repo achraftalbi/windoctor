@@ -25,7 +25,7 @@ angular.module('windoctorApp')
                         var endDate = new Date($filter('date')($scope.calendarEvts[i].event_date_end, 'yyyy-MM-dd HH:mm', '+0000'));
 
                         var patient = ($scope.calendarEvts[i].user!==null && $scope.calendarEvts[i].user!==undefined ?
-                        'Patient :'+$scope.calendarEvts[i].user.firstName+', '+$scope.calendarEvts[i].user.lastName:'');
+                        $scope.calendarEvts[i].user.firstName+', '+$scope.calendarEvts[i].user.lastName:'');
                         var description = ($scope.calendarEvts[i].description!==null && $scope.calendarEvts[i].description!==undefined ?
                             $scope.calendarEvts[i].description:'');
                         console.log('$scope.account.currentUserPatient calendar '+$scope.account.currentUserPatient);
@@ -33,7 +33,8 @@ angular.module('windoctorApp')
                             patient='';description='';
                         }
                         $scope.events.push({
-                            title: '<p>'+patient+'</p><p>'+description+'</p>',
+                            title: $scope.calendarEvts[i].eventStatus.id === 9 ?$translate.instant('global.dayBlocked')+''
+                                :('<p>'+patient+'</p><p>'+description+'</p>'),
                             type: $scope.calendarEvts[i].eventStatus === null ? 'Not applicable' :
                                 ($scope.calendarEvts[i].eventStatus.id === 1 ? 'info' :
                                     ($scope.calendarEvts[i].eventStatus.id === 2 ? 'special' :
@@ -48,7 +49,7 @@ angular.module('windoctorApp')
                             //angular.isUndefined($scope.calendarEvts[i].eventStatus)
                             //||$scope.calendarEvts[i].eventStatus==null?null:$scope.calendarEvts[i].eventStatus.description,
                             startsAt: startDate,
-                            endsAt: endDate,
+                            endsAt:  endDate,
                             draggable: true,
                             resizable: true
                         })

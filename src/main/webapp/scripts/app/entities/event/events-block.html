@@ -12,7 +12,7 @@
             <div class="col-md-8">
                 <form name="searchForm" class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'global.wordToSearch' | translate }}">
                     </div>
                     <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search</span>
                     </button>

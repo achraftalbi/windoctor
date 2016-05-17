@@ -3,7 +3,7 @@
         "calendar" : {
             "home": {
                 "title": "Events",
-                "dayEventsTitle": "Rendez vous et visites pour la journée {{ day }}",
+                "dayEventsTitle": "Rendez vous et visites pour {{ day }}",
                 "dayEventsActsTitle": "Gestion des événements et des actes",
                 "createAppointmentLabel": "Créer un nouveau rendez vous",
                 "createVisitLabel": "Créer une nouvelle visite",

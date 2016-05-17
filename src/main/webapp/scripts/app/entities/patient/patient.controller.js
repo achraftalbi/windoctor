@@ -64,15 +64,19 @@ angular.module('windoctorApp')
         };
 
         $scope.loadAllSearchPatient = function () {
-            PatientSearch.query({query: $scope.searchQuery,
-                page: $scope.page, per_page: 5}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.patients = result;
-            }, function (response) {
-                if (response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
+            if($scope.searchQuery===null || $scope.searchQuery===undefined || $scope.searchQuery===''){
+                $scope.loadAll();
+            }else{
+                PatientSearch.query({query: $scope.searchQuery,
+                    page: $scope.page, per_page: 5}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.patients = result;
+                }, function (response) {
+                    if (response.status === 404) {
+                        $scope.loadAll();
+                    }
+                });
+            }
         };
 
         $scope.refresh = function () {
