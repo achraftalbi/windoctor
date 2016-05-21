@@ -1,7 +1,7 @@
 {
     "main": {
         "title": "Welcome to WinDoctor !",
-        "subtitle": "You are in the office : \"{{structureName}}\"",
+        "subtitle": "You are in the office : \"{{structurename}}\"",
         "logged": {
             "message": "You are logged in as user \"{{username}}\"."
         },
