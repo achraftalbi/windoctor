@@ -154,12 +154,14 @@ angular.module('windoctorApp').expandChargeController =
         var onSaveEntryFinishedUpdate = function (result) {
             $scope.$emit('windoctorApp:entryUpdate', result);
             $scope.editEntryField = false;
+            var fundEntryId = $scope.entry.fund.id;
             $scope.funds=null;
             Fund.query(function (result, headers) {
                     $scope.funds = result;
                     for(var i= 0;$scope.funds.length;i++){
-                        if($scope.funds[i].id===$scope.entry.fund.id){
+                        if($scope.funds[i].id===fundEntryId){
                             $scope.entry.fund = $scope.funds[i];
+                            break;
                         }
                     }
                 }
