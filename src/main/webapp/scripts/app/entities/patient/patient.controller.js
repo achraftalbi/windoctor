@@ -140,7 +140,7 @@ angular.module('windoctorApp')
             $scope.displayTreatments = true;
             console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
             angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
-            ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+            ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
                 Event_reason, Event, Patient,Attachment,Fund);
         };
 

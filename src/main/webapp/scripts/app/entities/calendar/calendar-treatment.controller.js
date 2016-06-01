@@ -1,6 +1,6 @@
 'use strict';
 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
-    function ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+    function ($scope, $rootScope,$stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
               Event_reason, Event, Patient,Attachment,Fund) {
 
 
@@ -11,7 +11,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatmentPage = 1;
             $scope.treatmentPer_Page = 5;
             $scope.attachmentPage = 1;
-            $scope.treatment = null;
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
             $scope.treatmentTotal = null;
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
@@ -30,6 +30,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.oldFundContainEnoughMoney = true;
             $scope.oldFund=null;
             $scope.searchCalledTreatment = false;
+            $scope.saveTreatmentNotClose = false;
             /*Attachments variables */
             $scope.dispalyAttachments = false;
             $scope.attachments = null;
@@ -37,6 +38,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.viewSelectedAttachment = false;
             $scope.priceLessThanPaidPrice = false;
             $scope.captureAnImageScreen = false;
+            $scope.saveTreatmentOnGoing = false;
+
+            $scope.elementsSelected =[];
+            $scope.selectedElement = null;
+            $scope.TO_RADIANS = Math.PI/180;
         }
 
         // Display treatments Begin
@@ -55,27 +61,30 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                         && $scope.treatmentsAll.length>0){
                         //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
                         //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                        var length = $scope.treatmentsAll.length-1;
+                        var length = $scope.treatmentsAll.length;
                         console.log('length treatments '+length);
                         $scope.treatmentsCurrent=[];
                         $scope.treatments=[];
 
-                        if($scope.event!==null && $scope.event.id!==null && $scope.event.id!==undefined){
+                            $scope.elementsSelected =[];
                             for(var i = 0;i<length;i++){
-                                console.log('curent tre 1 '+(($scope.treatmentsAll[i].event!==null && $scope.treatmentsAll[i].event!==undefined
-                                && $scope.treatmentsAll[i].event.id!==null && $scope.treatmentsAll[i].event.id!==undefined)?$scope.treatmentsAll[i].event.id:'Total'));
-                                if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
-                                    console.log('curent tre 2 '+i);
-                                    $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+                                if($scope.event!==null && $scope.event.id!==null && $scope.event.id!==undefined) {
+                                    if ($scope.treatmentsAll[i].id !== -1 && $scope.treatmentsAll[i].event.id === $scope.event.id) {
+                                        $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+                                    }
+                                }
+                                if($scope.treatmentsAll[i].id!==-1){
+                                    $scope.addElements($scope.treatmentsAll[i]);
                                 }
                             }
-                        }
                         $scope.displayAllPatientTreatments = true;
                         $scope.treatments= $scope.treatmentsAll;
+                        $scope.drawSelectedElements();
                     }
                 }
             );
         };
+
         $scope.orderTreatments = function () {
             var orderBy = $filter('orderBy');
             $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
@@ -94,25 +103,6 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             }
         };
 
-        /*$scope.populateTreatments = function () {
-            if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
-                && $scope.treatmentsAll.length>0){
-                var orderBy = $filter('orderBy');
-                $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
-                var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                for(var i = 0;i<$scope.treatmentsAll.length;i++){
-                    if($scope.displayAllPatientTreatments === false){
-                        if(i>=firstElement && i<=lastElement){
-                            $scope.treatments.push($scope.treatments[i]);
-                        }
-                    }else{
-
-                    }
-                }
-            }
-        }*/
-
         $scope.loadAllTreatments = function () {
             ///
             if($scope.treatments === null || $scope.treatments === undefined || $scope.treatments.length===0){
@@ -123,36 +113,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.displayAllPatientTreatments =true;
             }
             if ($scope.displayAllPatientTreatments === false) {
-                /*Treatment.query({
-                        eventId: $scope.event.id,
-                        page: $scope.treatmentPage,
-                        per_page: 5
-                    }, function (result, headers) {
-                        $scope.selectedDate = new Date($stateParams.selectedDate);
-                        $scope.linksTreatment = ParseLinks.parse(headers('link'));
-                        $scope.treatments = result;
-                        $scope.sort ('description');
-                    }
-                );*/
                 $scope.treatments = $scope.treatmentsCurrent;
             } else {
                 $scope.treatments = $scope.treatmentsAll;
-                /*Treatment.query({
-                        patientId: $scope.event.user.id,
-                        page: $scope.treatmentPage,
-                        per_page: 5
-                    }, function (result, headers) {
-                        $scope.linksTreatment = ParseLinks.parse(headers('link'));
-                        $scope.treatments = result;
-                        if($scope.treatmentPage===1 && $scope.treatments!==null &&
-                            $scope.treatments!=undefined && $scope.treatments.length>0){
-                            $scope.treatmentTotal = $scope.treatments[$scope.treatments.length-1];
-                        }else if($scope.treatmentPage>1){
-                            $scope.treatments.push($scope.treatmentTotal);
-                        }
-
-                    }
-                );*/
             }
         };
 
@@ -236,6 +199,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.searchTreatments();
             }else{
                 $scope.loadAllTreatments();
+                $scope.createSelectedElements();
+                if($scope.saveTreatmentNotClose){
+                    $scope.drawElementsWhenEdit($scope.treatment);
+                    $scope.saveTreatmentNotClose = false;
+                }
             }
         };
         $scope.searchTreatments = function () {
@@ -269,8 +237,13 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.clear();
         };
 
+        $scope.refreshAll = function () {
+            $scope.loadAllTreatmentsFromServer();
+            $scope.displayAddEditViewPopup = false;
+            $scope.displayTreatments = true;
+        };
         $scope.clear = function () {
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
         };
         $scope.clearDeleteTreatment = function () {
             $scope.treatmentToDelete = {
@@ -278,7 +251,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 description: null,
                 price: null,
                 paid_price: null,
-                id: null
+                id: null,
+                elements: null
             };
             $scope.displayTreatmentToDelete = false;
             $scope.displayTreatments = true;
@@ -351,11 +325,14 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 doctor:$scope.defaultDoctor,
                 event: {id: $scope.event.id}
             };
+            $scope.temporaryElements=null;
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
             $scope.attachments=null;
             $scope.dialogPopupTreatment();
             $scope.loadFunds();
+            $scope.createSelectedElements();
+            $scope.saveTreatmentOnGoing = false;
         };
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
@@ -363,8 +340,19 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
             $scope.oldFund = $scope.treatment.fund;
             $scope.dialogPopupTreatment();
+            $scope.drawElementsWhenEdit($scope.treatment);
             $scope.loadAllAttachments(1);
             $scope.loadFunds();
+            $scope.saveTreatmentOnGoing = false;
+            $scope.temporaryElements=null;
+            if($scope.treatment.elements!==null && $scope.treatment.elements!==undefined
+                && $scope.treatment.elements.length>0){
+                var split = $scope.treatment.elements.split(',');
+                var tabLength = split.length;
+                for(var i = 0;i<split.length;i++){
+                    $scope.temporaryElements = (tabLength===1 || $scope.temporaryElements===null?'':$scope.temporaryElements +', ')+split[i];
+                }
+            }
         };
         $scope.dialogPopupTreatment = function (treatment) {
             $scope.displayAddEditViewPopup = true;
@@ -420,7 +408,23 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             }
             $scope.oldTreatmentPrice = $scope.treatment.price;
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
-            $scope.loadFunds();
+
+            var oldFundId = $scope.treatment.fund.id;
+            Fund.query(function (result, headers) {
+                    $scope.funds = result;
+                    console.log("$scope.treatment.fund 0 ")
+                    if($scope.funds!==null && $scope.funds.length > 0){
+                        $scope.defaultFund = $scope.funds[0];
+                        for(var i=0;i<$scope.funds.length;i++){
+                            if($scope.funds[i].id===oldFundId){
+                                $scope.treatment.fund = $scope.funds[i];
+                                break;
+                            }
+                        }
+                    }
+                    $scope.saveTreatmentOnGoing = false;
+                }
+            );
             $scope.loadAllAttachments(1);
         };
 
@@ -428,6 +432,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.treatment=result;
             console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
+            $scope.treatmentsAll.push($scope.treatment);
             $scope.loadPageTreatment($scope.treatmentPage);
             $scope.oldFund = $scope.treatment.fund;
             if($scope.oldTreatmentPrice===null){
@@ -444,11 +449,25 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
 
             // New feature
-            $scope.treatmentsAll.push($scope.treatment);
             $scope.orderTreatments();
             $scope.displayAllPatientTreatments = true;
+            var oldFundId = $scope.treatment.fund.id;
+            Fund.query(function (result, headers) {
+                    $scope.funds = result;
+                    console.log("$scope.treatment.fund 0 ")
+                    if($scope.funds!==null && $scope.funds.length > 0){
+                        $scope.defaultFund = $scope.funds[0];
+                        for(var i=0;i<$scope.funds.length;i++){
+                            if($scope.funds[i].id===oldFundId){
+                                $scope.treatment.fund = $scope.funds[i];
+                                break;
+                            }
+                        }
+                    }
+                    $scope.saveTreatmentOnGoing = false;
+                }
+            );
 
-            $scope.loadFunds();
             $scope.loadAllAttachments(1);
             if($scope.event.eventStatus.id === 1){
                 $scope.event.eventStatus.id = 3;
@@ -457,6 +476,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
         $scope.saveTreatmentAndClose = function () {
             $scope.saveTreatment();
+            $scope.drawElementsAfterSave($scope.treatment);
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
         };
@@ -466,7 +486,14 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatment.paid_price = $scope.treatment.eventReason.price;
         };
 
+        $scope.saveTreatmentCall = function () {
+            $scope.saveTreatmentNotClose = true;
+            $scope.saveTreatment();
+        };
+
         $scope.saveTreatment = function () {
+            $scope.constructElementBeforeSave($scope.treatment);
+            $scope.saveTreatmentOnGoing = true;
             if ($scope.treatment.id != null) {
                 $scope.treatment = Treatment.update($scope.treatment, onSaveTreatmentFinishedUpdate);
             } else {
@@ -479,6 +506,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayTreatmentView = false;
             $scope.cancelImageCapture();
             $scope.clear();
+            $scope.myCanvas();
+            $scope.createSelectedElements();
         };
         $scope.viewTreatmentDetail = function (treatment) {
             $scope.treatment = treatment;
@@ -597,293 +626,23 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.viewSelectedAttachment = false;
         };
 
-
-        /*$scope.hexToRgb = function (color) {
-            var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-            color = color.replace(shorthandRegex, function(m, r, g, b) {
-                return r + r + g + g + b + b;
-            });
-
-            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : {
-                r: 0,
-                g: 0,
-                b: 0
-            };
-        }*/
-
-        $scope.myCanvas = function () {
-            var TO_RADIANS = Math.PI/180;
-            for(var i=0;i<$scope.elements.length;i++){
-                var img = new Image();
-                img.src = $scope.pathNormalImage+$scope.elements[i].id+$scope.typeImg;
-                $scope.ctx.rotate($scope.elements[i].zRotation*TO_RADIANS);
-                $scope.ctx.drawImage(img,$scope.elements[i].xDraw,$scope.elements[i].yDraw,img.width*$scope.elements[i].widthDraw,img.height*$scope.elements[i].heightDraw);
-                $scope.ctx.restore();
-                $scope.ctx.save();
-            }
-
-            $scope.ctx.moveTo(100, 165);
-            $scope.ctx.lineTo(365, -57);
-            $scope.ctx.moveTo(116, -100);
-            $scope.ctx.lineTo(452, 300);
-            $scope.ctx.stroke();
-            $scope.c.onclick = function(e) {
-                if(e.x>0){
-                    //var x = e.x;
-                    //var y = e.y;
-                    //x -= c.offsetLeft;
-                    //y -= c.offsetTop;
-                    //var x = e.offsetLeft;
-                    //var y = e.offsetTop;
-
-                    var rect = c.getBoundingClientRect();
-                    var x= e.clientX - rect.left;
-                     var   y= e.clientY - rect.top;
-
-                    alert('testOKAK '+c.width+' '+c.height+' '+e.x+' '+e.y+' '+c.offsetLeft+' '+c.offsetTop+' '+(e.pageX-899)+' '+(e.pageY-296)+' posx='+x+' posy='+y+' ');
-                }
-            }
-        }
-
-        $scope.initCanvas = function () {
-            $scope.c = document.getElementById("myCanvas");
-            $scope.ctx = $scope.c.getContext("2d");
-            $scope.ctx.clearRect(0, 0, c.width, c.height);
-            $scope.typeImg = '.png';
-            $scope.pathNormalImage = '../../../../assets/images/elements/teethschame/';
-            $scope.ctx.fillStyle = "black";
-            $scope.ctx.font = "bold 24px Arial";
-            $scope.ctx.fillText("1", 20, 40);
-            $scope.ctx.fillText("2", 265, 40);
-            $scope.ctx.fillText("3", 265, 340);
-            $scope.ctx.fillText("4", 20, 340);
-            $scope.ctx.fillText("5", 130, 180);
-            $scope.ctx.fillText("6", 165, 180);
-            $scope.ctx.fillText("7", 165, 220);
-            $scope.ctx.fillText("8", 130, 220);
-            $scope.elements=[
-
-                // Top right Big
-                {id:28,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:200,yDraw:-250,zRotation:40,width:null,height:null,x:null,y:null},
-                {id:27,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:210,yDraw:-215,zRotation:30,width:null,height:null,x:null,y:null},
-                {id:26,img:null,widthDraw:1/3+1/40,heightDraw:1/3+1/40,xDraw:158,yDraw:-239,zRotation:37,width:null,height:null,x:null,y:null},
-                {id:25,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:134,yDraw:-236,zRotation:37,width:null,height:null,x:null,y:null},
-                {id:24,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:132,yDraw:-215,zRotation:31,width:null,height:null,x:null,y:null},
-                {id:23,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:172,yDraw:-137,zRotation:6,width:null,height:null,x:null,y:null},
-                {id:22,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:172,yDraw:-80,zRotation:-11,width:null,height:null,x:null,y:null},
-                {id:21,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:153,yDraw:5,zRotation:-40,width:null,height:null,x:null,y:null},
-
-
-                // Top children
-                {id:65,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:205,yDraw:160,zRotation:-40,width:null,height:null,x:null,y:null},
-                {id:64,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:149,yDraw:188,zRotation:-56,width:null,height:null,x:null,y:null},
-                {id:63,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:221,yDraw:-77,zRotation:6,width:null,height:null,x:null,y:null},
-                {id:62,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:203,yDraw:-42,zRotation:-3,width:null,height:null,x:null,y:null},
-                {id:61,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:153,yDraw:83,zRotation:-40,width:null,height:null,x:null,y:null},
-                {id:51,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:125,yDraw:82,zRotation:-40,width:null,height:null,x:null,y:null},
-                {id:52,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:48,yDraw:132,zRotation:-65,width:null,height:null,x:null,y:null},
-                {id:53,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-35,yDraw:143,zRotation:-87,width:null,height:null,x:null,y:null},
-                {id:64,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-155,yDraw:-120,zRotation:-200,width:null,height:null,x:null,y:null},
-                {id:65,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-159,yDraw:-147,zRotation:-200,width:null,height:null,x:null,y:null},
-                // Bottom children
-                {id:75,img:null,widthDraw:1/3-1/40,heightDraw:1/3-1/40,xDraw:120,yDraw:-292,zRotation:67,width:null,height:null,x:null,y:null},
-                {id:74,img:null,widthDraw:1/3-1/40,heightDraw:1/3-1/40,xDraw:31,yDraw:-330,zRotation:90,width:null,height:null,x:null,y:null},
-                {id:73,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:48,yDraw:-331,zRotation:92,width:null,height:null,x:null,y:null},
-                {id:72,img:null,widthDraw:1/3-1/10,heightDraw:1/3-1/10,xDraw:-111,yDraw:-320,zRotation:125,width:null,height:null,x:null,y:null},
-                {id:71,img:null,widthDraw:1/3-1/10,heightDraw:1/3-1/10,xDraw:-170,yDraw:-289,zRotation:140,width:null,height:null,x:null,y:null},
-                {id:81,img:null,widthDraw:1/3-1/7-1/130,heightDraw:1/3-1/7-1/130,xDraw:-151,yDraw:-289,zRotation:140,width:null,height:null,x:null,y:null},
-                {id:82,img:null,widthDraw:1/3-1/8-1/130,heightDraw:1/3-1/8-1/130,xDraw:-200,yDraw:-243,zRotation:155,width:null,height:null,x:null,y:null},
-                {id:83,img:null,widthDraw:1/3-1/15,heightDraw:1/3-1/15,xDraw:-270,yDraw:-121,zRotation:185,width:null,height:null,x:null,y:null},
-                {id:84,img:null,widthDraw:1/3-1/25,heightDraw:1/3-1/25,xDraw:-266,yDraw:8,zRotation:215,width:null,height:null,x:null,y:null},
-                {id:85,img:null,widthDraw:1/3-1/17,heightDraw:1/3-1/17,xDraw:-238,yDraw:8,zRotation:215,width:null,height:null,x:null,y:null},
-                // Bottom right Big
-                {id:38,img:null,widthDraw:1/2,heightDraw:1/2,xDraw:170,yDraw:-303,zRotation:55,width:null,height:null,x:null,y:null},
-                {id:37,img:null,widthDraw:1/2,heightDraw:1/2,xDraw:147,yDraw:-333,zRotation:65,width:null,height:null,x:null,y:null},
-                {id:36,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:176,yDraw:-333,zRotation:65,width:null,height:null,x:null,y:null},
-                {id:35,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:180,yDraw:-349,zRotation:70,width:null,height:null,x:null,y:null},
-                {id:34,img:null,widthDraw:1/2-1/40,heightDraw:1/2-1/40,xDraw:187,yDraw:-356,zRotation:73,width:null,height:null,x:null,y:null},
-                {id:33,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:36,yDraw:-415,zRotation:100,width:null,height:null,x:null,y:null},
-                {id:32,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:-75,yDraw:-417,zRotation:120,width:null,height:null,x:null,y:null},
-                {id:31,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-185,yDraw:-380,zRotation:140,width:null,height:null,x:null,y:null},
-                // Bottom left Big
-                {id:41,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-156,yDraw:-380,zRotation:140,width:null,height:null,x:null,y:null},
-                {id:42,img:null,widthDraw:1/2-1/10,heightDraw:1/2-1/10,xDraw:-244,yDraw:-310,zRotation:160,width:null,height:null,x:null,y:null},
-                {id:43,img:null,widthDraw:1/2-1/20,heightDraw:1/2-1/20,xDraw:-321,yDraw:-190,zRotation:185,width:null,height:null,x:null,y:null},
-                {id:44,img:null,widthDraw:1/2-1/7,heightDraw:1/2-1/7,xDraw:-326,yDraw:-112,zRotation:200,width:null,height:null,x:null,y:null},
-                {id:45,img:null,widthDraw:1/2-1/7,heightDraw:1/2-1/7,xDraw:-301,yDraw:-108,zRotation:200,width:null,height:null,x:null,y:null},
-                {id:46,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-287,yDraw:-58,zRotation:210,width:null,height:null,x:null,y:null},
-                {id:47,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-261,yDraw:-18,zRotation:220,width:null,height:null,x:null,y:null},
-                {id:48,img:null,widthDraw:1/2-1/8,heightDraw:1/2-1/8,xDraw:-230,yDraw:-15,zRotation:220,width:null,height:null,x:null,y:null},
-
-
-
-
-
-                // Top left Big
-                {id:18,img:null,widthDraw:1/3+1/25,heightDraw:1/3+1/25,xDraw:-175,yDraw:60,zRotation:-118,width:null,height:null,x:null,y:null},
-                {id:17,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-136,yDraw:72,zRotation:-112,width:null,height:null,x:null,y:null},
-                {id:16,img:null,widthDraw:1/3+1/40,heightDraw:1/3+1/40,xDraw:-115,yDraw:64,zRotation:-115,width:null,height:null,x:null,y:null},
-                {id:15,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-77,yDraw:70,zRotation:-110,width:null,height:null,x:null,y:null},
-                {id:14,img:null,widthDraw:1/3,heightDraw:1/3,xDraw:-40,yDraw:77,zRotation:-103,width:null,height:null,x:null,y:null},
-                {id:13,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:22,yDraw:78,zRotation:-80,width:null,height:null,x:null,y:null},
-                {id:12,img:null,widthDraw:1/3-1/13,heightDraw:1/3-1/13,xDraw:81,yDraw:54,zRotation:-60,width:null,height:null,x:null,y:null},
-                {id:11,img:null,widthDraw:1/3-1/20,heightDraw:1/3-1/20,xDraw:123,yDraw:5,zRotation:-40,width:null,height:null,x:null,y:null}
-
-            ];
-            $scope.myCanvas();
-            $scope.myCanvas();
-            $scope.myCanvas();
-        }
-        $scope.initCanvas();
-        /********************************************************************************/
-        /********************************************************************************/
-        /**************************           Paginator        **************************/
-        /********************************************************************************/
-        /********************************************************************************/
-
-        /*$scope.pageSize = 4;
-        $scope.allItems = $scope.treatments;
-        $scope.reverse = false;
-        $scope.searched = function (valLists,toSearch) {
-            return _.filter(valLists,
-                function (i) {
-                    return searchUtil(i, toSearch);
-                });
+        $scope.declareElementsFunctions = function () {
+            angular.module('windoctorApp').expandTreatmentsControllerElements
+            ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+                Event_reason, Event, Patient,Attachment,Fund);
         };
-
-        $scope.paged = function (valLists,pageSize)
-        {
-            var retVal = [];
-            for (var i = 0; i < valLists.length; i++) {
-                if (i % pageSize === 0) {
-                    retVal[Math.floor(i / pageSize)] = [valLists[i]];
-                } else {
-                    retVal[Math.floor(i / pageSize)].push(valLists[i]);
-                }
-            }
-            return retVal;
-        };
-        $scope.resetAll = function () {
-            $scope.filteredList = $scope.allItems;
-            $scope.newEmpId = '';
-            $scope.newDescription = '';
-            $scope.newEventReasonDescription = '';
-            $scope.searchText = '';
-            $scope.currentPage = 0;
-            $scope.Header = ['','',''];
-        }
-
-
-        $scope.add = function () {
-            $scope.allItems.push({
-                EmpId: $scope.newEmpId,
-                name: $scope.newDescription,
-                Email: $scope.newEventReasonDescription
-            });
-            $scope.resetAll();
-        }
-
-        $scope.search = function () {
-            $scope.filteredList =
-                $scope.searched($scope.allItems, $scope.searchText);
-
-            if ($scope.searchText == '') {
-                $scope.filteredList = $scope.allItems;
-            }
-            $scope.pagination();
-        }
-
-
-        // Calculate Total Number of Pages based on Search Result
-        $scope.pagination = function () {
-            $scope.filteredList = $scope.treatments;
-            console.log('$scope.filteredList '+$scope.filteredList);
-            $scope.ItemsByPage = $scope.paged( $scope.filteredList, $scope.pageSize );
-        };
-
-        $scope.setPage = function () {
-            $scope.currentPage = this.n;
-        };
-
-        $scope.firstPage = function () {
-            $scope.currentPage = 0;
-        };
-
-        $scope.lastPage = function () {
-            $scope.currentPage = $scope.ItemsByPage.length - 1;
-        };
-
-        $scope.range = function (input, total) {
-            var ret = [];
-            if (!total) {
-                total = input;
-                input = 0;
-            }
-            for (var i = input; i < total; i++) {
-                if (i != 0 && i != total - 1) {
-                    ret.push(i);
-                }
-            }
-            return ret;
-        };
-
-        $scope.sort = function(sortBy){
-            $scope.resetAll();
-
-            $scope.columnToOrder = sortBy;
-
-            //$Filter - Standard Service
-            $scope.filteredList = $filter('orderBy')($scope.filteredList, ['-treatment_date','-id'], false);
-            var iconName;
-            if($scope.reverse)
-                iconName = 'glyphicon glyphicon-chevron-up';
-            else
-                iconName = 'glyphicon glyphicon-chevron-down';
-
-            if(sortBy === 'EmpId')
-            {
-                $scope.Header[0] = iconName;
-            }
-            else if(sortBy === 'name')
-            {
-                $scope.Header[1] = iconName;
-            }else {
-                $scope.Header[2] = iconName;
-            }
-
-            $scope.reverse = !$scope.reverse;
-
-            $scope.pagination();
-        };
-
-        //By Default sort ny Name
-
-        function searchUtil(item, toSearch) {
-            return (item.description.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.eventReason.description.toLowerCase().indexOf(toSearch.toLowerCase()) > -1 || item.EmpId == toSearch) ? true : false;
-        }
-        */
-
-
-
-
-
-
-
 
         $scope.initTreatmentPage = function () {
             $scope.initVariables();
+            $scope.declareElementsFunctions();
+            $scope.initCanvas();
             $scope.loadAllTreatmentsFromServer();
             $scope.initEventReasons();
             $scope.loadFunds();
             $scope.initDoctors();
             console.log('displayTreatmentsPage values '+$scope.displayTreatmentsPage);
             console.log('displayTreatments values '+$scope.displayTreatments);
-        }
+        };
 
         $scope.initTreatmentPage();
     };

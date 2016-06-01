@@ -63,6 +63,7 @@
                 <tr ng-repeat="patient in patients">
                     <td>
                         <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 30px;" ng-if="patient.picture"/>
+                        <img class="userImageVerryLittle" ng-if="!patient.picture"></img>
                     </td>
                     <td><strong>{{patient.firstName}}</strong></td>
                     <td><strong>{{patient.lastName}}</strong></td>

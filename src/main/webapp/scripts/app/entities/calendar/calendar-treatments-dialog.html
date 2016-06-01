@@ -40,14 +40,29 @@
                       class="form-control-static">{{treatment.eventReason.description}}</span>
             </div>
             <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.defaultPrice">Default price</label>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label translate="windoctorApp.treatment.categoryAct">Category of the act</label>
+                    <span ng-show="displayTreatmentView"
+                          class="form-control-static">{{treatment.eventReason.categoryAct.name}}</span>
+
+                        <div ng-show="treatment.eventReason && !displayTreatmentView">
+                            <span>{{treatment.eventReason.categoryAct.name}}</span></div>
+                        <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
+                            translate="windoctorApp.treatment.chooseReason">Choose an act</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <label translate="windoctorApp.treatment.defaultPrice">Default price</label>
                     <span ng-show="displayTreatmentView"
                           class="form-control-static">{{treatment.eventReason.price}}</span>
 
-                <div ng-show="treatment.eventReason && !displayTreatmentView">
-                    <span>{{treatment.eventReason.price}}</span></div>
-                <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
-                    translate="windoctorApp.treatment.chooseReason">Choose a reason</span>
+                        <div ng-show="treatment.eventReason && !displayTreatmentView">
+                            <span>{{treatment.eventReason.price}}</span></div>
+                        <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
+                            translate="windoctorApp.treatment.chooseReason">Choose a reason</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="form-group col-xs-6 col-md-3">
@@ -202,17 +217,6 @@
         </div>
         <div class="row">
             <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.categoryAct">Category of the act</label>
-                    <span ng-show="displayTreatmentView"
-                          class="form-control-static">{{treatment.eventReason.categoryAct.name}}</span>
-
-                <div ng-show="treatment.eventReason && !displayTreatmentView">
-                    <span>{{treatment.eventReason.categoryAct.name}}</span></div>
-                <div ng-show="!treatment.eventReason && !displayTreatmentView"><span
-                    translate="windoctorApp.treatment.chooseReason">Choose an act</span>
-                </div>
-            </div>
-            <div class="form-group col-xs-6 col-md-3">
                 <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
                 <input type="text" class="form-control" name="description" id="field_description"
                        ng-model="treatment.description" ng-show="!displayTreatmentView"
@@ -276,6 +280,17 @@
                     </p>
                 </div>
             </div>
+            <div class="form-group col-xs-6 col-md-3">
+                <label translate="windoctorApp.treatment.teeth">Teeth</label>
+                    <span ng-show="displayTreatmentView"
+                          class="form-control-static">{{temporaryElements}}</span>
+
+                <div ng-show="temporaryElements && !displayTreatmentView" style="color: red;font-weight: bold;font-size: 16px;">
+                    <span class="divider">{{temporaryElements}}</span></div>
+                <div ng-show="!temporaryElements && !displayTreatmentView"><span
+                    translate="windoctorApp.treatment.chooseTeeth">Choose teeth</span>
+                </div>
+            </div>
         </div>
         <div class="row">
         </div>
@@ -292,14 +307,14 @@
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
             translate="entity.action.close">Close</span>
         </button>
-        <button type="button" ng-click="saveTreatment()"
-                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney"
+        <button type="button" ng-click="saveTreatmentCall()"
+                ng-disabled="editForm.$invalid || (!oldFundContainEnoughMoney) || saveTreatmentOnGoing"
                 ng-show="!displayTreatmentView"
                 class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
         </button>
         <button type="button" ng-click="saveTreatmentAndClose()" ng-show="!displayTreatmentView"
-                ng-disabled="editForm.$invalid || !oldFundContainEnoughMoney"
+                ng-disabled="editForm.$invalid || (!oldFundContainEnoughMoney) || saveTreatmentOnGoing"
                 class="btn btn-primary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save and close</span>
         </button>

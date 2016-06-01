@@ -85,6 +85,19 @@ public class Treatment implements Serializable {
     @Column(name = "ELEMENT")
     private Long element;
 
+    @Size(min = 0, max = 500)
+    @Column(name = "ELEMENTS", length = 500, nullable = true)
+    private String elements;
+
+
+    public String getElements() {
+        return elements;
+    }
+
+    public void setElements(String elements) {
+        this.elements = elements;
+    }
+
     public Long getElement() {
         return element;
     }

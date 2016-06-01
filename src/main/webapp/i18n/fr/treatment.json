@@ -42,7 +42,9 @@
             "eventReasonPrice": "Prix",
             "eventReasonADDMessage": "Ajouter un acte",
             "eventReasonHideMessage": "Annuler l'ajout de l'acte",
-            "eventReasonAdd": "Ajouter acte"
+            "eventReasonAdd": "Ajouter acte",
+            "teeth": "Dents",
+            "chooseTeeth": "Choisissez des dents"
         }
     }
 }

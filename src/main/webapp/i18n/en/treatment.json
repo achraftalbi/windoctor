@@ -42,7 +42,9 @@
             "eventReasonPrice": "Price",
             "eventReasonADDMessage": "Add an act",
             "eventReasonHideMessage": "Cancel adding of the act",
-            "eventReasonAdd": "Add act"
+            "eventReasonAdd": "Add act",
+            "teeth": "Teeth",
+            "chooseTeeth": "Choose teeth"
         }
     }
 }

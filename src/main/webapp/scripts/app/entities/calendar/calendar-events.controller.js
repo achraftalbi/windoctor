@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('windoctorApp')
-    .controller('CalendarEventsController', function ($scope, $stateParams, Event, EventSearch,EventDTO, Patient, ParseLinks,
+    .controller('CalendarEventsController', function ($scope, $rootScope,$stateParams, Event, EventSearch,EventDTO, Patient, ParseLinks,
                                                       PatientSearch, $filter, Principal,$translate,Treatment, TreatmentSearch,
                                                       Doctor,Event_reason,Attachment,Fund,CategoryAct) {
         $scope.events = [];
@@ -19,6 +19,7 @@ angular.module('windoctorApp')
         $scope.displayDialogEventPage = false;
         $scope.searchQueryPatientDialog='';
         $scope.displayTreatmentsPage = false;
+        $scope.initTextDrawingInCanvas = false;
         console.log('selectedDateString '+$scope.selectedDateString);
         $scope.loadAll = function () {
             $scope.events = [];
@@ -153,7 +154,7 @@ angular.module('windoctorApp')
                 $scope.displayTreatments = true;
                 console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
                 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
-                ($scope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
+                ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
                     Event_reason, Event, Patient,Attachment,Fund);
             }
         };

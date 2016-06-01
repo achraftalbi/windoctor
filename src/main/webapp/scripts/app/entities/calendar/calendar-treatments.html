@@ -8,12 +8,13 @@
                             <button type="button"
                                     ng-click="returnToEventsPage()"
                                     class="btn btn-info">
-                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span
+                                translate="entity.action.back"> Back</span>
                             </button>
                         </div>
                         <div class="form-group col-xs-6">
                             <button type="button"
-                                    ng-click="loadAllTreatmentsFromServer()"
+                                    ng-click="refreshAll()"
                                     class="btn btn-info">
                                 <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
                             </button>
@@ -30,21 +31,23 @@
                 <jh-alert></jh-alert>
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="center-block">
                                 <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
                                      style="max-width: 100%;" ng-if="event.user.picture"/>
+                                <span class="userImage img-responsive img-rounded" ng-if="!event.user.picture"></span>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="form-group col-xs-6">
                                     <div>
-                                        <table class="table table-no-bordered"  style="font-size: 14px">
+                                        <table class="table table-no-bordered" style="font-size: 14px">
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <strong translate="windoctorApp.patient.firstName">FirstName</strong>
+                                                    <strong
+                                                        translate="windoctorApp.patient.firstName">FirstName</strong>
                                                 </td>
                                                 <td>
                                                     <span class="form-control-static">{{event.user.firstName}}</span>
@@ -60,18 +63,67 @@
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <strong translate="windoctorApp.patient.birthDate">Birth date</strong>
+                                                    <strong translate="windoctorApp.patient.birthDate">Birth
+                                                        date</strong>
                                                 </td>
                                                 <td>
                                                     <span class="form-control-static">{{event.user.birthDate | date:'yyyy-MM-dd' : '+0000'}}</span>
                                                 </td>
                                             </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <div>
+                                        <table class="table table-no-bordered" style="font-size: 14px">
+                                            <tbody>
                                             <tr>
                                                 <td>
-                                                    <strong translate="windoctorApp.patient.phoneNumber">Phone number</strong>
+                                                    <strong translate="windoctorApp.patient.lastName">LastName</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">00212{{event.user.phoneNumber}}</span>
+                                                    <span class="form-control-static">{{event.user.lastName}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong
+                                                        translate="windoctorApp.patient.allergies">allergies</strong>
+                                                </td>
+                                                <td>
+                                                    <span class="form-control-static">{{event.user.allergies}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <strong
+                                                        translate="windoctorApp.patient.profession">Profession</strong>
+                                                </td>
+                                                <td>
+                                                    <span class="form-control-static">{{event.user.profession}}</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="form-group col-xs-6">
+                                    <div>
+                                        <table class="table table-no-bordered" style="font-size: 14px">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong translate="windoctorApp.patient.phoneNumber">Phone
+                                                        number</strong>
+                                                </td>
+                                                <td>
+                                                    <span
+                                                        class="form-control-static">00212{{event.user.phoneNumber}}</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -88,32 +140,8 @@
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <div>
-                                        <table class="table table-no-bordered" style="font-size: 14px" >
+                                        <table class="table table-no-bordered" style="font-size: 14px">
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                    <strong translate="windoctorApp.patient.lastName">LastName</strong>
-                                                </td>
-                                                <td>
-                                                    <span class="form-control-static">{{event.user.lastName}}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong translate="windoctorApp.patient.allergies">allergies</strong>
-                                                </td>
-                                                <td>
-                                                    <span class="form-control-static">{{event.user.allergies}}</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong translate="windoctorApp.patient.profession">Profession</strong>
-                                                </td>
-                                                <td>
-                                                    <span class="form-control-static">{{event.user.profession}}</span>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <td>
                                                     <strong translate="windoctorApp.patient.email">Email</strong>
@@ -136,13 +164,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4"  ng-show="false">
-                            <p><button ng-click="myCanvas()" >Try it</button></p>
-                            <canvas id="myCanvas" height="380" width="305" ng-click="clickOnCanvas()"
-                                    style="border:1px solid #d3d3d3;">
-                                <span>Your browser does not support the HTML5 canvas tag.</span></canvas>
-
-                        </div>
                     </div>
                 </div>
                 <div class="row" style="padding-top: 20px">
@@ -155,7 +176,8 @@
                     </div>
                     <div class="form-group col-xs-6 col-md-3">
                         <button class="btn btn-primary"
-                                ng-click="displayPatientTreatmentsEventFunction()" ng-show="event!==null && event.id!==null">
+                                ng-click="displayPatientTreatmentsEventFunction()"
+                                ng-show="event!==null && event.id!==null">
                             <span class="glyphicon glyphicon-eye-open"></span>
                                     <span ng-show="event.eventStatus.id===8"
                                           translate="windoctorApp.treatment.home.displayPatientTreatmentsVisit">Current acts</span>
@@ -164,66 +186,71 @@
                         </button>
                     </div>
                     <div class="form-group col-xs-6 col-md-3">
-                        <button class="btn btn-primary" ng-click="addNewTreatment()" ng-show="event!==null && event.id!==null">
+                        <button class="btn btn-primary" ng-click="addNewTreatment()"
+                                ng-show="event!==null && event.id!==null">
                             <span class="fa fa-plus"></span> <span
                             translate="windoctorApp.treatment.home.createLabel">Create a new Treatment</span>
                         </button>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-xs-9">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 ng-show="displayTreatments && displayAllPatientTreatments"
+                                    translate="windoctorApp.treatment.home.displayAllPatientTreatments"
+                                    class="panel-title"></h3>
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 ng-show="displayTreatments && displayAllPatientTreatments"
-                            translate="windoctorApp.treatment.home.displayAllPatientTreatments"
-                            class="panel-title"></h3>
+                                <h3 ng-show="displayTreatments && (!displayAllPatientTreatments)"
+                                    translate="windoctorApp.treatment.home.displayPatientTreatmentsAppointment"
+                                    class="panel-title"></h3>
 
-                        <h3 ng-show="displayTreatments && (!displayAllPatientTreatments)"
-                            translate="windoctorApp.treatment.home.displayPatientTreatmentsAppointment"
-                            class="panel-title"></h3>
-
-                        <h3 ng-show="displayAddEditViewPopup" translate="windoctorApp.treatment.home.createOrEditLabel"
-                            class="panel-title"></h3>
-                    </div>
-                    <div class="panel-body">
-                        <div ng-show="displayTreatments">
-                            <div class="row" ng-show="false">
-                                <div class="form-group col-xs-6 col-md-3">
-                                </div>
-                                <div class="form-group col-xs-6 col-md-3">
-                                    <input type="text" class="form-control" ng-model="searchQuery"
-                                           id="searchQuery"
-                                           placeholder="{{ 'global.wordToSearch' | translate }}">
-                                </div>
-                                <div class="form-group col-xs-6 col-md-3">
-                                    <button class="btn btn-info" ng-click="searchTreatments()"><span
-                                        class="glyphicon glyphicon-search"></span>
-                                        <span translate="entity.action.search">Search</span>
-                                    </button>
-                                </div>
-                                <div class="form-group col-xs-6 col-md-3">
-                                </div>
+                                <h3 ng-show="displayAddEditViewPopup"
+                                    translate="windoctorApp.treatment.home.createOrEditLabel"
+                                    class="panel-title"></h3>
                             </div>
-                            <div class="table-responsive"
-                                 ng-show="treatments!==null && treatments!==undefined && treatments.length>0">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th translate="windoctorApp.treatment.treatment_date">Date</th>
-                                        <th translate="windoctorApp.treatment.description">Description</th>
-                                        <th translate="windoctorApp.treatment.price">Price</th>
-                                        <th translate="windoctorApp.treatment.paid_price">Paid price</th>
-                                        <th translate="windoctorApp.treatment.remainingPrice">Remaining price</th>
-                                        <th translate="windoctorApp.treatment.eventReason">eventReason</th>
-                                        <th translate="windoctorApp.treatment.categoryAct">Category of the act</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr ng-repeat="treatment in treatments">
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;"></td>
-                                        <td ng-show="treatment.id!==-1">{{treatment.treatment_date | date:'dd/MM/yyyy HH:mm'}}</td>
-                                        <td ng-show="treatment.id!==-1">
+                            <div class="panel-body">
+                                <div ng-show="displayTreatments">
+                                    <div class="row" ng-show="false">
+                                        <div class="form-group col-xs-6 col-md-3">
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-3">
+                                            <input type="text" class="form-control" ng-model="searchQuery"
+                                                   id="searchQuery"
+                                                   placeholder="{{ 'global.wordToSearch' | translate }}">
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-3">
+                                            <button class="btn btn-info" ng-click="searchTreatments()"><span
+                                                class="glyphicon glyphicon-search"></span>
+                                                <span translate="entity.action.search">Search</span>
+                                            </button>
+                                        </div>
+                                        <div class="form-group col-xs-6 col-md-3">
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive"
+                                         ng-show="treatments!==null && treatments!==undefined && treatments.length>0">
+                                        <table class="table table-striped"  style="font-size: 14px;">
+                                            <thead>
+                                            <tr>
+                                                <th translate="windoctorApp.treatment.treatment_date">Date</th>
+                                                <th translate="windoctorApp.treatment.description">Description</th>
+                                                <th translate="windoctorApp.treatment.price">Price</th>
+                                                <th translate="windoctorApp.treatment.paid_price">Paid price</th>
+                                                <th translate="windoctorApp.treatment.remainingPrice">Remaining price</th>
+                                                <th translate="windoctorApp.treatment.eventReason">eventReason</th>
+                                                <th translate="windoctorApp.treatment.teeth">Dents</th>
+                                                <th></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="treatment in treatments">
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;"></td>
+                                                <td ng-show="treatment.id!==-1">{{treatment.treatment_date |
+                                                    date:'dd/MM/yyyy HH:mm'}}
+                                                </td>
+                                                <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.description }}"
@@ -233,31 +260,31 @@
                                 <span ng-show="treatment.description.length <= 10">
                                     {{ treatment.description | limitTo: 10 }}{{treatment.description.length > 10 ? '...' : ''}}
                                 </span>
-                                        </td>
-                                        <td ng-show="treatment.id===-1" translate="windoctorApp.treatment.total"
-                                            style="background-color: black;;color: white;">Total
-                                        </td>
-                                        <td ng-show="treatment.id!==-1">{{treatment.price}}</td>
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;">{{treatment.price}}
-                                        </td>
-                                        <td ng-show="treatment.id!==-1">{{treatment.paid_price}}</td>
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;">{{treatment.paid_price}}
-                                        </td>
-                                        <td style="background-color: darkgreen;;color: white;"
-                                            ng-show="(treatment.price - treatment.paid_price)===0">
-                                            {{treatment.price - treatment.paid_price}}
-                                        </td>
-                                        <td style="background-color: #ad2121;color: white;"
-                                            ng-show="(treatment.price - treatment.paid_price)>0">
-                                            {{treatment.price - treatment.paid_price}}
-                                        </td>
-                                        <td style="background-color: yellow;color: black;"
-                                            ng-show="(treatment.price - treatment.paid_price)<0">
-                                            {{treatment.price - treatment.paid_price}}
-                                        </td>
-                                        <td ng-show="treatment.id!==-1">
+                                                </td>
+                                                <td ng-show="treatment.id===-1" translate="windoctorApp.treatment.total"
+                                                    style="background-color: black;;color: white;">Total
+                                                </td>
+                                                <td ng-show="treatment.id!==-1">{{treatment.price}}</td>
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;">{{treatment.price}}
+                                                </td>
+                                                <td ng-show="treatment.id!==-1">{{treatment.paid_price}}</td>
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;">{{treatment.paid_price}}
+                                                </td>
+                                                <td style="background-color: darkgreen;;color: white;"
+                                                    ng-show="(treatment.price - treatment.paid_price)===0">
+                                                    {{treatment.price - treatment.paid_price}}
+                                                </td>
+                                                <td style="background-color: #ad2121;color: white;"
+                                                    ng-show="(treatment.price - treatment.paid_price)>0">
+                                                    {{treatment.price - treatment.paid_price}}
+                                                </td>
+                                                <td style="background-color: yellow;color: black;"
+                                                    ng-show="(treatment.price - treatment.paid_price)<0">
+                                                    {{treatment.price - treatment.paid_price}}
+                                                </td>
+                                                <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.eventReason.description }}"
@@ -267,52 +294,59 @@
                                 <span ng-show="treatment.eventReason.description.length <= 10">
                                     {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
                                 </span>
-                                            </td>
-                                        <td ng-show="treatment.id!==-1">
-                                <span ng-show="treatment.eventReason.categoryAct.name.length > 10"
+                                                </td>
+                                                <td ng-show="treatment.id!==-1">
+                                <span ng-show="treatment.elements.length > 15"
                                       data-toggle="tooltip"
-                                      tooltip="{{ treatment.eventReason.categoryAct.name }}"
+                                      tooltip="{{ treatment.elements }}"
                                       tooltip-placement="bottom-right">
-                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                    {{ treatment.elements | limitTo: 15 }}{{treatment.elements.length > 15 ? '...' : ''}}
                                 </span>
-                                <span ng-show="treatment.eventReason.categoryAct.name.length <= 10">
-                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                <span ng-show="treatment.elements.length <= 15">
+                                    {{ treatment.elements | limitTo: 15 }}{{treatment.elements.length > 15 ? '...' : ''}}
                                 </span>
-                                        </td>
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;"></td>
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;"></td>
-                                        <td ng-show="treatment.id!==-1">
-                                            <button ng-click="viewTreatmentDetail(treatment)"
-                                                    data-toggle="tooltip"
-                                                    tooltip="{{ 'entity.action.view' | translate }}"
-                                                    tooltip-class="eyeClass"
-                                                    tooltip-placement="bottom-left"
-                                                    class="btn btn-info btn-sm">
-                                                <span class="glyphicon glyphicon-eye-open"></span>
-                                            </button>
-                                            <button ng-click="editTreatment(treatment)"
-                                                    data-toggle="tooltip"
-                                                    tooltip="{{ 'entity.action.edit' | translate }}"
-                                                    tooltip-class="pencilClass"
-                                                    tooltip-placement="bottom-left"
-                                                    class="btn btn-primary btn-sm">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                        </td>
-                                        <td ng-show="treatment.id===-1"
-                                            style="background-color: black;;color: white;"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                                </td>
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;"></td>
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;"></td>
+                                                <td ng-show="treatment.id!==-1">
+                                                    <button ng-click="viewTreatmentDetail(treatment)" ng-show="false"
+                                                            data-toggle="tooltip"
+                                                            tooltip="{{ 'entity.action.view' | translate }}"
+                                                            tooltip-class="eyeClass"
+                                                            tooltip-placement="bottom-left"
+                                                            class="btn btn-info btn-sm">
+                                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                                    </button>
+                                                    <button ng-click="editTreatment(treatment)"
+                                                            data-toggle="tooltip"
+                                                            tooltip="{{ 'entity.action.edit' | translate }}"
+                                                            tooltip-class="pencilClass"
+                                                            tooltip-placement="bottom-left"
+                                                            class="btn btn-primary btn-sm">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                </td>
+                                                <td ng-show="treatment.id===-1"
+                                                    style="background-color: black;;color: white;"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div ng-show="displayAddEditViewPopup">
+                                    <ng-include
+                                        src="'scripts/app/entities/calendar/calendar-treatments-dialog.html'"></ng-include>
+                                </div>
                             </div>
                         </div>
-
-                        <div ng-show="displayAddEditViewPopup">
-                            <ng-include
-                                src="'scripts/app/entities/calendar/calendar-treatments-dialog.html'"></ng-include>
-                        </div>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <canvas id="myCanvas" height="380" width="305" ng-click="clickOnCanvas()"
+                                style="margin: 0;padding: 0;">
+                            <span>Your browser does not support the HTML5 canvas tag.</span></canvas>
                     </div>
                 </div>
 

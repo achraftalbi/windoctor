@@ -114,7 +114,8 @@
                                         <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
                                              style="max-width: 25%;max-height: 28%;" ng-if="event.user.picture"
                                              class="img-circle"/>
-                                        <strong>{{event.user.firstName}} {{event.user.lastName}}</strong>
+                                        <img class="userImageLittle img-circle" ng-if="!event.user.picture"></img>
+                                        <strong style="position: relative;top: 50%;transform: translateY(-50%);">{{event.user.firstName}} {{event.user.lastName}}</strong>
                                 </span>
                                 <span ng-show="account.currentUserPatient && account.id!==event.user.id"
                                       translate="windoctorApp.calendar.anonymous">Anonymous</span>

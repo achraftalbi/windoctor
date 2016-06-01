@@ -1519,7 +1519,7 @@ pre code {
         width: 970px; } }
 @media (min-width: 1200px) {
     .container {
-        width: 1170px; } }
+        width: 1270px; } }
 
 .container-fluid {
     margin-right: auto;
@@ -6114,6 +6114,29 @@ body {
     height: 497px;
     background: url("../images/WinDoctor.png") no-repeat center top;
     background-size: contain; }
+.userImage {
+    display: inline-block;
+    width: 150px;
+    height: 140px;
+    border: 0px;
+    background: url("../images/user-thumbnail.png") no-repeat center top;
+    background-size: contain; }
+
+.userImageLittle {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border: 0px;
+    background: url("../images/user-thumbnail.png") no-repeat center top;
+    background-size: contain; }
+.userImageVerryLittle {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 0px;
+    background: url("../images/user-thumbnail.png") no-repeat center top;
+    background-size: contain; }
+
 
 .pad {
     padding: 10px; }
