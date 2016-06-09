@@ -7,7 +7,8 @@
                 "createOrEditLabel": "Créer ou éditer un acte",
                 "displayAllPatientTreatments": "Tout les actes",
                 "displayPatientTreatmentsAppointment": "Actes courant",
-                "displayPatientTreatmentsVisit": "Actes courant"
+                "displayPatientTreatmentsVisit": "Actes courant",
+                "attachments": "Attachments"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",
             "updated": "Un acte avec l'heure {{ param }} a été mis à jour",

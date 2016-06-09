@@ -43,6 +43,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.elementsSelected =[];
             $scope.selectedElement = null;
             $scope.TO_RADIANS = Math.PI/180;
+
+
+            // Patient attachments
+            $scope.displayAllPatientAttachments=false;
         }
 
         // Display treatments Begin
@@ -117,6 +121,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             } else {
                 $scope.treatments = $scope.treatmentsAll;
             }
+            $scope.displayAllPatientAttachments=false;
         };
 
         $scope.loadFunds = function () {
@@ -265,6 +270,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayAllPatientTreatments = true;
             $scope.displayTreatments = true;
             $scope.displayAddEditViewPopup=false;
+            $scope.displayAllPatientAttachments=false;
             $scope.treatmentPage = 1;
             $scope.loadPageTreatment($scope.treatmentPage);
         }
@@ -272,6 +278,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayAllPatientTreatments = false;
             $scope.displayTreatments = true;
             $scope.displayAddEditViewPopup=false;
+            $scope.displayAllPatientAttachments=false;
             $scope.treatmentPage = 1;
             $scope.loadPageTreatment($scope.treatmentPage);
         }
@@ -333,6 +340,16 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.loadFunds();
             $scope.createSelectedElements();
             $scope.saveTreatmentOnGoing = false;
+            $scope.displayAllPatientAttachments=false;
+            if($scope.treatment.fund!==null && $scope.treatment.fund!==undefined
+                && $scope.treatment.fund.id!==null && $scope.treatment.fund.id!==undefined){
+                for(var i=0;i<$scope.funds.length;i++){
+                    if($scope.funds[i].id===$scope.treatment.fund.id){
+                        $scope.treatment.fund = $scope.funds[i];
+                        break;
+                    }
+                }
+            }
         };
         $scope.editTreatment = function (treatment) {
             $scope.treatment = treatment;
@@ -351,6 +368,16 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 var tabLength = split.length;
                 for(var i = 0;i<split.length;i++){
                     $scope.temporaryElements = (tabLength===1 || $scope.temporaryElements===null?'':$scope.temporaryElements +', ')+split[i];
+                }
+            }
+            $scope.displayAllPatientAttachments=false;
+            if($scope.treatment.fund!==null && $scope.treatment.fund!==undefined
+                && $scope.treatment.fund.id!==null && $scope.treatment.fund.id!==undefined){
+                for(var i=0;i<$scope.funds.length;i++){
+                    if($scope.funds[i].id===$scope.treatment.fund.id){
+                        $scope.treatment.fund = $scope.funds[i];
+                        break;
+                    }
                 }
             }
         };
@@ -493,6 +520,15 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
         $scope.saveTreatment = function () {
             $scope.constructElementBeforeSave($scope.treatment);
+            if($scope.treatment.fund!==null && $scope.treatment.fund!==undefined
+                && $scope.treatment.fund.id!==null && $scope.treatment.fund.id!==undefined){
+                for(var i=0;i<$scope.funds.length;i++){
+                    if($scope.funds[i].id===$scope.treatment.fund.id){
+                        $scope.treatment.fund = $scope.funds[i];
+                        break;
+                    }
+                }
+            }
             $scope.saveTreatmentOnGoing = true;
             if ($scope.treatment.id != null) {
                 $scope.treatment = Treatment.update($scope.treatment, onSaveTreatmentFinishedUpdate);
@@ -631,6 +667,15 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
                 Event_reason, Event, Patient,Attachment,Fund);
         };
+
+        // *********Treat all patient attachments *********//
+        $scope.displayAllAttachments = function () {
+            $scope.displayAllPatientTreatments = false;
+            $scope.displayTreatments = false;
+            $scope.displayAddEditViewPopup=false;
+            $scope.displayAllPatientAttachments=true;
+        }
+
 
         $scope.initTreatmentPage = function () {
             $scope.initVariables();

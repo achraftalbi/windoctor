@@ -4,11 +4,9 @@
         <div class="row" id="demo">
 
             <div>
-                <h2 class="text-center">{{ calendarTitle | translate }}</h2>
-
                 <div class="row">
 
-                    <div class="col-md-6 text-center">
+                    <div class="col-md-4 text-center">
                         <div class="btn-group">
 
                             <button
@@ -41,7 +39,13 @@
 
                     <br class="visible-xs visible-sm">
 
-                    <div class="col-md-6 text-center">
+                    <div class="col-md-4 text-center">
+                        <h2 class="text-center">{{ calendarTitle | translate }}</h2>
+                    </div>
+
+                    <br class="visible-xs visible-sm">
+
+                    <div class="col-md-4 text-center">
                         <div class="btn-group">
                             <label class="btn btn-primary" ng-model="calendarView" btn-radio="'year'"
                                    ><span

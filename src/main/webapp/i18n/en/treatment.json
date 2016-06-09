@@ -7,7 +7,8 @@
                 "createOrEditLabel": "Create or edit an act",
                 "displayAllPatientTreatments": "All acts",
                 "displayPatientTreatmentsAppointment": "Current acts",
-                "displayPatientTreatmentsVisit": "Current acts"
+                "displayPatientTreatmentsVisit": "Current acts",
+                "attachments": "Attachments"
             },
             "created": "A new act is created with time {{ param }}",
             "updated": "An act with time {{ param }} is updated ",

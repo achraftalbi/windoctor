@@ -80,6 +80,10 @@ public class TreatmentResource {
             return ResponseEntity.badRequest().header("Failure", "A new treatment cannot already have an ID").body(null);
         }
 
+        if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
+            treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
+        }
+
         // Mange funds with treatments Begin
         BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
         treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
@@ -110,6 +114,10 @@ public class TreatmentResource {
         log.debug("REST request to update Treatment : {}", treatment);
         if (treatment.getId() == null) {
             return create(treatment);
+        }
+
+        if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
+            treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
         }
 
         // Mange funds with treatments Begin

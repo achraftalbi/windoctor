@@ -185,6 +185,12 @@
                                           translate="windoctorApp.treatment.home.displayPatientTreatmentsAppointment">Current acts</span>
                         </button>
                     </div>
+                    <div class="form-group col-xs-6 col-md-3" ng-show="false">
+                        <button class="btn btn-primary" ng-click="displayAllAttachments()">
+                            <span class="fa fa-plus"></span> <span
+                            translate="windoctorApp.treatment.home.attachments">Attachments</span>
+                        </button>
+                    </div>
                     <div class="form-group col-xs-6 col-md-3">
                         <button class="btn btn-primary" ng-click="addNewTreatment()"
                                 ng-show="event!==null && event.id!==null">
@@ -208,6 +214,11 @@
                                 <h3 ng-show="displayAddEditViewPopup"
                                     translate="windoctorApp.treatment.home.createOrEditLabel"
                                     class="panel-title"></h3>
+                                <ul class="nav nav-tabs" ng-show="displayAllPatientAttachments">
+                                    <li class="active"><a href="#" data-toggle="tab">Primary 1</a></li>
+                                    <li><a href="#" data-toggle="tab">Primary 2</a></li>
+                                    <li><a href="#" data-toggle="tab">Primary 3</a></li>
+                                </ul>
                             </div>
                             <div class="panel-body">
                                 <div ng-show="displayTreatments">
@@ -339,6 +350,15 @@
                                 <div ng-show="displayAddEditViewPopup">
                                     <ng-include
                                         src="'scripts/app/entities/calendar/calendar-treatments-dialog.html'"></ng-include>
+                                </div>
+                                <div ng-show="displayAllPatientAttachments">
+                                    <div class="tab-content">
+                                        <div class="tab-pane fade in active" id="tab1primary">Primary 1</div>
+                                        <div class="tab-pane fade" id="tab2primary">Primary 2</div>
+                                        <div class="tab-pane fade" id="tab3primary">Primary 3</div>
+                                        <div class="tab-pane fade" id="tab4primary">Primary 4</div>
+                                        <div class="tab-pane fade" id="tab5primary">Primary 5</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
