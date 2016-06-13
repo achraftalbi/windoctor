@@ -5,6 +5,7 @@ angular.module('windoctorApp').expandProductController =
     function ($scope, $stateParams, Product, Category, Fund,Principal,Purchase,ParseLinks,$filter,Consumption) {
 
         $scope.fundContainEnoughMoney = true;
+        $scope.savePurchaseOnGoing = false;
         var onSaveFinished = function (result) {
             $scope.$emit('windoctorApp:productUpdate', result);
             $scope.product = result;
@@ -98,15 +99,13 @@ angular.module('windoctorApp').expandProductController =
                 function () {
                     $scope.product.price = $scope.product.price - (purchase.price*purchase.amount);
                     $scope.product.amount = $scope.product.amount - purchase.amount;
-                    for(var i= 0;$scope.funds.length;i++){
-                        if($scope.funds[i].id===purchase.purchase_fund.id){
-                            $scope.funds[i].amount = $scope.funds[i].amount+(purchase.price * purchase.amount);
-                            break;
+                    Fund.query(function (result, headers) {
+                            $scope.funds = result;
+                            $scope.clearPurchase();
+                            $scope.loadAllPurchases();
+                            $('#deletePurchaseConfirmation').modal('hide');
                         }
-                    }
-                    $scope.clearPurchase();
-                    $scope.loadAllPurchases();
-                    $('#deletePurchaseConfirmation').modal('hide');
+                    );
                 });
         };
 
@@ -153,15 +152,18 @@ angular.module('windoctorApp').expandProductController =
 
         var onSavePurchaseFinishedUpdate = function (result) {
             $scope.$emit('windoctorApp:purchaseUpdate', result);
-            $scope.editPurchaseField = false;
+            var fundPurchaseId = $scope.purchase.purchase_fund.id;
             $scope.funds=null;
             Fund.query(function (result, headers) {
                     $scope.funds = result;
                     for(var i= 0;$scope.funds.length;i++){
-                        if($scope.funds[i].id===$scope.purchase.purchase_fund.id){
+                        if($scope.funds[i].id===fundPurchaseId){
                             $scope.purchase.purchase_fund = $scope.funds[i];
+                            break;
                         }
                     }
+                    $scope.editPurchaseField = false;
+                    $scope.savePurchaseOnGoing = false;
                 }
             );
             $scope.product.price = $scope.product.price +
@@ -171,17 +173,37 @@ angular.module('windoctorApp').expandProductController =
 
         var onSavePurchaseFinished = function (result) {
             $scope.$emit('windoctorApp:purchaseUpdate', result);
-            $scope.addPurchaseField = false;
             $scope.pagePurchase = 1;
             $scope.loadAllPurchases();
             $scope.product.price = $scope.product.price + (result.price*result.amount);
             $scope.product.amount = $scope.product.amount + result.amount;
             $scope.purchase.purchase_fund.amount = $scope.purchase.purchase_fund.amount-($scope.purchase.price * $scope.purchase.amount);
+            var fundPurchaseId = $scope.purchase.purchase_fund.id;
+            $scope.funds=null;
+            Fund.query(function (result, headers) {
+                    $scope.funds = result;
+                    for(var i= 0;$scope.funds.length;i++){
+                        if($scope.funds[i].id===fundPurchaseId){
+                            $scope.purchase.purchase_fund = $scope.funds[i];
+                            break;
+                        }
+                    }
+                    $scope.addPurchaseField = false;
+                    $scope.savePurchaseOnGoing = false;
+                }
+            );
         };
 
         $scope.savePurchase = function () {
             $scope.purchase.relative_date = new Date($scope.dateValuePurchase);
             console.log(' has had a date change. $scope.dateValuePurchase ' + $scope.purchase.relative_date);
+            for(var i= 0;$scope.funds.length;i++){
+                if($scope.funds[i].id===$scope.purchase.purchase_fund.id){
+                    $scope.purchase.purchase_fund = $scope.funds[i];
+                    break;
+                }
+            }
+            $scope.savePurchaseOnGoing = true;
             if ($scope.purchase.id != null) {
                 Purchase.update($scope.purchase, onSavePurchaseFinishedUpdate);
             } else {

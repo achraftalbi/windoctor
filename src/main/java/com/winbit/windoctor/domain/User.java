@@ -13,10 +13,10 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import org.hibernate.annotations.Type;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,6 +88,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "picture")
     private byte[] picture;
 
+    @Min(value = 0)
+    @Max(value = 25000000)
+    @Column(name = "initial_balance", precision=10, scale=2, nullable = false)
+    private BigDecimal initial_balance;
+
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -154,6 +160,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Size(min = 0, max = 200)
     @Column(name = "PROFESSION", length = 200, nullable = true)
     private String profession;
+
+    public BigDecimal getInitial_balance() {
+        return initial_balance;
+    }
+
+    public void setInitial_balance(BigDecimal initial_balance) {
+        this.initial_balance = initial_balance;
+    }
 
     public String getAllergies() {
         return allergies;

@@ -75,6 +75,10 @@ public class PurchaseResource {
             return ResponseEntity.badRequest().header("Failure", "A new purchase cannot already have an ID").body(null);
         }
 
+        if(purchase.getPurchase_fund()!=null && purchase.getPurchase_fund().getId()!=null){
+            purchase.setPurchase_fund(fundRepository.findOne(purchase.getPurchase_fund().getId()));
+        }
+
         BigDecimal oldFundAmount = new BigDecimal(purchase.getPurchase_fund().getAmount().doubleValue());
         purchase.getPurchase_fund().setAmount(new BigDecimal(purchase.getPurchase_fund().getAmount().doubleValue() - (purchase.getAmount().doubleValue()*purchase.getPrice().doubleValue())));
         purchase.setPurchase_fund(fundRepository.save(purchase.getPurchase_fund()));
@@ -105,6 +109,9 @@ public class PurchaseResource {
         log.debug("REST request to update Purchase : {}", purchase);
         if (purchase.getId() == null) {
             return create(purchase);
+        }
+        if(purchase.getPurchase_fund()!=null && purchase.getPurchase_fund().getId()!=null){
+            purchase.setPurchase_fund(fundRepository.findOne(purchase.getPurchase_fund().getId()));
         }
 
         // Add the product amount to the old fund and decrease it from the current one.

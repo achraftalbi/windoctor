@@ -23,7 +23,7 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="fund_history in fund_historys">
-                        <td>{{fund_history.creation_date | date:'dd/MM/yyyy HH:mm:SS'}}</td>
+                        <td>{{fund_history.creation_date | date:'dd/MM/yyyy HH:mm:ss'}}</td>
                         <td>{{fund_history.created_by.firstName}} {{fund_history.created_by.lastName}}</td>
                         <td>{{fund_history.old_amount}}</td>
                         <td>{{fund_history.new_amount}}</td>

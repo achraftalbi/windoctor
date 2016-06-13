@@ -75,6 +75,10 @@ public class EntryResource {
             return ResponseEntity.badRequest().header("Failure", "A new entry cannot already have an ID").body(null);
         }
 
+        if(entry.getFund()!=null && entry.getFund().getId()!=null){
+            entry.setFund(fundRepository.findOne(entry.getFund().getId()));
+        }
+
         BigDecimal oldFundAmount = new BigDecimal(entry.getFund().getAmount().doubleValue());
         entry.getFund().setAmount(new BigDecimal(entry.getFund().getAmount().doubleValue() - (entry.getAmount().doubleValue()*entry.getPrice().doubleValue())));
         entry.setFund(fundRepository.save(entry.getFund()));
@@ -105,6 +109,10 @@ public class EntryResource {
         log.debug("REST request to update Entry : {}", entry);
         if (entry.getId() == null) {
             return create(entry);
+        }
+
+        if(entry.getFund()!=null && entry.getFund().getId()!=null){
+            entry.setFund(fundRepository.findOne(entry.getFund().getId()));
         }
 
         // Add the charge amount to the old fund and decrease it from the current one.

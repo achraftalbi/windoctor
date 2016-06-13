@@ -3,7 +3,7 @@
 
 angular.module('windoctorApp').expandChargeController =
     function ($scope, $stateParams, Charge, CategoryCharge, Fund,Principal,Entry,ParseLinks,$filter) {
-
+        $scope.saveEntryOnGoing = false;
         $scope.fundContainEnoughMoney = true;
         var onSaveFinished = function (result) {
             $scope.$emit('windoctorApp:chargeUpdate', result);
@@ -98,15 +98,13 @@ angular.module('windoctorApp').expandChargeController =
                 function () {
                     $scope.charge.price = $scope.charge.price - (entry.price*entry.amount);
                     $scope.charge.amount = $scope.charge.amount - entry.amount;
-                    for(var i= 0;$scope.funds.length;i++){
-                        if($scope.funds[i].id===entry.fund.id){
-                            $scope.funds[i].amount = $scope.funds[i].amount+(entry.price * entry.amount);
-                            break;
+                    Fund.query(function (result, headers) {
+                            $scope.funds = result;
+                            $scope.clearEntry();
+                            $scope.loadAllEntrys();
+                            $('#deleteEntryConfirmation').modal('hide');
                         }
-                    }
-                    $scope.clearEntry();
-                    $scope.loadAllEntrys();
-                    $('#deleteEntryConfirmation').modal('hide');
+                    );
                 });
         };
 
@@ -153,7 +151,6 @@ angular.module('windoctorApp').expandChargeController =
 
         var onSaveEntryFinishedUpdate = function (result) {
             $scope.$emit('windoctorApp:entryUpdate', result);
-            $scope.editEntryField = false;
             var fundEntryId = $scope.entry.fund.id;
             $scope.funds=null;
             Fund.query(function (result, headers) {
@@ -164,6 +161,8 @@ angular.module('windoctorApp').expandChargeController =
                             break;
                         }
                     }
+                    $scope.editEntryField = false;
+                    $scope.saveEntryOnGoing = false;
                 }
             );
             $scope.charge.price = $scope.charge.price +
@@ -173,17 +172,37 @@ angular.module('windoctorApp').expandChargeController =
 
         var onSaveEntryFinished = function (result) {
             $scope.$emit('windoctorApp:entryUpdate', result);
-            $scope.addEntryField = false;
             $scope.pageEntry = 1;
             $scope.loadAllEntrys();
             $scope.charge.price = $scope.charge.price + (result.price*result.amount);
             $scope.charge.amount = $scope.charge.amount + result.amount;
             $scope.entry.fund.amount = $scope.entry.fund.amount-($scope.entry.price * $scope.entry.amount);
+            var fundEntryId = $scope.entry.fund.id;
+            $scope.funds=null;
+            Fund.query(function (result, headers) {
+                    $scope.funds = result;
+                    for(var i= 0;$scope.funds.length;i++){
+                        if($scope.funds[i].id===fundEntryId){
+                            $scope.entry.fund = $scope.funds[i];
+                            break;
+                        }
+                    }
+                    $scope.addEntryField = false;
+                    $scope.saveEntryOnGoing = false;
+                }
+            );
         };
 
         $scope.saveEntry = function () {
             $scope.entry.relative_date = new Date($scope.dateValueEntry);
             console.log(' has had a date change. $scope.dateValueEntry ' + $scope.entry.relative_date);
+            for(var i= 0;$scope.funds.length;i++){
+                if($scope.funds[i].id===$scope.entry.fund.id){
+                    $scope.entry.fund = $scope.funds[i];
+                    break;
+                }
+            }
+            $scope.saveEntryOnGoing = true;
             if ($scope.entry.id != null) {
                 Entry.update($scope.entry, onSaveEntryFinishedUpdate);
             } else {
