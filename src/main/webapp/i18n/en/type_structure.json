@@ -1,0 +1,23 @@
+{
+    "windoctorApp": {
+        "type_structure" : {
+            "home": {
+                "title": "Type_structures",
+                "createLabel": "Create a new Type_structure",
+                "createOrEditLabel": "Create or edit a Type_structure"
+            },
+            "created": "A new Type_structure is created with identifier {{ param }}",
+            "updated": "A Type_structure is updated with identifier {{ param }}",
+            "deleted": "A Type_structure is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Type_structure {{ id }}?"
+            },
+            "detail": {
+                "title": "Type_structure"
+            },
+            "description_en": "Description_en",
+            "description_fr": "Description_fr",
+            "structure": "Structure"
+        }
+    }
+}

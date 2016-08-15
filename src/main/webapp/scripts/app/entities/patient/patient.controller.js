@@ -3,7 +3,7 @@
 angular.module('windoctorApp')
     .controller('PatientController', function ($scope,$rootScope, Patient, PatientSearch, $filter,
                                                Event_reason,ParseLinks,$stateParams, Treatment, TreatmentSearch,
-                                               Attachment,Fund, Doctor,LANGUAGES) {
+                                               Attachment,Fund, Doctor,LANGUAGES,Principal) {
         $scope.patients = [];
         $scope.page = 1;
         $scope.searchCalled = false;
