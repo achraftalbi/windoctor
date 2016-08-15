@@ -46,6 +46,7 @@
                 "charge": "Charges",
                 "entry": "Entry",
                 "internalManagement": "Internal management",
+                "type_structure": "Type_structure",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

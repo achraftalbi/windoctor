@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -135,7 +136,10 @@ public class UserService {
         Authority authority = authorityRepository.findOne("ROLE_PATIENT");
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(patientCreated.getPassword());
+        BigDecimal patientsNumber = userRepository.findPatientsNumber("ROLE_PATIENT",SecurityUtils.getCurrerntStructure());
+        log.info("patientsNumber "+patientsNumber);
         // new user gets initially a generated password
+
         patient.setLogin(patientCreated.getLogin());
         patient.setPassword(encryptedPassword);
         patient.setFirstName(patientCreated.getFirstName());
@@ -146,6 +150,9 @@ public class UserService {
         patient.setMutualAssurance(patientCreated.getMutualAssurance());
         patient.setProfession(patientCreated.getProfession());
         patient.setFacebook(patientCreated.getFacebook());
+        patient.setNumber(new BigDecimal(patientsNumber==null?0+1:patientsNumber.intValue()+1));
+
+        patient.setInitial_balance(new BigDecimal(0l));
         int phoneNumberSize = patientCreated.getPhoneNumber().length();
         patient.setPhoneNumber(patientCreated.getPhoneNumber()==null?patientCreated.getPhoneNumber()
             :patientCreated.getPhoneNumber().substring(5,phoneNumberSize));

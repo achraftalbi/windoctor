@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,8 +31,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneById(Long id);
 
-    @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.firstName, u.lastName asc")
+    @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.number asc")
     Page<User> findAll(String role, Long id, Pageable var1);
+
+    @Query("select count(u) from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.firstName, u.lastName asc")
+    BigDecimal findPatientsNumber(String role, Long structureId);
 
     @Query("select u from User u join u.authorities a where a.name= ?1")
     Page<User> findAll(String role, Pageable var1);

@@ -2,7 +2,7 @@
     <div>
         <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
             <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form" novalidate show-validation>
-                <h2> <span translate="global.menu.entities.benefits">Patient chart</span>
+                <h2><span translate="global.menu.entities.benefits">Patient chart</span>
                     {{patient.firstName}} {{patient.lastName}}</h2>
                 <jh-alert></jh-alert>
                 <div class="container">
@@ -12,7 +12,7 @@
                                 <span translate="windoctorApp.treatment.firstDate">First date</span>
                                 <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
                                        date-change="changeFirstDate" readonly name="firstDate"
-                                       ng-model="firstDate" >
+                                       ng-model="firstDate">
                                 <span class="fa fa-calendar"/>
                             </div>
                         </div>
@@ -21,14 +21,14 @@
                                 <span translate="windoctorApp.treatment.lastDate">Last date</span>
                                 <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
                                        date-change="changeLastDate" readonly name="lastDate"
-                                       ng-model="lastDate" >
+                                       ng-model="lastDate">
                                 <span class="fa fa-calendar"/>
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-3">
                             <div>
                                 <span translate="windoctorApp.treatment.doctor"
-                                       for="field_doctor">doctor</span>
+                                      for="field_doctor">doctor</span>
                                 <select class="form-control" id="field_doctorBenefit" name="doctorBenefit"
                                         ng-model="doctorBenefit"
                                         ng-options="doctor as doctor.firstName +' '+ doctor.lastName for doctor in doctors track by doctor.id">
@@ -47,11 +47,13 @@
                     </div>
                 </div>
 
-                <div class="table-responsive" ng-show="treatments!==null && treatments!==undefined && treatments.length>0">
+                <div class="table-responsive"
+                     ng-show="treatments!==null && treatments!==undefined && treatments.length>0">
                     <table class="table table-striped">
                         <thead>
                         <tr>
                             <th translate="windoctorApp.treatment.treatment_date">Date</th>
+                            <th translate="windoctorApp.patient.patientName">Patient name</th>
                             <th translate="windoctorApp.treatment.description">Description</th>
                             <th translate="windoctorApp.treatment.price">Price</th>
                             <th translate="windoctorApp.treatment.paid_price">Paid price</th>
@@ -62,7 +64,20 @@
                         </thead>
                         <tbody>
                         <tr ng-repeat="treatment in treatments">
-                            <td ng-show="treatment.id!==-1">{{treatment.treatment_date | date:'yyyy-MM-dd HH:mm' : '+0000'}}</td>
+                            <td ng-show="treatment.id!==-1">{{treatment.treatment_date | date:'yyyy-MM-dd HH:mm' :
+                                '+0000'}}
+                            </td>
+                            <td ng-show="treatment.id===-1"
+                                style="background-color: black;;color: white;"></td>
+                            <td ng-show="treatment.id!==-1">
+                                <span>
+                                    <img data-ng-src="{{'data:image/*;base64,' + treatment.event.user.picture}}"
+                                         style="max-height: 30px;" ng-if="treatment.event.user.picture"/>
+                                    <img class="userImageVerryLittle" ng-if="!treatment.event.user.picture"></img>
+                                    <strong style="position: relative;top: 50%;transform: translateY(-50%);">{{treatment.event.user.firstName}}
+                                        {{treatment.event.user.lastName}}</strong>
+                                </span>
+                            </td>
                             <td ng-show="treatment.id===-1"
                                 style="background-color: black;;color: white;"></td>
                             <td ng-show="treatment.id!==-1">
@@ -77,13 +92,16 @@
                                 </span>
                             </td>
                             <td ng-show="treatment.id===-1" translate="windoctorApp.treatment.total"
-                                style="background-color: black;;color: white;">Total</td>
+                                style="background-color: black;;color: white;">Total
+                            </td>
                             <td ng-show="treatment.id!==-1">{{treatment.price}}</td>
                             <td ng-show="treatment.id===-1"
-                                style="background-color: black;;color: white;">{{treatment.price}}</td>
+                                style="background-color: black;;color: white;">{{treatment.price}}
+                            </td>
                             <td ng-show="treatment.id!==-1">{{treatment.paid_price}}</td>
                             <td ng-show="treatment.id===-1"
-                                style="background-color: black;;color: white;">{{treatment.paid_price}}</td>
+                                style="background-color: black;;color: white;">{{treatment.paid_price}}
+                            </td>
                             <td style="background-color: darkgreen;;color: white;"
                                 ng-show="(treatment.price - treatment.paid_price)===0">
                                 {{treatment.price - treatment.paid_price}}
@@ -138,7 +156,8 @@
                                 <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
                                 <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
                                 <li class="active"><a>{{page}}</a></li>
-                                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
+                                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a>
+                                </li>
                                 <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a>
                                 </li>
                                 <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>

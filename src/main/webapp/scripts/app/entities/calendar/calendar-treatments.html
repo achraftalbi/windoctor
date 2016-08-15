@@ -36,6 +36,8 @@
                                 <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
                                      style="max-width: 100%;" ng-if="event.user.picture"/>
                                 <span class="userImage img-responsive img-rounded" ng-if="!event.user.picture"></span>
+                                <strong style="font-size: 20px">{{event.user.number}} - {{event.user.firstName}} {{event.user.lastName}}
+                                </strong>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -46,11 +48,10 @@
                                             <tbody>
                                             <tr>
                                                 <td>
-                                                    <strong
-                                                        translate="windoctorApp.patient.firstName">FirstName</strong>
+                                                    <strong translate="windoctorApp.patient.firstName">FirstName</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.firstName}}</span>
+                                                    <strong class="form-control-static" style="color: blue">{{event.user.firstName}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -58,16 +59,15 @@
                                                     <strong translate="windoctorApp.patient.diseases">Diseases</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.diseases}}</span>
+                                                    <strong class="form-control-static" style="color: red">{{event.user.diseases}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <strong translate="windoctorApp.patient.birthDate">Birth
-                                                        date</strong>
+                                                    <strong translate="windoctorApp.patient.mutualAssurance">Mutual assurance</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.birthDate | date:'yyyy-MM-dd' : '+0000'}}</span>
+                                                    <strong class="form-control-static" style="color: green">{{event.user.mutualAssurance}}</strong>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -83,7 +83,7 @@
                                                     <strong translate="windoctorApp.patient.lastName">LastName</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.lastName}}</span>
+                                                    <strong class="form-control-static" style="color: blue">{{event.user.lastName}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -92,16 +92,16 @@
                                                         translate="windoctorApp.patient.allergies">allergies</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.allergies}}</span>
+                                                    <strong class="form-control-static" style="color: red">{{event.user.allergies}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>
-                                                    <strong
-                                                        translate="windoctorApp.patient.profession">Profession</strong>
+                                                    <strong translate="windoctorApp.patient.birthDate">Birth
+                                                        date</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.profession}}</span>
+                                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.birthDate | date:'yyyy-MM-dd' : '+0000'}}</strong>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -118,12 +118,21 @@
                                             <tbody>
                                             <tr>
                                                 <td>
+                                                    <strong
+                                                        translate="windoctorApp.patient.profession">Profession</strong>
+                                                </td>
+                                                <td>
+                                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.profession}}</strong>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
                                                     <strong translate="windoctorApp.patient.phoneNumber">Phone
                                                         number</strong>
                                                 </td>
                                                 <td>
-                                                    <span
-                                                        class="form-control-static">00212{{event.user.phoneNumber}}</span>
+                                                    <strong
+                                                        class="form-control-static" style="color: dodgerblue">00212{{event.user.phoneNumber}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -131,7 +140,7 @@
                                                     <strong translate="windoctorApp.patient.login">Login</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.login}}</span>
+                                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.login}}</strong>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -147,7 +156,7 @@
                                                     <strong translate="windoctorApp.patient.email">Email</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.email}}</span>
+                                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.email}}</strong>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -155,7 +164,7 @@
                                                     <strong translate="windoctorApp.patient.facebook">facebook</strong>
                                                 </td>
                                                 <td>
-                                                    <span class="form-control-static">{{event.user.facebook}}</span>
+                                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.facebook}}</strong>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -200,7 +209,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-xs-9">
+                    <div ng-class="firstClassTypeStructure">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
                                 <h3 ng-show="displayTreatments && displayAllPatientTreatments"
@@ -287,7 +296,7 @@
                                                     ng-show="(treatment.price - treatment.paid_price)===0">
                                                     {{treatment.price - treatment.paid_price}}
                                                 </td>
-                                                <td style="background-color: #ad2121;color: white;"
+                                                <td style="background-color: red;color: white;"
                                                     ng-show="(treatment.price - treatment.paid_price)>0">
                                                     {{treatment.price - treatment.paid_price}}
                                                 </td>
@@ -363,7 +372,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group col-sm-3">
+                    <div ng-class="segondClassTypeStructure">
                         <canvas id="myCanvas" height="380" width="305" ng-click="clickOnCanvas()"
                                 style="margin: 0;padding: 0;">
                             <span>Your browser does not support the HTML5 canvas tag.</span></canvas>

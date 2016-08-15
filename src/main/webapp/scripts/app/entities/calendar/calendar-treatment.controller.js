@@ -47,7 +47,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
             // Patient attachments
             $scope.displayAllPatientAttachments=false;
-        }
+        };
 
         // Display treatments Begin
         $scope.loadAllTreatmentsFromServer = function () {

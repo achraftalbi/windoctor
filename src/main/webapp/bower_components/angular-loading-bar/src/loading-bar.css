@@ -67,8 +67,8 @@
 }
 
 #loading-bar-spinner .spinner-icon {
-  width: 14px;
-  height: 14px;
+  width: 30px;
+  height: 30px;
 
   border:  solid 2px transparent;
   border-top-color:  #29d;

@@ -40,12 +40,22 @@ angular.module('windoctorApp')
                 $scope.categoryActs = CategoryAct.query();
             });
         };
+
+        $scope.setClassTypeStructure = function(){
+            $scope.typeStructureId = $scope.account.typeStructureId;
+            $scope.firstClassTypeStructure = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
+                'form-group col-xs-9':'form-group col-xs-12';
+            $scope.segondClassTypeStructure = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
+                'form-group col-xs-3':'form-group putHiddenCss';
+        };
+
         Principal.identity(true).then(function (account) {
             $scope.account = account;
             console.log('$scope.account.currentUserPatient ' + $scope.account.currentUserPatient);
             console.log('$scope.account.maxEventsReached ' + $scope.account.maxEventsReached);
             $scope.userCanAddRequest = $scope.account.currentUserPatient && !$scope.account.maxEventsReached;
             $scope.userNotPatient = !$scope.account.currentUserPatient;
+            $scope.setClassTypeStructure();
         });
 
         $("a").tooltip();

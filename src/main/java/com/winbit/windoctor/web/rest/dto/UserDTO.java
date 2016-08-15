@@ -75,6 +75,12 @@ public class UserDTO {
 
     private String structureName;
 
+    private Long typeStructureId;
+
+    public Long getTypeStructureId() {
+        return typeStructureId;
+    }
+
     public String getStructureName() {
         return structureName;
     }
@@ -125,6 +131,7 @@ public class UserDTO {
         this.currentUserPatient = currentUserPatient;
         this.maxEventsReached = maxEventsReached;
         this.structureName = structure.getName();
+        this.typeStructureId = structure.getType_structure()==null?null:structure.getType_structure().getId();
     }
 
     public Long getId() {

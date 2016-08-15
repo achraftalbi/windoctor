@@ -19,6 +19,20 @@ angular.module('windoctorApp')
                 console.log("username "+$rootScope.username);
             });
         };
+        $scope.setClassTypeStructure = function(){
+            $scope.typeStructureId = $scope.account.typeStructureId;
+            $scope.firstClassTypeStructure = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
+                'form-group col-xs-9':'form-group col-xs-12';
+            $scope.segondClassTypeStructure = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
+                'form-group col-xs-3':'form-group putHiddenCss';
+        };
+
+        Principal.identity().then(function (account) {
+            $scope.account = account;
+            $scope.setClassTypeStructure();
+        });
+
+
         $scope.loadAll();
 
         $scope.delete = function (id) {

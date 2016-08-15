@@ -16,6 +16,7 @@
                            ng-change="reasonValueChanged()"
                            ng-show="!displayTreatmentView" name="eventReason"
                            title="{{ 'entity.action.choose' | translate }}" ng-disabled="disabled"
+                           style="font-size: 20px"
                     >
                     <ui-select-match placeholder="{{ 'entity.action.select' | translate }}">
                         {{$select.selected.description}}
@@ -218,9 +219,9 @@
         <div class="row">
             <div class="form-group col-xs-6 col-md-3">
                 <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
-                <input type="text" class="form-control" name="description" id="field_description"
+                <textarea class="form-control" name="description" id="field_description" rows="3"
                        ng-model="treatment.description" ng-show="!displayTreatmentView"
-                       ng-maxlength="1000">
+                       ng-maxlength="1000"/>
                 <span ng-show="displayTreatmentView" class="form-control-static">{{treatment.description}}</span>
 
                 <div ng-show="editForm.description.$invalid">

@@ -12,9 +12,11 @@
             <div class="col-md-8">
                 <form name="searchForm" class="form-inline">
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'global.wordToSearch' | translate }}">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery"
+                               placeholder="{{ 'global.wordToSearch' | translate }}">
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search</span>
+                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span>
+                        <span translate="entity.action.search">Search</span>
                     </button>
                 </form>
             </div>
@@ -31,14 +33,17 @@
                         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p translate="windoctorApp.patient.delete.question" translate-values="{id: '{{patient.id}}'}">Are you sure you want to delete this Patient?</p>
+                        <p translate="windoctorApp.patient.delete.question" translate-values="{id: '{{patient.id}}'}">
+                            Are you sure you want to delete this Patient?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                            translate="entity.action.cancel">Cancel</span>
                         </button>
                         <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
+                            translate="entity.action.delete">Delete</span>
                         </button>
                     </div>
                 </form>
@@ -49,42 +54,43 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th translate="windoctorApp.patient.picture">Picture</th>
-                    <th translate="windoctorApp.patient.firstName">FirstName</th>
-                    <th translate="windoctorApp.patient.lastName">LastName</th>
-                    <th translate="windoctorApp.patient.login">Login</th>
-                    <th translate="windoctorApp.patient.email">Email</th>
-                    <th translate="windoctorApp.patient.patientChart">Patient chart</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th translate="windoctorApp.patient.patientName">Patient name</th>
+                <th translate="windoctorApp.patient.fileNumber">File number</th>
+                <th translate="windoctorApp.patient.login">Login</th>
+                <th translate="windoctorApp.patient.email">Email</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="patient in patients">
-                    <td>
-                        <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}" style="max-height: 30px;" ng-if="patient.picture"/>
-                        <img class="userImageVerryLittle" ng-if="!patient.picture"></img>
-                    </td>
-                    <td><strong>{{patient.firstName}}</strong></td>
-                    <td><strong>{{patient.lastName}}</strong></td>
-                    <td>{{patient.login}}</td>
-                    <td>{{patient.email}}</td>
-                    <td><a translate="windoctorApp.patient.chart"
-                           ng-click="displayPatientChartPage(patient)"
-                        /></td>
-                    <td>
-                        <button type="submit"
-                                ui-sref="patient.edit({id:patient.id})"
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="delete(patient.id)"
-                                class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
-                        </button>
-                    </td>
-                </tr>
+            <tr ng-repeat="patient in patients">
+                <td ng-click="displayPatientChartPage(patient)" style="cursor: pointer;">
+                        <span>
+                            <img data-ng-src="{{'data:image/*;base64,' + patient.picture}}"
+                                 style="max-height: 30px;" ng-if="patient.picture"/>
+                            <img class="userImageVerryLittle" ng-if="!patient.picture"></img>
+                            <strong style="position: relative;top: 50%;transform: translateY(-50%);">{{patient.firstName}}
+                                            {{patient.lastName}}</strong>
+                        </span>
+                </td>
+                <td>{{patient.number}}</td>
+                <td>{{patient.login}}</td>
+                <td>{{patient.email}}</td>
+                <td>
+                    <button type="submit"
+                            ui-sref="patient.edit({id:patient.id})"
+                            class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
+                        translate="entity.action.edit"> Edit</span>
+                    </button>
+                    <button type="submit"
+                            ng-click="delete(patient.id)"
+                            class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span
+                        translate="entity.action.delete"> Delete</span>
+                    </button>
+                </td>
+            </tr>
             </tbody>
             <nav>
                 <ul class="pagination" ng-show="links['prev'] || links['next']">

@@ -161,6 +161,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "PROFESSION", length = 200, nullable = true)
     private String profession;
 
+    @Min(value = 1)
+    @Max(value = 250000000)
+    @Column(name = "number", precision=10, scale=2, nullable = false)
+    private BigDecimal number;
+
+    public BigDecimal getNumber() {
+        return number;
+    }
+
+    public void setNumber(BigDecimal number) {
+        this.number = number;
+    }
+
     public BigDecimal getInitial_balance() {
         return initial_balance;
     }

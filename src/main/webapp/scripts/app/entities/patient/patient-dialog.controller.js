@@ -15,6 +15,10 @@ angular.module('windoctorApp').controller('PatientDialogController',
             $scope.newPatient = false;
             $scope.test=null;
             $scope.captureAnImageScreen = false;
+            $scope.initBirthDate = function () {
+                $scope.maxDateValue = moment(new Date()).utc();
+                $scope.dateValue = moment($scope.patient.birthDate).utc();
+            };
             $scope.load = function (id) {
                 if($stateParams.id !== null && $stateParams.id !==undefined){
                     Patient.get({id: $stateParams.id}, function (result) {
@@ -22,6 +26,7 @@ angular.module('windoctorApp').controller('PatientDialogController',
                         $scope.passwordNew=$scope.patient.id===null||$scope.patient.id===undefined?null:'wrongpassword';
                         $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
                         $scope.newPatient = true;
+                        $scope.initBirthDate();
                     });
                 }else if($scope.patient.id===null||$scope.patient.id===undefined){
                     $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
@@ -29,10 +34,6 @@ angular.module('windoctorApp').controller('PatientDialogController',
                 }
             };
             $scope.load();
-            $scope.initBirthDate = function () {
-                $scope.maxDateValue = moment(new Date()).utc();
-            };
-            $scope.initBirthDate();
 
             var onSaveFinished = function (result) {
                 $scope.$emit('windoctorApp:patientUpdate', result);
