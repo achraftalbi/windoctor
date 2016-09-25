@@ -27,7 +27,7 @@
                        id="startDate" required ng-model="startDateValue" type="text" readonly/>
                 <div  data-selected="pickerdate1" />
                 <div ng-show="editFormCalendarDialog.startDateField.$invalid">
-                    <p class="help-block"
+                    <p class="help-block" style="color:red"
                        ng-show="editFormCalendarDialog.startDateField.$error.required" translate="entity.validation.required">
                         This field is required.
                     </p>
@@ -40,7 +40,7 @@
                        id="endDate" required ng-model="endDateValue" type="text" readonly/>
                 <div data-selected="pickerdate2" />
                 <div ng-show="editFormCalendarDialog.endDateField.$invalid">
-                    <p class="help-block"
+                    <p class="help-block" style="color:red"
                        ng-show="editFormCalendarDialog.endDateField.$error.required" translate="entity.validation.required">
                         This field is required.
                     </p>
@@ -68,7 +68,7 @@
 
             <div ng-show="editFormCalendarDialog.description.$invalid">
 
-                <p class="help-block"
+                <p class="help-block" style="color:red"
                    ng-show="editFormCalendarDialog.description.$error.maxlength" translate="entity.validation.maxlength"
                    translate-value-max="1000">
                     This field cannot be longer than 1000 characters.
@@ -99,7 +99,7 @@
                         </div>
                     </div>
                     <div ng-show="editFormCalendarDialog.patient.$invalid">
-                        <p class="help-block"
+                        <p class="help-block" style="color:red"
                            ng-show="editFormCalendarDialog.patient.$error.required" translate="entity.validation.required">
                             This field is required.
                         </p>
@@ -113,7 +113,7 @@
     <div ng-show="showListPatients" style="padding: 15px;">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Choise patient</h3>
+                <h3 class="panel-title" translate="windoctorApp.patient.choosePatient">Choise patient</h3>
             </div>
             <div class="panel-body">
                 <div class="container">
@@ -128,13 +128,19 @@
                                                id="searchPatientDialogText" placeholder="{{ 'global.wordToSearch' | translate }}">
                                     </div>
                                     <div class="form-group col-xs-6 col-sm-3">
-                                        <ul class="btn btn-info"">
+                                        <ul class="btn btn-info">
                                             <li ng-click="searchPatient()">
                                                 <span class="glyphicon glyphicon-search">  <span translate="entity.action.search">Search</span></span>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="form-group col-xs-6 col-sm-3">
+                                        <button type="submit"
+                                                ng-click="addNewPatient()"
+                                                class="btn btn-primary" style="cursor: pointer; cursor: hand;">
+                                            <span class="fa fa-plus" translate="windoctorApp.patient.home.createLabel">Create a new patient</span>&nbsp;<span
+                                            ></span>
+                                        </button>
                                     </div>
                                 </div>
                                 </form>
@@ -192,7 +198,10 @@
             </div>
         </div>
     </div>
-
+    <div ng-show="addNewPatientFlag">
+        <ng-include
+            src="'scripts/app/entities/calendar/calendar-dialog-add-patient.html'"></ng-include>
+    </div>
     <div class="modal-footer">
         <button  class="btn btn-default" data-dismiss="modal" ng-click="clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span

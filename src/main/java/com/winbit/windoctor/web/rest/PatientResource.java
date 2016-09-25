@@ -59,28 +59,26 @@ public class PatientResource {
     public ResponseEntity<?> create(@Valid @RequestBody PatientDTO patient) throws URISyntaxException {
         log.debug("REST request to save Patient : {}", patient);
         if(patient.getEmail()==null || patient.getEmail().length()==0){
-            return userRepository.findOneByLogin(patient.getLogin())
-                .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
-                .orElseGet(() -> {
                             User user = userService.createPatientInformation(patient);
                             userSearchRepository.save(user);
 
 
-                            return new ResponseEntity<>(HttpStatus.CREATED);
-                        });
+                            return new ResponseEntity<>(user,HttpStatus.CREATED);
         }else{
-            return userRepository.findOneByLogin(patient.getLogin())
-                .map(user -> new ResponseEntity<>(ErrorCodes.User.LOGIN_ALREADY_USED, HttpStatus.BAD_REQUEST))
-                .orElseGet(() -> userRepository.findOneByEmailAndStructure(patient.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
-                        .map(user -> new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED, HttpStatus.BAD_REQUEST))
+            ResponseEntity<?> responseEntity;
+            responseEntity = userRepository.findOneByEmailAndStructure(patient.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()))
+                        .map(user -> new ResponseEntity<>(user, HttpStatus.BAD_REQUEST))
                         .orElseGet(() -> {
                             User user = userService.createPatientInformation(patient);
                             userSearchRepository.save(user);
 
-
-                            return new ResponseEntity<>(HttpStatus.CREATED);
-                        })
-                );
+                            return new ResponseEntity<>(user,HttpStatus.CREATED);
+                        });
+            if(responseEntity!=null && HttpStatus.BAD_REQUEST.getReasonPhrase().
+                                            equals(responseEntity.getStatusCode().getReasonPhrase())){
+                return new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED,HttpStatus.BAD_REQUEST);
+            }
+            return responseEntity;
         }
     }
 
@@ -93,11 +91,18 @@ public class PatientResource {
     @Timed
     public ResponseEntity<?> update(@Valid @RequestBody PatientDTO patient) throws URISyntaxException {
         log.debug("REST request to update Patient : {}", patient);
-        //TODO - mbf 27092015 - manage exception !
-        User user = userService.updatePatientInformation(patient);
-        userSearchRepository.save(user);
+        Optional<User>  patientFounded=null;
+        if(patient.getEmail()!=null && patient.getEmail().length()>0){
+            patientFounded = userRepository.findOneByEmailAndStructure(patient.getEmail(), structureRepository.findOneById(SecurityUtils.getCurrerntStructure()));
+        }
+        if(patientFounded!=null && patientFounded.isPresent() && !patientFounded.get().getId().equals(patient.getId())){
+            return new ResponseEntity<>(ErrorCodes.User.EMAIL_ALREADY_USED,HttpStatus.BAD_REQUEST);
+        }else {
+            User user = userService.updatePatientInformation(patient);
+            userSearchRepository.save(user);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
     }
 
     /**

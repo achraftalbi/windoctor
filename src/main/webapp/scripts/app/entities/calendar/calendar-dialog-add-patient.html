@@ -1,0 +1,112 @@
+<div >
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 translate="windoctorApp.patient.home.createOrEditLabel" class="panel-title"></h3>
+        </div>
+        <div class="panel-body">
+            <jh-alert></jh-alert>
+            <div>
+                <div class="row" style="padding: 15px;padding-top:0px;padding-bottom:0px;">
+                    <form name="editFoAddPatient" role="form" novalidate show-validation>
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group col-xs-6">
+                                            <label translate="windoctorApp.patient.firstName" for="field_firstName">FirstName</label>
+                                            <input type="text" class="form-control" name="firstName" id="field_firstName"
+                                                   ng-model="newPatient.firstName" required
+                                                   ng-maxlength="50">
+
+                                            <div ng-show="editFoAddPatient.firstName.$invalid" style="color:red">
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.firstName.$error.required" translate="entity.validation.required" style="color:red">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.firstName.$error.maxlength" translate="entity.validation.maxlength"
+                                                   translate-value-max="50" style="color:red">
+                                                    This field cannot be longer than 50 characters.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-6">
+                                            <label translate="windoctorApp.patient.lastName" for="field_lastName">LastName</label>
+                                            <input type="text" class="form-control" name="lastName" id="field_lastName"
+                                                   ng-model="newPatient.lastName" required
+                                                   ng-maxlength="50">
+
+                                            <div ng-show="editFoAddPatient.lastName.$invalid" style="color:red">
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.lastName.$error.required" translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.lastName.$error.maxlength" translate="entity.validation.maxlength"
+                                                   translate-value-max="50">
+                                                    This field cannot be longer than 50 characters.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-xs-6">
+                                            <label translate="windoctorApp.patient.phoneNumber" for="field_phoneNumber">Phone number</label><span class="fa fa-phone"/>
+                                            <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                                                       ng-model="newPatient.phoneNumber"
+                                                       required ng-minlength="14" ng-maxlength="14" ng-pattern="/^00212[0-9]*$/">
+                                            <div ng-show="editFoAddPatient.phoneNumber.$invalid" style="color:red">
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.phoneNumber.$error.required" translate="entity.validation.required">
+                                                    This field is required.
+                                                </p>
+
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.phoneNumber.$error.minlength" translate="entity.validation.minlength"
+                                                   translate-value-min="14">
+                                                    This field is required to be at least 14 characters.
+                                                </p>
+
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.phoneNumber.$error.maxlength" translate="entity.validation.maxlength"
+                                                   translate-value-max="14">
+                                                    This field cannot be longer than 14 characters.
+                                                </p>
+
+                                                <p class="help-block" style="color:red"
+                                                   ng-show="editFoAddPatient.phoneNumber.$error.pattern" translate="windoctorApp.patient.phoneNumberPatternError"
+                                                   translate-value-pattern="00212622334455">
+                                                    The phone number should follow the example : "00212622334455".
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-xs-6">
+                                            <button  type="submit"
+                                                     ng-click="cancelAddPatient()" style="margin-top:20px;"
+                                                     class="btn btn-danger" style="cursor: pointer; cursor: hand;">
+                                                <span class="fa fa-minus" translate="entity.action.cancel">Cancel</span>&nbsp;<span
+                                                ></span>
+                                            </button>
+                                            <button type="button" ng-click="saveNewPatient()" style="margin-top:20px;"
+                                                    ng-disabled="editFoAddPatient.firstName.$invalid || editFoAddPatient.lastName.$invalid
+                                    || editFoAddPatient.phoneNumber.$invalid"
+                                                    class="btn btn-primary">
+                                                <span class="fa fa-plus fa-1x"></span>&nbsp;<span
+                                                translate="entity.action.save">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

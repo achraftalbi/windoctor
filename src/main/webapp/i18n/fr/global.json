@@ -14,6 +14,8 @@
         "wordToSearch": "Mot à chercher",
         "cheeeese": "Cheeeese",
         "image": "Image",
+        "yes": "Oui",
+        "no": "Non",
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
@@ -47,6 +49,7 @@
                 "entry": "Entry",
                 "internalManagement": "Gestion interne",
                 "type_structure": "Type_structure",
+                "plan": "Plan",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

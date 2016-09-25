@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <button class="btn btn-primary" ui-sref="patient.new">
+                <button class="btn btn-primary" ng-click="addPatient()">
                     <span class="fa fa-plus"></span> <span translate="windoctorApp.patient.home.createLabel">Create a new Patient</span>
                 </button>
             </div>
@@ -78,7 +78,7 @@
                 <td>{{patient.email}}</td>
                 <td>
                     <button type="submit"
-                            ui-sref="patient.edit({id:patient.id})"
+                            ng-click="editPatient(patient)"
                             class="btn btn-primary btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
                         translate="entity.action.edit"> Edit</span>
@@ -121,6 +121,9 @@
         </nav>
     </div>
 </div>
-<div ng-show="displayChartPage">
+<div ng-show="displayChartPage && !editPatientField">
     <ng-include src="'scripts/app/entities/calendar/calendar-treatments.html'"></ng-include>
+</div>
+<div ng-show="editPatientField || addPatientField">
+    <ng-include src="'scripts/app/entities/patient/patient-dialog.html'"></ng-include>
 </div>

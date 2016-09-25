@@ -47,6 +47,8 @@ angular.module('windoctorApp')
                 'form-group col-xs-9':'form-group col-xs-12';
             $scope.segondClassTypeStructure = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
                 'form-group col-xs-3':'form-group putHiddenCss';
+            $scope.hideCss = $scope.typeStructureId===null || $scope.typeStructureId===undefined||$scope.typeStructureId<=1000 ?
+                '':'putHiddenCss';
         };
 
         Principal.identity(true).then(function (account) {
@@ -161,12 +163,34 @@ angular.module('windoctorApp')
                 $scope.event=event;
                 $scope.displayEventsPage = false;
                 $scope.displayTreatmentsPage = true;
+                if($scope.event.user.phoneNumber===null || $scope.event.user.phoneNumber===undefined
+                    || $scope.event.user.phoneNumber.length!==14){
+                    $scope.event.user.phoneNumber = '00212' + $scope.event.user.phoneNumber;
+                }
                 $scope.displayTreatments = true;
                 console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
                 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
                 ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
                     Event_reason, Event, Patient,Attachment,Fund);
             }
+        };
+
+        $scope.editPatient = function () {
+            //$scope.$emit('windoctorApp:eventUpdate');
+            $scope.patient=$scope.event.user;
+            if($scope.patient.smoking===null || $scope.patient.smoking === undefined){
+                $scope.patient.smoking = false;
+            }
+            if($scope.patient.bleedingWhileBrushing===null || $scope.patient.bleedingWhileBrushing === undefined){
+                $scope.patient.bleedingWhileBrushing = false;
+            }
+            if($scope.patient.toothSensitivity===null || $scope.patient.toothSensitivity === undefined){
+                $scope.patient.toothSensitivity = false;
+            }
+            $scope.displayTreatmentsPage= false;
+            $scope.editPatientField= true;
+            angular.module('windoctorApp').expandPatientController
+            ($scope, $stateParams, Patient);
         };
 
         //End Patient pages treatement
@@ -347,6 +371,77 @@ angular.module('windoctorApp')
             }
 
             return new Blob([ia], {type:mimeString});
+        };
+
+        /********************************************************************************/
+        /********************************************************************************/
+        /***********************                                       ******************/
+        /*********************** Patient : Manage live capture image   ******************/
+        /***********************                                       ******************/
+        /********************************************************************************/
+        /********************************************************************************/
+        /********************************************************************************/
+
+        $scope.setPicturePatient = function ($files, patient) {
+            if ($files[0]) {
+                var file = $files[0];
+                var fileReader = new FileReader();
+                fileReader.readAsDataURL(file);
+                fileReader.onload = function (e) {
+                    var data = e.target.result;
+                    var base64Data = data.substr(data.indexOf('base64,') + 'base64,'.length);
+                    $scope.$apply(function () {
+                        patient.picture = base64Data;
+                    });
+                };
+            }
+        };
+
+        $scope.makeSnapshotPatient = function () {
+            if (_video) {
+                var patCanvas = document.querySelector('#snapshotPatient');
+                if (!patCanvas) return;
+
+                patCanvas.width = _video.width;
+                patCanvas.height = _video.height;
+                var ctxPat = patCanvas.getContext('2d');
+
+                var idata = getVideoDataPatient($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
+                ctxPat.putImageData(idata, 0, 0);
+
+                sendSnapshotToServerPatient(patCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
+
+                patData = idata;
+                $scope.captureAnImageScreen = false;
+            }
+        };
+
+        /**
+         * Redirect the browser to the URL given.
+         * Used to download the image by passing a dataURL string
+         */
+        $scope.downloadSnapshot = function downloadSnapshot(dataURL) {
+            window.location.href = dataURL;
+        };
+
+        var getVideoDataPatient = function getVideoDataPatient(x, y, w, h) {
+            var hiddenCanvas = document.createElement('canvas');
+            hiddenCanvas.width = _video.width;
+            hiddenCanvas.height = _video.height;
+            var ctx = hiddenCanvas.getContext('2d');
+            ctx.drawImage(_video, 0, 0, _video.width, _video.height);
+            return ctx.getImageData(x, y, w, h);
+        };
+
+        /**
+         * This function could be used to send the image data
+         * to a backend server that expects base64 encoded images.
+         *
+         * In this example, we simply store it in the scope for display.
+         */
+        var sendSnapshotToServerPatient = function sendSnapshotToServerPatient(imgBase64) {
+            $scope.setPicturePatient([dataURItoBlob(imgBase64)], $scope.patient);
+
         };
 
     });

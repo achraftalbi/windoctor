@@ -26,7 +26,7 @@
             "blocked": "Blocké",
             "picture": "Photo",
             "birthDate": "Date de naissance",
-            "phoneNumber": "Numéro de téléphone",
+            "phoneNumber": "Téléphone",
             "phoneNumberPatternError": "Le numéro de téléphone doit être comme l'exemple : {{pattern}}.",
             "diseases": "Maladies",
             "allergies": "Allergies",
@@ -35,6 +35,14 @@
             "facebook": "Facebook",
             "patientChart": "Fiche patient",
             "chart": "Fiche",
+            "choosePatient": "Choisir un patient",
+            "referralBy": "Adressé par",
+            "doctorTreating": "Médecin traitant",
+            "smoking": "Fumeur",
+            "bleedingWhileBrushing": "Saignement au brossage",
+            "toothSensitivity": "Sensibilité dentaire",
+            "address": "Adresse",
+            "workingHours": "Horaires de travail",
             "messages": {
                 "success": "<strong>Patient sauvegarder!</strong>",
                 "error": {

@@ -8,6 +8,8 @@
                 "displayAllPatientTreatments": "All acts",
                 "displayPatientTreatmentsAppointment": "Current acts",
                 "displayPatientTreatmentsVisit": "Current acts",
+                "acts": "Acts",
+                "plan": "Plan",
                 "attachments": "Attachments"
             },
             "created": "A new act is created with time {{ param }}",

@@ -21,8 +21,8 @@ angular.module('windoctorApp')
                     var cuurentDate = new Date();
 
                     for (var i = 0; i < $scope.calendarEvts.length; i++) {
-                        var startDate = new Date($filter('date')($scope.calendarEvts[i].event_date, 'yyyy-MM-dd HH:mm', '+0000'));
-                        var endDate = new Date($filter('date')($scope.calendarEvts[i].event_date_end, 'yyyy-MM-dd HH:mm', '+0000'));
+                        var startDate = $filter('date')($scope.calendarEvts[i].event_date, 'yyyy-MM-dd HH:mm', '+0000');
+                        var endDate = $filter('date')($scope.calendarEvts[i].event_date_end, 'yyyy-MM-dd HH:mm', '+0000');
 
                         var patient = ($scope.calendarEvts[i].user!==null && $scope.calendarEvts[i].user!==undefined ?
                         $scope.calendarEvts[i].user.firstName+', '+$scope.calendarEvts[i].user.lastName:'');

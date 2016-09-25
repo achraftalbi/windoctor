@@ -3,11 +3,13 @@
         "treatment" : {
             "home": {
                 "title": "Actes à la date {{ date }}",
-                "createLabel": "Créer un nouveau acte",
+                "createLabel": "Créer un nouvel acte",
                 "createOrEditLabel": "Créer ou éditer un acte",
                 "displayAllPatientTreatments": "Tout les actes",
                 "displayPatientTreatmentsAppointment": "Actes courant",
                 "displayPatientTreatmentsVisit": "Actes courant",
+                "acts": "Actes",
+                "plan": "Plan",
                 "attachments": "Attachments"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",

@@ -47,6 +47,21 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
             // Patient attachments
             $scope.displayAllPatientAttachments=false;
+            $scope.displayActsTab=true;
+            $scope.displayPlanTab=false;
+            $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
+        };
+
+        $scope.clickOnActs = function () {
+            $scope.displayActsTab=true;
+            $scope.displayPlanTab=false;
+            $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
+        };
+
+        $scope.clickOnPlan = function () {
+            $scope.displayPlanTab=true;
+            $scope.displayActsTab=false;
+            $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
         };
 
         // Display treatments Begin

@@ -1,45 +1,47 @@
 'use strict';
 
-angular.module('windoctorApp').controller('PatientDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'Patient',
-        function ($scope, $stateParams, $modalInstance, entity, Patient) {
-            $scope.doNotMatch = null;
+angular.module('windoctorApp').expandPatientController =
+    function ($scope, $stateParams, Patient) {
             $scope.error = null;
             $scope.errorUserExists = null;
             $scope.errorEmailExists = null;
             $scope.dateValue = moment(new Date()).utc();
             $scope.maxDateValue =  moment(new Date()).utc();
-            $scope.patient =entity;
-            $scope.passwordUpdate=null;
-            $scope.passwordNew=null;
-            $scope.newPatient = false;
-            $scope.test=null;
+            if($scope.patient.phoneNumber===null || $scope.patient.phoneNumber===undefined
+                || $scope.patient.phoneNumber.length!==14){
+                $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
+            }
+            $scope.password=null;
+            $scope.savePatientInformationsOnGoing = false;
             $scope.captureAnImageScreen = false;
             $scope.initBirthDate = function () {
                 $scope.maxDateValue = moment(new Date()).utc();
-                $scope.dateValue = moment($scope.patient.birthDate).utc();
+                $scope.dateValue = moment($scope.patient.birthDate===null || $scope.patient.birthDate===undefined?new Date():$scope.patient.birthDate).utc();
             };
-            $scope.load = function (id) {
-                if($stateParams.id !== null && $stateParams.id !==undefined){
-                    Patient.get({id: $stateParams.id}, function (result) {
-                        $scope.patient = result;
-                        $scope.passwordNew=$scope.patient.id===null||$scope.patient.id===undefined?null:'wrongpassword';
-                        $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
-                        $scope.newPatient = true;
-                        $scope.initBirthDate();
-                    });
-                }else if($scope.patient.id===null||$scope.patient.id===undefined){
-                    $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
-                    $scope.newPatient = false;
-                }
+            /*$scope.load = function () {
+                $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
             };
-            $scope.load();
+            $scope.load();*/
 
-            var onSaveFinished = function (result) {
+            var onSaveFinishedPatientInformation = function (result) {
                 $scope.$emit('windoctorApp:patientUpdate', result);
-                $modalInstance.close(result);
+                $scope.addPatientField= false;
+                $scope.editPatientField= false;
+                $scope.savePatientInformationsOnGoing = false;
+                if($scope.displayChartPage===true){
+                    return;
+                }
+                if($scope.event!==null && $scope.event!==undefined
+                    && $scope.event.id!==null){
+                    $scope.displayTreatmentsPage = true;
+                    return;
+                }
+                $scope.displayPatientPage = true;
+                $scope.loadAll();
+                //$modalInstance.close(result);
             };
-            var onSaveFailed = function (response) {
+            var onSaveFailedPatientInformation = function (response) {
+                $scope.savePatientInformationsOnGoing = false;
                 if (response.status === 400 && response.data.code === 'U-02') {
                     $scope.errorUserExists = 'ERROR';
                 } else if (response.status === 400 && response.data.code === 'U-01') {
@@ -56,24 +58,51 @@ angular.module('windoctorApp').controller('PatientDialogController',
                 console.log(modelName + ' has had a date change. $scope.dateValue ' + new Date(moment(new Date($scope.dateValue)).utc()));
             }
 
-            $scope.save = function () {
+            $scope.savePatientInformation = function () {
                 $scope.patient.birthDate = new Date($scope.dateValue);
+                $scope.patient.password = $scope.password;
+                $scope.savePatientInformationsOnGoing = true;
                 if ($scope.patient.id != null) {
-                    $scope.patient.password = $scope.passwordUpdate;
-                    Patient.update($scope.patient, onSaveFinished, onSaveFailed);
+                    Patient.update($scope.patient, onSaveFinishedPatientInformation, onSaveFailedPatientInformation);
                 } else {
-                    $scope.patient.password = $scope.passwordNew;
-                    Patient.save($scope.patient, onSaveFinished, onSaveFailed);
+                    Patient.save($scope.patient, onSaveFinishedPatientInformation, onSaveFailedPatientInformation);
                 }
             };
 
-            $scope.changeBlockStatus = function(){
+            $scope.changeBlockStatus = function () {
                 $scope.patient.blocked = !$scope.patient.blocked;
-                console.log('$scope.patient.blocked '+$scope.patient.blocked);
+                console.log('$scope.patient.blocked ' + $scope.patient.blocked);
             }
 
-            $scope.clear = function () {
-                $modalInstance.dismiss('cancel');
+            $scope.changeSmokingStatus = function () {
+                $scope.patient.smoking = !$scope.patient.smoking;
+                console.log('$scope.patient.smoking ' + $scope.patient.smoking);
+            }
+
+            $scope.changeBleedingWhileBrushingStatus = function () {
+                $scope.patient.bleedingWhileBrushing = !$scope.patient.bleedingWhileBrushing;
+                console.log('$scope.patient.bleedingWhileBrushing ' + $scope.patient.bleedingWhileBrushing);
+            }
+
+            $scope.changeToothSensitivityStatus = function () {
+                $scope.patient.toothSensitivity = !$scope.patient.toothSensitivity;
+                console.log('$scope.patient.toothSensitivity ' + $scope.patient.toothSensitivity);
+            }
+
+            $scope.clearPatientInformation = function () {
+                $scope.addPatientField= false;
+                $scope.editPatientField= false;
+                if($scope.displayChartPage===true){
+                    return;
+                }
+                if($scope.event!==null && $scope.event!==undefined
+                    && $scope.event.id!==null){
+                    $scope.displayTreatmentsPage = true;
+                    return;
+                }
+                $scope.loadAll();
+                $scope.displayPatientPage = true;
+                //$modalInstance.dismiss('cancel');
             };
 
             $scope.abbreviate = function (text) {
@@ -115,134 +144,4 @@ angular.module('windoctorApp').controller('PatientDialogController',
                 return formatAsBytes(size(base64String));
             };
 
-            $scope.setPicture = function ($files, patient) {
-                if ($files[0]) {
-                    var file = $files[0];
-                    var fileReader = new FileReader();
-                    fileReader.readAsDataURL(file);
-                    fileReader.onload = function (e) {
-                        var data = e.target.result;
-                        var base64Data = data.substr(data.indexOf('base64,') + 'base64,'.length);
-                        $scope.$apply(function () {
-                            patient.picture = base64Data;
-                        });
-                    };
-                }
-            };
-
-            /********************************************************************************/
-            /********************************************************************************/
-            /***********************                                       ******************/
-            /***********************      Manage live capture image        ******************/
-            /***********************                                       ******************/
-            /********************************************************************************/
-            /********************************************************************************/
-            /********************************************************************************/
-
-            $scope.captureAnImage = function () {
-                $scope.captureAnImageScreen = true;
-            };
-            $scope.cancelImageCapture = function () {
-                $scope.captureAnImageScreen = false;
-            };
-
-            var _video = null,
-                patData = null;
-
-            $scope.patOpts = {x: 0, y: 0, w: 25, h: 25};
-
-            // Setup a channel to receive a video property
-            // with a reference to the video element
-            // See the HTML binding in main.html
-            $scope.channel = {};
-
-            $scope.webcamError = false;
-            $scope.onError = function (err) {
-                $scope.$apply(
-                    function () {
-                        $scope.webcamError = err;
-                    }
-                );
-            };
-
-            $scope.onSuccess = function () {
-                // The video element contains the captured camera data
-                _video = $scope.channel.video;
-                $scope.$apply(function () {
-                    $scope.patOpts.w = _video.width;
-                    $scope.patOpts.h = _video.height;
-                    //$scope.showDemos = true;
-                });
-            };
-
-            $scope.onStream = function (stream) {
-                // You could do something manually with the stream.
-            };
-
-            $scope.makeSnapshot = function () {
-                if (_video) {
-                    var patCanvas = document.querySelector('#snapshot');
-                    if (!patCanvas) return;
-
-                    patCanvas.width = _video.width;
-                    patCanvas.height = _video.height;
-                    var ctxPat = patCanvas.getContext('2d');
-
-                    var idata = getVideoData($scope.patOpts.x, $scope.patOpts.y, $scope.patOpts.w, $scope.patOpts.h);
-                    ctxPat.putImageData(idata, 0, 0);
-
-                    sendSnapshotToServer(patCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
-
-                    patData = idata;
-                    $scope.captureAnImageScreen = false;
-                }
-            };
-
-            /**
-             * Redirect the browser to the URL given.
-             * Used to download the image by passing a dataURL string
-             */
-            $scope.downloadSnapshot = function downloadSnapshot(dataURL) {
-                window.location.href = dataURL;
-            };
-
-            var getVideoData = function getVideoData(x, y, w, h) {
-                var hiddenCanvas = document.createElement('canvas');
-                hiddenCanvas.width = _video.width;
-                hiddenCanvas.height = _video.height;
-                var ctx = hiddenCanvas.getContext('2d');
-                ctx.drawImage(_video, 0, 0, _video.width, _video.height);
-                return ctx.getImageData(x, y, w, h);
-            };
-
-            /**
-             * This function could be used to send the image data
-             * to a backend server that expects base64 encoded images.
-             *
-             * In this example, we simply store it in the scope for display.
-             */
-            var sendSnapshotToServer = function sendSnapshotToServer(imgBase64) {
-                $scope.setPicture([dataURItoBlob(imgBase64)], $scope.patient);
-
-            };
-
-            function dataURItoBlob(dataURI) {
-                // convert base64/URLEncoded data component to raw binary data held in a string
-                var byteString;
-                if (dataURI.split(',')[0].indexOf('base64') >= 0)
-                    byteString = atob(dataURI.split(',')[1]);
-                else
-                    byteString = unescape(dataURI.split(',')[1]);
-
-                // separate out the mime component
-                var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-
-                // write the bytes of the string to a typed array
-                var ia = new Uint8Array(byteString.length);
-                for (var i = 0; i < byteString.length; i++) {
-                    ia[i] = byteString.charCodeAt(i);
-                }
-
-                return new Blob([ia], {type: mimeString});
-            }
-        }]);
+    };

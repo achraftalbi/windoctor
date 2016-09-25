@@ -286,16 +286,18 @@ public class TreatmentResource {
 
 
     public void saveFundHistory(Treatment treatment, BigDecimal oldFundAmount) {
-        Fund_history fund_history = new Fund_history();
-        fund_history.setFund(treatment.getFund());
-        fund_history.setNew_amount(treatment.getFund().getAmount());
-        fund_history.setOld_amount(oldFundAmount);
-        fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
-        fund_history.setType_operation(fund_history.getAmount_movement().doubleValue() >= 0d ? true : false);
-        fund_history.setTreatment(treatment);
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        fund_history.setCreated_by(user.isPresent() ? user.get() : null);
-        fund_history.setCreation_date(new DateTime());
-        fund_historyRepository.save(fund_history);
+        if(!new Double(treatment.getFund().getAmount().doubleValue()).equals(oldFundAmount.doubleValue())){
+            Fund_history fund_history = new Fund_history();
+            fund_history.setFund(treatment.getFund());
+            fund_history.setNew_amount(treatment.getFund().getAmount());
+            fund_history.setOld_amount(oldFundAmount);
+            fund_history.setAmount_movement(new BigDecimal(fund_history.getNew_amount().doubleValue() - fund_history.getOld_amount().doubleValue()));
+            fund_history.setType_operation(fund_history.getAmount_movement().doubleValue() >= 0d ? true : false);
+            fund_history.setTreatment(treatment);
+            Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+            fund_history.setCreated_by(user.isPresent() ? user.get() : null);
+            fund_history.setCreation_date(new DateTime());
+            fund_historyRepository.save(fund_history);
+        }
     }
 }

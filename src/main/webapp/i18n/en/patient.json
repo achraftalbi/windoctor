@@ -29,7 +29,7 @@
             "blocked": "Blocked",
             "picture": "Picture",
             "birthDate": "Birth date",
-            "phoneNumber": "Phone number",
+            "phoneNumber": "Phone",
             "phoneNumberPatternError": "The phone number should follow the example : {{pattern}}.",
             "diseases": "Diseases",
             "allergies": "Allergies",
@@ -38,6 +38,14 @@
             "facebook": "Facebook",
             "patientChart": "Patient chart",
             "chart": "Chart",
+            "choosePatient": "Choose a patient",
+            "referralBy": "Referral by",
+            "doctorTreating": "Doctor treating",
+            "smoking": "Smoking",
+            "bleedingWhileBrushing": "Bleeding while brushing",
+            "toothSensitivity": "Tooth sensitivity",
+            "address": "Address",
+            "workingHours": "Working hours",
             "messages": {
                 "success": "<strong>Patient saved!</strong>",
                 "error": {

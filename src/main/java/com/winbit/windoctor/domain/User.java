@@ -93,6 +93,31 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "initial_balance", precision=10, scale=2, nullable = false)
     private BigDecimal initial_balance;
 
+    @Column(nullable = false)
+    private Boolean smoking = false;
+
+    @Column(nullable = false)
+    private Boolean bleedingWhileBrushing = false;
+
+    @Column(nullable = false)
+    private Boolean toothSensitivity = false;
+
+    @Size(max = 200)
+    @Column(name = "referral_by", length = 200)
+    private String referralBy;
+
+    @Size(max = 200)
+    @Column(name = "doctor_treating", length = 200)
+    private String doctorTreating;
+
+    @Size(max = 500)
+    @Column(name = "address", length = 500)
+    private String address;
+
+    @Size(max = 500)
+    @Column(name = "workingHours", length = 500)
+    private String workingHours;
+
 
     @JsonIgnore
     @ManyToMany
@@ -165,6 +190,62 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Max(value = 250000000)
     @Column(name = "number", precision=10, scale=2, nullable = false)
     private BigDecimal number;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDoctorTreating() {
+        return doctorTreating;
+    }
+
+    public void setDoctorTreating(String doctorTreating) {
+        this.doctorTreating = doctorTreating;
+    }
+
+    public Boolean getBleedingWhileBrushing() {
+        return bleedingWhileBrushing;
+    }
+
+    public void setBleedingWhileBrushing(Boolean bleedingWhileBrushing) {
+        this.bleedingWhileBrushing = bleedingWhileBrushing;
+    }
+
+    public String getReferralBy() {
+        return referralBy;
+    }
+
+    public void setReferralBy(String referralBy) {
+        this.referralBy = referralBy;
+    }
+
+    public Boolean getSmoking() {
+        return smoking;
+    }
+
+    public void setSmoking(Boolean smoking) {
+        this.smoking = smoking;
+    }
+
+    public Boolean getToothSensitivity() {
+        return toothSensitivity;
+    }
+
+    public void setToothSensitivity(Boolean toothSensitivity) {
+        this.toothSensitivity = toothSensitivity;
+    }
+
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
+    }
 
     public BigDecimal getNumber() {
         return number;

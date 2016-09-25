@@ -89,6 +89,27 @@ public class Treatment implements Serializable {
     @Column(name = "ELEMENTS", length = 500, nullable = true)
     private String elements;
 
+    @ManyToOne
+    private Status status;
+
+    @ManyToOne
+    private Plan plan;
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public String getElements() {
         return elements;

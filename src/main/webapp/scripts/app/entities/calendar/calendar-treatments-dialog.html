@@ -10,7 +10,7 @@
 
 
         <div class="row">
-            <div class="form-group col-xs-6 col-md-3">
+            <div ng-class="treatmentDialogFieldClass">
                 <label translate="windoctorApp.treatment.eventReason">eventReason</label>
                 <ui-select ng-model="treatment.eventReason" theme="select2" class="form-control"
                            ng-change="reasonValueChanged()"
@@ -97,7 +97,7 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group col-xs-6 col-md-3">
+            <div class="form-group col-xs-6 col-md-3"  ng-show="displayActsTab">
                 <label translate="windoctorApp.treatment.paid_price" for="field_paid_price">Paid_price</label>
                 <input type="number" class="form-control" name="paid_price" id="field_paid_price"
                        ng-model="treatment.paid_price" ng-show="!displayTreatmentView" ng-change="changeFields()"
@@ -217,7 +217,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-xs-6 col-md-3">
+            <div ng-class="treatmentDialogFieldClass">
                 <label translate="windoctorApp.treatment.description" for="field_description">Description</label>
                 <textarea class="form-control" name="description" id="field_description" rows="3"
                        ng-model="treatment.description" ng-show="!displayTreatmentView"
@@ -232,7 +232,7 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group col-xs-6 col-md-3">
+            <div class="form-group col-xs-6 col-md-3" ng-show="displayActsTab">
                 <label translate="windoctorApp.treatment.fund" for="field_fund">Fund</label>
                 <select class="form-control" id="field_fund" name="fund" ng-model="treatment.fund"
                         ng-change="changeFields()"
@@ -282,14 +282,16 @@
                 </div>
             </div>
             <div class="form-group col-xs-6 col-md-3">
-                <label translate="windoctorApp.treatment.teeth">Teeth</label>
+                <div  ng-class="hideCss">
+                    <label translate="windoctorApp.treatment.teeth">Teeth</label>
                     <span ng-show="displayTreatmentView"
                           class="form-control-static">{{temporaryElements}}</span>
 
-                <div ng-show="temporaryElements && !displayTreatmentView" style="color: red;font-weight: bold;font-size: 16px;">
-                    <span class="divider">{{temporaryElements}}</span></div>
-                <div ng-show="!temporaryElements && !displayTreatmentView"><span
-                    translate="windoctorApp.treatment.chooseTeeth">Choose teeth</span>
+                    <div ng-show="temporaryElements && !displayTreatmentView" style="color: red;font-weight: bold;font-size: 16px;">
+                        <span class="divider">{{temporaryElements}}</span></div>
+                    <div ng-show="!temporaryElements && !displayTreatmentView"><span
+                        translate="windoctorApp.treatment.chooseTeeth">Choose teeth</span>
+                    </div>
                 </div>
             </div>
         </div>

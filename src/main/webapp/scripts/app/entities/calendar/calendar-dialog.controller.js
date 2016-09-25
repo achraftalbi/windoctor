@@ -8,6 +8,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
         $scope.account = null;
         $scope.visit = false;
         $scope.searchCalledPatients = false;
+        $scope.addNewPatientFlag = false;
+        $scope.saveNewPatientOnGoing = false;
+        $scope.newPatient = {id:null,firstName:null,lastName:null,phoneNumber:null,birthDate:null};
         $scope.load = function (id) {
             Event.get({id: id}, function (result) {
                 $scope.event = result;
@@ -107,8 +110,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
                         $scope.visit = true;
                         var curentDate = new Date();
                         if($scope.event.id===null || $scope.event.id === undefined) {
-                            $scope.event.event_date = new Date($filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').
-                                    replace('00:00:00', moment(curentDate).format('HH:mm') + ':00') + ' +00:00');
+                            //$scope.event.event_date = new Date($filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').
+                            //        replace('00:00:00', moment(curentDate).format('HH:mm') + ':00') + ' +00:00');
+                            $scope.event.event_date = moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').
+                                    replace('00:00:00', moment(curentDate).format('HH:mm') + ':00')+'+00:00';
                             console.log("$scope.event.event_date rrrr"+$scope.event.event_date);
                             $scope.event.event_date_end = $scope.event.event_date;
                             $scope.startDateValue = moment(curentDate).format('HH:mm') + '';
@@ -141,10 +146,18 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
         $scope.changeDataPickerStartDate = function () {
             if ($('.pickerstartdate').data('picker').pickerValue !== null &&
                 $('.pickerstartdate').data('picker').pickerValue !== undefined) {
+                console.log('year2 '+new Date($stateParams.selectedDate).getFullYear());
+                console.log('month2 '+new Date($stateParams.selectedDate).getMonth());
+                console.log('day2 '+new Date($stateParams.selectedDate).getDate());
+                console.log('date '+moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('00:00:00', $('.pickerstartdate').data('picker').pickerValue + ':00')+'+00:00');
+                var selectedDateTmp = new Date($stateParams.selectedDate);
                 var startDate = $filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').replace('00:00:00', $('.pickerstartdate').data('picker').pickerValue + ':00');
                 var startDateUTC = $filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').replace('00:00:00', $('.pickerstartdate').data('picker').pickerValue + ':00') + ' +00:00';
+                //startDateUTC = startDateUTC.replace(/(.+) (.+)/, "$1T$2Z");
+                //input = new Date(input).getTime();
+                selectedDateTmp = new Date()
                 console.log("99999 startDateUTC " + startDateUTC);
-                $scope.event.event_date = new Date(startDateUTC);
+                $scope.event.event_date = moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('00:00:00', $('.pickerstartdate').data('picker').pickerValue + ':00')+'+00:00';
                 $scope.startDateValue = $filter('date')(new Date(startDate), 'HH:mm');
                 var findFirstEndDate = false;
                 $scope.endDateTab = [];
@@ -192,7 +205,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
                 console.log("Here2 endDateTab " + $scope.endDateTab);
                 var endDate = $filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').replace('00:00:00', $('.pickerenddate').data('picker1').picker1Value + ':00');
                 var endDateUTC = $filter('date')($stateParams.selectedDate, 'MM/dd/yyyy').replace('00:00:00', $('.pickerenddate').data('picker1').picker1Value + ':00') + ' +00:00';
-                $scope.event.event_date_end = new Date(endDateUTC);
+                $scope.event.event_date_end = moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('00:00:00', $('.pickerenddate').data('picker1').picker1Value + ':00')+'+00:00';;
                 console.log("end display event_date_end " + $scope.event.event_date_end);
                 console.log("end endDateUTC " + endDateUTC);
                 $scope.endDateValue = $filter('date')(new Date(endDate), 'HH:mm');
@@ -246,6 +259,19 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
             $scope.loadAllPatients();
             $scope.showListPatients = true;
         };
+
+        $scope.addNewPatient = function () {
+            $scope.newPatient = {id:null,firstName:null,lastName:null,phoneNumber: '00212',birthDate:null};
+            $scope.addNewPatientFlag = true;
+            $scope.showListPatients = false;
+        };
+
+        $scope.cancelAddPatient = function () {
+            $scope.newPatient = {id:null,firstName:null,lastName:null,phoneNumber:null,birthDate:null};
+            $scope.addNewPatientFlag = false;
+            $scope.showListPatients = true;
+        };
+
         $scope.setPatient = function (patient) {
             $scope.event.user = patient;
             $scope.showListPatients = false;
@@ -270,11 +296,26 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
             angular.copy($scope.event, eventTmp);
             userTmp={id:$scope.event.user.id};
             eventTmp.user=userTmp;
+            console.log('dis event_date'+eventTmp.event_date);
+            console.log('dis event_date_end'+eventTmp.event_date_end);
             if (eventTmp.id != null) {
                 Event.update(eventTmp, onUpdateFinishedEventDialog);
             } else {
                 Event.save(eventTmp, onSaveFinishedEventDialog);
             }
+        };
+
+        var onSaveNewPatient = function (result) {
+            $scope.event.user = result;
+            console.log('result.id '+result.id+' result.firstName '+result.firstName);
+            $scope.saveNewPatientOnGoing = false;
+            $scope.addNewPatientFlag = false;
+            $scope.showListPatients = false;
+        };
+
+        $scope.saveNewPatient = function () {
+            $scope.saveNewPatientOnGoing = true;
+            Patient.save($scope.newPatient, onSaveNewPatient);
         };
 
         $scope.clear = function () {

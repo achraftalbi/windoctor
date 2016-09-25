@@ -29,6 +29,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneByLogin(String login);
 
+    User findByLogin(String login);
+
     Optional<User> findOneById(Long id);
 
     @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.number asc")

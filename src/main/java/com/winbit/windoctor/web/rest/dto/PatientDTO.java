@@ -18,10 +18,13 @@ public class PatientDTO {
     public static final int PASSWORD_MIN_LENGTH = 5;
     public static final int PASSWORD_MAX_LENGTH = 100;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private Long id;
 
     @Pattern(regexp = "^[A-Za-z0-9]*$")
-    @NotNull
     @Size(min = 1, max = 50)
     private String login;
 
@@ -66,15 +69,12 @@ public class PatientDTO {
     @Size(min = 0, max = 100)
     private String facebook;
 
-    @NotNull
     @Size(min = 1, max = 200)
     private String diseases;
 
-    @NotNull
     @Size(min = 1, max = 200)
     private String allergies;
 
-    @NotNull
     @Size(min = 1, max = 200)
     private String mutualAssurance;
 
@@ -109,6 +109,24 @@ public class PatientDTO {
         return birthDate;
     }
 
+    private Boolean smoking = false;
+
+    private Boolean bleedingWhileBrushing = false;
+
+    private Boolean toothSensitivity = false;
+
+    @Size(max = 200)
+    private String referralBy;
+
+    @Size(max = 200)
+    private String doctorTreating;
+
+    @Size(max = 500)
+    private String address;
+
+    @Size(max = 500)
+    private String workingHours;
+
     public PatientDTO() {
     }
 
@@ -138,6 +156,34 @@ public class PatientDTO {
         this.roles = roles;
         this.currentUserPatient = currentUserPatient;
         this.maxEventsReached = maxEventsReached;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Boolean getBleedingWhileBrushing() {
+        return bleedingWhileBrushing;
+    }
+
+    public String getDoctorTreating() {
+        return doctorTreating;
+    }
+
+    public String getReferralBy() {
+        return referralBy;
+    }
+
+    public Boolean getSmoking() {
+        return smoking;
+    }
+
+    public Boolean getToothSensitivity() {
+        return toothSensitivity;
+    }
+
+    public String getWorkingHours() {
+        return workingHours;
     }
 
     public Long getId() {

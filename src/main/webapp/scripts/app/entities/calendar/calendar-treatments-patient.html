@@ -1,0 +1,211 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="center-block" ng-click="editPatient()" style="cursor: pointer;">
+                <div>
+                    <img data-ng-src="{{'data:image/*;base64,' + event.user.picture}}"
+                         style="max-width: 100%;" ng-if="event.user.picture"/>
+                    <span class="userImage img-responsive img-rounded" ng-if="!event.user.picture"></span>
+                </div>
+                <div>
+                    <strong style="font-size: 20px">{{event.user.number}} - {{event.user.firstName}}
+                        {{event.user.lastName}}
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <div>
+                        <table class="table table-no-bordered" style="font-size: 14px">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.firstName">FirstName</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: blue">{{event.user.firstName}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.diseases">Diseases</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: red">{{event.user.diseases}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.referralBy">Referral by</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: dodgerblue">{{event.user.referralBy}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.mutualAssurance">Mutual
+                                        assurance</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static" style="color: green">{{event.user.mutualAssurance}}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div>
+                        <table class="table table-no-bordered" style="font-size: 14px">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.lastName">LastName</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: blue">{{event.user.lastName}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong
+                                        translate="windoctorApp.patient.allergies">allergies</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: red">{{event.user.allergies}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.doctorTreating">Doctor treating</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: dodgerblue">{{event.user.doctorTreating}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.birthDate">Birth
+                                        date</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.birthDate
+                                        | date:'yyyy-MM-dd' : '+0000'}}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <div>
+                        <table class="table table-no-bordered" style="font-size: 14px">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong
+                                        translate="windoctorApp.patient.profession">Profession</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.profession}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.phoneNumber">Phone
+                                        number</strong>
+                                </td>
+                                <td>
+                                    <strong
+                                        class="form-control-static" style="color: dodgerblue">
+                                        {{event.user.phoneNumber}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.address">Address</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: dodgerblue">{{event.user.address}}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <div>
+                        <table class="table table-no-bordered" style="font-size: 14px">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.smoking">Smoking</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <span ng-if="event.user.smoking === true" style="color: red"
+                                              translate="global.yes">Yes</span>
+                                        <span ng-if="event.user.smoking === false" style="color: green"
+                                              translate="global.no">No</span>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr  ng-class="hideCss">
+                                <td>
+                                    <strong translate="windoctorApp.patient.bleedingWhileBrushing">
+                                        Bleeding while brushing</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <span ng-if="event.user.bleedingWhileBrushing === true" style="color: red"
+                                              translate="global.yes">Yes</span>
+                                        <span ng-if="event.user.bleedingWhileBrushing === false" style="color: green"
+                                              translate="global.no">No</span>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr ng-class="hideCss">
+                                <td>
+                                    <strong translate="windoctorApp.patient.toothSensitivity">Tooth sensitivity</strong>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <span ng-if="event.user.toothSensitivity === true" style="color: red"
+                                              translate="global.yes">Yes</span>
+                                        <span ng-if="event.user.toothSensitivity === false" style="color: green"
+                                              translate="global.no">No</span>
+                                    </strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong translate="windoctorApp.patient.workingHours">Working hours</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static"
+                                            style="color: dodgerblue">{{event.user.workingHours}}</strong>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

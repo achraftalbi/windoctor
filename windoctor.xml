@@ -908,9 +908,9 @@
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
     <property name="artifact.output.windoctor:war" value="${basedir}/target"/>
-    <property name="artifact.output.windoctor:war_exploded" value="${basedir}/target/windoctor-0.0.1-SNAPSHOT"/>
+    <property name="artifact.output.windoctor:war_exploded" value="${basedir}/target/windoctor-v.1.0"/>
     <mkdir dir="${artifacts.temp.dir}"/>
-    <property name="temp.jar.path.windoctor-0.0.1-SNAPSHOT.war" value="${artifacts.temp.dir}/windoctor-0.0.1-SNAPSHOT.war"/>
+    <property name="temp.jar.path.windoctor-v.1.0.war" value="${artifacts.temp.dir}/windoctor-v.1.0.war"/>
   </target>
   
   <target name="clean.artifact.windoctor:war_exploded" description="clean windoctor:war exploded artifact output">
@@ -920,10 +920,10 @@
   <target name="artifact.windoctor:war" depends="init.artifacts, artifact.windoctor:war_exploded" description="Build &#39;windoctor:war&#39; artifact">
     <property name="artifact.temp.output.windoctor:war" value="${artifacts.temp.dir}/windoctor_war"/>
     <mkdir dir="${artifact.temp.output.windoctor:war}"/>
-    <zip destfile="${temp.jar.path.windoctor-0.0.1-SNAPSHOT.war}">
+    <zip destfile="${temp.jar.path.windoctor-v.1.0.war}">
       <zipfileset dir="${artifact.output.windoctor:war_exploded}"/>
     </zip>
-    <copy file="${temp.jar.path.windoctor-0.0.1-SNAPSHOT.war}" tofile="${artifact.temp.output.windoctor:war}/windoctor-0.0.1-SNAPSHOT.war"/>
+    <copy file="${temp.jar.path.windoctor-v.1.0.war}" tofile="${artifact.temp.output.windoctor:war}/windoctor-v.1.0.war"/>
   </target>
   
   <target name="artifact.windoctor:war_exploded" depends="init.artifacts, compile.module.windoctor" description="Build &#39;windoctor:war exploded&#39; artifact">
@@ -1080,7 +1080,7 @@
     <copy file="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-logging-juli/8.0.23/tomcat-embed-logging-juli-8.0.23.jar" tofile="${artifact.output.windoctor:war_exploded}/WEB-INF/lib/tomcat-embed-logging-juli-8.0.23.jar"/>
     <copy file="${path.variable.maven_repository}/org/apache/tomcat/embed/tomcat-embed-websocket/8.0.23/tomcat-embed-websocket-8.0.23.jar" tofile="${artifact.output.windoctor:war_exploded}/WEB-INF/lib/tomcat-embed-websocket-8.0.23.jar"/>
     <mkdir dir="${artifact.output.windoctor:war_exploded}/META-INF"/>
-    <copy file="${basedir}/target/windoctor-0.0.1-SNAPSHOT/META-INF/MANIFEST.MF" tofile="${artifact.output.windoctor:war_exploded}/META-INF/MANIFEST.MF"/>
+    <copy file="${basedir}/target/windoctor-v.1.0/META-INF/MANIFEST.MF" tofile="${artifact.output.windoctor:war_exploded}/META-INF/MANIFEST.MF"/>
     <copy todir="${artifact.output.windoctor:war_exploded}">
       <fileset dir="${basedir}/src/main/webapp"/>
     </copy>
