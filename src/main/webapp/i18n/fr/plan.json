@@ -1,0 +1,23 @@
+{
+    "windoctorApp": {
+        "plan" : {
+            "home": {
+                "title": "Plans",
+                "createLabel": "Créer un nouveau Plan",
+                "createOrEditLabel": "Créer ou éditer un Plan"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Plan {{ id }} ?"
+            },
+            "detail": {
+                "title": "Plan"
+            },
+            "name": "Name",
+            "number": "Number",
+            "archive": "Archive",
+            "creation_date": "Creation_date",
+            "structure": "Structure"
+        }
+    }
+}
+

@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="windoctorApp.plan.detail.title">Plan</span> {{plan.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.plan.name">Name</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{plan.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.plan.number">Number</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{plan.number}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.plan.archive">Archive</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{plan.archive}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.plan.creation_date">Creation_date</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{plan.creation_date}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="windoctorApp.plan.structure">structure</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="structure.detail({id:plan.structure.id})">{{plan.structure.id}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

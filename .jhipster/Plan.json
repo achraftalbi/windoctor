@@ -1,0 +1,52 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "structure",
+            "otherEntityName": "structure",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 0,
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "number",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "1",
+            "fieldValidateRulesMax": "10000000"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "archive",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "creation_date",
+            "fieldType": "DateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160821155740",
+    "dto": "no",
+    "pagination": "pagination"
+}
