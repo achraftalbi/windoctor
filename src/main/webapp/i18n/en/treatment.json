@@ -10,6 +10,8 @@
                 "displayPatientTreatmentsVisit": "Current acts",
                 "acts": "Acts",
                 "plan": "Plan",
+                "archive": "Archive",
+                "createLabelPlan": "Create an act for the plan",
                 "attachments": "Attachments"
             },
             "created": "A new act is created with time {{ param }}",

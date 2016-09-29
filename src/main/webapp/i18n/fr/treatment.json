@@ -10,6 +10,8 @@
                 "displayPatientTreatmentsVisit": "Actes courant",
                 "acts": "Actes",
                 "plan": "Plan",
+                "archive": "Archiver",
+                "createLabelPlan": "Créer un acte pour le plan",
                 "attachments": "Attachments"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",

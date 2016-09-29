@@ -2,26 +2,22 @@
     <div>
         <div style="padding: 15px;padding-top:0px;padding-bottom:0px;">
             <div class="row">
-                <div class="form-group col-xs-6">
-                    <div class="row">
-                        <div class="form-group col-xs-6">
-                            <button type="button"
-                                    ng-click="returnToEventsPage()"
-                                    class="btn btn-info">
-                                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span
-                                translate="entity.action.back"> Back</span>
-                            </button>
-                        </div>
-                        <div class="form-group col-xs-6">
-                            <button type="button"
-                                    ng-click="refreshAll()"
-                                    class="btn btn-info">
-                                <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
-                            </button>
-                        </div>
-                    </div>
+                <div class="form-group col-md-2">
+                    <button type="button"
+                            ng-click="returnToEventsPage()"
+                            class="btn btn-info">
+                        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span
+                        translate="entity.action.back"> Back</span>
+                    </button>
                 </div>
-                <div class="form-group col-xs-6">
+                <div class="form-group col-md-2">
+                    <button type="button"
+                            ng-click="refreshAll()"
+                            class="btn btn-info">
+                        <span class="fa fa-refresh"></span>&nbsp;<span translate="entity.action.refresh"> Refresh</span>
+                    </button>
+                </div>
+                <div class="form-group col-md-8">
                     <h2 translate="windoctorApp.treatment.home.title" ng-show="event!==null && event.id!==null"
                         translate-values="{date: '{{ event.event_date | date:'EEEE, MMMM d, y HH:mm' }}'}">Acts at
                         date </h2>
@@ -32,15 +28,17 @@
                 <jh-alert></jh-alert>
                 <ng-include src="'scripts/app/entities/calendar/calendar-treatments-patient.html'"></ng-include>
 
-                <div >
+                <div>
                     <ul class="nav nav-tabs">
                         <li class="active">
                             <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnActs()">
-                                <h4>Actes</h4>
+                                <h4 translate="windoctorApp.treatment.home.acts">Actes</h4>
                             </a>
                         </li>
-                        <li ng-show="false">
-                            <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnPlan()"><h4>Plan</h4></a>
+                        <li>
+                            <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnPlan()">
+                                <h4 translate="windoctorApp.treatment.home.plan">Plan</h4>
+                            </a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -63,7 +61,7 @@
                                 <div class="form-group col-xs-6 col-md-3">
                                     <button class="btn btn-primary"
                                             ng-click="displayPatientTreatmentsEventFunction()"
-                                            ng-show="event!==null && event.id!==null">
+                                            ng-show="event!==null && event.id!==null && displayActsTab">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                     <span ng-show="event.eventStatus.id===8"
                                           translate="windoctorApp.treatment.home.displayPatientTreatmentsVisit">Current acts</span>
@@ -71,7 +69,7 @@
                                           translate="windoctorApp.treatment.home.displayPatientTreatmentsAppointment">Current acts</span>
                                     </button>
                                     <button class="btn btn-primary"
-                                            ng-click="displayPatientTreatmentsEventFunction()"
+                                            ng-click="archiveCurrentPlan()"
                                             ng-show="event!==null && event.id!==null && displayPlanTab">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                         <span translate="windoctorApp.treatment.home.archive">Archive</span>
@@ -79,18 +77,18 @@
                                 </div>
                                 <div class="form-group col-xs-6 col-md-3">
                                     <button class="btn btn-primary" ng-click="addNewTreatment()"
-                                            ng-show="event!==null && event.id!==null">
+                                            ng-show="event!==null && event.id!==null && displayActsTab">
                                         <span class="fa fa-plus"></span> <span
                                         translate="windoctorApp.treatment.home.createLabel">Create a new Treatment</span>
                                     </button>
                                     <button class="btn btn-primary" ng-click="addNewTreatment()"
                                             ng-show="event!==null && event.id!==null && displayPlanTab">
                                         <span class="fa fa-plus"></span> <span
-                                        translate="windoctorApp.treatment.home.createLabel">Act for the plan</span>
+                                        translate="windoctorApp.treatment.home.createLabelPlan">Create act for the plan</span>
                                     </button>
                                 </div>
                             </div>
-                             <div class="row">
+                            <div class="row">
                                 <div ng-class="firstClassTypeStructure">
                                     <div class="panel panel-primary">
                                         <div class="panel-heading">
@@ -127,15 +125,24 @@
                                                 </div>
                                                 <div class="table-responsive"
                                                      ng-show="treatments!==null && treatments!==undefined && treatments.length>0">
-                                                    <table class="table table-striped"  style="font-size: 14px;">
+                                                    <table class="table table-striped" style="font-size: 14px;">
                                                         <thead>
                                                         <tr>
-                                                            <th translate="windoctorApp.treatment.treatment_date">Date</th>
-                                                            <th translate="windoctorApp.treatment.description">Description</th>
+                                                            <th translate="windoctorApp.treatment.treatment_date">Date
+                                                            </th>
+                                                            <th translate="windoctorApp.treatment.description">
+                                                                Description
+                                                            </th>
                                                             <th translate="windoctorApp.treatment.price">Price</th>
-                                                            <th translate="windoctorApp.treatment.paid_price" ng-show="displayActsTab">Paid price</th>
-                                                            <th translate="windoctorApp.treatment.remainingPrice" ng-show="displayActsTab">Remaining price</th>
-                                                            <th translate="windoctorApp.treatment.eventReason">eventReason</th>
+                                                            <th translate="windoctorApp.treatment.paid_price"
+                                                                ng-show="displayActsTab">Paid price
+                                                            </th>
+                                                            <th translate="windoctorApp.treatment.remainingPrice"
+                                                                ng-show="displayActsTab">Remaining price
+                                                            </th>
+                                                            <th translate="windoctorApp.treatment.eventReason">
+                                                                eventReason
+                                                            </th>
                                                             <th translate="windoctorApp.treatment.teeth">Teeth</th>
                                                             <th></th>
                                                         </tr>
@@ -158,16 +165,21 @@
                                     {{ treatment.description | limitTo: 10 }}{{treatment.description.length > 10 ? '...' : ''}}
                                 </span>
                                                             </td>
-                                                            <td ng-show="treatment.id===-1" translate="windoctorApp.treatment.total"
+                                                            <td ng-show="treatment.id===-1"
+                                                                translate="windoctorApp.treatment.total"
                                                                 style="background-color: black;;color: white;">Total
                                                             </td>
                                                             <td ng-show="treatment.id!==-1">{{treatment.price}}</td>
                                                             <td ng-show="treatment.id===-1"
-                                                                style="background-color: black;;color: white;">{{treatment.price}}
+                                                                style="background-color: black;;color: white;">
+                                                                {{treatment.price}}
                                                             </td>
-                                                            <td ng-show="treatment.id!==-1 &&  displayActsTab">{{treatment.paid_price}}</td>
+                                                            <td ng-show="treatment.id!==-1 &&  displayActsTab">
+                                                                {{treatment.paid_price}}
+                                                            </td>
                                                             <td ng-show="treatment.id===-1 &&  displayActsTab"
-                                                                style="background-color: black;;color: white;">{{treatment.paid_price}}
+                                                                style="background-color: black;;color: white;">
+                                                                {{treatment.paid_price}}
                                                             </td>
                                                             <td style="background-color: darkgreen;;color: white;"
                                                                 ng-show="(treatment.price - treatment.paid_price)===0 &&  displayActsTab">
@@ -181,7 +193,7 @@
                                                                 ng-show="(treatment.price - treatment.paid_price)<0 &&  displayActsTab">
                                                                 {{treatment.price - treatment.paid_price}}
                                                             </td>
-                                                            <td ng-show="treatment.id!==-1" &&  displayActsTab>
+                                                            <td ng-show="treatment.id!==-1" && displayActsTab>
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.eventReason.description }}"
@@ -192,7 +204,7 @@
                                     {{ treatment.eventReason.description | limitTo: 10 }}{{treatment.eventReason.description.length > 10 ? '...' : ''}}
                                 </span>
                                                             </td>
-                                                            <td ng-show="treatment.id!==-1" >
+                                                            <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.elements.length > 15"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.elements }}"
@@ -208,7 +220,8 @@
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id!==-1">
-                                                                <button ng-click="viewTreatmentDetail(treatment)" ng-show="false"
+                                                                <button ng-click="viewTreatmentDetail(treatment)"
+                                                                        ng-show="false"
                                                                         data-toggle="tooltip"
                                                                         tooltip="{{ 'entity.action.view' | translate }}"
                                                                         tooltip-class="eyeClass"
@@ -239,7 +252,8 @@
                                             </div>
                                             <div ng-show="displayAllPatientAttachments">
                                                 <div class="tab-content">
-                                                    <div class="tab-pane fade in active" id="tab1primary">Primary 1</div>
+                                                    <div class="tab-pane fade in active" id="tab1primary">Primary 1
+                                                    </div>
                                                     <div class="tab-pane fade" id="tab2primary">Primary 2</div>
                                                     <div class="tab-pane fade" id="tab3primary">Primary 3</div>
                                                     <div class="tab-pane fade" id="tab4primary">Primary 4</div>
@@ -258,8 +272,6 @@
                         </div>
                     </div>
                 </div>
-
-
 
 
             </form>
