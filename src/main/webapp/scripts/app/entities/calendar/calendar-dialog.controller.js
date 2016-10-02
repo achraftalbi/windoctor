@@ -26,7 +26,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToDialog =
             if ($scope.eventDTO === null || $scope.eventDTO === undefined) {
                 console.log('test eventId sent to server ' + $scope.event.id);
                 EventDTO.query({
-                    selectedDate: $stateParams.selectedDate + '',
+                    selectedDate: moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('T00:00:00.000',''),
                     eventId: $scope.event.id
                 }, function (result) {
                     $scope.endDateTab = [];

@@ -163,7 +163,8 @@
             </button>
             <button type="button" ng-click="saveAndClose()" ng-disabled="editForm.$invalid"
                     class="btn btn-primary">
-                <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.saveAndClose">Save</span>
+                <span class="glyphicon glyphicon-save"></span>&nbsp;<span
+                translate="entity.action.saveAndClose">Save</span>
             </button>
         </div>
     </form>
@@ -185,10 +186,11 @@
     </div>
 </div>
 <div ng-show="captureAnImageScreen">
-    <div>
-        <div class="alert alert-error ng-scope" ng-show="webcamError" style="">
-            <span>Webcam could not be started. Did you give access to it?</span>
-        </div>
+    <div ng-show="captureAnImageScreen">
+        <div>
+            <div class="alert alert-error ng-scope" ng-show="webcamError" style="">
+                <span>Webcam could not be started. Did you give access to it?</span>
+            </div>
             <webcam channel="channel"
                     on-streaming="onSuccess()"
                     on-error="onError(err)"
@@ -226,4 +228,3 @@
         </div>
     </div>
 </div>
-

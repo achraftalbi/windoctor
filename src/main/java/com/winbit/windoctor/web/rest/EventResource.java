@@ -235,9 +235,9 @@ public class EventResource {
             log.info("selectedDate 1 " + selectedDate);
             page = eventRepository.findAll(SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
         } else {
-            selectedDate = selectedDate.split("GMT")[0].trim();
-            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
-            log.info("first date:" + dateTimeInUTC + " segond date:" + dateTimeInUTC.plusDays(1));
+            selectedDate = selectedDate.split("GMT")[0].trim() + "";
+            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN);
+            log.info("first date:" + dateTimeInUTC + " segond date:x" + dateTimeInUTC.plusDays(1));
             page = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
             log.info("event list page.getContent().size()"+page.getContent().size());
         }
@@ -284,7 +284,7 @@ public class EventResource {
         } else {
             log.debug("selectedDate 222 " + selectedDate);
             selectedDate = selectedDate.split("GMT")[0].trim();
-            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
+            DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN);
             eventList = eventRepository.findAll(dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure());
             // I commented this list because this affected the load of data
             //eventDTO.setEventList(eventList);
@@ -418,7 +418,7 @@ public class EventResource {
         Page<Event> page = null;
         log.debug("REST request to get events query "+query);
         selectedDate = selectedDate.split("GMT")[0].trim();
-        DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN_BROWZER);
+        DateTime dateTimeInUTC = FunctionsUtil.convertStringToDateTimeUTC(selectedDate, WinDoctorConstants.WinDoctorPattern.DATE_PATTERN);
         // This function was omitted for problems found with elasticsearcg
         //page = eventSearchRepository.search(query,dateTimeInUTC, dateTimeInUTC.plusDays(1), SecurityUtils.getCurrerntStructure(), PaginationUtil.generatePageRequest(offset, limit));
         if(query==null || query.length()==0){

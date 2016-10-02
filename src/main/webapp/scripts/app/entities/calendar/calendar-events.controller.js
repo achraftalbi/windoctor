@@ -20,12 +20,12 @@ angular.module('windoctorApp')
         $scope.searchQueryPatientDialog='';
         $scope.displayTreatmentsPage = false;
         $scope.initTextDrawingInCanvas = false;
-        console.log('selectedDateString '+$scope.selectedDateString);
+        console.log('selectedDateString '+moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('T00:00:00.000',''));
         $scope.loadAll = function () {
             $scope.events = [];
             $scope.eventsEmpty = false;
             Event.query({
-                selectedDate: $stateParams.selectedDate + '',
+                selectedDate: moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('T00:00:00.000',''),
                 page: $scope.page,
                 per_page: $scope.numberPageEvents
             }, function (result, headers) {
@@ -99,7 +99,7 @@ angular.module('windoctorApp')
             if($scope.searchQuery===null || $scope.searchQuery===undefined || $scope.searchQuery===''){
                 $scope.loadAll();
             }else {
-                EventSearch.query({query: $scope.searchQuery,selectedDate: $stateParams.selectedDate + '',
+                EventSearch.query({query: $scope.searchQuery,selectedDate: moment(new Date($stateParams.selectedDate)).format('YYYY-MM-DDT00:00:00.000').replace('T00:00:00.000',''),
                     page: $scope.page, per_page: 5}, function (result, headers) {
                     $scope.links = ParseLinks.parse(headers('link'));
                     $scope.events = result;
