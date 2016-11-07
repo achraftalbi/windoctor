@@ -9,6 +9,7 @@ import com.winbit.windoctor.repository.search.FundSearchRepository;
 import com.winbit.windoctor.repository.search.TreatmentSearchRepository;
 import com.winbit.windoctor.security.AuthoritiesConstants;
 import com.winbit.windoctor.security.SecurityUtils;
+import com.winbit.windoctor.web.rest.dto.TreatmentDTO;
 import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
@@ -67,6 +68,9 @@ public class TreatmentResource {
     @Inject
     private UserRepository userRepository;
 
+    @Inject
+    private PlanRepository planRepository;
+
     /**
      * POST  /treatments -> Create a new treatment.
      */
@@ -83,7 +87,14 @@ public class TreatmentResource {
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
             treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
         }
+        if(treatment.getStatus()!=null && Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
+                Event event = eventRepository.findOne(treatment.getEvent().getId());
+                if(event.getUser().getPlan()!=null && event.getUser().getPlan().getId()!=null){
+                    treatment.setPlan(event.getUser().getPlan());
+                }else{
 
+                }
+        }
         // Mange funds with treatments Begin
         BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
         treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
@@ -172,26 +183,48 @@ public class TreatmentResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Treatment>> getAll(@RequestParam(value = "eventId", required = false) Long eventId, @RequestParam(value = "patientId", required = false) Long patientId, @RequestParam(value = "page", required = false) Integer offset,
-                                                  @RequestParam(value = "per_page", required = false) Integer limit)
+    public ResponseEntity<TreatmentDTO> getAll(@RequestParam(value = "eventId", required = false) Long eventId, @RequestParam(value = "patientId", required = false) Long patientId, @RequestParam(value = "page", required = false) Integer offset,
+                                               @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<Treatment> page = null;
+        Page<Treatment> pagePlan = null;
         if (patientId != null) {
             log.debug("patientId part -> eventId:" + eventId + " patientId:" + patientId);
             Pageable pageable = PaginationUtil.generatePageRequest(offset, limit);
-            if(offset == null || limit==null){
+            if (offset == null || limit == null) {
                 page = treatmentRepository.findByPatient(patientId, null);
-            }else{
+            } else {
                 page = treatmentRepository.findByPatient(patientId, PaginationUtil.generatePageRequest(offset, limit));
             }
-            //if (Constants.FIRST_PAGE.equals(offset)) {
-                Treatment totalPatientTreatments = treatmentRepository.findTotalPatientTreatments(patientId);
-                totalPatientTreatments.setId(-1l);
-                log.info("Total paid price :" + totalPatientTreatments.getPrice());
-                List<Treatment> newTreatmentList= new ArrayList<Treatment>(page.getContent());
-                newTreatmentList.add(totalPatientTreatments);
-                page = new PageImpl<Treatment>(newTreatmentList,pageable,page.getTotalElements());
-            //}
+            Treatment totalPatientTreatments = treatmentRepository.findTotalPatientTreatments(patientId);
+            totalPatientTreatments.setId(-1l);
+            log.info("Total paid price :" + totalPatientTreatments.getPrice());
+            List<Treatment> newTreatmentList = new ArrayList<Treatment>(page.getContent());
+            newTreatmentList.add(totalPatientTreatments);
+            page = new PageImpl<Treatment>(newTreatmentList, pageable, page.getTotalElements());
+
+            /**
+             * Treatment done for the plan.
+             */
+            if (offset == null || limit == null) {
+                pagePlan = treatmentRepository.findByPatientPlan(patientId, null);
+            } else {
+                pagePlan = treatmentRepository.findByPatientPlan(patientId, PaginationUtil.generatePageRequest(offset, limit));
+            }
+            Treatment totalPatientTreatmentsPlan = treatmentRepository.findTotalPatientTreatmentsPlan(patientId);
+            totalPatientTreatmentsPlan.setId(-1l);
+            if(totalPatientTreatmentsPlan!=null &&
+                totalPatientTreatmentsPlan.getPrice()==null){
+                totalPatientTreatmentsPlan.setPrice(new BigDecimal(0l));
+            }
+            if(totalPatientTreatmentsPlan!=null &&
+                totalPatientTreatmentsPlan.getPaid_price()==null){
+                totalPatientTreatmentsPlan.setPaid_price(new BigDecimal(0l));
+            }
+            log.info("Plan Total paid price :" + totalPatientTreatmentsPlan.getPrice());
+            List<Treatment> newTreatmentPlanList = new ArrayList<Treatment>(pagePlan.getContent());
+            newTreatmentPlanList.add(totalPatientTreatmentsPlan);
+            pagePlan = new PageImpl<Treatment>(newTreatmentPlanList, pageable, pagePlan.getTotalElements());
         } else if (eventId != null) {
             log.debug("eventId part -> eventId:" + eventId + " patientId:" + patientId);
             page = treatmentRepository.findByEvent(eventId, PaginationUtil.generatePageRequest(offset, limit));
@@ -201,7 +234,8 @@ public class TreatmentResource {
         }
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/treatments", offset, limit);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(new TreatmentDTO(page.getContent(), pagePlan==null?null:pagePlan.getContent()),
+            headers, HttpStatus.OK);
     }
 
     /**

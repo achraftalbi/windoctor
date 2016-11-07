@@ -7,6 +7,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.initVariables = function(){
             $scope.treatments = [];
             $scope.treatmentsAll = [];
+            $scope.treatmentsPlanAll = [];
             $scope.treatmentsCurrent = [];
             $scope.treatmentPage = 1;
             $scope.treatmentPer_Page = 5;
@@ -55,27 +56,37 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.clickOnActs = function () {
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
+            $scope.treatments= $scope.treatmentsAll;
+            $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
+            $scope.displayAddEditViewPopup = false;
+            $scope.displayTreatments = true;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
         };
 
         $scope.clickOnPlan = function () {
             $scope.displayPlanTab=true;
             $scope.displayActsTab=false;
+            $scope.treatments= $scope.treatmentsPlanAll;
+            $scope.displayAddEditViewPopup = false;
+            $scope.displayTreatments = true;
+            $scope.treatmentTotal = $scope.treatmentsPlanAll[$scope.treatmentsPlanAll.length-1];
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
         };
 
         // Display treatments Begin
         $scope.loadAllTreatmentsFromServer = function () {
             console.log('length event used '+$scope.event.id);
-            Treatment.query({
+            Treatment.getSimple({
                     patientId: $scope.event.user.id
                 }, function (result, headers) {
                     $scope.selectedDate = new Date($stateParams.selectedDate);
                     $scope.linksTreatment = ParseLinks.parse(headers('link'));
-                    $scope.treatmentsAll = result;
+                    $scope.treatmentsAll = result.treatmentsList;
+                    $scope.treatmentsPlanAll = result.treatmentsPlanList;
                     $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     var orderBy = $filter('orderBy');
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
+                    $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-treatment_date','-id']);
                     if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
                         && $scope.treatmentsAll.length>0){
                         //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
@@ -347,6 +358,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 doctor:$scope.defaultDoctor,
                 event: {id: $scope.event.id}
             };
+            if($scope.displayPlanTab){
+                $scope.treatment.status={id:1};
+            }
             $scope.temporaryElements=null;
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;

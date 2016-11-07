@@ -12,6 +12,13 @@ angular.module('windoctorApp')
                     return data;
                 }
             },
+            'getSimple': {
+                method: 'GET',
+                transformResponse: function (data) {
+                    data = angular.fromJson(data);
+                    return data;
+                }
+            },
             'update': {method: 'PUT'}
         });
     })

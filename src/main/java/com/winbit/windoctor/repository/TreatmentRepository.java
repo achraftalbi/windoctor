@@ -32,4 +32,13 @@ public interface TreatmentRepository extends JpaRepository<Treatment,Long> {
         " ( lower(t.description) like lower(?1) or lower(t.eventReason.description) like lower(?1) or lower(t.price) like lower(?1) or lower(t.paid_price) like lower(?1)) ")
     Page<Treatment> findAllMatchString(String query, Long patientId, Pageable var1);
 
+    /**
+     * This functions are used for the plan
+     */
+    @Query("select t from Treatment t where t.event.user.id = ?1 and (t.status.id = 1 or t.status.id = 3) and t.event.user.plan.id is not null and t.event.user.plan.id=t.plan.id")
+    Page<Treatment> findByPatientPlan(Long patientId, Pageable var1);
+
+    @Query("select new Treatment(sum(t.price),sum(t.paid_price)) from Treatment t where t.event.user.id = ?1  and (t.status.id = 1 or t.status.id = 3) and t.event.user.plan.id is not null and t.event.user.plan.id=t.plan.id order by t.treatment_date asc")
+    Treatment findTotalPatientTreatmentsPlan(Long patientId);
+
 }

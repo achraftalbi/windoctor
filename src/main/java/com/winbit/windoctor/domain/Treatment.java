@@ -37,8 +37,8 @@ public class Treatment implements Serializable {
     }
 
     public Treatment(BigDecimal price, BigDecimal paid_price){
-        this.price = price;
-        this.paid_price = paid_price;
+        this.price = price==null?price:new BigDecimal(0l);
+        this.paid_price = paid_price==null?paid_price:new BigDecimal(0l);
     }
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")

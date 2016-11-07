@@ -191,6 +191,17 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "number", precision=10, scale=2, nullable = false)
     private BigDecimal number;
 
+    @OneToOne
+    private Plan plan;
+
+    public Plan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(Plan plan) {
+        this.plan = plan;
+    }
+
     public String getAddress() {
         return address;
     }

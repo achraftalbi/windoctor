@@ -31,30 +31,45 @@ public class Plan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
 
-    @Size(min = 0, max = 100)        
+
+    @Size(min = 0, max = 100)
     @Column(name = "name", length = 100)
     private String name;
 
     @NotNull
     @Min(value = 1)
-    @Max(value = 10000000)        
+    @Max(value = 10000000)
     @Column(name = "number", precision=10, scale=2, nullable = false)
     private BigDecimal number;
-    
+
     @Column(name = "archive")
     private Boolean archive;
 
-    @NotNull        
+    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "creation_date", nullable = false)
     private DateTime creation_date;
 
+    /**
+     * This column is not used in plan treatments, it was met by error and we will let it here
+     * may be it can be used next.
+     */
     @ManyToOne
     private Structure structure;
+
+    @OneToOne
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Long getId() {
         return id;
