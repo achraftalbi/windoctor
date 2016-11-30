@@ -30,12 +30,12 @@
 
                 <div>
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                        <li ng-class="{active : displayActsTab}">
                             <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnActs()">
                                 <h4 translate="windoctorApp.treatment.home.acts">Actes</h4>
                             </a>
                         </li>
-                        <li ng-show="true">
+                        <li ng-class="{active : displayPlanTab}" ng-show="true">
                             <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnPlan()">
                                 <h4 translate="windoctorApp.treatment.home.plan">Plan</h4>
                             </a>
@@ -236,6 +236,15 @@
                                                                         tooltip-placement="bottom-left"
                                                                         class="btn btn-primary btn-sm">
                                                                     <span class="glyphicon glyphicon-pencil"></span>
+                                                                </button>
+                                                                <button ng-click="deleteTreatmentInPlan(treatment)"
+                                                                        data-toggle="tooltip"
+                                                                        ng-show="treatment.status.id===1 && displayPlanTab"
+                                                                        tooltip="{{ 'entity.action.delete' | translate }}"
+                                                                        tooltip-class="deleteClass"
+                                                                        tooltip-placement="bottom-left"
+                                                                        class="btn btn-danger btn-sm">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
                                                                 </button>
                                                             </td>
                                                             <td ng-show="treatment.id===-1"

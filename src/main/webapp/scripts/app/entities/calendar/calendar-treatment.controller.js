@@ -57,10 +57,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
             $scope.treatments= $scope.treatmentsAll;
-            $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
+            $scope.treatmentTotal = $scope.treatmentsAll[0];
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
+            $scope.drawSelectedElements();
         };
 
         $scope.clickOnPlan = function () {
@@ -69,8 +70,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatments= $scope.treatmentsPlanAll;
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
-            $scope.treatmentTotal = $scope.treatmentsPlanAll[$scope.treatmentsPlanAll.length-1];
+            $scope.treatmentTotal = $scope.treatmentsPlanAll[0];
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
+            $scope.drawSelectedElements();
         };
 
         // Display treatments Begin
@@ -86,30 +88,48 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     var orderBy = $filter('orderBy');
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
-                    $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-treatment_date','-id']);
+                    var totalTreatmentPlanElement =$scope.treatmentsPlanAll[$scope.treatmentsPlanAll.length-1];
+                        $scope.treatmentsPlanAll.splice($scope.treatmentsPlanAll.length-1, 1);
+                    $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-id']);
+                    $scope.treatmentsPlanAll.splice(0, 0,totalTreatmentPlanElement);
                     if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
                         && $scope.treatmentsAll.length>0){
-                        //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                        //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
                         var length = $scope.treatmentsAll.length;
                         console.log('length treatments '+length);
                         $scope.treatmentsCurrent=[];
                         $scope.treatments=[];
 
-                            $scope.elementsSelected =[];
-                            for(var i = 0;i<length;i++){
-                                if($scope.event!==null && $scope.event.id!==null && $scope.event.id!==undefined) {
-                                    if ($scope.treatmentsAll[i].id !== -1 && $scope.treatmentsAll[i].event.id === $scope.event.id) {
-                                        $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
-                                    }
-                                }
-                                if($scope.treatmentsAll[i].id!==-1){
-                                    $scope.addElements($scope.treatmentsAll[i]);
+                        $scope.elementsSelected =[];
+                        for(var i = 0;i<length;i++){
+                            if($scope.event!==null && $scope.event.id!==null && $scope.event.id!==undefined) {
+                                if ($scope.treatmentsAll[i].id !== -1 && $scope.treatmentsAll[i].event.id === $scope.event.id) {
+                                    $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
                                 }
                             }
+                            if($scope.treatmentsAll[i].id!==-1){
+                                $scope.addElements($scope.treatmentsAll[i]);
+                            }
+                        }
                         $scope.displayAllPatientTreatments = true;
                         $scope.treatments= $scope.treatmentsAll;
                         $scope.drawSelectedElements();
+                    }
+                    if($scope.treatmentsPlanAll!==null && $scope.treatmentsPlanAll!==undefined
+                        && $scope.treatmentsPlanAll.length>0){
+                        var length = $scope.treatmentsPlanAll.length;
+                        if($scope.treatmentsAll===null || $scope.treatmentsAll===undefined
+                            || $scope.treatmentsAll.length===0){
+                            $scope.elementsSelected =[];
+                        }
+                        $scope.displayPlanTab=true;
+                        $scope.displayActsTab=false;
+                        for(var i = 0;i<length;i++){
+                            if($scope.treatmentsPlanAll[i].id!==-1){
+                                $scope.addElements($scope.treatmentsPlanAll[i]);
+                            }
+                        }
+                        $scope.displayPlanTab=false;
+                        $scope.displayActsTab=true;
                     }
                 }
             );
@@ -117,19 +137,27 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
 
         $scope.orderTreatments = function () {
             var orderBy = $filter('orderBy');
-            $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
-            if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
-                && $scope.treatmentsAll.length>0){
-                //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
-                $scope.treatmentsCurrent=[];
-                $scope.treatments=[];
-                for(var i = 0;i<$scope.treatmentsAll.length;i++){
-                    if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
-                        $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+            if($scope.displayPlanTab){
+                var totalTreatmentPlanElement =$scope.treatmentsPlanAll[0];
+                $scope.treatmentsPlanAll.splice(0, 1);
+                $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-id']);
+                $scope.treatmentsPlanAll.splice(0, 0,totalTreatmentPlanElement);
+                $scope.treatments= $scope.treatmentsPlanAll;
+            }else{
+                $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
+                if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
+                    && $scope.treatmentsAll.length>0){
+                    //var firstElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                    //var lastElement = ($scope.treatmentPage-1)*$scope.treatmentPer_Page;
+                    $scope.treatmentsCurrent=[];
+                    $scope.treatments=[];
+                    for(var i = 0;i<$scope.treatmentsAll.length;i++){
+                        if($scope.treatmentsAll[i].id!==-1 && $scope.treatmentsAll[i].event.id===$scope.event.id){
+                            $scope.treatmentsCurrent.push($scope.treatmentsAll[i]);
+                        }
                     }
+                    $scope.treatments= $scope.treatmentsAll;
                 }
-                $scope.treatments= $scope.treatmentsAll;
             }
         };
 
@@ -142,12 +170,14 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             if($scope.event.id===null){
                 $scope.displayAllPatientTreatments =true;
             }
-            if ($scope.displayAllPatientTreatments === false) {
-                $scope.treatments = $scope.treatmentsCurrent;
-            } else {
-                $scope.treatments = $scope.treatmentsAll;
+            if($scope.displayActsTab === true){
+                if ($scope.displayAllPatientTreatments === false) {
+                    $scope.treatments = $scope.treatmentsCurrent;
+                } else {
+                    $scope.treatments = $scope.treatmentsAll;
+                }
+                $scope.displayAllPatientAttachments=false;
             }
-            $scope.displayAllPatientAttachments=false;
         };
 
         $scope.loadFunds = function () {
@@ -488,7 +518,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.$emit('windoctorApp:treatmentUpdate', result);
             $scope.treatment=result;
             console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
-            $scope.treatmentsAll.push($scope.treatment);
+            if($scope.displayPlanTab) {
+                $scope.treatmentsPlanAll.push($scope.treatment);
+            }else{
+                $scope.treatmentsAll.push($scope.treatment);
+            }
             $scope.loadPageTreatment($scope.treatmentPage);
             $scope.oldFund = $scope.treatment.fund;
             if($scope.oldTreatmentPrice===null){
@@ -581,6 +615,24 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayTreatments = false;
             $scope.displayTreatmentView = true;
             $scope.loadAllAttachments(1);
+        };
+
+        $scope.deleteTreatmentInPlan = function (treatment) {
+            Treatment.delete({id: treatment.id},
+                function () {
+                    var treatmentIndex = -1;
+                    for (var k = 0; k < $scope.treatmentsPlanAll.length; k++) {
+                        if (treatment.id === $scope.treatmentsPlanAll[k].id) {
+                            treatmentIndex = k;
+                            break;
+                        }
+                    }
+                    if(treatmentIndex>-1){
+                        $scope.treatmentsPlanAll.splice(treatmentIndex, 1);
+                    }
+                    $scope.clearTreatmentElements(treatment);
+                    $scope.createSelectedElements();
+                });
         };
 
         /********************************************************************************/

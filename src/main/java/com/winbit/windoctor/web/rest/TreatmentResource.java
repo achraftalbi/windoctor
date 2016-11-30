@@ -71,6 +71,9 @@ public class TreatmentResource {
     @Inject
     private PlanRepository planRepository;
 
+    @Inject
+    private PlanResource planResource;
+
     /**
      * POST  /treatments -> Create a new treatment.
      */
@@ -87,14 +90,36 @@ public class TreatmentResource {
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
             treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
         }
+
+        // Treatment done only for the plan.
         if(treatment.getStatus()!=null && Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
                 Event event = eventRepository.findOne(treatment.getEvent().getId());
+                treatment.setPaid_price(new BigDecimal(0l));
                 if(event.getUser().getPlan()!=null && event.getUser().getPlan().getId()!=null){
                     treatment.setPlan(event.getUser().getPlan());
                 }else{
-
+                    Plan plan = new Plan();
+                    plan.setUser(treatment.getEvent().getUser());
+                    plan.setStructure(new Structure());
+                    plan.getStructure().setId(SecurityUtils.getCurrerntStructure());
+                    plan.setCreation_date(new DateTime());
+                    BigDecimal planNumber = planRepository.findPlanNumber(event.getUser().getId(), SecurityUtils.getCurrerntStructure());
+                    plan.setNumber(new BigDecimal(planNumber == null ? 0 + 1 : planNumber.intValue() + 1));
+                    ResponseEntity<Plan> responseEntity = planResource.create(plan);
+                    event.getUser().setPlan(responseEntity.getBody());
+                    userRepository.save(event.getUser());
+                    treatment.setPlan(responseEntity.getBody());
                 }
         }
+
+        // Treatment if price or paid price is null.
+        if(treatment.getPrice()==null){
+            treatment.setPrice(new BigDecimal(0l));
+        }
+        if(treatment.getPaid_price()==null){
+            treatment.setPaid_price(new BigDecimal(0l));
+        }
+
         // Mange funds with treatments Begin
         BigDecimal oldFundAmount = new BigDecimal(treatment.getFund().getAmount().doubleValue());
         treatment.getFund().setAmount(new BigDecimal(treatment.getFund().getAmount().doubleValue() + treatment.getPaid_price().doubleValue()));
@@ -213,14 +238,6 @@ public class TreatmentResource {
             }
             Treatment totalPatientTreatmentsPlan = treatmentRepository.findTotalPatientTreatmentsPlan(patientId);
             totalPatientTreatmentsPlan.setId(-1l);
-            if(totalPatientTreatmentsPlan!=null &&
-                totalPatientTreatmentsPlan.getPrice()==null){
-                totalPatientTreatmentsPlan.setPrice(new BigDecimal(0l));
-            }
-            if(totalPatientTreatmentsPlan!=null &&
-                totalPatientTreatmentsPlan.getPaid_price()==null){
-                totalPatientTreatmentsPlan.setPaid_price(new BigDecimal(0l));
-            }
             log.info("Plan Total paid price :" + totalPatientTreatmentsPlan.getPrice());
             List<Treatment> newTreatmentPlanList = new ArrayList<Treatment>(pagePlan.getContent());
             newTreatmentPlanList.add(totalPatientTreatmentsPlan);
@@ -294,11 +311,18 @@ public class TreatmentResource {
     @Timed
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Treatment : {}", id);
-        treatmentRepository.delete(id);
-        treatmentSearchRepository.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("treatment",
-            id.toString()))
-            .build();
+        Treatment treatment = treatmentRepository.findOne(id);
+        if(Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
+            treatmentRepository.delete(id);
+            treatmentSearchRepository.delete(id);
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("treatment",
+                id.toString()))
+                .build();
+        }else{
+            return ResponseEntity.badRequest().headers(HeaderUtil.createEntityDeletionAlert("treatment",
+                id.toString()))
+                .build();
+        }
     }
 
     /**

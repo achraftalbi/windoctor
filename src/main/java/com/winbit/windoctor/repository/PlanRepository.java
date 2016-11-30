@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface PlanRepository extends JpaRepository<Plan,Long> {
 
-    @Query("select count(p) from Plan p where p.user.structure.id = ?1")
-    BigDecimal findPlanNumber(Long structureId);
+    @Query("select count(p) from Plan p where p.structure.id = ?2 and p.user.id = ?1")
+    BigDecimal findPlanNumber(Long patientId, Long structureId);
 
 }
