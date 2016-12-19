@@ -37,6 +37,7 @@
             "fundAmount": "Montant de la caisse",
             "total": "Total",
             "chooseFund": "Choisissez une caisse pour voir ce champs",
+            "amountPaidForAct": "Entrer le montant payé pour cet acte:",
             "theAmountOfNewOrOldFundNotEnough": "Le montant dans la caisse courante ou l'anciènne caisse n'est pas assez.",
             "priceLessThanPaidPrice": "Le prix payé doit être moins que le prix.",
             "firstDate": "First date",
@@ -48,6 +49,9 @@
             "eventReasonADDMessage": "Ajouter un acte",
             "eventReasonHideMessage": "Annuler l'ajout de l'acte",
             "eventReasonAdd": "Ajouter acte",
+            "status": "Statut",
+            "inProgress": "En cours",
+            "executed": "Executé",
             "teeth": "Dents",
             "chooseTeeth": "Choisissez des dents"
         }

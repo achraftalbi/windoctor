@@ -240,6 +240,12 @@ public class TreatmentResource {
             totalPatientTreatmentsPlan.setId(-1l);
             log.info("Plan Total paid price :" + totalPatientTreatmentsPlan.getPrice());
             List<Treatment> newTreatmentPlanList = new ArrayList<Treatment>(pagePlan.getContent());
+            /*for(Treatment treatment:newTreatmentPlanList){
+                if(treatment.getStatus()!=null
+                    && Constants.STATUS_EXECUTED.equals(treatment.getStatus().getId())){
+                    treatment.setElements(null);
+                }
+            }*/
             newTreatmentPlanList.add(totalPatientTreatmentsPlan);
             pagePlan = new PageImpl<Treatment>(newTreatmentPlanList, pageable, pagePlan.getTotalElements());
         } else if (eventId != null) {

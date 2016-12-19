@@ -23,7 +23,7 @@
                         date </h2>
                 </div>
             </div>
-            <form name="displayTreatmentForm" id="displayTreatmentFormId" role="form"
+            <form name="editForm2" id="displayTreatmentFormId" role="form"
                   show-validation>
                 <jh-alert></jh-alert>
                 <ng-include src="'scripts/app/entities/calendar/calendar-treatments-patient.html'"></ng-include>
@@ -128,14 +128,15 @@
                                                     <table class="table table-striped" style="font-size: 14px;">
                                                         <thead>
                                                         <tr>
+                                                            <th translate="windoctorApp.treatment.status" ng-show="displayPlanTab">Status
+                                                            </th>
                                                             <th translate="windoctorApp.treatment.treatment_date">Date
                                                             </th>
                                                             <th translate="windoctorApp.treatment.description">
                                                                 Description
                                                             </th>
                                                             <th translate="windoctorApp.treatment.price">Price</th>
-                                                            <th translate="windoctorApp.treatment.paid_price"
-                                                                ng-show="displayActsTab">Paid price
+                                                            <th translate="windoctorApp.treatment.paid_price">Paid price
                                                             </th>
                                                             <th translate="windoctorApp.treatment.remainingPrice"
                                                                 ng-show="displayActsTab">Remaining price
@@ -149,12 +150,30 @@
                                                         </thead>
                                                         <tbody>
                                                         <tr ng-repeat="treatment in treatments">
+                                                            <td ng-style="{'color': 'white','background-color': treatment.status.id===1 ? 'dodgerblue' : 'darkgreen'}"
+                                                                ng-show="treatment.status!==null && treatment.status!==undefined
+                                                                        && (treatment.status.id===1 || treatment.status.id===3) && displayPlanTab">
+                                                                <span translate="windoctorApp.treatment.inProgress" ng-show="treatment.status.id===1">In progress</span>
+                                                                <span translate="windoctorApp.treatment.executed" ng-show="treatment.status.id===3">Executed</span>
+                                                            </td>
+                                                            <td ng-show="treatment.id===-1 && displayPlanTab"
+                                                                style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
-                                                            <td ng-show="treatment.id!==-1">{{treatment.treatment_date |
-                                                                date:'dd/MM/yyyy HH:mm'}}
+                                                            <td ng-show="treatment.id!==-1 && treatment.status!==null && treatment.status!==undefined && treatment.status.id===1"
+                                                                style="background-color: grey;">
+                                                            </td>
+                                                            <td ng-show="treatment.id!==-1 && (treatment.status===null || treatment.status===undefined || treatment.status.id!==1)">
+                                                                {{treatment.treatment_date | date:'dd/MM/yyyy HH:mm'}}
                                                             </td>
                                                             <td ng-show="treatment.id!==-1">
+                                                            <span ng-show="paidPriceTreatment.treatmentIdToExecute===treatment.id"
+                                                                   style="color:green">
+                                                                <strong translate="windoctorApp.treatment.amountPaidForAct">
+                                                                    Enter the amount paid for the act:
+                                                                </strong>
+                                                            </span>
+                                                            <span ng-show="paidPriceTreatment.treatmentIdToExecute!==treatment.id">
                                 <span ng-show="treatment.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.description }}"
@@ -164,6 +183,7 @@
                                 <span ng-show="treatment.description.length <= 10">
                                     {{ treatment.description | limitTo: 10 }}{{treatment.description.length > 10 ? '...' : ''}}
                                 </span>
+                                                            </span>
                                                             </td>
                                                             <td ng-show="treatment.id===-1"
                                                                 translate="windoctorApp.treatment.total"
@@ -174,10 +194,36 @@
                                                                 style="background-color: black;;color: white;">
                                                                 {{treatment.price}}
                                                             </td>
-                                                            <td ng-show="treatment.id!==-1 &&  displayActsTab">
+                                                            <td ng-show="treatment.id!==-1 && treatment.status!==null && treatment.status!==undefined
+                                                                && treatment.status.id===1"
+                                                                style="background-color: grey;">
+                                                                <span ng-show="paidPriceTreatment.treatmentIdToExecute===treatment.id">
+                                                                    <input type="number" class="form-control" name="paidPriceExecutedA" id="field_paid_price_plan"
+                                                                           ng-change="changePaidPrice()" ng-model="paidPriceTreatment.paidPriceExecuted" >
+                                                                    <div >
+                                                                        <p class="help-block"  style="color:red"
+                                                                           ng-show="paidPriceTreatment.paidPriceErrorNumber===1" translate="entity.validation.required">
+                                                                            This field is required.
+                                                                        </p>
+
+                                                                        <p class="help-block" style="color:red"
+                                                                           ng-show="paidPriceTreatment.paidPriceErrorNumber===2" translate="entity.validation.max"
+                                                                           translate-value-max="0">
+                                                                            This field should be more than 0.
+                                                                        </p>
+
+                                                                        <p class="help-block" style="color:red"
+                                                                           ng-show="paidPriceTreatment.paidPriceErrorNumber===3" translate="entity.validation.min"
+                                                                           translate-value-min="10000000">
+                                                                            This field cannot be more than 10000000.
+                                                                        </p>
+                                                                    </div>
+                                                                </span>
+                                                            </td>
+                                                            <td ng-show="treatment.id!==-1 && (treatment.status===null || treatment.status===undefined || treatment.status.id!==1)">
                                                                 {{treatment.paid_price}}
                                                             </td>
-                                                            <td ng-show="treatment.id===-1 &&  displayActsTab"
+                                                            <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;">
                                                                 {{treatment.paid_price}}
                                                             </td>
@@ -193,7 +239,7 @@
                                                                 ng-show="(treatment.price - treatment.paid_price)<0 &&  displayActsTab">
                                                                 {{treatment.price - treatment.paid_price}}
                                                             </td>
-                                                            <td ng-show="treatment.id!==-1" && displayActsTab>
+                                                            <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"
                                       tooltip="{{ treatment.eventReason.description }}"
@@ -229,8 +275,20 @@
                                                                         class="btn btn-info btn-sm">
                                                                     <span class="glyphicon glyphicon-eye-open"></span>
                                                                 </button>
+                                                                <button ng-click="executeTreatmentInPlan(treatment)"
+                                                                        data-toggle="tooltip"
+                                                                        ng-show="treatment.status.id===1 && displayPlanTab
+                                                                         && paidPriceTreatment.treatmentIdToExecute!==treatment.id"
+                                                                        tooltip="{{ 'entity.action.execute' | translate }}"
+                                                                        tooltip-class="acceptClass"
+                                                                        tooltip-placement="bottom-left"
+                                                                        class="btn btn-success btn-sm">
+                                                                    <span class="glyphicon glyphicon-flash"></span>
+                                                                </button>
                                                                 <button ng-click="editTreatment(treatment)"
                                                                         data-toggle="tooltip"
+                                                                        ng-show="(!(treatment.status.id===3 && displayPlanTab))
+                                                                         && paidPriceTreatment.treatmentIdToExecute!==treatment.id"
                                                                         tooltip="{{ 'entity.action.edit' | translate }}"
                                                                         tooltip-class="pencilClass"
                                                                         tooltip-placement="bottom-left"
@@ -239,12 +297,28 @@
                                                                 </button>
                                                                 <button ng-click="deleteTreatmentInPlan(treatment)"
                                                                         data-toggle="tooltip"
-                                                                        ng-show="treatment.status.id===1 && displayPlanTab"
+                                                                        ng-show="treatment.status.id===1 && displayPlanTab
+                                                                         && paidPriceTreatment.treatmentIdToExecute!==treatment.id"
                                                                         tooltip="{{ 'entity.action.delete' | translate }}"
                                                                         tooltip-class="deleteClass"
                                                                         tooltip-placement="bottom-left"
                                                                         class="btn btn-danger btn-sm">
                                                                     <span class="glyphicon glyphicon-remove"></span>
+                                                                </button>
+                                                                <button type="button" ng-click="confirmExecuteTreatmentInPlan(treatment)"
+                                                                        ng-show="treatment.status.id===1 && displayPlanTab
+                                                                         && paidPriceTreatment.treatmentIdToExecute===treatment.id"
+                                                                        ng-disabled="paidPriceTreatment.paidPriceErrorNumber===1 || paidPriceTreatment.paidPriceErrorNumber===2
+                                                                         || paidPriceTreatment.paidPriceErrorNumber===3"
+                                                                        class="btn btn-success btn-sm">
+                                                                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.confirm">Confirm</span>
+                                                                </button>
+                                                                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"
+                                                                        ng-show="treatment.status.id===1 && displayPlanTab
+                                                                         && paidPriceTreatment.treatmentIdToExecute===treatment.id"
+                                                                        ng-click="closeExecuteTreatmentInPlan(treatment)">
+                                                                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+                                                                    translate="entity.action.close">Close</span>
                                                                 </button>
                                                             </td>
                                                             <td ng-show="treatment.id===-1"

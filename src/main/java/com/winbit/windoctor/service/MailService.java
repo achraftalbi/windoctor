@@ -334,10 +334,16 @@ public class MailService {
         log.debug("Sending recall apppointment correct treatment to '{}'");
         DateTime dateTime = new DateTime().withTime(0,0,0,0);
         List<Event> eventList = eventRepository.
-            findAppointmentsToRecall(dateTime.plusDays(1), dateTime.plusDays(3));
+            findAppointmentsToRecall(dateTime.plusDays(0), dateTime.plusDays(3));
         log.info("list of events to recall " + eventList);
         for (Event eventVar : eventList) {
-            Locale locale = Locale.forLanguageTag(eventVar.getUser().getLangKey());
+            Locale locale = null;
+            try{
+                locale = Locale.forLanguageTag(eventVar.getUser().getLangKey()==null?
+                    Constants.FRENCH_DEFAULT_LANGUAGE:eventVar.getUser().getLangKey());
+            }catch(Exception e){
+                log.info("Exception language " + e.getMessage());
+            }
             Context context = new Context(locale);
             context.setVariable("user", eventVar.getUser());
             context.setVariable("structure", eventVar.getUser().getStructure());

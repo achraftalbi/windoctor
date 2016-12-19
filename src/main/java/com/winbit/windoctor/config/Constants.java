@@ -25,6 +25,7 @@ public final class Constants {
     public static final Long STATUS_IN_PROGRESS = 1l;
     public static final Long STATUS_VISIT = 8l;
     public static final Long STATUS_CANCELLED = 2l;
+    public static final Long STATUS_EXECUTED = 3l;
     public static final Long STATUS_CANCELLED_BY_PATIENT = 10l;
     public static final Long STATUS_REQUEST = 7l;
     public static final Long STATUS_REJECTED = 6l;
@@ -43,6 +44,8 @@ public final class Constants {
 
     // Special characters
     public static final String PERCENTAGE = "%";
+
+    public static final String FRENCH_DEFAULT_LANGUAGE = "fr";
 
     private Constants() {
     }

@@ -423,7 +423,10 @@ angular.module('windoctorApp').expandTreatmentsControllerElements =
                 $scope.displayActsTab=false;
                 for(var i = 0;i<length;i++){
                     if($scope.treatmentsPlanAll[i].id!==-1){
-                        $scope.addElements($scope.treatmentsPlanAll[i]);
+                        if($scope.treatmentsPlanAll[i].status===null || $scope.treatmentsPlanAll[i].status===undefined
+                            ||$scope.treatmentsPlanAll[i].status.id!=3) {
+                            $scope.addElements($scope.treatmentsPlanAll[i]);
+                        }
                     }
                 }
             }
@@ -434,7 +437,7 @@ angular.module('windoctorApp').expandTreatmentsControllerElements =
             }
         };
 
-        $scope.clearTreatmentElements = function (treatment) {
+         $scope.clearTreatmentElements = function (treatment) {
             if(treatment.elements!==null && treatment.elements!==undefined
                 && treatment.elements.length>0){
                 var split = treatment.elements.split(',');

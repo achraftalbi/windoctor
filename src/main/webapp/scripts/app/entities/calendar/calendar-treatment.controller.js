@@ -51,6 +51,12 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
+
+            $scope.paidPriceTreatment = {
+                treatmentIdToExecute : null,
+                paidPriceExecuted : 0,
+                paidPriceErrorNumber : 0
+            };
         };
 
         $scope.clickOnActs = function () {
@@ -61,7 +67,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
-            $scope.drawSelectedElements();
+            $scope.clear();
+            $scope.myCanvas();
+            $scope.createSelectedElements();
         };
 
         $scope.clickOnPlan = function () {
@@ -72,7 +80,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayTreatments = true;
             $scope.treatmentTotal = $scope.treatmentsPlanAll[0];
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
-            $scope.drawSelectedElements();
+            $scope.clear();
+            $scope.myCanvas();
+            $scope.createSelectedElements();
         };
 
         // Display treatments Begin
@@ -124,8 +134,12 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                         $scope.displayPlanTab=true;
                         $scope.displayActsTab=false;
                         for(var i = 0;i<length;i++){
+
                             if($scope.treatmentsPlanAll[i].id!==-1){
-                                $scope.addElements($scope.treatmentsPlanAll[i]);
+                                if($scope.treatmentsPlanAll[i].status===null || $scope.treatmentsPlanAll[i].status===undefined
+                                    ||$scope.treatmentsPlanAll[i].status.id!=3){
+                                    $scope.addElements($scope.treatmentsPlanAll[i]);
+                                }
                             }
                         }
                         $scope.displayPlanTab=false;
@@ -628,11 +642,57 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                         }
                     }
                     if(treatmentIndex>-1){
+                        $scope.treatmentTotal.price = $scope.treatmentTotal.price - treatment.price;
                         $scope.treatmentsPlanAll.splice(treatmentIndex, 1);
                     }
                     $scope.clearTreatmentElements(treatment);
                     $scope.createSelectedElements();
                 });
+        };
+
+        $scope.changePaidPrice = function () {
+
+            if($scope.paidPriceTreatment.paidPriceExecuted === null
+                || $scope.paidPriceTreatment.paidPriceExecuted===undefined) {
+                $scope.paidPriceTreatment.paidPriceErrorNumber = 1;
+            }else if($scope.paidPriceTreatment.paidPriceExecuted <0){
+                $scope.paidPriceTreatment.paidPriceErrorNumber = 2;
+            }else if($scope.paidPriceTreatment.paidPriceExecuted >10000000){
+                $scope.paidPriceTreatment.paidPriceErrorNumber = 3;
+            }else{
+                $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+            }
+        };
+        $scope.executeTreatmentInPlan = function (treatment) {
+            $scope.paidPriceTreatment.treatmentIdToExecute = treatment.id;
+            $scope.paidPriceTreatment.paidPriceExecuted = 0;
+            $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+        };
+        $scope.closeExecuteTreatmentInPlan = function (treatment) {
+            $scope.paidPriceTreatment.treatmentIdToExecute = null;
+            $scope.paidPriceTreatment.paidPriceExecuted = 0;
+            $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+        };
+        $scope.confirmExecuteTreatmentInPlan = function (treatment) {
+            treatment.status.id=3;
+            treatment.treatment_date=$scope.event.event_date;
+            treatment.paid_price=$scope.paidPriceTreatment.paidPriceExecuted;
+            Treatment.update(treatment, onSaveTreatmentFinishedUpdate);
+            $scope.paidPriceTreatment.treatmentIdToExecute = null;
+            $scope.paidPriceTreatment.paidPriceExecuted = 0;
+            $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+            var treatmentTmp={};
+            angular.copy(treatment, treatmentTmp);
+            $scope.treatmentsAll.push(treatmentTmp);
+            $scope.treatmentsAll[0].price=$scope.treatmentsAll[0].price+treatment.price;
+            $scope.treatmentsAll[0].paid_price=$scope.treatmentsAll[0].paid_price+treatment.paid_price;
+            $scope.displayPlanTab=false;
+            $scope.displayActsTab=true;
+            $scope.orderTreatments();
+            $scope.displayPlanTab=true;
+            $scope.displayActsTab=false;
+            $scope.clickOnPlan();
+
         };
 
         /********************************************************************************/

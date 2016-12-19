@@ -37,6 +37,7 @@
             "fundAmount": "Fund amount",
             "total": "Total",
             "chooseFund": "Choose a fund to see this field",
+            "amountPaidForAct": "Enter the amount paid for this act:",
             "theAmountOfNewOrOldFundNotEnough": "The amount of the current fund or the old fund is not enough.",
             "priceLessThanPaidPrice": "The paid price must be less than price.",
             "firstDate": "First date",
@@ -48,6 +49,9 @@
             "eventReasonADDMessage": "Add an act",
             "eventReasonHideMessage": "Cancel adding of the act",
             "eventReasonAdd": "Add act",
+            "status": "Status",
+            "inProgress": "In progress",
+            "executed": "Executed",
             "teeth": "Teeth",
             "chooseTeeth": "Choose teeth"
         }

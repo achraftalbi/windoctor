@@ -136,6 +136,8 @@
             "close": "Close",
             "delete": "Delete",
             "edit": "Edit",
+            "execute": "Execute",
+            "confirm": "Confirm",
             "select": "Select",
             "search": "Search",
             "save": "Save",

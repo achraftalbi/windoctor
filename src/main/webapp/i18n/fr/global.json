@@ -135,6 +135,8 @@
             "cancel": "Annuler",
             "close": "Fermer",
             "edit": "Editer",
+            "execute": "Exécuter",
+            "confirm": "Confirmer",
             "select": "Séléctionner",
             "search": "Rechercher",
             "delete": "Supprimer",
