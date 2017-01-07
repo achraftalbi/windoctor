@@ -17,13 +17,6 @@
        <addColumn tableName="PLAN">
            <column name="user_id" type="bigint"/>
        </addColumn>
-       <addForeignKeyConstraint baseColumnNames="user_id"
-                                baseTableName="PLAN"
-                                constraintName="FK_plan_user"
-                                deferrable="false"
-                                initiallyDeferred="false"
-                                referencedColumnNames="id"
-                                referencedTableName="JHI_USER"/>
    </changeSet>
 
 </databaseChangeLog>

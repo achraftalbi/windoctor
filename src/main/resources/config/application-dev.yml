@@ -1,5 +1,6 @@
 server:
     port: 8080
+    sessionTimeout: 300000
 
 email:
     hostname: http://localhost

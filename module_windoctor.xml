@@ -2,9 +2,9 @@
 <project name="module_windoctor" default="compile.module.windoctor">
   <dirname property="module.windoctor.basedir" file="${ant.file.module_windoctor}"/>
   
-  <property name="module.jdk.home.windoctor" value="${jdk.home.1.8}"/>
-  <property name="module.jdk.bin.windoctor" value="${jdk.bin.1.8}"/>
-  <property name="module.jdk.classpath.windoctor" value="jdk.classpath.1.8"/>
+  <property name="module.jdk.home.windoctor" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.windoctor" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.windoctor" value="${project.jdk.classpath}"/>
   
   <property name="compiler.args.windoctor" value="-encoding UTF-8 -source 8 -target 1.8 ${compiler.args}"/>
   

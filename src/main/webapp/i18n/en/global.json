@@ -145,6 +145,7 @@
             "view": "View",
             "choose": "Choose",
             "refresh": "Refresh",
+            "archive": "Archive",
             "display": "Display"
         },
         "detail": {

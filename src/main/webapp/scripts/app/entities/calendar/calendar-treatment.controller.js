@@ -1,7 +1,7 @@
 'use strict';
 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
     function ($scope, $rootScope,$stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
-              Event_reason, Event, Patient,Attachment,Fund) {
+              Event_reason, Event, Patient,Attachment,Fund,Plan) {
 
 
         $scope.initVariables = function(){
@@ -40,7 +40,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.priceLessThanPaidPrice = false;
             $scope.captureAnImageScreen = false;
             $scope.saveTreatmentOnGoing = false;
-
+            $scope.archiveCurrentPlanFlag = false;
             $scope.elementsSelected =[];
             $scope.selectedElement = null;
             $scope.TO_RADIANS = Math.PI/180;
@@ -313,12 +313,19 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.refreshAll = function () {
+            $scope.displayPlanTab=false;
+            $scope.displayActsTab=true;
             $scope.loadAllTreatmentsFromServer();
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
         };
         $scope.clear = function () {
             $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
+            $scope.paidPriceTreatment = {
+                treatmentIdToExecute : null,
+                paidPriceExecuted : 0,
+                paidPriceErrorNumber : 0
+            };
         };
         $scope.clearDeleteTreatment = function () {
             $scope.treatmentToDelete = {
@@ -337,6 +344,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
         // Treatment to display all or only treatment events
         $scope.displayAllPatientTreatmentsFunction = function () {
+            $scope.clear();
             $scope.displayAllPatientTreatments = true;
             $scope.displayTreatments = true;
             $scope.displayAddEditViewPopup=false;
@@ -377,10 +385,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.priceLessThanPaidPrice = false;
             }*/
 
-            console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
-            console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );
-            console.log(" $scope.treatment.paid_price "+$scope.treatment.paid_price );
-            console.log("$scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price) 4 "+($scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price)));
+            //console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
+            //console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );
+            //console.log(" $scope.treatment.paid_price "+$scope.treatment.paid_price );
+            //console.log("$scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price) 4 "+($scope.oldFund.amount - ( $scope.oldTreatmentPaidPrice - $scope.treatment.paid_price)));
 
         };
         // Display treatments end
@@ -669,18 +677,22 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
         };
         $scope.closeExecuteTreatmentInPlan = function (treatment) {
-            $scope.paidPriceTreatment.treatmentIdToExecute = null;
-            $scope.paidPriceTreatment.paidPriceExecuted = 0;
-            $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+            $scope.paidPriceTreatment = {
+                treatmentIdToExecute : null,
+                paidPriceExecuted : 0,
+                paidPriceErrorNumber : 0
+            };
         };
         $scope.confirmExecuteTreatmentInPlan = function (treatment) {
             treatment.status.id=3;
             treatment.treatment_date=$scope.event.event_date;
             treatment.paid_price=$scope.paidPriceTreatment.paidPriceExecuted;
             Treatment.update(treatment, onSaveTreatmentFinishedUpdate);
-            $scope.paidPriceTreatment.treatmentIdToExecute = null;
-            $scope.paidPriceTreatment.paidPriceExecuted = 0;
-            $scope.paidPriceTreatment.paidPriceErrorNumber = 0;
+            $scope.paidPriceTreatment = {
+                treatmentIdToExecute : null,
+                paidPriceExecuted : 0,
+                paidPriceErrorNumber : 0
+            };
             var treatmentTmp={};
             angular.copy(treatment, treatmentTmp);
             $scope.treatmentsAll.push(treatmentTmp);
@@ -693,6 +705,37 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayActsTab=false;
             $scope.clickOnPlan();
 
+        };
+
+        $scope.archiveCurrentPlan = function () {
+            $scope.archiveCurrentPlanFlag = false;
+            if($scope.treatmentsPlanAll!==null && $scope.treatmentsPlanAll!==undefined
+                && $scope.treatmentsPlanAll.length>1){
+                $scope.archiveCurrentPlanFlag = true;
+            }else{
+                $scope.archiveCurrentPlanFlag = false;
+            }
+            $('#archivePlanPopup').modal('show');
+        };
+
+        $scope.confirmArchiveCurrentPlan = function () {
+            $scope.paidPriceTreatment = {
+                treatmentIdToExecute : null,
+                paidPriceExecuted : 0,
+                paidPriceErrorNumber : 0
+            };
+            Plan.get({id: $scope.treatmentsPlanAll[1].plan.id}, function(result) {
+                $scope.treatmentsPlanAll=[];
+                $scope.treatmentTotal.price=0;
+                $scope.treatmentTotal.paid_price=0;
+                $scope.treatmentsPlanAll.push($scope.treatmentTotal);
+                $scope.treatments=treatmentsPlanAll;
+                $('#archivePlanPopup').modal('hide');
+            });
+        };
+
+        $scope.closeArchiveCurrentPlan = function () {
+            $('#archivePlanPopup').modal('hide');
         };
 
         /********************************************************************************/

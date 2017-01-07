@@ -1,5 +1,6 @@
 server:
     port: 8642
+    sessionTimeout: 300000
 
 email:
     hostname: http://localhost

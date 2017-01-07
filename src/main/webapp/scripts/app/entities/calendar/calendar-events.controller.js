@@ -3,7 +3,7 @@
 angular.module('windoctorApp')
     .controller('CalendarEventsController', function ($scope, $rootScope,$stateParams, Event, EventSearch,EventDTO, Patient, ParseLinks,
                                                       PatientSearch, $filter, Principal,$translate,Treatment, TreatmentSearch,
-                                                      Doctor,Event_reason,Attachment,Fund,CategoryAct) {
+                                                      Doctor,Event_reason,Attachment,Fund,CategoryAct,Plan) {
         $scope.events = [];
         $scope.page = 1;
         $scope.numberPageEvents = 5;
@@ -171,7 +171,7 @@ angular.module('windoctorApp')
                 console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
                 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments
                 ($scope, $rootScope, $stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
-                    Event_reason, Event, Patient,Attachment,Fund);
+                    Event_reason, Event, Patient,Attachment,Fund,Plan);
             }
         };
 

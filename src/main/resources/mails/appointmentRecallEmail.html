@@ -16,7 +16,7 @@
                             <div
                                 style="font-family:Bodoni MT;font-size:14px;padding:20px 15px;color:#999;line-height:2em">
                                 <span th:text="#{email.greeting}">Dear, </span>
-                                <span style="color:white" th:text="#{email.greeting.user(${user.login})}"/>
+                                <span style="color:white" th:text="#{email.greeting.user(${user.firstName})}"/>
                             </div>
                         </td>
                     </tr>
@@ -59,7 +59,7 @@
                                         <a
                                             style="text-decoration:none;font-size:25px;color:DarkCyan;font-weight:bold;font-family:Arial,sans-serif"
                                             href="#">
-                                            <span th:text="#{email.appointment.recall.subtitle(${user.login},${appointmentDate})}">Appointment recall</span>
+                                            <span th:text="#{email.appointment.recall.subtitle(${user.lastName},${user.firstName},${appointmentDate})}">Appointment recall</span>
 
                                         </a>
                                     </td>

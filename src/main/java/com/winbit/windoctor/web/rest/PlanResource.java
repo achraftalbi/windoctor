@@ -2,8 +2,11 @@ package com.winbit.windoctor.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.winbit.windoctor.domain.Plan;
+import com.winbit.windoctor.domain.User;
 import com.winbit.windoctor.repository.PlanRepository;
+import com.winbit.windoctor.repository.UserRepository;
 import com.winbit.windoctor.repository.search.PlanSearchRepository;
+import com.winbit.windoctor.security.SecurityUtils;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -37,6 +40,9 @@ public class PlanResource {
 
     @Inject
     private PlanRepository planRepository;
+
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private PlanSearchRepository planSearchRepository;
@@ -103,7 +109,15 @@ public class PlanResource {
     @Timed
     public ResponseEntity<Plan> get(@PathVariable Long id) {
         log.debug("REST request to get Plan : {}", id);
-        return Optional.ofNullable(planRepository.findOne(id))
+        Plan planTmp = planRepository.findOne(id);
+        if(planTmp!=null && SecurityUtils.getCurrerntStructure().equals(planTmp.getStructure().getId())){
+            planTmp.setArchive(true);
+            User patient = userRepository.findOne(planTmp.getUser_id());
+            patient.setPlan(null);
+            userRepository.save(patient);
+            planRepository.save(planTmp);
+        }
+        return Optional.ofNullable(planTmp)
             .map(plan -> new ResponseEntity<>(
                 plan,
                 HttpStatus.OK))

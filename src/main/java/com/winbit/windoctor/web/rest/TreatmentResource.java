@@ -99,7 +99,7 @@ public class TreatmentResource {
                     treatment.setPlan(event.getUser().getPlan());
                 }else{
                     Plan plan = new Plan();
-                    plan.setUser(treatment.getEvent().getUser());
+                    plan.setUser_id(event.getUser().getId());
                     plan.setStructure(new Structure());
                     plan.getStructure().setId(SecurityUtils.getCurrerntStructure());
                     plan.setCreation_date(new DateTime());
