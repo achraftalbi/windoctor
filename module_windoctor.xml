@@ -17,6 +17,9 @@
   
   <path id="windoctor.module.production.classpath">
     <path refid="${module.jdk.classpath.windoctor}"/>
+    <path refid="library.maven:_com.itextpdf:itextpdf:5.3.4.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.8.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-core:3.1.2.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-api:1.7.12.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-annotation:3.1.2.classpath"/>
@@ -166,6 +169,9 @@
   
   <path id="windoctor.runtime.production.module.classpath">
     <pathelement location="${windoctor.output.dir}"/>
+    <path refid="library.maven:_com.itextpdf:itextpdf:5.3.4.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.8.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-core:3.1.2.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-api:1.7.12.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-annotation:3.1.2.classpath"/>
@@ -316,6 +322,9 @@
   <path id="windoctor.module.classpath">
     <path refid="${module.jdk.classpath.windoctor}"/>
     <pathelement location="${windoctor.output.dir}"/>
+    <path refid="library.maven:_com.itextpdf:itextpdf:5.3.4.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.8.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-core:3.1.2.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-api:1.7.12.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-annotation:3.1.2.classpath"/>
@@ -516,6 +525,9 @@
   <path id="windoctor.runtime.module.classpath">
     <pathelement location="${windoctor.testoutput.dir}"/>
     <pathelement location="${windoctor.output.dir}"/>
+    <path refid="library.maven:_com.itextpdf:itextpdf:5.3.4.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.8.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.5.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-core:3.1.2.classpath"/>
     <path refid="library.maven:_org.slf4j:slf4j-api:1.7.12.classpath"/>
     <path refid="library.maven:_io.dropwizard.metrics:metrics-annotation:3.1.2.classpath"/>

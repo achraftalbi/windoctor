@@ -39,6 +39,11 @@ public final class Constants {
     public static final String GLOBAL_DATE_FORMAT = "yy/MM/yyyy";
     public static final String GLOBAL_HOUR_MINUTE = "HH:mm";
 
+    //WinDoctor constants types
+    public static final Long LONG = 1l,
+        DOUBLE = 2l,
+        OTHER = 0l;
+
     //Structure constants
     public static final Long DEFAULT_MAX_EVENTS_PATIENT_CAN_ADD = 3l;
 

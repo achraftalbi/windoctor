@@ -3,6 +3,8 @@ package com.winbit.windoctor.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;
+import com.winbit.windoctor.service.excel.servlets.PatientPlanServlet;
+import com.winbit.windoctor.service.pdf.servlets.PatientPlanServletPdf;
 import com.winbit.windoctor.web.filter.CachingHttpHeadersFilter;
 import com.winbit.windoctor.web.filter.ChangeURIPathFilter;
 import com.winbit.windoctor.web.filter.StaticResourcesProductionFilter;
@@ -60,6 +62,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         /*******************************************************************************************************************************************/
         /*******************************************************************************************************************************************/
         //initChangeURIPathFilter(servletContext);
+        servletContext.addServlet("PatientPlanServletPdf"/*servlet name*/, PatientPlanServletPdf.class /*servlet class*/);
+        servletContext.getServletRegistration("PatientPlanServletPdf" /*servlet name*/).addMapping("/servlet/PatientPlanServletPdf" /*servlet path*/);
         log.info("Web application fully configured");
     }
 

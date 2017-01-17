@@ -1,0 +1,43 @@
+<div>
+    <div style="padding-top: 10px">
+    </div>
+    <div >
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 translate="windoctorApp.treatment.archives.archivesPlans"
+                    class="panel-title"></h3>
+            </div>
+            <div class="panel-body">
+                <div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" style="font-size: 14px;">
+                            <thead>
+                            <tr>
+                                <th translate="windoctorApp.treatment.archives.number">Number
+                                </th>
+                                <th translate="windoctorApp.treatment.archives.livePdf">Live PDF
+                                </th>
+                                <th translate="windoctorApp.treatment.archives.copySystem">Copy system
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="planArchived in plansArchived">
+                                <td>
+                                    {{planArchived.number}}
+                                </td>
+                                <td>
+                                    {{planArchived.number}}
+                                </td>
+                                <td>
+                                    {{planArchived.number}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

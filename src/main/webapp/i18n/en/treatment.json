@@ -10,9 +10,16 @@
                 "displayPatientTreatmentsVisit": "Current acts",
                 "acts": "Acts",
                 "plan": "Plan",
+                "archives": "Archives",
                 "archive": "Archive",
                 "createLabelPlan": "Create an act for the plan",
                 "attachments": "Attachments"
+            },
+            "archives": {
+                "number": "Number",
+                "livePdf": "Live PDF",
+                "copySystem": "Copy system",
+                "archivesPlans": "Archives of plans"
             },
             "created": "A new act is created with time {{ param }}",
             "updated": "An act with time {{ param }} is updated ",

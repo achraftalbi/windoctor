@@ -92,12 +92,12 @@ public class PlanResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Plan>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+    public ResponseEntity<List<Plan>> getAll(@RequestParam(value = "patientId", required = false) Long patientId,
+                                             @RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
-        Page<Plan> page = planRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/plans", offset, limit);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        List<Plan> plansArchived = planRepository.findAll(patientId, SecurityUtils.getCurrerntStructure());
+        return new ResponseEntity<>(plansArchived, HttpStatus.OK);
     }
 
     /**

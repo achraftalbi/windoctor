@@ -9,6 +9,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatmentsAll = [];
             $scope.treatmentsPlanAll = [];
             $scope.treatmentsCurrent = [];
+            $scope.plansArchived = [];
             $scope.treatmentPage = 1;
             $scope.treatmentPer_Page = 5;
             $scope.attachmentPage = 1;
@@ -50,6 +51,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayAllPatientAttachments=false;
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
+            $scope.displayArchivesTab=false;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
 
             $scope.paidPriceTreatment = {
@@ -62,6 +64,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.clickOnActs = function () {
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
+            $scope.displayArchivesTab=false;
             $scope.treatments= $scope.treatmentsAll;
             $scope.treatmentTotal = $scope.treatmentsAll[0];
             $scope.displayAddEditViewPopup = false;
@@ -75,6 +78,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.clickOnPlan = function () {
             $scope.displayPlanTab=true;
             $scope.displayActsTab=false;
+            $scope.displayArchivesTab=false;
             $scope.treatments= $scope.treatmentsPlanAll;
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
@@ -83,6 +87,27 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.clear();
             $scope.myCanvas();
             $scope.createSelectedElements();
+        };
+
+        $scope.clickOnArchives = function () {
+            $scope.displayArchivesTab=true;
+            $scope.displayActsTab=true;
+            $scope.displayPlanTab=false;
+            $scope.treatments= $scope.treatmentsAll;
+            $scope.displayAddEditViewPopup = false;
+            $scope.displayTreatments = true;
+            $scope.treatmentTotal = $scope.treatmentsAll[0];
+            $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
+            if($scope.plansArchived===null || $scope.plansArchived===undefined
+                ||$scope.plansArchived.length===0){
+                Plan.query( {patientId:$scope.event.user.id}, function(result) {
+                    $scope.plansArchived = result;
+                });
+            }
+            $scope.clear();
+            $scope.myCanvas();
+            $scope.createSelectedElements();
+            $scope.displayActsTab=false;
         };
 
         // Display treatments Begin
@@ -729,7 +754,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.treatmentTotal.price=0;
                 $scope.treatmentTotal.paid_price=0;
                 $scope.treatmentsPlanAll.push($scope.treatmentTotal);
-                $scope.treatments=treatmentsPlanAll;
+                $scope.treatments=$scope.treatmentsPlanAll;
+                $scope.plansArchived.push(result);
+                var orderBy = $filter('orderBy');
+                $scope.plansArchived = orderBy($scope.plansArchived, ['-number']);
                 $('#archivePlanPopup').modal('hide');
             });
         };

@@ -253,6 +253,8 @@ public class MailService {
             log.debug("sendEventEmail e-mail to usedForTreatment.getUser().getStructure() != null '{}'", usedForTreatment.getUser().getEmail());
 
             Locale locale = Locale.forLanguageTag(usedForTreatment.getUser().getLangKey());
+
+
             Context context = new Context(locale);
             context.setVariable("user", usedForTreatment.getUser());
             context.setVariable("structure", usedForTreatment.getUser().getStructure());

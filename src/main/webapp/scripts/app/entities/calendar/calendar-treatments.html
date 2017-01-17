@@ -31,20 +31,25 @@
                 <div>
                     <ul class="nav nav-tabs">
                         <li ng-class="{active : displayActsTab}">
-                            <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnActs()">
+                            <a data-toggle="tab" data-target="#alltabs" ng-click="clickOnActs()">
                                 <h4 translate="windoctorApp.treatment.home.acts">Actes</h4>
                             </a>
                         </li>
                         <li ng-class="{active : displayPlanTab}" ng-show="true">
-                            <a data-toggle="tab" data-target="#actsAndPlans" ng-click="clickOnPlan()">
+                            <a data-toggle="tab" data-target="#alltabs" ng-click="clickOnPlan()">
                                 <h4 translate="windoctorApp.treatment.home.plan">Plan</h4>
+                            </a>
+                        </li>
+                        <li ng-class="{active : displayArchivesTab}" ng-show="true">
+                            <a data-toggle="tab" data-target="#alltabs" ng-click="clickOnArchives()">
+                                <h4 translate="windoctorApp.treatment.home.archives">Archives</h4>
                             </a>
                         </li>
                     </ul>
                     <div class="tab-content">
-                        <div id="actsAndPlans" class="tab-pane fade in active">
-                            <div class="row" style="padding-top: 10px">
-                                <div class="form-group col-xs-6 col-md-3">
+                        <div id="alltabs" class="tab-pane fade in active">
+                            <div ng-show="!displayArchivesTab" class="row" style="padding-top: 10px">
+                                <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'">
                                     <button class="btn btn-primary"
                                             ng-click="displayAllPatientTreatmentsFunction()"
                                             ng-show="displayActsTab">
@@ -58,7 +63,7 @@
                                         translate="windoctorApp.treatment.home.plan">Plan</span>
                                     </button>
                                 </div>
-                                <div class="form-group col-xs-6 col-md-3">
+                                <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'">
                                     <button class="btn btn-primary"
                                             ng-click="displayPatientTreatmentsEventFunction()"
                                             ng-show="event!==null && event.id!==null && displayActsTab">
@@ -75,7 +80,7 @@
                                         <span translate="windoctorApp.treatment.home.archive">Archive</span>
                                     </button>
                                 </div>
-                                <div class="form-group col-xs-6 col-md-3">
+                                <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'">
                                     <button class="btn btn-primary" ng-click="addNewTreatment()"
                                             ng-show="event!==null && event.id!==null && displayActsTab">
                                         <span class="fa fa-plus"></span> <span
@@ -87,9 +92,49 @@
                                         translate="windoctorApp.treatment.home.createLabelPlan">Create act for the plan</span>
                                     </button>
                                 </div>
+                                <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'"
+                                         ng-show="displayPlanTab">
+                                        <div class="input-group">
+                                            <div class="input-group-btn">
+                                                <a target="_blank"
+                                                   href="../servlet/PatientPlanServletPdf?patientId={{event.user.id}}"
+                                                   class="btn btn-primary center">Devis</a>
+                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <span class="caret"></span>
+                                                    <span class="sr-only">Toggle Dropdown</span>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input ng-model="sentMailToPatient"
+                                                                    type="checkbox"> Envoyer mail au patient.
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input ng-model="addASystemCopy"
+                                                                    type="checkbox"> Sauvegarder une copie système.
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    <li role="separator" class="divider"></li>
+                                                    <li class="center"><a target="_blank"
+                                                                          href="../servlet/PatientPlanServletPdf?patientId={{event.user.id}}"
+                                                                          class="btn btn-primary center" >Print</a></li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- /.input-group -->
+                                    </div>
                             </div>
                             <div class="row">
-                                <div ng-class="firstClassTypeStructure">
+                                <div id="archives" ng-class="firstClassTypeStructure" ng-show="displayArchivesTab">
+                                    <ng-include
+                                        src="'scripts/app/entities/calendar/calendar-treatments-archives.html'"></ng-include>
+                                </div>
+                                <div ng-class="firstClassTypeStructure" ng-show="!displayArchivesTab">
                                     <div class="panel panel-primary">
                                         <div class="panel-heading">
                                             <h3 ng-show="displayTreatments && displayAllPatientTreatments"

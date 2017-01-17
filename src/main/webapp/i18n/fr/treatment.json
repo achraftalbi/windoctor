@@ -10,9 +10,16 @@
                 "displayPatientTreatmentsVisit": "Actes courant",
                 "acts": "Actes",
                 "plan": "Plan",
+                "archives": "Archives",
                 "archive": "Archiver",
                 "createLabelPlan": "Créer un acte pour le plan",
                 "attachments": "Attachments"
+            },
+            "archives": {
+                "number": "Numéro",
+                "livePdf": "PDF",
+                "copySystem": "Copy system",
+                "archivesPlans": "Archives des plans"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",
             "updated": "Un acte avec l'heure {{ param }} a été mis à jour",
