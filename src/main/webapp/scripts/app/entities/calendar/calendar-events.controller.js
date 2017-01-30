@@ -193,6 +193,13 @@ angular.module('windoctorApp')
             ($scope, $stateParams, Patient);
         };
 
+        $scope.changeDate = function (modelName, newDate) {
+            console.log(modelName + ' has had a date change. New value is TEST  ' + newDate.format());
+            console.log(modelName + ' has had a date change. New value is ' + newDate.format().split('T')[0] + 'T00:00:00+00:00');
+            $scope.dateValue = moment(new Date(newDate.format().split('T')[0] + 'T00:00:00+00:00')).utc();
+            console.log(modelName + ' has had a date change. $scope.dateValue ' + new Date(moment(new Date($scope.dateValue)).utc()));
+        }
+
         //End Patient pages treatement
         //Annul an appointment
         $scope.annul = function (event) {

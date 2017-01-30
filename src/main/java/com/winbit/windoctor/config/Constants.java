@@ -30,10 +30,13 @@ public final class Constants {
     public static final Long STATUS_REQUEST = 7l;
     public static final Long STATUS_REJECTED = 6l;
     public static final String FULL_DATE_PATTERN = "MMMM EEEE dd yyyy HH:mm";
+    public static final String FULL_DATE_PATTERN_FR = "MMMM EEEE dd yyyy 'à' HH:mm";
+    public static final String FULL_DATE_PATTERN_EN = "MMMM EEEE dd yyyy 'to' HH:mm";
 
     //Treatment constants
     public static final String TOTAL = "Total";
     public static final Integer FIRST_PAGE = 1;
+    public static final String YES = "Y";
 
     //WinDoctor application format
     public static final String GLOBAL_DATE_FORMAT = "yy/MM/yyyy";

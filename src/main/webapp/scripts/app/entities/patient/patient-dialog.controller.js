@@ -11,7 +11,6 @@ angular.module('windoctorApp').expandPatientController =
                 || $scope.patient.phoneNumber.length!==14){
                 $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
             }
-            $scope.password=null;
             $scope.savePatientInformationsOnGoing = false;
             $scope.captureAnImageScreen = false;
             $scope.initBirthDate = function () {
@@ -22,7 +21,7 @@ angular.module('windoctorApp').expandPatientController =
                 $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
             };
             $scope.load();*/
-
+            $scope.initBirthDate();
             var onSaveFinishedPatientInformation = function (result) {
                 $scope.$emit('windoctorApp:patientUpdate', result);
                 $scope.addPatientField= false;
@@ -51,16 +50,8 @@ angular.module('windoctorApp').expandPatientController =
                 }
             };
 
-            $scope.changeDate = function (modelName, newDate) {
-                console.log(modelName + ' has had a date change. New value is TEST  ' + newDate.format());
-                console.log(modelName + ' has had a date change. New value is ' + newDate.format().split('T')[0] + 'T00:00:00+00:00');
-                $scope.dateValue = moment(new Date(newDate.format().split('T')[0] + 'T00:00:00+00:00')).utc();
-                console.log(modelName + ' has had a date change. $scope.dateValue ' + new Date(moment(new Date($scope.dateValue)).utc()));
-            }
-
             $scope.savePatientInformation = function () {
                 $scope.patient.birthDate = new Date($scope.dateValue);
-                $scope.patient.password = $scope.password;
                 $scope.savePatientInformationsOnGoing = true;
                 if ($scope.patient.id != null) {
                     Patient.update($scope.patient, onSaveFinishedPatientInformation, onSaveFailedPatientInformation);

@@ -92,14 +92,17 @@
                                         translate="windoctorApp.treatment.home.createLabelPlan">Create act for the plan</span>
                                     </button>
                                 </div>
-                                <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'"
-                                         ng-show="displayPlanTab">
+                                <div ng-class="(displayPlanTab===true && treatmentsPlanAll!==null
+                                         && treatmentsPlanAll!==undefined && treatmentsPlanAll.length>1)? '' : ''"
+                                         ng-show="displayPlanTab && treatmentsPlanAll!==null
+                                         && treatmentsPlanAll!==undefined && treatmentsPlanAll.length>1">
                                         <div class="input-group">
-                                            <div class="input-group-btn">
+                                            <div class="input-group-btn form-group col-xs-6 col-md-2">
                                                 <a target="_blank"
-                                                   href="../servlet/PatientPlanServletPdf?patientId={{event.user.id}}"
+                                                   href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true"
                                                    class="btn btn-primary center">Devis</a>
-                                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button type="button" class="btn btn-primary dropdown-toggle" ng-click="clearVariablesUsedInPdf()"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="caret"></span>
                                                     <span class="sr-only">Toggle Dropdown</span>
                                                 </button>
@@ -107,26 +110,35 @@
                                                     <li>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input ng-model="sentMailToPatient"
-                                                                    type="checkbox"> Envoyer mail au patient.
+                                                                <input ng-model="checkFields.sendMail"
+                                                                       ng-checked="checkFields.sendMail === true"
+                                                                    type="checkbox"> <span translate="windoctorApp.treatment.archives.sendMail">Send in mail to patient</span>
                                                             </label>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="checkbox">
                                                             <label>
-                                                                <input ng-model="addASystemCopy"
-                                                                    type="checkbox"> Sauvegarder une copie système.
+                                                                <input ng-model="checkFields.savePdf"
+                                                                       ng-checked="checkFields.savePdf === true"
+                                                                    type="checkbox"> <span translate="windoctorApp.treatment.archives.savePdf">Save a system copy</span>
                                                             </label>
                                                         </div>
                                                     </li>
                                                     <li role="separator" class="divider"></li>
-                                                    <li class="center"><a target="_blank"
-                                                                          href="../servlet/PatientPlanServletPdf?patientId={{event.user.id}}"
-                                                                          class="btn btn-primary center" >Print</a></li>
+                                                    <li class="center"><a target="_blank"  ng-click="clickOnAdvancedGeneratedPdf()"
+                                                                          href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true&savePdf={{checkFields.savePdf}}&sendMail={{checkFields.sendMail}}"
+                                                                          class="btn btn-primary center" ><span translate="entity.action.print">Print</span></a></li>
                                                 </ul>
                                             </div>
                                         </div><!-- /.input-group -->
+                                    <div class="form-group col-xs-6 col-md-2" ng-show="checkFields.displayCopySystem">
+                                        <a target="_blank"
+                                           href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=false"
+                                           class="btn btn-primary center">
+                                            <span translate="windoctorApp.treatment.archives.copySystemEstimation">Copy system of the estimation</span>
+                                        </a>
+                                    </div>
                                     </div>
                             </div>
                             <div class="row">

@@ -59,6 +59,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 paidPriceExecuted : 0,
                 paidPriceErrorNumber : 0
             };
+            $scope.checkFields = {
+                sendMail : false,
+                savePdf : false,
+                displayCopySystem : false
+            };
         };
 
         $scope.clickOnActs = function () {
@@ -84,6 +89,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayTreatments = true;
             $scope.treatmentTotal = $scope.treatmentsPlanAll[0];
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
+            if($scope.treatmentsPlanAll.length>1 && $scope.treatmentsPlanAll[1].plan.pdf_document!==null
+                && $scope.treatmentsPlanAll[1].plan.pdf_document!==undefined){
+                $scope.checkFields.displayCopySystem = true;
+            }
             $scope.clear();
             $scope.myCanvas();
             $scope.createSelectedElements();
@@ -338,12 +347,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.refreshAll = function () {
-            $scope.displayPlanTab=false;
-            $scope.displayActsTab=true;
             $scope.loadAllTreatmentsFromServer();
-            $scope.displayAddEditViewPopup = false;
-            $scope.displayTreatments = true;
+            $scope.clickOnActs();
         };
+
         $scope.clear = function () {
             $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
             $scope.paidPriceTreatment = {
@@ -755,6 +762,12 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.treatmentTotal.paid_price=0;
                 $scope.treatmentsPlanAll.push($scope.treatmentTotal);
                 $scope.treatments=$scope.treatmentsPlanAll;
+                if($scope.treatmentsPlanAll.length>1 && $scope.treatmentsPlanAll[1].plan.pdf_document!==null
+                    && $scope.treatmentsPlanAll[1].plan.pdf_document!==undefined){
+                    $scope.checkFields.displayCopySystem = true;
+                }else{
+                    $scope.checkFields.displayCopySystem = false;
+                }
                 $scope.plansArchived.push(result);
                 var orderBy = $filter('orderBy');
                 $scope.plansArchived = orderBy($scope.plansArchived, ['-number']);
@@ -762,8 +775,27 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             });
         };
 
-        $scope.closeArchiveCurrentPlan = function () {
-            $('#archivePlanPopup').modal('hide');
+
+
+        $scope.clearVariablesUsedInPdf = function () {
+            $scope.checkFields = {
+                sendMail : false,
+                savePdf : false,
+                displayCopySystem : false
+            };
+            if($scope.treatmentsPlanAll.length>1 && $scope.treatmentsPlanAll[1].plan.pdf_document!==null
+                && $scope.treatmentsPlanAll[1].plan.pdf_document!==undefined){
+                $scope.checkFields.displayCopySystem = true;
+            }
+            console.log("clearVariablesUsedInPdf clicked");
+        };
+
+        $scope.clickOnAdvancedGeneratedPdf = function () {
+            if($scope.checkFields.savePdf===true){
+                $scope.treatmentsPlanAll[1].plan.pdf_document = {id:1};
+                $scope.checkFields.displayCopySystem = true;
+            }
+            console.log("clickOnAdvancedGeneratedPdf clicked");
         };
 
         /********************************************************************************/

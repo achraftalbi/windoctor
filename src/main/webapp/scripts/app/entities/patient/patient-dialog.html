@@ -412,9 +412,10 @@
                                 <div>
                                     <label translate="windoctorApp.patient.birthDate">Birth date</label>
                                 </div>
-                                <input type="text" format="L" view='date' min-view="date" date-time ng-required="false"
+                                <input type="text" format="L" view='date' min-view="date" date-time
+                                       ng-required="false"
                                        date-change="changeDate" readonly name="birthDate"
-                                       ng-model="dateValue" max-date="maxDateValue">
+                                       ng-model="dateValue">
                                 <span class="fa fa-calendar"/>
                             </div>
                             <div class="form-group col-xs-6 col-sm-3">
@@ -541,7 +542,7 @@
                                        for="field_password">Password</label>
                                 <input type="text" class="form-control" name="password"
                                        id="field_password"
-                                       ng-model="password" ng-minlength="5" ng-maxlength="20">
+                                       ng-model="patient.password" ng-minlength="5" ng-maxlength="20">
 
                                 <div ng-show="editForm.password.$invalid">
 

@@ -41,4 +41,10 @@ public interface TreatmentRepository extends JpaRepository<Treatment,Long> {
     @Query("select new Treatment(sum(t.price),sum(t.paid_price)) from Treatment t where t.event.user.id = ?1  and (t.status.id = 1 or t.status.id = 3) and t.event.user.plan.id is not null and t.event.user.plan.id=t.plan.id ")
     Treatment findTotalPatientTreatmentsPlan(Long patientId);
 
+    @Query("select t from Treatment t where t.event.user.id = ?1 and (t.status.id = 1 or t.status.id = 3) and t.plan.id=?2 order by t.id asc")
+    List<Treatment> findByPatientPlan(Long patientId, Long planId, Pageable var1);
+
+    @Query("select new Treatment(sum(t.price),sum(t.paid_price)) from Treatment t where t.event.user.id = ?1  and (t.status.id = 1 or t.status.id = 3) and t.plan.id=?2 ")
+    Treatment findTotalPatientTreatmentsPlan(Long patientId, Long planId);
+
 }

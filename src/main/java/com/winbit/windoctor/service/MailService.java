@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -32,6 +33,9 @@ import javax.mail.internet.InternetAddress;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
+import javax.sql.DataSource;
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
@@ -101,6 +105,29 @@ public class MailService {
             message.setFrom(from,personal);
             message.setSubject(subject);
             message.setText(content, isHtml);
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent e-mail to User '{}'", to);
+        } catch (Exception e) {
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
+        }
+    }
+
+    @Async
+    public void sendEmailWithAttachment(String to, String subject, String content, String fileName, boolean isMultipart, boolean isHtml,ByteArrayOutputStream byteArrayOutputStream) {
+        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, to, subject, content);
+
+        // Prepare message using a Spring helper
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setTo(to);
+            message.setFrom(from, personal);
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            message.addAttachment(fileName, new ByteArrayResource(byteArrayOutputStream.toByteArray()),"application/pdf"
+                );
             javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'", to);
         } catch (Exception e) {
@@ -252,7 +279,7 @@ public class MailService {
         if (usedForTreatment.getUser().getStructure() != null) {
             log.debug("sendEventEmail e-mail to usedForTreatment.getUser().getStructure() != null '{}'", usedForTreatment.getUser().getEmail());
 
-            Locale locale = Locale.forLanguageTag(usedForTreatment.getUser().getLangKey());
+            Locale locale = Locale.forLanguageTag("fr");
 
 
             Context context = new Context(locale);
@@ -364,7 +391,7 @@ public class MailService {
     @Async
     public void sendAppointmentCreationEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment creation e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentCreationEmail", context);
         String subject = messageSource.getMessage("email.appointment.creation.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
@@ -373,7 +400,7 @@ public class MailService {
     @Async
     public void sendAppointmentCancellationEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment cancellation e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentCancellationEmail", context);
         String subject = messageSource.getMessage("email.appointment.cancellation.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
@@ -382,7 +409,7 @@ public class MailService {
     @Async
     public void sendAppointmentRequestEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment request e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentRequestEmail", context);
         String subject = messageSource.getMessage("email.appointment.request.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
@@ -391,7 +418,7 @@ public class MailService {
     @Async
     public void sendAppointmentAcceptanceEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment acceptance e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentRequestAcceptanceEmail", context);
         String subject = messageSource.getMessage("email.appointment.acceptance.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
@@ -400,7 +427,7 @@ public class MailService {
     @Async
     public void sendAppointmentRejectEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment reject e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentRequestRejectEmail", context);
         String subject = messageSource.getMessage("email.appointment.reject.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
@@ -409,10 +436,27 @@ public class MailService {
     @Async
     public void sendAppointmentRecallEmail(Event event, Context context, Object[] subjectVariables, Locale locale) {
         log.debug("Sending Patient appointment recall e-mail to '{}'", event.getUser().getEmail());
-        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN, locale));
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(event.getEvent_date().toDate(), Constants.FULL_DATE_PATTERN_FR, locale));
         String content = templateEngine.process("appointmentRecallEmail", context);
         String subject = messageSource.getMessage("email.appointment.recall.title", subjectVariables, locale);
         sendEmail(event.getUser().getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendEstimationToPatientEmail(User patient, Locale locale,ByteArrayOutputStream baos) {
+        log.debug("Sending Patient appointment recall e-mail to '{}'", patient.getEmail());
+        String currentDate = FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale);
+        String fileName = patient.getStructure().getName()+"_"+patient.getFirstName()+
+            "_"+patient.getLastName()+"_"+currentDate+".pdf";
+        Context context = new Context(locale);
+        context.setVariable("user", patient);
+        context.setVariable("structure", patient.getStructure());
+        context.setVariable("date", currentDate);
+        context.setVariable("appointmentDate", FunctionsUtil.convertDateToString(new Date(), Constants.FULL_DATE_PATTERN_FR, locale));
+        Object[] subjectVariables = {patient.getStructure().getName(),patient.getFirstName(),patient.getLastName()};
+        String content = templateEngine.process("appointmentEstimationEmail", context);
+        String subject = messageSource.getMessage("email.appointment.estimation.title", subjectVariables, locale);
+        sendEmailWithAttachment(patient.getEmail(), subject, content, fileName, true, true, baos);
     }
 
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+   <changeSet author="achraftalbi (generated)" id="1485163576713-1">
+       <createTable tableName="PDF_DOCUMENT_TYPE">
+           <column name="id" type="bigint" autoIncrement="${autoIncrement}" >
+               <constraints primaryKey="true" nullable="false"/>
+           </column>
+           <column name="name" type="varchar(250)">
+               <constraints nullable="false" />
+           </column>
+           <column name="description" type="varchar(1000)"/>
+       </createTable>
+       <createTable tableName="PDF_DOCUMENT">
+           <column name="id" type="bigint" autoIncrement="${autoIncrement}" >
+               <constraints primaryKey="true" nullable="false"/>
+           </column>
+           <column name="description" type="varchar(500)"/>
+           <column name="original_file_name" type="varchar(250)"/>
+           <column name="file_content" type="blob"/>
+           <column name="mime_type" type="varchar(250)">
+               <constraints nullable="false" />
+           </column>
+           <column name="creation_date" type="timestamp">
+               <constraints nullable="false" />
+           </column>
+           <column name="update_date" type="timestamp">
+               <constraints nullable="false" />
+           </column>
+           <column name="pdf_document_type_id" type="bigint"/>
+       </createTable>
+       <addForeignKeyConstraint baseColumnNames="pdf_document_type_id"
+                                baseTableName="PDF_DOCUMENT"
+                                constraintName="fk_pdf_document_pdf_document_type_id"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="PDF_DOCUMENT_TYPE"/>
+       <addColumn tableName="PLAN">
+           <column name="pdf_document_id" type="bigint"/>
+       </addColumn>
+       <addForeignKeyConstraint baseColumnNames="pdf_document_id"
+                                baseTableName="PLAN"
+                                constraintName="FK_plan_pdf_document"
+                                deferrable="false"
+                                initiallyDeferred="false"
+                                referencedColumnNames="id"
+                                referencedTableName="PDF_DOCUMENT"/>
+       <loadData encoding="UTF-8"
+                 file="config/liquibase/windoctor-sampledata/pdf_document_type.csv"
+                 separator=";"
+                 tableName="PDF_DOCUMENT_TYPE">
+           <column name="id" type="numeric"/>
+           <column name="name" type="string"/>
+       </loadData>
+   </changeSet>
+</databaseChangeLog>

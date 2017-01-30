@@ -18,7 +18,10 @@
             "archives": {
                 "number": "Numéro",
                 "livePdf": "PDF",
-                "copySystem": "Copy system",
+                "copySystem": "Copies système",
+                "sendMail": "Envoyer par mail au patient",
+                "savePdf": "Sauvegarder une copie système",
+                "copySystemEstimation": "Copie système du devis",
                 "archivesPlans": "Archives des plans"
             },
             "created": "Un nouvelle acte avec l'heure {{ param }} est créé",

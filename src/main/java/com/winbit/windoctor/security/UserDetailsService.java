@@ -42,9 +42,9 @@ public class UserDetailsService implements org.springframework.security.core.use
         String lowercaseLogin = login.toLowerCase();
         Optional<User> userFromDatabase =  userRepository.findOneByLogin(lowercaseLogin);
         return userFromDatabase.map(user -> {
-            if (!user.getActivated()) {
+            /*if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
-            }
+            }*/
             if(user.getAuthorities() == null && user.getAuthorities().isEmpty()){
                 throw new UserWithoutRoleException("User " + lowercaseLogin + " has no role, please fix the configuration issue, normaly a user must have a role!");
             }

@@ -27,10 +27,14 @@
                                     {{planArchived.number}}
                                 </td>
                                 <td>
-                                    {{planArchived.number}}
+                                    <a target="_blank"
+                                       href="../servlet/ServletPdf?planId={{planArchived.id}}&livePdf=true"
+                                       class="btn btn-primary center"><span translate="entity.action.view">View</span></a>
                                 </td>
                                 <td>
-                                    {{planArchived.number}}
+                                    <a target="_blank" ng-show="planArchived.pdf_document!==null && planArchived.pdf_document!==undefined"
+                                       href="../servlet/ServletPdf?planId={{planArchived.id}}&livePdf=false"
+                                       class="btn btn-primary center"><span translate="entity.action.view">View</span></a>
                                 </td>
                             </tr>
                             </tbody>

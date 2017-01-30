@@ -18,7 +18,10 @@
             "archives": {
                 "number": "Number",
                 "livePdf": "Live PDF",
-                "copySystem": "Copy system",
+                "copySystem": "Copies system",
+                "sendMail": "Send in mail to patient",
+                "savePdf": "Save a system copy",
+                "copySystemEstimation": "Copy system of the estimation",
                 "archivesPlans": "Archives of plans"
             },
             "created": "A new act is created with time {{ param }}",

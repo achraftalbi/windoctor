@@ -32,7 +32,6 @@ public class Plan implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-
     @Size(min = 0, max = 100)
     @Column(name = "name", length = 100)
     private String name;
@@ -59,6 +58,9 @@ public class Plan implements Serializable {
      */
     @ManyToOne
     private Structure structure;
+
+    @OneToOne
+    private Pdf_document pdf_document;
 
     private Long user_id;
 
@@ -116,6 +118,14 @@ public class Plan implements Serializable {
 
     public void setStructure(Structure structure) {
         this.structure = structure;
+    }
+
+    public Pdf_document getPdf_document() {
+        return pdf_document;
+    }
+
+    public void setPdf_document(Pdf_document pdf_document) {
+        this.pdf_document = pdf_document;
     }
 
     @Override
