@@ -5,6 +5,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.winbit.windoctor.common.WinDoctorConstants;
 import com.winbit.windoctor.config.Constants;
 import com.winbit.windoctor.domain.*;
 import com.winbit.windoctor.repository.Pdf_documentRepository;
@@ -94,7 +95,7 @@ public class PlanServletPdfTreatments  {
             constructTheHeader(pdfGenericDocumentGenrator, patient, planOptionnal, subjectVariables, headerTable, cellStructureList);
             constructTheBody(pdfGenericDocumentGenrator, patient, planOptionnal, subjectVariables, headerTable, cellStructureList);
             pdfGenericDocumentGenrator.writeStructure();
-            if(savePdf){
+            if(savePdf && planOptionnal!=null && (planOptionnal.getArchive()==null || planOptionnal.getArchive()==false)){
                 try{
                     savePlanPdfDocument(pdfGenericDocumentGenrator,planOptionnal);
                 }catch (Exception ex){
@@ -176,7 +177,7 @@ public class PlanServletPdfTreatments  {
             PdfPCell.ALIGN_RIGHT, PdfPCell.ALIGN_CENTER, null, new BaseColor(243, 243, 243), true, 0f, 0f));
         headerTable.addCell(Structure.getCell("", PdfPCell.ALIGN_LEFT, Element.ALIGN_MIDDLE, boldFontCourier, new BaseColor(243, 243, 243), true, 0f, 0f));
         cellStructureList = new ArrayList<CellStructure>();
-        cellStructureList.add(new CellStructure(FunctionsUtil.convertDateToString(new Date(), Constants.GLOBAL_DATE_FORMAT),
+        cellStructureList.add(new CellStructure(FunctionsUtil.convertDateToString(new Date(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale),
             mediumFontCourier, false, true));
         cellStructureList.add(new CellStructure((planOptionnal.getNumber() != null ? planOptionnal.getNumber().intValue() : "") + "",
             mediumFontCourier, false, true));
@@ -230,7 +231,7 @@ public class PlanServletPdfTreatments  {
             cellStructureList = new ArrayList<CellStructure>();
             cellStructureList.add(new CellStructure(treatment.getId()==null?
                 messageSource.getMessage("date.name", null, locale):
-                (treatment.getTreatment_date()==null?"":FunctionsUtil.convertDateToString(treatment.getTreatment_date().toDate(), Constants.GLOBAL_DATE_FORMAT))+"",
+                (treatment.getTreatment_date()==null || treatment.getStatus().getId()==Constants.STATUS_IN_PROGRESS?"":FunctionsUtil.convertDateToString(treatment.getTreatment_date().toDate(), WinDoctorConstants.WinDoctorPattern.DATE_PATTERN, locale))+"",
                 treatment.getId()==null?mediumBoldFontCourierWhite:mediumFontCourier, false, true));
             headerTable.addCell(Structure.getCell(cellStructureList,
                 PdfPCell.ALIGN_CENTER, PdfPCell.ALIGN_CENTER, null,

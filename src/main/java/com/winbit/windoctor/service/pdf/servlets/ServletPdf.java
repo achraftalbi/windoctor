@@ -88,7 +88,7 @@ public class ServletPdf extends HttpServlet {
         }
         Boolean sendMail = false;
         try {
-            sendMail = Boolean.valueOf(request.getParameter("sendMail"));
+            sendMail = Boolean.valueOf(request.getParameter("savePdf"));
         } catch (Exception ex) {
             logger.error("livePdf variable error", ex);
             ex.getMessage();
@@ -98,13 +98,13 @@ public class ServletPdf extends HttpServlet {
         if(planId !=null){
             Plan planOptionnal = planRepository.findOne(planId);
             if(planOptionnal!=null
-            && SecurityUtils.getCurrerntStructure().equals(planOptionnal.getStructure().getId())){
+                && SecurityUtils.getCurrerntStructure().equals(planOptionnal.getStructure().getId())){
                 logger.info("1 Boolean livePdf" + livePdf);
                 logger.info("1 Boolean savePdf" + savePdf);
                 logger.info("1 Boolean sendMail" + sendMail);
                 PlanServletPdfTreatments planServletPdfTreatments = new PlanServletPdfTreatments(messageSource, userRepository,
-                     planRepository, treatmentRepository,
-                     pdf_documentRepository,mailService);
+                    planRepository, treatmentRepository,
+                    pdf_documentRepository,mailService);
                 planServletPdfTreatments.
                     makePdfTreatments
                         (pdfGenericDocumentGenrator, response, planOptionnal,

@@ -4,6 +4,7 @@ angular.module('windoctorApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pasc
                'ui.bootstrap', // for modal dialogs
                'chart.js', //For include chard in application
             //Used for inclufing loading bar
+               'ui.sortable',
                'ngLocale',
                'ncy-angular-breadcrumb',
                 'datePicker','ui.select','ngSanitize','webcam',

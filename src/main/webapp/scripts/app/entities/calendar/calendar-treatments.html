@@ -75,7 +75,7 @@
                                     </button>
                                     <button class="btn btn-primary"
                                             ng-click="archiveCurrentPlan()"
-                                            ng-show="event!==null && event.id!==null && displayPlanTab">
+                                            ng-show="event!==null && displayPlanTab">
                                         <span class="glyphicon glyphicon-eye-open"></span>
                                         <span translate="windoctorApp.treatment.home.archive">Archive</span>
                                     </button>
@@ -99,7 +99,7 @@
                                         <div class="input-group">
                                             <div class="input-group-btn form-group col-xs-6 col-md-2">
                                                 <a target="_blank"
-                                                   href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true"
+                                                   href="../windoctor/servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true"
                                                    class="btn btn-primary center">Devis</a>
                                                 <button type="button" class="btn btn-primary dropdown-toggle" ng-click="clearVariablesUsedInPdf()"
                                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -127,14 +127,14 @@
                                                     </li>
                                                     <li role="separator" class="divider"></li>
                                                     <li class="center"><a target="_blank"  ng-click="clickOnAdvancedGeneratedPdf()"
-                                                                          href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true&savePdf={{checkFields.savePdf}}&sendMail={{checkFields.sendMail}}"
+                                                                          href="../windoctor/servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true&savePdf={{checkFields.savePdf}}&sendMail={{checkFields.sendMail}}"
                                                                           class="btn btn-primary center" ><span translate="entity.action.print">Print</span></a></li>
                                                 </ul>
                                             </div>
                                         </div><!-- /.input-group -->
                                     <div class="form-group col-xs-6 col-md-2" ng-show="checkFields.displayCopySystem">
                                         <a target="_blank"
-                                           href="../servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=false"
+                                           href="../windoctor/servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=false"
                                            class="btn btn-primary center">
                                             <span translate="windoctorApp.treatment.archives.copySystemEstimation">Copy system of the estimation</span>
                                         </a>
@@ -205,7 +205,8 @@
                                                             <th></th>
                                                         </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody ui-sortable="sortableOptions" ng-model="treatments">
+
                                                         <tr ng-repeat="treatment in treatments">
                                                             <td ng-style="{'color': 'white','background-color': treatment.status.id===1 ? 'dodgerblue' : 'darkgreen'}"
                                                                 ng-show="treatment.status!==null && treatment.status!==undefined
@@ -334,7 +335,7 @@
                                                                 </button>
                                                                 <button ng-click="executeTreatmentInPlan(treatment)"
                                                                         data-toggle="tooltip"
-                                                                        ng-show="treatment.status.id===1 && displayPlanTab
+                                                                        ng-show="treatment.status.id===1 && event.id!==null && displayPlanTab
                                                                          && paidPriceTreatment.treatmentIdToExecute!==treatment.id"
                                                                         tooltip="{{ 'entity.action.execute' | translate }}"
                                                                         tooltip-class="acceptClass"

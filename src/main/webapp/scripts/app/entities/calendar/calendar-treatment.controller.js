@@ -64,6 +64,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 savePdf : false,
                 displayCopySystem : false
             };
+            $scope.sortableOptions = {
+                'ui-floating': false
+            };
         };
 
         $scope.clickOnActs = function () {
@@ -771,6 +774,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.plansArchived.push(result);
                 var orderBy = $filter('orderBy');
                 $scope.plansArchived = orderBy($scope.plansArchived, ['-number']);
+                // This behavior must be tested this is way a commented it.
+                $scope.clickOnPlan();
                 $('#archivePlanPopup').modal('hide');
             });
         };
