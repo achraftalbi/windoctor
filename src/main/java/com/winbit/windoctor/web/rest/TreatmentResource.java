@@ -155,7 +155,8 @@ public class TreatmentResource {
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
             treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
         }
-
+        log.info("treatment sorting_key " + treatment.getSorting_key());
+        log.info("treatment getId " + treatment.getId());
         // Mange funds with treatments Begin
         Treatment treatmentBeforeSave = treatmentRepository.findOne(treatment.getId());
         Fund oldFund = treatmentBeforeSave.getFund();
@@ -192,9 +193,17 @@ public class TreatmentResource {
         log.info("treatment.getFund() after " + treatment.getFund().getAmount().doubleValue());
         // Mange funds with treatments End
 
-
+        log.info("segond treatment sorting_key " + treatment.getSorting_key());
         Treatment result = treatmentRepository.save(treatment);
         treatmentSearchRepository.save(treatment);
+        if(treatment.getStatus()!=null &&
+            (Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())
+                || Constants.STATUS_EXECUTED.equals(treatment.getStatus().getId()))
+            && treatment.getSorting_key()!=null
+            && (!treatment.getSorting_key().equals(treatmentBeforeSave.getSorting_key()))
+            ){
+            treatmentRepository.afterUpdateTreatmentSorting(treatment.getId());
+        }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("treatment",
                 treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
@@ -238,14 +247,16 @@ public class TreatmentResource {
             }
             Treatment totalPatientTreatmentsPlan = treatmentRepository.findTotalPatientTreatmentsPlan(patientId);
             totalPatientTreatmentsPlan.setId(-1l);
+            totalPatientTreatmentsPlan.setSorting_key(-1l);
             log.info("Plan Total paid price :" + totalPatientTreatmentsPlan.getPrice());
             List<Treatment> newTreatmentPlanList = new ArrayList<Treatment>(pagePlan.getContent());
-            /*for(Treatment treatment:newTreatmentPlanList){
-                if(treatment.getStatus()!=null
+            for(Treatment treatment:newTreatmentPlanList){
+                /*if(treatment.getStatus()!=null
                     && Constants.STATUS_EXECUTED.equals(treatment.getStatus().getId())){
                     treatment.setElements(null);
-                }
-            }*/
+                }*/
+                log.info("Plan treatment.getSorting_key() " + treatment.getSorting_key());
+            }
             newTreatmentPlanList.add(totalPatientTreatmentsPlan);
             pagePlan = new PageImpl<Treatment>(newTreatmentPlanList, pageable, pagePlan.getTotalElements());
         } else if (eventId != null) {
@@ -321,6 +332,9 @@ public class TreatmentResource {
         if(Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
             treatmentRepository.delete(id);
             treatmentSearchRepository.delete(id);
+            if(treatment.getPlan()!=null){
+                treatmentRepository.afterDeleteTreatmentSorting(treatment.getPlan().getId());
+            }
             return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("treatment",
                 id.toString()))
                 .build();

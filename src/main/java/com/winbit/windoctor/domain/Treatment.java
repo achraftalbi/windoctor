@@ -25,6 +25,18 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "TREATMENT")
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(name = "afterUpdateTreatmentSorting",
+        procedureName = "afterUpdateTreatmentSorting",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, name = "treatmentId", type = Long.class)
+        }),
+    @NamedStoredProcedureQuery(name = "afterDeleteTreatmentSorting",
+        procedureName = "afterDeleteTreatmentSorting",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, name = "planId", type = Long.class)
+        })
+})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName="treatment")
 public class Treatment implements Serializable {
@@ -82,6 +94,11 @@ public class Treatment implements Serializable {
     @Max(value = 100000)
     @Column(name = "ELEMENT")
     private Long element;
+
+    @Min(value = 1)
+    @Max(value = 100000)
+    @Column(name = "sorting_key")
+    private Long sorting_key;
 
     @Size(min = 0, max = 500)
     @Column(name = "ELEMENTS", length = 500, nullable = true)
@@ -203,6 +220,14 @@ public class Treatment implements Serializable {
 
     public void setEventReason(Event_reason event_reason) {
         this.eventReason = event_reason;
+    }
+
+    public Long getSorting_key() {
+        return sorting_key;
+    }
+
+    public void setSorting_key(Long sorting_key) {
+        this.sorting_key = sorting_key;
     }
 
     @Override

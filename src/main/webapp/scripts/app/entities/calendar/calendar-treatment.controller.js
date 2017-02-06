@@ -13,7 +13,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatmentPage = 1;
             $scope.treatmentPer_Page = 5;
             $scope.attachmentPage = 1;
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null};
             $scope.treatmentTotal = null;
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
@@ -65,11 +65,55 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 displayCopySystem : false
             };
             $scope.sortableOptions = {
-                'ui-floating': false
+                disabled: true,
+                'ui-floating': false,
+                update: function(e, ui) {
+                    if ($scope.treatments[ui.item.sortable.index].id === -1
+                            || ui.item.sortable.index===0 || ui.item.sortable.dropindex===0) {
+                        ui.item.sortable.cancel();
+                    }else{
+                        console.log(' index values '+ui.item.sortable.index);
+                        console.log(' dropindex values '+ui.item.sortable.dropindex);
+                        var idMoved = $scope.treatments[ui.item.sortable.index].id;
+                        $scope.treatments[ui.item.sortable.index].sorting_key=ui.item.sortable.dropindex;
+                        Treatment.update($scope.treatments[ui.item.sortable.index], onSaveTreatmentFinishedUpdateSorting);
+                        console.log('idMoved $scope.treatments['+ui.item.sortable.index+'].sorting_key before '+$scope.treatments[ui.item.sortable.index].sorting_key);
+                        var orderBy = $filter('orderBy');
+                        $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
+                        var i = 0;
+                        console.log(' idMoved '+idMoved);
+                        for (var k = 0; k < $scope.treatments.length; k++) {
+                            console.log(' k '+k);
+                            console.log(' i '+i);
+                            console.log(' $scope.treatments[k].price '+$scope.treatments[k].price);
+                            console.log(' $scope.treatments[k].id '+$scope.treatments[k].id);
+                            console.log(' $scope.treatments[k].sorting_key before '+$scope.treatments[k].sorting_key);
+                            if (idMoved !== $scope.treatments[k].id && -1 !== $scope.treatments[k].id) {
+                                i++;
+                                if (i === ui.item.sortable.dropindex) {
+                                    i++;
+                                }
+                                $scope.treatments[k].sorting_key = i;
+                            }
+                            if(-1 === $scope.treatments[k].id){
+                                $scope.treatments[k].sorting_key = -1;
+                            }
+                            console.log(' $scope.treatmentsPlanAll[k].sorting_key after '+$scope.treatments[k].sorting_key);
+                        }
+                        $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
+                    }
+                    console.log('ui.item.sortable.index '+ui.item.sortable.index);
+                    console.log('ui.item.sortable.dropindex '+ui.item.sortable.dropindex);
+                }
             };
         };
-
+        var onSaveTreatmentFinishedUpdateSorting = function (result) {
+            console.log('saving sorting for the selected treatment');
+        };
         $scope.clickOnActs = function () {
+            if($scope.displayPlanTab){
+                $scope.treatmentsPlanAll= $scope.treatments;
+            }
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
             $scope.displayArchivesTab=false;
@@ -77,6 +121,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatmentTotal = $scope.treatmentsAll[0];
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
+            $scope.sortableOptions.disabled=true;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
             $scope.clear();
             $scope.myCanvas();
@@ -90,6 +135,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatments= $scope.treatmentsPlanAll;
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
+            $scope.sortableOptions.disabled=false;
             $scope.treatmentTotal = $scope.treatmentsPlanAll[0];
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6';
             if($scope.treatmentsPlanAll.length>1 && $scope.treatmentsPlanAll[1].plan.pdf_document!==null
@@ -102,6 +148,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.clickOnArchives = function () {
+            if($scope.displayPlanTab){
+                $scope.treatmentsPlanAll= $scope.treatments;
+            }
             $scope.displayArchivesTab=true;
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
@@ -137,7 +186,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
                     var totalTreatmentPlanElement =$scope.treatmentsPlanAll[$scope.treatmentsPlanAll.length-1];
                         $scope.treatmentsPlanAll.splice($scope.treatmentsPlanAll.length-1, 1);
-                    $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-id']);
+                    $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['sorting_key']);
                     $scope.treatmentsPlanAll.splice(0, 0,totalTreatmentPlanElement);
                     if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
                         && $scope.treatmentsAll.length>0){
@@ -191,7 +240,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             if($scope.displayPlanTab){
                 var totalTreatmentPlanElement =$scope.treatmentsPlanAll[0];
                 $scope.treatmentsPlanAll.splice(0, 1);
-                $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['-id']);
+                $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['sorting_key']);
                 $scope.treatmentsPlanAll.splice(0, 0,totalTreatmentPlanElement);
                 $scope.treatments= $scope.treatmentsPlanAll;
             }else{
@@ -355,7 +404,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.clear = function () {
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null};
             $scope.paidPriceTreatment = {
                 treatmentIdToExecute : null,
                 paidPriceExecuted : 0,
@@ -438,7 +487,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 treatment_date: $scope.event.event_date,
                 description: null,
                 price: $scope.defaultEventReason.price,
-                paid_price: $scope.defaultEventReason.price,
+                paid_price: $scope.displayPlanTab?0:$scope.defaultEventReason.price,
                 id: null,
                 eventReason : $scope.defaultEventReason,
                 fund : $scope.defaultFund,
@@ -577,6 +626,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
             if($scope.displayPlanTab) {
                 $scope.treatmentsPlanAll.push($scope.treatment);
+                $scope.treatment.sorting_key = $scope.treatmentsPlanAll.length-1;
             }else{
                 $scope.treatmentsAll.push($scope.treatment);
             }
@@ -678,15 +728,22 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             Treatment.delete({id: treatment.id},
                 function () {
                     var treatmentIndex = -1;
-                    for (var k = 0; k < $scope.treatmentsPlanAll.length; k++) {
-                        if (treatment.id === $scope.treatmentsPlanAll[k].id) {
+                    for (var k = 0; k < $scope.treatments.length; k++) {
+                        if (treatment.id === $scope.treatments[k].id) {
                             treatmentIndex = k;
                             break;
                         }
                     }
                     if(treatmentIndex>-1){
                         $scope.treatmentTotal.price = $scope.treatmentTotal.price - treatment.price;
-                        $scope.treatmentsPlanAll.splice(treatmentIndex, 1);
+                        $scope.treatments.splice(treatmentIndex, 1);
+                        var i = 0;
+                        for (var k = 0; k < $scope.treatments.length; k++) {
+                            if ($scope.treatments[k].id !== -1) {
+                                i++;
+                                $scope.treatments[k].sorting_key = i;
+                            }
+                        }
                     }
                     $scope.clearTreatmentElements(treatment);
                     $scope.createSelectedElements();

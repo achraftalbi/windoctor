@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.util.List;
 
@@ -46,5 +47,11 @@ public interface TreatmentRepository extends JpaRepository<Treatment,Long> {
 
     @Query("select new Treatment(sum(t.price),sum(t.paid_price)) from Treatment t where t.event.user.id = ?1  and (t.status.id = 1 or t.status.id = 3) and t.plan.id=?2 ")
     Treatment findTotalPatientTreatmentsPlan(Long patientId, Long planId);
+
+    @Procedure
+    void afterUpdateTreatmentSorting(Long treatmentId);
+
+    @Procedure
+    void afterDeleteTreatmentSorting(Long planId);
 
 }
