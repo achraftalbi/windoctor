@@ -70,13 +70,16 @@ public class ServletPdf extends HttpServlet {
 
 
 
-        Boolean livePdf = false;
+        Boolean livePdf = null;
         try {
-            livePdf = Boolean.valueOf(request.getParameter("livePdf"));
+            String livePdfTmp = request.getParameter("livePdf");
+            if(livePdfTmp!=null){
+                livePdf = Boolean.valueOf(livePdfTmp);
+            }
         } catch (Exception ex) {
             logger.error("livePdf variable error", ex);
             ex.getMessage();
-            livePdf = false;
+            livePdf = null;
         }
         Boolean savePdf = false;
         try {
@@ -88,7 +91,7 @@ public class ServletPdf extends HttpServlet {
         }
         Boolean sendMail = false;
         try {
-            sendMail = Boolean.valueOf(request.getParameter("savePdf"));
+            sendMail = Boolean.valueOf(request.getParameter("sendMail"));
         } catch (Exception ex) {
             logger.error("livePdf variable error", ex);
             ex.getMessage();

@@ -54,6 +54,7 @@
             "lastDate": "Last date",
             "eventReason": "Acts",
             "categoryAct": "Category of the act",
+            "category": "Category",
             "eventReasonDescription": "Description",
             "eventReasonPrice": "Price",
             "eventReasonADDMessage": "Add an act",

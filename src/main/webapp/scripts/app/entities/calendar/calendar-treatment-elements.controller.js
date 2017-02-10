@@ -398,6 +398,9 @@ angular.module('windoctorApp').expandTreatmentsControllerElements =
 
         $scope.createSelectedElements = function () {
             $scope.elementsSelected = null;
+            if($scope.displayPlanTab){
+                $scope.treatmentsPlanAll = $scope.treatments;
+            }
             var displayPlanTab = $scope.displayPlanTab;
             var displayActsTab = $scope.displayActsTab;
             if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined

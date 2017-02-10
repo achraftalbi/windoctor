@@ -121,14 +121,29 @@
                                                             <label>
                                                                 <input ng-model="checkFields.savePdf"
                                                                        ng-checked="checkFields.savePdf === true"
-                                                                    type="checkbox"> <span translate="windoctorApp.treatment.archives.savePdf">Save a system copy</span>
+                                                                       type="checkbox"> <span translate="windoctorApp.treatment.archives.savePdf">Save a system copy</span>
+                                                            </label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input ng-model="checkFields.printPdf"
+                                                                       ng-checked="checkFields.printPdf === true"
+                                                                       type="checkbox"> <span translate="entity.action.print">Print</span>
                                                             </label>
                                                         </div>
                                                     </li>
                                                     <li role="separator" class="divider"></li>
-                                                    <li class="center"><a target="_blank"  ng-click="clickOnAdvancedGeneratedPdf()"
-                                                                          href="../windoctor/servlet/ServletPdf?planId={{treatmentsPlanAll[1].plan.id}}&livePdf=true&savePdf={{checkFields.savePdf}}&sendMail={{checkFields.sendMail}}"
-                                                                          class="btn btn-primary center" ><span translate="entity.action.print">Print</span></a></li>
+                                                    <li class="center">
+                                                        <button ng-click="launchPlanEstimation()"
+                                                                class="btn btn-primary center">
+                                                            <span class="glyphicon glyphicon-flash"
+                                                                  translate="entity.action.execute">
+                                                                Execute
+                                                            </span>
+                                                        </button>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div><!-- /.input-group -->
@@ -187,8 +202,6 @@
                                                         <tr>
                                                             <th ng-show="displayPlanTab">
                                                             </th>
-                                                            <th translate="windoctorApp.treatment.status" ng-show="displayPlanTab">Status
-                                                            </th>
                                                             <th translate="windoctorApp.treatment.treatment_date">Date
                                                             </th>
                                                             <th translate="windoctorApp.treatment.description">
@@ -199,6 +212,8 @@
                                                             </th>
                                                             <th translate="windoctorApp.treatment.remainingPrice"
                                                                 ng-show="displayActsTab">Remaining price
+                                                            </th>
+                                                            <th translate="windoctorApp.treatment.category" ng-show="displayPlanTab">Category
                                                             </th>
                                                             <th translate="windoctorApp.treatment.eventReason">
                                                                 eventReason
@@ -212,17 +227,11 @@
                                                         <tr ng-repeat="treatment in treatments">
                                                             <td ng-show="treatment.id===-1 && displayPlanTab"
                                                                 style="background-color: black;;color: white;"></td>
-                                                            <td ng-show="treatment.id!==-1 && displayPlanTab">
+                                                            <td ng-show="treatment.id!==-1 && displayPlanTab"
+                                                                ng-style="{'color': 'white','background-color': treatment.status!=null && treatment.status.id===1 && displayPlanTab ?
+                                                                'dodgerblue' : (treatment.status!=null && treatment.status.id===3 && displayPlanTab ?'darkgreen':'')}">
                                                                 {{treatment.sorting_key}}
                                                             </td>
-                                                            <td ng-style="{'color': 'white','background-color': treatment.status.id===1 ? 'dodgerblue' : 'darkgreen'}"
-                                                                ng-show="treatment.status!==null && treatment.status!==undefined
-                                                                        && (treatment.status.id===1 || treatment.status.id===3) && displayPlanTab">
-                                                                <span translate="windoctorApp.treatment.inProgress" ng-show="treatment.status.id===1">In progress</span>
-                                                                <span translate="windoctorApp.treatment.executed" ng-show="treatment.status.id===3">Executed</span>
-                                                            </td>
-                                                            <td ng-show="treatment.id===-1 && displayPlanTab"
-                                                                style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id!==-1 && treatment.status!==null && treatment.status!==undefined && treatment.status.id===1"
@@ -304,6 +313,21 @@
                                                                 ng-show="(treatment.price - treatment.paid_price)<0 &&  displayActsTab">
                                                                 {{treatment.price - treatment.paid_price}}
                                                             </td>
+                                                            <td ng-show="treatment.id===-1 && displayPlanTab"
+                                                                style="background-color: black;;color: white;"></td>
+                                                            <td ng-show="treatment.id!==-1">
+                                <span ng-show="treatment.eventReason.categoryAct!==null && treatment.eventReason.categoryAct!==undefined &&
+                                treatment.eventReason.categoryAct.name.length > 10"
+                                      data-toggle="tooltip"
+                                      tooltip="{{ treatment.eventReason.categoryAct.name }}"
+                                      tooltip-placement="bottom-right">
+                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                </span>
+                                <span ng-show="treatment.eventReason.categoryAct!==null && treatment.eventReason.categoryAct!==undefined &&
+                                treatment.eventReason.categoryAct.name.length <=10">
+                                    {{ treatment.eventReason.categoryAct.name | limitTo: 10 }}{{treatment.eventReason.categoryAct.name.length > 10 ? '...' : ''}}
+                                </span>
+                                                            </td>
                                                             <td ng-show="treatment.id!==-1">
                                 <span ng-show="treatment.eventReason.description.length > 10"
                                       data-toggle="tooltip"
@@ -328,9 +352,13 @@
                                                             </td>
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
+                                                            <td ng-show="treatment.id===-1 && displayActsTab"
+                                                                style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
-                                                            <td ng-show="treatment.id!==-1">
+                                                            <td ng-show="treatment.id!==-1"
+                                                                ng-style="{'color': 'white','background-color': treatment.status!=null && treatment.status.id===1 && displayPlanTab ?
+                                                                'dodgerblue' : (treatment.status!=null && treatment.status.id===3 && displayPlanTab ?'darkgreen':'')}">
                                                                 <button ng-click="viewTreatmentDetail(treatment)"
                                                                         ng-show="false"
                                                                         data-toggle="tooltip"

@@ -1,7 +1,7 @@
 'use strict';
 angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
     function ($scope, $rootScope,$stateParams, Treatment, TreatmentSearch, Doctor, ParseLinks, $filter,
-              Event_reason, Event, Patient,Attachment,Fund,Plan) {
+              Event_reason, Event, Patient,Attachment,Fund,Plan,$http) {
 
 
         $scope.initVariables = function(){
@@ -62,6 +62,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.checkFields = {
                 sendMail : false,
                 savePdf : false,
+                printPdf : false,
                 displayCopySystem : false
             };
             $scope.sortableOptions = {
@@ -69,7 +70,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 'ui-floating': false,
                 update: function(e, ui) {
                     if ($scope.treatments[ui.item.sortable.index].id === -1
-                            || ui.item.sortable.index===0 || ui.item.sortable.dropindex===0) {
+                        || ui.item.sortable.index===0 || ui.item.sortable.dropindex===0) {
                         ui.item.sortable.cancel();
                     }else{
                         console.log(' index values '+ui.item.sortable.index);
@@ -101,6 +102,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                             console.log(' $scope.treatmentsPlanAll[k].sorting_key after '+$scope.treatments[k].sorting_key);
                         }
                         $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
+                        $scope.treatmentsPlanAll = $scope.treatments;
                     }
                     console.log('ui.item.sortable.index '+ui.item.sortable.index);
                     console.log('ui.item.sortable.dropindex '+ui.item.sortable.dropindex);
@@ -185,7 +187,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     var orderBy = $filter('orderBy');
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
                     var totalTreatmentPlanElement =$scope.treatmentsPlanAll[$scope.treatmentsPlanAll.length-1];
-                        $scope.treatmentsPlanAll.splice($scope.treatmentsPlanAll.length-1, 1);
+                    $scope.treatmentsPlanAll.splice($scope.treatmentsPlanAll.length-1, 1);
                     $scope.treatmentsPlanAll = orderBy($scope.treatmentsPlanAll, ['sorting_key']);
                     $scope.treatmentsPlanAll.splice(0, 0,totalTreatmentPlanElement);
                     if($scope.treatmentsAll!==null && $scope.treatmentsAll!==undefined
@@ -458,16 +460,16 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.oldFundContainEnoughMoney = false;
                 console.log("changeFields 3 - 2 :");
             } else {
-                    $scope.oldFundContainEnoughMoney = true;
+                $scope.oldFundContainEnoughMoney = true;
                 console.log("changeFields 4");
             }
             /*if(( $scope.treatment.price - $scope.treatment.paid_price) < 0){
-                console.log("1 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
-                $scope.priceLessThanPaidPrice = true;
-            }else{
-                console.log("2 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
-                $scope.priceLessThanPaidPrice = false;
-            }*/
+             console.log("1 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
+             $scope.priceLessThanPaidPrice = true;
+             }else{
+             console.log("2 $scope.treatment.price - $scope.treatment.paid_price "+($scope.treatment.price - $scope.treatment.paid_price));
+             $scope.priceLessThanPaidPrice = false;
+             }*/
 
             //console.log("$scope.oldFund.amount "+($scope.oldFund.amount ));
             //console.log(" $scope.oldTreatmentPaidPrice "+$scope.oldTreatmentPaidPrice );
@@ -625,8 +627,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatment=result;
             console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
             if($scope.displayPlanTab) {
+                $scope.treatmentsPlanAll = $scope.treatments;
                 $scope.treatmentsPlanAll.push($scope.treatment);
                 $scope.treatment.sorting_key = $scope.treatmentsPlanAll.length-1;
+                $scope.treatments = $scope.treatmentsPlanAll;
             }else{
                 $scope.treatmentsAll.push($scope.treatment);
             }
@@ -838,11 +842,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
 
-
         $scope.clearVariablesUsedInPdf = function () {
             $scope.checkFields = {
                 sendMail : false,
                 savePdf : false,
+                printPdf : false,
                 displayCopySystem : false
             };
             if($scope.treatmentsPlanAll.length>1 && $scope.treatmentsPlanAll[1].plan.pdf_document!==null
@@ -852,12 +856,26 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             console.log("clearVariablesUsedInPdf clicked");
         };
 
-        $scope.clickOnAdvancedGeneratedPdf = function () {
-            if($scope.checkFields.savePdf===true){
-                $scope.treatmentsPlanAll[1].plan.pdf_document = {id:1};
-                $scope.checkFields.displayCopySystem = true;
+        $scope.launchPlanEstimation = function () {
+            var url = '../windoctor/servlet/ServletPdf?planId='+$scope.treatmentsPlanAll[1].plan.id
+            +($scope.checkFields.printPdf?'&livePdf=true':'')
+            +'&savePdf='+$scope.checkFields.savePdf
+            +'&sendMail='+$scope.checkFields.sendMail;
+            if($scope.checkFields.printPdf){
+                window.open(url, "_blank");
+                if($scope.checkFields.savePdf===true){
+                    $scope.treatmentsPlanAll[1].plan.pdf_document = {id:1};
+                    $scope.checkFields.displayCopySystem = true;
+                }
+            }else{
+                //document.location =url;
+                $http.get(url).success(function (data, status, headers, config) {
+                    if($scope.checkFields.savePdf===true){
+                        $scope.treatmentsPlanAll[1].plan.pdf_document = {id:1};
+                        $scope.checkFields.displayCopySystem = true;
+                    }
+                });
             }
-            console.log("clickOnAdvancedGeneratedPdf clicked");
         };
 
         /********************************************************************************/
@@ -870,11 +888,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         /********************************************************************************/
 
         $scope.loadAllAttachments = function (attachmentPage){
-                $scope.attachmentPage = attachmentPage;
-                Attachment.query({treatmentId:$scope.treatment.id,page: $scope.attachmentPage, per_page: 5}, function (result, headers) {
-                    $scope.linkAttachments = ParseLinks.parse(headers('link'));
-                    $scope.attachments = result;
-                });
+            $scope.attachmentPage = attachmentPage;
+            Attachment.query({treatmentId:$scope.treatment.id,page: $scope.attachmentPage, per_page: 5}, function (result, headers) {
+                $scope.linkAttachments = ParseLinks.parse(headers('link'));
+                $scope.attachments = result;
+            });
         };
 
 

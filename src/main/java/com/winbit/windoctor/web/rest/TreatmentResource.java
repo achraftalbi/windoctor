@@ -155,6 +155,9 @@ public class TreatmentResource {
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
             treatment.setFund(fundRepository.findOne(treatment.getFund().getId()));
         }
+        if(treatment.getStatus()!=null && Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())) {
+            treatment.setPaid_price(new BigDecimal(0l));
+        }
         log.info("treatment sorting_key " + treatment.getSorting_key());
         log.info("treatment getId " + treatment.getId());
         // Mange funds with treatments Begin

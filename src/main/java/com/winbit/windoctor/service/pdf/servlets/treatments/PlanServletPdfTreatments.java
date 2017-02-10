@@ -67,7 +67,7 @@ public class PlanServletPdfTreatments  {
     }
 
     public void makePdfTreatments(PdfGenericDocumentGenrator pdfGenericDocumentGenrator, HttpServletResponse response,
-                                     Plan planOptionnal, boolean livePdf, boolean savePdf, boolean sendMail)
+                                     Plan planOptionnal, Boolean livePdf, Boolean savePdf, Boolean sendMail)
         throws ServletException, IOException {
 
         // Listing 2. Creation of PdfWriter object
@@ -75,7 +75,7 @@ public class PlanServletPdfTreatments  {
         //Object[] subjectVariables = {""+patientId};
         logger.info("userRepository " + userRepository);
         Long patientId = planOptionnal.getUser_id();
-        logger.info("boolean livePdf" + livePdf);
+        logger.info("boolean - livePdf" + livePdf);
         logger.info("boolean savePdf" + savePdf);
         logger.info("boolean sendMail" + sendMail);
 
@@ -91,27 +91,28 @@ public class PlanServletPdfTreatments  {
         java.util.List<CellStructure> cellStructureList = null;
 
         // All important treatments begin here
-        if(livePdf){
+        if((livePdf!=null && livePdf==true) || (savePdf!=null && savePdf==true) || (sendMail!=null && sendMail==true)) {
             constructTheHeader(pdfGenericDocumentGenrator, patient, planOptionnal, subjectVariables, headerTable, cellStructureList);
             constructTheBody(pdfGenericDocumentGenrator, patient, planOptionnal, subjectVariables, headerTable, cellStructureList);
             pdfGenericDocumentGenrator.writeStructure();
-            if(savePdf && planOptionnal!=null && (planOptionnal.getArchive()==null || planOptionnal.getArchive()==false)){
-                try{
-                    savePlanPdfDocument(pdfGenericDocumentGenrator,planOptionnal);
-                }catch (Exception ex){
-                    logger.error("Error when saving plan document ",ex);
+            if (savePdf && planOptionnal != null && (planOptionnal.getArchive() == null || planOptionnal.getArchive() == false)) {
+                try {
+                    savePlanPdfDocument(pdfGenericDocumentGenrator, planOptionnal);
+                } catch (Exception ex) {
+                    logger.error("Error when saving plan document ", ex);
                     ex.printStackTrace();
                 }
             }
-            if(sendMail){
-                try{
+            if (sendMail) {
+                try {
                     mailService.sendEstimationToPatientEmail(patient, locale, pdfGenericDocumentGenrator.getStructure().getBaos());
-                }catch (Exception ex){
-                    logger.error("Error when sending mail to patient ",ex);
+                } catch (Exception ex) {
+                    logger.error("Error when sending mail to patient ", ex);
                     ex.printStackTrace();
                 }
             }
-        }else if (planOptionnal.getPdf_document()!=null){
+        }
+        if (planOptionnal.getPdf_document()!=null && livePdf!=null && livePdf==false){
             pdfGenericDocumentGenrator.getStructure().getBaos().reset();
             pdfGenericDocumentGenrator.getStructure().getBaos().write(planOptionnal.getPdf_document().getFile_content());
         }
@@ -119,22 +120,23 @@ public class PlanServletPdfTreatments  {
 
 
 
+        if(livePdf!=null){
+            response.setHeader("Expires", "0");
+            response.setHeader("Cache-Control",
+                "must-revalidate, post-check=0, pre-check=0");
+            response.setHeader("Pragma", "public");
+            // setting the content type
+            response.setContentType("application/pdf");
+            // the contentlength
+            response.setContentLength(pdfGenericDocumentGenrator.getStructure().getBaos().size());
+            // write ByteArrayOutputStream to the ServletOutputStream
+            OutputStream os = response.getOutputStream();
+            pdfGenericDocumentGenrator.getStructure().getBaos()
+                .writeTo(os);
 
-        response.setHeader("Expires", "0");
-        response.setHeader("Cache-Control",
-            "must-revalidate, post-check=0, pre-check=0");
-        response.setHeader("Pragma", "public");
-        // setting the content type
-        response.setContentType("application/pdf");
-        // the contentlength
-        response.setContentLength(pdfGenericDocumentGenrator.getStructure().getBaos().size());
-        // write ByteArrayOutputStream to the ServletOutputStream
-        OutputStream os = response.getOutputStream();
-        pdfGenericDocumentGenrator.getStructure().getBaos()
-            .writeTo(os);
-
-        os.flush();
-        os.close();
+            os.flush();
+            os.close();
+        }
     }
 
     private void constructTheHeader(PdfGenericDocumentGenrator pdfGenericDocumentGenrator, User patient,Plan planOptionnal, Object[] subjectVariables,
