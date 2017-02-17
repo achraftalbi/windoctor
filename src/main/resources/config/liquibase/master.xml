@@ -66,6 +66,7 @@
     <include file="classpath:config/liquibase/changelog/20161009104717_changelog.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170123092536_add_entity_pdf_document.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170205113240_changelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170212151623_changelog.xml" relativeToChangelogFile="false"/>
 
     <!-- JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

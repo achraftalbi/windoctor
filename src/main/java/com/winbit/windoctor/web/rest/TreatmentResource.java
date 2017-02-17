@@ -13,6 +13,7 @@ import com.winbit.windoctor.web.rest.dto.TreatmentDTO;
 import com.winbit.windoctor.web.rest.util.FunctionsUtil;
 import com.winbit.windoctor.web.rest.util.HeaderUtil;
 import com.winbit.windoctor.web.rest.util.PaginationUtil;
+import org.apache.commons.lang3.SerializationUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,10 +82,36 @@ public class TreatmentResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Treatment> create(@Valid @RequestBody Treatment treatment) throws URISyntaxException {
+    public ResponseEntity<TreatmentDTO> create(@Valid @RequestBody Treatment treatment) throws URISyntaxException {
         log.debug("REST request to save Treatment : {}", treatment);
         if (treatment.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new treatment cannot already have an ID").body(null);
+        }
+        List<Treatment> treatmentList = new ArrayList<Treatment>();
+        if(treatment.getCreateTreatmentForEachElement()
+            && treatment.getElements()!=null && treatment.getElements().length()>0){
+            String[] elements = treatment.getElements().split(",");
+            for(int i = 0;i < elements.length;i++){
+                Treatment treatmentTmp = SerializationUtils.clone(treatment);
+                treatmentTmp.setId(null);
+                treatmentTmp.setElements(elements[i]);
+                treatmentList.add(createTreatment(treatmentTmp));
+            }
+        }else{
+            treatmentList.add(createTreatment(treatment));
+        }
+        TreatmentDTO treatmentDTO = new TreatmentDTO();
+        treatmentDTO.setTreatmentsList(treatmentList);
+        return ResponseEntity.created(new URI("/api/treatments/" + treatmentList.get(0).getId()))
+            .headers(HeaderUtil.createEntityCreationAlert("treatment",
+                treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
+            .body(treatmentDTO);
+    }
+
+    public Treatment createTreatment(@Valid @RequestBody Treatment treatment) throws URISyntaxException {
+        log.debug("REST request to save Treatment : {}", treatment);
+        if (treatment.getId() != null) {
+            return null;
         }
 
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
@@ -93,23 +120,23 @@ public class TreatmentResource {
 
         // Treatment done only for the plan.
         if(treatment.getStatus()!=null && Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
-                Event event = eventRepository.findOne(treatment.getEvent().getId());
-                treatment.setPaid_price(new BigDecimal(0l));
-                if(event.getUser().getPlan()!=null && event.getUser().getPlan().getId()!=null){
-                    treatment.setPlan(event.getUser().getPlan());
-                }else{
-                    Plan plan = new Plan();
-                    plan.setUser_id(event.getUser().getId());
-                    plan.setStructure(new Structure());
-                    plan.getStructure().setId(SecurityUtils.getCurrerntStructure());
-                    plan.setCreation_date(new DateTime());
-                    BigDecimal planNumber = planRepository.findPlanNumber(event.getUser().getId(), SecurityUtils.getCurrerntStructure());
-                    plan.setNumber(new BigDecimal(planNumber == null ? 0 + 1 : planNumber.intValue() + 1));
-                    ResponseEntity<Plan> responseEntity = planResource.create(plan);
-                    event.getUser().setPlan(responseEntity.getBody());
-                    userRepository.save(event.getUser());
-                    treatment.setPlan(responseEntity.getBody());
-                }
+            Event event = eventRepository.findOne(treatment.getEvent().getId());
+            treatment.setPaid_price(new BigDecimal(0l));
+            if(event.getUser().getPlan()!=null && event.getUser().getPlan().getId()!=null){
+                treatment.setPlan(event.getUser().getPlan());
+            }else{
+                Plan plan = new Plan();
+                plan.setUser_id(event.getUser().getId());
+                plan.setStructure(new Structure());
+                plan.getStructure().setId(SecurityUtils.getCurrerntStructure());
+                plan.setCreation_date(new DateTime());
+                BigDecimal planNumber = planRepository.findPlanNumber(event.getUser().getId(), SecurityUtils.getCurrerntStructure());
+                plan.setNumber(new BigDecimal(planNumber == null ? 0 + 1 : planNumber.intValue() + 1));
+                ResponseEntity<Plan> responseEntity = planResource.create(plan);
+                event.getUser().setPlan(responseEntity.getBody());
+                userRepository.save(event.getUser());
+                treatment.setPlan(responseEntity.getBody());
+            }
         }
 
         // Treatment if price or paid price is null.
@@ -133,10 +160,7 @@ public class TreatmentResource {
         saveFundHistory(treatment, oldFundAmount);
 
 
-        return ResponseEntity.created(new URI("/api/treatments/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("treatment",
-                treatment.getEvent().getEvent_date() == null ? "" : FunctionsUtil.convertDateToString(treatment.getEvent().getEvent_date().toDate(), Constants.GLOBAL_HOUR_MINUTE)))
-            .body(result);
+        return result;
     }
 
     /**
@@ -149,7 +173,7 @@ public class TreatmentResource {
     public ResponseEntity<Treatment> update(@Valid @RequestBody Treatment treatment) throws URISyntaxException {
         log.debug("REST request to update Treatment : {}", treatment);
         if (treatment.getId() == null) {
-            return create(treatment);
+            return null;
         }
 
         if(treatment.getFund()!=null && treatment.getFund().getId()!=null){
@@ -332,6 +356,7 @@ public class TreatmentResource {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Treatment : {}", id);
         Treatment treatment = treatmentRepository.findOne(id);
+        log.debug("REST request to delete  2 Treatment : {}", id);
         if(Constants.STATUS_IN_PROGRESS.equals(treatment.getStatus().getId())){
             treatmentRepository.delete(id);
             treatmentSearchRepository.delete(id);

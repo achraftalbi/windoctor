@@ -13,7 +13,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.treatmentPage = 1;
             $scope.treatmentPer_Page = 5;
             $scope.attachmentPage = 1;
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null, createTreatmentForEachElement:false};
             $scope.treatmentTotal = null;
             $scope.oldTreatmentPrice = null;
             $scope.oldTreatmentPaidPrice = null;
@@ -41,6 +41,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.priceLessThanPaidPrice = false;
             $scope.captureAnImageScreen = false;
             $scope.saveTreatmentOnGoing = false;
+            $scope.deleteTreatmentOnGoing = false;
             $scope.archiveCurrentPlanFlag = false;
             $scope.elementsSelected =[];
             $scope.selectedElement = null;
@@ -69,48 +70,52 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 disabled: true,
                 'ui-floating': false,
                 update: function(e, ui) {
-                    if ($scope.treatments[ui.item.sortable.index].id === -1
-                        || ui.item.sortable.index===0 || ui.item.sortable.dropindex===0) {
-                        ui.item.sortable.cancel();
-                    }else{
-                        console.log(' index values '+ui.item.sortable.index);
-                        console.log(' dropindex values '+ui.item.sortable.dropindex);
-                        var idMoved = $scope.treatments[ui.item.sortable.index].id;
-                        $scope.treatments[ui.item.sortable.index].sorting_key=ui.item.sortable.dropindex;
-                        Treatment.update($scope.treatments[ui.item.sortable.index], onSaveTreatmentFinishedUpdateSorting);
-                        console.log('idMoved $scope.treatments['+ui.item.sortable.index+'].sorting_key before '+$scope.treatments[ui.item.sortable.index].sorting_key);
-                        var orderBy = $filter('orderBy');
-                        $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
-                        var i = 0;
-                        console.log(' idMoved '+idMoved);
-                        for (var k = 0; k < $scope.treatments.length; k++) {
-                            console.log(' k '+k);
-                            console.log(' i '+i);
-                            console.log(' $scope.treatments[k].price '+$scope.treatments[k].price);
-                            console.log(' $scope.treatments[k].id '+$scope.treatments[k].id);
-                            console.log(' $scope.treatments[k].sorting_key before '+$scope.treatments[k].sorting_key);
-                            if (idMoved !== $scope.treatments[k].id && -1 !== $scope.treatments[k].id) {
-                                i++;
-                                if (i === ui.item.sortable.dropindex) {
-                                    i++;
-                                }
-                                $scope.treatments[k].sorting_key = i;
-                            }
-                            if(-1 === $scope.treatments[k].id){
-                                $scope.treatments[k].sorting_key = -1;
-                            }
-                            console.log(' $scope.treatmentsPlanAll[k].sorting_key after '+$scope.treatments[k].sorting_key);
-                        }
-                        $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
-                        $scope.treatmentsPlanAll = $scope.treatments;
-                    }
-                    console.log('ui.item.sortable.index '+ui.item.sortable.index);
-                    console.log('ui.item.sortable.dropindex '+ui.item.sortable.dropindex);
+                    $scope.updateSortingKey(e,ui);
                 }
             };
+            $scope.currentPlanNumber = null;
         };
         var onSaveTreatmentFinishedUpdateSorting = function (result) {
             console.log('saving sorting for the selected treatment');
+        };
+        $scope.updateSortingKey = function (e, ui) {
+            if ($scope.treatments[ui.item.sortable.index].id === -1
+                || ui.item.sortable.index===0 || ui.item.sortable.dropindex===0) {
+                ui.item.sortable.cancel();
+            }else{
+                console.log(' index values '+ui.item.sortable.index);
+                console.log(' dropindex values '+ui.item.sortable.dropindex);
+                var idMoved = $scope.treatments[ui.item.sortable.index].id;
+                $scope.treatments[ui.item.sortable.index].sorting_key=ui.item.sortable.dropindex;
+                Treatment.update($scope.treatments[ui.item.sortable.index], onSaveTreatmentFinishedUpdateSorting);
+                console.log('idMoved $scope.treatments['+ui.item.sortable.index+'].sorting_key before '+$scope.treatments[ui.item.sortable.index].sorting_key);
+                var orderBy = $filter('orderBy');
+                $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
+                var i = 0;
+                console.log(' idMoved '+idMoved);
+                for (var k = 0; k < $scope.treatments.length; k++) {
+                    console.log(' k '+k);
+                    console.log(' i '+i);
+                    console.log(' $scope.treatments[k].price '+$scope.treatments[k].price);
+                    console.log(' $scope.treatments[k].id '+$scope.treatments[k].id);
+                    console.log(' $scope.treatments[k].sorting_key before '+$scope.treatments[k].sorting_key);
+                    if (idMoved !== $scope.treatments[k].id && -1 !== $scope.treatments[k].id) {
+                        i++;
+                        if (i === ui.item.sortable.dropindex) {
+                            i++;
+                        }
+                        $scope.treatments[k].sorting_key = i;
+                    }
+                    if(-1 === $scope.treatments[k].id){
+                        $scope.treatments[k].sorting_key = -1;
+                    }
+                    console.log(' $scope.treatmentsPlanAll[k].sorting_key after '+$scope.treatments[k].sorting_key);
+                }
+                $scope.treatments = orderBy($scope.treatments, ['sorting_key']);
+                $scope.treatmentsPlanAll = $scope.treatments;
+            }
+            console.log('ui.item.sortable.index '+ui.item.sortable.index);
+            console.log('ui.item.sortable.dropindex '+ui.item.sortable.dropindex);
         };
         $scope.clickOnActs = function () {
             if($scope.displayPlanTab){
@@ -183,6 +188,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     $scope.linksTreatment = ParseLinks.parse(headers('link'));
                     $scope.treatmentsAll = result.treatmentsList;
                     $scope.treatmentsPlanAll = result.treatmentsPlanList;
+                    if(result.treatmentsPlanList!==null && result.treatmentsPlanList!==undefined
+                        && result.treatmentsPlanList.length>1){
+                        $scope.currentPlanNumber = result.treatmentsPlanList[0].plan.number;
+                    }
                     $scope.treatmentTotal = $scope.treatmentsAll[$scope.treatmentsAll.length-1];
                     var orderBy = $filter('orderBy');
                     $scope.treatmentsAll = orderBy($scope.treatmentsAll, ['-treatment_date','-id']);
@@ -406,7 +415,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.clear = function () {
-            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null};
+            $scope.treatment = {treatment_date: null, description: null, price: null, paid_price: null,doctor:null, id: null,elements:null,sorting_key:null, createTreatmentForEachElement:false};
             $scope.paidPriceTreatment = {
                 treatmentIdToExecute : null,
                 paidPriceExecuted : 0,
@@ -494,10 +503,14 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 eventReason : $scope.defaultEventReason,
                 fund : $scope.defaultFund,
                 doctor:$scope.defaultDoctor,
-                event: {id: $scope.event.id}
+                event: {id: $scope.event.id},//,user:{id:$scope.event.user}},
+                sorting_key:null,
+                createTreatmentForEachElement:false
             };
             if($scope.displayPlanTab){
                 $scope.treatment.status={id:1};
+                $scope.treatment.createTreatmentForEachElement=$scope.displayPlanTab?
+                    $scope.account.create_plan_act_for_each_element:$scope.account.create_normal_act_for_each_element;
             }
             $scope.temporaryElements=null;
             $scope.oldTreatmentPrice = null;
@@ -620,39 +633,50 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 }
             );
             $scope.loadAllAttachments(1);
+            if($scope.event!==null && $scope.event.id!==null && $scope.event.eventStatus.id === 1 && $scope.displayActsTab){
+                $scope.event.eventStatus.id = 3;
+            }
         };
 
         var onSaveTreatmentFinished = function (result) {
             $scope.$emit('windoctorApp:treatmentUpdate', result);
-            $scope.treatment=result;
-            console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
+            var newTreatmentsCreated = result.treatmentsList;
             if($scope.displayPlanTab) {
                 $scope.treatmentsPlanAll = $scope.treatments;
-                $scope.treatmentsPlanAll.push($scope.treatment);
-                $scope.treatment.sorting_key = $scope.treatmentsPlanAll.length-1;
+                var treatmentsPlanAllLength = $scope.treatmentsPlanAll.length;
+                for(var j=0;j<newTreatmentsCreated.length;j++){
+                    newTreatmentsCreated[j].sorting_key = treatmentsPlanAllLength;
+                    $scope.treatmentsPlanAll.push(newTreatmentsCreated[j]);
+                    treatmentsPlanAllLength++;
+                }
                 $scope.treatments = $scope.treatmentsPlanAll;
+                if($scope.currentPlanNumber===null || $scope.currentPlanNumber===undefined){
+                    $scope.currentPlanNumber = $scope.treatment.plan.number;
+                }
             }else{
-                $scope.treatmentsAll.push($scope.treatment);
+                for(var j=0;j<newTreatmentsCreated.length;j++){
+                    $scope.treatmentsAll.push(newTreatmentsCreated[j]);
+                }
             }
-            $scope.loadPageTreatment($scope.treatmentPage);
-            $scope.oldFund = $scope.treatment.fund;
-            if($scope.oldTreatmentPrice===null){
-                $scope.treatmentTotal.price = $scope.treatmentTotal.price + $scope.treatment.price;
-            }else{
-                $scope.treatmentTotal.price = $scope.treatmentTotal.price + ($scope.treatment.price - $scope.oldTreatmentPrice);
+            //console.log('save $scope.treatment.id'+$scope.treatment.id+' $scope.treatment.event.id '+$scope.treatment.event.id);
+            for(var j=0;j<newTreatmentsCreated.length;j++){
+                $scope.oldFund = newTreatmentsCreated[j].fund;
+                $scope.treatmentTotal.price = $scope.treatmentTotal.price + newTreatmentsCreated[j].price;
+                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + newTreatmentsCreated[j].paid_price;
+                /*if($scope.oldTreatmentPrice===null){
+                }else{
+                    $scope.treatmentTotal.price = $scope.treatmentTotal.price + (newTreatmentsCreated[j].price - $scope.oldTreatmentPrice);
+                }
+                if($scope.oldTreatmentPaidPrice===null){
+                }else{
+                    $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + (newTreatmentsCreated[j].paid_price - $scope.oldTreatmentPaidPrice);
+                }
+                $scope.oldTreatmentPrice = newTreatmentsCreated[j].price;
+                $scope.oldTreatmentPaidPrice = newTreatmentsCreated[j].paid_price;*/
             }
-            if($scope.oldTreatmentPaidPrice===null){
-                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + $scope.treatment.paid_price;
-            }else{
-                $scope.treatmentTotal.paid_price = $scope.treatmentTotal.paid_price + ($scope.treatment.paid_price - $scope.oldTreatmentPaidPrice);
-            }
-            $scope.oldTreatmentPrice = $scope.treatment.price;
-            $scope.oldTreatmentPaidPrice = $scope.treatment.paid_price;
 
             // New feature
-            $scope.orderTreatments();
-            $scope.displayAllPatientTreatments = true;
-            var oldFundId = $scope.treatment.fund.id;
+            var oldFundId = $scope.oldFund.id;
             Fund.query(function (result, headers) {
                     $scope.funds = result;
                     console.log("$scope.treatment.fund 0 ")
@@ -660,7 +684,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                         $scope.defaultFund = $scope.funds[0];
                         for(var i=0;i<$scope.funds.length;i++){
                             if($scope.funds[i].id===oldFundId){
-                                $scope.treatment.fund = $scope.funds[i];
+                                for(var j=0;j<newTreatmentsCreated.length;j++){
+                                    newTreatmentsCreated[j].fund = $scope.funds[i];
+                                }
                                 break;
                             }
                         }
@@ -669,8 +695,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 }
             );
 
-            $scope.loadAllAttachments(1);
-            if($scope.event.eventStatus.id === 1){
+            //$scope.loadAllAttachments(1);
+            $scope.loadPageTreatment($scope.treatmentPage);
+            $scope.orderTreatments();
+            $scope.displayAllPatientTreatments = true;
+            if($scope.event!==null && $scope.event.id!==null && $scope.event.eventStatus.id === 1 && $scope.displayActsTab){
                 $scope.event.eventStatus.id = 3;
             }
         };
@@ -704,7 +733,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 }
             }
             $scope.saveTreatmentOnGoing = true;
-            if ($scope.treatment.id != null) {
+            if ($scope.treatment.id !== null) {
+                $scope.treatment.createTreatmentForEachElement = false;
                 $scope.treatment = Treatment.update($scope.treatment, onSaveTreatmentFinishedUpdate);
             } else {
                 $scope.treatment = Treatment.save($scope.treatment, onSaveTreatmentFinished);
@@ -729,6 +759,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
 
         $scope.deleteTreatmentInPlan = function (treatment) {
+            $scope.deleteTreatmentOnGoing = true;
             Treatment.delete({id: treatment.id},
                 function () {
                     var treatmentIndex = -1;
@@ -751,6 +782,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                     }
                     $scope.clearTreatmentElements(treatment);
                     $scope.createSelectedElements();
+                    $scope.deleteTreatmentOnGoing = false;
                 });
         };
 
@@ -781,6 +813,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         };
         $scope.confirmExecuteTreatmentInPlan = function (treatment) {
             treatment.status.id=3;
+            $scope.oldTreatmentPrice = treatment.price;
+            $scope.oldTreatmentPaidPrice = treatment.paid_price;
             treatment.treatment_date=$scope.event.event_date;
             treatment.paid_price=$scope.paidPriceTreatment.paidPriceExecuted;
             Treatment.update(treatment, onSaveTreatmentFinishedUpdate);
@@ -799,6 +833,9 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.orderTreatments();
             $scope.displayPlanTab=true;
             $scope.displayActsTab=false;
+            if($scope.event!==null && $scope.event.eventStatus.id === 1){
+                $scope.event.eventStatus.id = 3;
+            }
             $scope.clickOnPlan();
 
         };
@@ -821,6 +858,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 paidPriceErrorNumber : 0
             };
             Plan.get({id: $scope.treatmentsPlanAll[1].plan.id}, function(result) {
+                $scope.currentPlanNumber = null;
                 $scope.treatmentsPlanAll=[];
                 $scope.treatmentTotal.price=0;
                 $scope.treatmentTotal.paid_price=0;
@@ -832,10 +870,12 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 }else{
                     $scope.checkFields.displayCopySystem = false;
                 }
-                $scope.plansArchived.push(result);
-                var orderBy = $filter('orderBy');
-                $scope.plansArchived = orderBy($scope.plansArchived, ['-number']);
-                // This behavior must be tested this is way a commented it.
+                if($scope.plansArchived!==null && $scope.plansArchived!==undefined
+                    &&$scope.plansArchived.length>0){
+                    $scope.plansArchived.push(result);
+                    var orderBy = $filter('orderBy');
+                    $scope.plansArchived = orderBy($scope.plansArchived, ['-number']);
+                }
                 $scope.clickOnPlan();
                 $('#archivePlanPopup').modal('hide');
             });
@@ -878,6 +918,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             }
         };
 
+        $scope.changeCreateActForEachToothSelectedStatus = function () {
+            $scope.treatment.createTreatmentForEachElement = !$scope.treatment.createTreatmentForEachElement;
+            console.log('$scope.treatment.createTreatmentForEachElement ' + $scope.treatment.createTreatmentForEachElement);
+        };
         /********************************************************************************/
         /********************************************************************************/
         /***********************                                       ******************/

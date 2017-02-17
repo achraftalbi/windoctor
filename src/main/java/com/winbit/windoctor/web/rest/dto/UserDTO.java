@@ -56,6 +56,10 @@ public class UserDTO {
 
     private Boolean currentUserPatient;
 
+    private Boolean create_normal_act_for_each_element=false;
+
+    private Boolean create_plan_act_for_each_element=false;
+
     private Boolean maxEventsReached;
 
     @Size(min = 0, max = 14)
@@ -76,6 +80,14 @@ public class UserDTO {
     private String structureName;
 
     private Long typeStructureId;
+
+    public Boolean getCreate_normal_act_for_each_element() {
+        return create_normal_act_for_each_element;
+    }
+
+    public Boolean getCreate_plan_act_for_each_element() {
+        return create_plan_act_for_each_element;
+    }
 
     public Long getTypeStructureId() {
         return typeStructureId;
@@ -132,6 +144,8 @@ public class UserDTO {
         this.maxEventsReached = maxEventsReached;
         this.structureName = structure.getName();
         this.typeStructureId = structure.getType_structure()==null?null:structure.getType_structure().getId();
+        this.create_normal_act_for_each_element = structure.getCreate_normal_act_for_each_element();
+        this.create_plan_act_for_each_element = structure.getCreate_plan_act_for_each_element();
     }
 
     public Long getId() {

@@ -1,6 +1,7 @@
 package com.winbit.windoctor.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.winbit.windoctor.domain.util.CustomDateTimeDeserializer;
@@ -52,7 +53,6 @@ public class Treatment implements Serializable {
         this.price = price==null?new BigDecimal(0l):price;
         this.paid_price = paid_price==null?new BigDecimal(0l):paid_price;
     }
-    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
@@ -109,6 +109,18 @@ public class Treatment implements Serializable {
 
     @ManyToOne
     private Plan plan;
+
+    @JsonProperty
+    @Transient
+    private Boolean createTreatmentForEachElement;
+
+    public Boolean getCreateTreatmentForEachElement() {
+        return createTreatmentForEachElement;
+    }
+
+    public void setCreateTreatmentForEachElement(Boolean createTreatmentForEachElement) {
+        this.createTreatmentForEachElement = createTreatmentForEachElement;
+    }
 
     public Plan getPlan() {
         return plan;

@@ -54,6 +54,28 @@ public class Structure implements Serializable {
     @ManyToOne
     private Type_structure type_structure;
 
+    @Column(name = "create_normal_act_for_each_element")
+    private Boolean create_normal_act_for_each_element;
+
+    @Column(name = "create_plan_act_for_each_element")
+    private Boolean create_plan_act_for_each_element;
+
+    public Boolean getCreate_normal_act_for_each_element() {
+        return create_normal_act_for_each_element;
+    }
+
+    public void setCreate_normal_act_for_each_element(Boolean create_normal_act_for_each_element) {
+        this.create_normal_act_for_each_element = create_normal_act_for_each_element;
+    }
+
+    public Boolean getCreate_plan_act_for_each_element() {
+        return create_plan_act_for_each_element;
+    }
+
+    public void setCreate_plan_act_for_each_element(Boolean create_plan_act_for_each_element) {
+        this.create_plan_act_for_each_element = create_plan_act_for_each_element;
+    }
+
     public Type_structure getType_structure() {
         return type_structure;
     }

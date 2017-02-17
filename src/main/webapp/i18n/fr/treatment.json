@@ -6,6 +6,7 @@
                 "createLabel": "Créer un nouvel acte",
                 "createOrEditLabel": "Créer ou éditer un acte",
                 "displayAllPatientTreatments": "Tout les actes",
+                "planNumberText": "du plan avec le numéro {{ number }}",
                 "displayPatientTreatmentsAppointment": "Actes courant",
                 "displayPatientTreatmentsVisit": "Actes courant",
                 "acts": "Actes",
@@ -67,6 +68,7 @@
             "inProgress": "En cours",
             "executed": "Executé",
             "teeth": "Dents",
+            "createActForEachToothSelected": "Créer un acte pour chaque dent sélectionnées",
             "chooseTeeth": "Choisissez des dents"
         }
     }

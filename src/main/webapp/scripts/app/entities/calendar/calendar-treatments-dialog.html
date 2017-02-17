@@ -295,7 +295,26 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" ng-class="hideCss">
+            <div >
+                <div class="form-group col-xs-6 col-md-3" ng-show="treatment.id===null">
+                    <label translate="windoctorApp.treatment.createActForEachToothSelected">
+                        Create an act for each tooth selected
+                    </label>
+                    <div>
+                        <i class="fa fa-toggle-on inactive" style="font-size:30px;"
+                           ng-show="treatment.createTreatmentForEachElement"
+                           ng-click="changeCreateActForEachToothSelectedStatus();">
+                        </i>
+                        <span ng-show="treatment.createTreatmentForEachElement" style="font-size:25px;color: red"translate="global.yes">Yes</span>
+                        <i class="fa fa-toggle-on fa-rotate-180 active" style="font-size:30px;"
+                           ng-show="!treatment.createTreatmentForEachElement"
+                           ng-click="changeCreateActForEachToothSelectedStatus();">
+                        </i>
+                        <span ng-show="!treatment.createTreatmentForEachElement" style="font-size:25px;color: green"translate="global.no">No</span>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">

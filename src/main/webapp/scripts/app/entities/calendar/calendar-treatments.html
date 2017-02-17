@@ -165,9 +165,13 @@
                                     <div class="panel panel-primary">
                                         <div class="panel-heading">
                                             <h3 ng-show="displayTreatments && displayAllPatientTreatments"
-                                                translate="windoctorApp.treatment.home.displayAllPatientTreatments"
-                                                class="panel-title"></h3>
-
+                                                class="panel-title">
+                                                <span translate="windoctorApp.treatment.home.displayAllPatientTreatments">Current acts</span>
+                                                <span translate="windoctorApp.treatment.home.planNumberText"
+                                                    translate-values="{number: '{{currentPlanNumber}}'}"
+                                                    ng-show="displayPlanTab && currentPlanNumber!==null
+                                                && currentPlanNumber!==undefined">of the plan with number {{currentPlanNumber}}</span>
+                                            </h3>
                                             <h3 ng-show="displayTreatments && (!displayAllPatientTreatments)"
                                                 translate="windoctorApp.treatment.home.displayPatientTreatmentsAppointment"
                                                 class="panel-title"></h3>
@@ -200,7 +204,7 @@
                                                     <table class="table table-striped" style="font-size: 14px;">
                                                         <thead>
                                                         <tr>
-                                                            <th ng-show="displayPlanTab">
+                                                            <th >
                                                             </th>
                                                             <th translate="windoctorApp.treatment.treatment_date">Date
                                                             </th>
@@ -225,12 +229,15 @@
                                                         <tbody ui-sortable="sortableOptions" ng-model="treatments">
 
                                                         <tr ng-repeat="treatment in treatments">
-                                                            <td ng-show="treatment.id===-1 && displayPlanTab"
+                                                            <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
                                                             <td ng-show="treatment.id!==-1 && displayPlanTab"
                                                                 ng-style="{'color': 'white','background-color': treatment.status!=null && treatment.status.id===1 && displayPlanTab ?
                                                                 'dodgerblue' : (treatment.status!=null && treatment.status.id===3 && displayPlanTab ?'darkgreen':'')}">
                                                                 {{treatment.sorting_key}}
+                                                            </td>
+                                                            <td ng-show="treatment.id!==-1 && displayActsTab">
+                                                                <span ng-show="treatment.plan!==null && treatment.plan!==undefined">P{{treatment.plan.number}}</span>
                                                             </td>
                                                             <td ng-show="treatment.id===-1"
                                                                 style="background-color: black;;color: white;"></td>
@@ -389,6 +396,7 @@
                                                                     <span class="glyphicon glyphicon-pencil"></span>
                                                                 </button>
                                                                 <button ng-click="deleteTreatmentInPlan(treatment)"
+                                                                        ng-disabled="deleteTreatmentOnGoing"
                                                                         data-toggle="tooltip"
                                                                         ng-show="treatment.status.id===1 && displayPlanTab
                                                                          && paidPriceTreatment.treatmentIdToExecute!==treatment.id"
@@ -473,7 +481,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="closeArchiveCurrentPlan()">
                         <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                     </button>
-                    <button type="button"  class="btn btn-danger" ng-click="confirmArchiveCurrentPlan()">
+                    <button type="button" ng-show="archiveCurrentPlanFlag" class="btn btn-danger" ng-click="confirmArchiveCurrentPlan()">
                         <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.archive">Archive</span>
                     </button>
                 </div>
