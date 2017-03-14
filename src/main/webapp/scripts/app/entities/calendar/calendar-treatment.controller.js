@@ -53,6 +53,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
             $scope.displayArchivesTab=false;
+            $scope.displayPrescriptionsTab=false;
+            $scope.displayOthersTab=false;
             $scope.treatmentDialogFieldClass = 'form-group col-xs-6 col-md-3';
 
             $scope.paidPriceTreatment = {
@@ -124,6 +126,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
             $scope.displayArchivesTab=false;
+            $scope.displayOthersTab=false;
+            $scope.displayPrescriptionsTab=false;
             $scope.treatments= $scope.treatmentsAll;
             $scope.treatmentTotal = $scope.treatmentsAll[0];
             $scope.displayAddEditViewPopup = false;
@@ -139,6 +143,8 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
             $scope.displayPlanTab=true;
             $scope.displayActsTab=false;
             $scope.displayArchivesTab=false;
+            $scope.displayOthersTab=false;
+            $scope.displayPrescriptionsTab=false;
             $scope.treatments= $scope.treatmentsPlanAll;
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
@@ -159,8 +165,10 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 $scope.treatmentsPlanAll= $scope.treatments;
             }
             $scope.displayArchivesTab=true;
+            $scope.displayOthersTab=true;
             $scope.displayActsTab=true;
             $scope.displayPlanTab=false;
+            $scope.displayPrescriptionsTab=false;
             $scope.treatments= $scope.treatmentsAll;
             $scope.displayAddEditViewPopup = false;
             $scope.displayTreatments = true;
@@ -1036,6 +1044,11 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
                 Event_reason, Event, Patient,Attachment,Fund);
         };
 
+        $scope.declarePrescriptionsFunctions = function () {
+            angular.module('windoctorApp').expandTreatmentsControllerPrescriptions
+            ($scope, $rootScope, $stateParams, $filter);
+        };
+
         // *********Treat all patient attachments *********//
         $scope.displayAllAttachments = function () {
             $scope.displayAllPatientTreatments = false;
@@ -1048,6 +1061,7 @@ angular.module('windoctorApp').expandCalendarEventsControllerToTreatments =
         $scope.initTreatmentPage = function () {
             $scope.initVariables();
             $scope.declareElementsFunctions();
+            $scope.declarePrescriptionsFunctions();
             $scope.initCanvas();
             $scope.loadAllTreatmentsFromServer();
             $scope.initEventReasons();

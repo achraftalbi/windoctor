@@ -11,6 +11,14 @@ angular.module('windoctorApp').expandPatientController =
                 || $scope.patient.phoneNumber.length!==14){
                 $scope.patient.phoneNumber = '00212' + $scope.patient.phoneNumber;
             }
+            if($scope.patient.phoneNumber2!==null && $scope.patient.phoneNumber2!==undefined
+                && $scope.patient.phoneNumber2.length!==14 && $scope.patient.phoneNumber2.length>0){
+                $scope.patient.phoneNumber2 = '00212' + $scope.patient.phoneNumber2;
+            }
+            if($scope.patient.phoneNumber3!==null && $scope.patient.phoneNumber3!==undefined
+                && $scope.patient.phoneNumber3.length!==14 && $scope.patient.phoneNumber3.length>0){
+                $scope.patient.phoneNumber3 = '00212' + $scope.patient.phoneNumber3;
+            }
             $scope.savePatientInformationsOnGoing = false;
             $scope.captureAnImageScreen = false;
             $scope.initBirthDate = function () {

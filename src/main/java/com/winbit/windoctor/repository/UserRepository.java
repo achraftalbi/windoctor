@@ -33,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findOneById(Long id);
 
-    @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.number asc")
+    @Query("select u from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.firstName,u.lastName asc")
     Page<User> findAll(String role, Long id, Pageable var1);
 
     @Query("select count(u) from User u join u.authorities a join u.structure s where a.name= ?1 and s.id = ?2 order by u.firstName, u.lastName asc")
@@ -43,7 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAll(String role, Pageable var1);
 
     @Query("select u from User u join u.authorities a where a.name= ?2 and u.structure.id = ?3 and" +
-        " ( lower(u.login) like lower(?1) or lower(u.firstName) like lower(?1) or lower(u.lastName) like lower(?1) or lower(u.email) like lower(?1)) ")
+        " ( lower(u.login) like lower(?1) or lower(u.address) like lower(?1) or lower(u.phoneNumber) like lower(?1) or lower(u.number) like lower(?1) or lower(u.firstName) like lower(?1) or lower(u.lastName) like lower(?1) or lower(u.email) like lower(?1)) order by u.firstName, u.lastName asc")
     Page<User> findAllMatchString(String query, String role, Long structureId, Pageable var1);
 
 

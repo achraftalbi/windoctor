@@ -270,6 +270,7 @@
   overflow-y: auto;
   min-height: 62px;
   max-height: 310px;
+    z-index:5;
 }
 .picker1 .picker1-items:before,
 .picker1 .picker1-items:after {

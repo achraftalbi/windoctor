@@ -12,6 +12,7 @@
                 "acts": "Acts",
                 "plan": "Plan",
                 "archives": "Archives",
+                "prescriptions": "Prescriptions",
                 "archive": "Archive",
                 "createLabelPlan": "Create an act for the plan",
                 "attachments": "Attachments"

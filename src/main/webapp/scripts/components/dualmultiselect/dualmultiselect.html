@@ -1,0 +1,68 @@
+<div class="dualmultiselect">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <h4><span  translate-compile translate="{{options.title}}"
+                >{{options.title}}</span>
+                <small translate-compile translate="{{options.helpMessage}}">&nbsp;{{options.helpMessage}}</small>
+            </h4>
+            <input class="form-control" translate-compile placeholder="{{options.filterPlaceHolder | translate}}" ng-model="searchTerm"></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6"><label translate-compile translate="{{options.labelAll}}">{{options.labelAll}}</label>
+            <button type="button" class="btn btn-default btn-xs"
+                    ng-click="transferToSelected(options.items, options.selectedItems, -1)">
+                <span translate-compile translate="{{options.selectAll}}" >Select All</span>
+            </button>
+            <div class="pool">
+                <ul>
+                    <div  ng-repeat="item in options.items | filter: searchTerm | orderBy: options.orderProperty"
+                          ng-style="{'background-color': item.selected ?
+                                                                'darkblue' : ''}"
+                          class="row">
+                            <button ng-click="editItem(item)"
+                                    data-toggle="tooltip"
+                                    style="'cursor': 'pointer'"
+                                    tooltip="{{ 'entity.action.edit' | translate }}"
+                                    tooltip-class="pencilClass"
+                                    tooltip-placement="bottom-left"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button ng-click="deleteItem(item)"
+                                    style="'cursor': 'pointer'"
+                                    data-toggle="tooltip"
+                                    tooltip="{{ 'entity.action.delete' | translate }}"
+                                    tooltip-class="deleteClass"
+                                    tooltip-placement="bottom-left"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        <div class="form-group col-md-8"
+                            ng-click="transferToSelected(options.items, options.selectedItems, options.items.indexOf(item))">
+                            <span ng-style="{'cursor': 'pointer','background-color': item.selected ?
+                                                                    'darkblue' : '','color': item.selected ?
+                                                                    'white' : ''}">
+                                <span
+                                href="" >{{item.name}}&nbsp;&rArr; </span>
+                            </span>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6"><label translate-compile translate="{{options.labelSelected}}" >{{options.labelSelected}}</label>
+            <button type="button" class="btn btn-default btn-xs"
+                    ng-click="unselectTransfer(options.selectedItems, options.items, -1)">
+                <span translate-compile translate="{{options.deselectAll}}" >Deselect All</span>
+            </button>
+            <div class="pool">
+                <ul>
+                    <li ng-repeat="item in options.selectedItems | orderBy: options.orderProperty"
+                        ng-click="unselectTransfer(options.selectedItems, options.items, options.selectedItems.indexOf(item))">
+                        <span href=""> &lArr;&nbsp;{{item.name}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

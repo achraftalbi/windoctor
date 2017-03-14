@@ -173,9 +173,14 @@ public class UserService {
         patient.setNumber(new BigDecimal(patientsNumber == null ? 0 + 1 : patientsNumber.intValue() + 1));
 
         patient.setInitial_balance(new BigDecimal(0l));
-        int phoneNumberSize = patientCreated.getPhoneNumber().length();
         patient.setPhoneNumber(patientCreated.getPhoneNumber() == null ? patientCreated.getPhoneNumber()
-            : patientCreated.getPhoneNumber().substring(5, phoneNumberSize));
+            : patientCreated.getPhoneNumber().substring(5, patientCreated.getPhoneNumber().length()));
+        patient.setPhoneNumber2(patientCreated.getPhoneNumber2() == null || patientCreated.getPhoneNumber2().length()==0 ? patientCreated.getPhoneNumber2()
+            : patientCreated.getPhoneNumber2().substring(5, patientCreated.getPhoneNumber2().length()));
+        patient.setPhoneNumber3(patientCreated.getPhoneNumber3() == null || patientCreated.getPhoneNumber3().length()==0 ? patientCreated.getPhoneNumber3()
+            : patientCreated.getPhoneNumber3().substring(5, patientCreated.getPhoneNumber3().length()));
+        patient.setRemark(patientCreated.getRemark());
+        patient.setConsultationReason(patientCreated.getConsultationReason());
         patient.setEmail(patientCreated.getEmail());
         patient.setLangKey(patientCreated.getLangKey());
         Long structureId = sessionService.getCurrentStructure();
@@ -312,9 +317,14 @@ public class UserService {
         patient.setMutualAssurance(patientUpdated.getMutualAssurance());
         patient.setProfession(patientUpdated.getProfession());
         patient.setFacebook(patientUpdated.getFacebook());
-        int phoneNumberSize = patientUpdated.getPhoneNumber().length();
         patient.setPhoneNumber(patientUpdated.getPhoneNumber() == null ? patientUpdated.getPhoneNumber()
-            : patientUpdated.getPhoneNumber().substring(5, phoneNumberSize));
+            : patientUpdated.getPhoneNumber().substring(5, patientUpdated.getPhoneNumber().length()));
+        patient.setPhoneNumber2(patientUpdated.getPhoneNumber2() == null  || patientUpdated.getPhoneNumber2().length()==0? patientUpdated.getPhoneNumber2()
+            : patientUpdated.getPhoneNumber2().substring(5, patientUpdated.getPhoneNumber2().length()));
+        patient.setPhoneNumber3(patientUpdated.getPhoneNumber3() == null  || patientUpdated.getPhoneNumber3().length()==0? patientUpdated.getPhoneNumber3()
+            : patientUpdated.getPhoneNumber3().substring(5, patientUpdated.getPhoneNumber3().length()));
+        patient.setRemark(patientUpdated.getRemark());
+        patient.setConsultationReason(patientUpdated.getConsultationReason());
         patient.setEmail(patientUpdated.getEmail());
         patient.setLangKey(patientUpdated.getLangKey());
         // new user is not active

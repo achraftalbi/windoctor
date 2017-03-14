@@ -45,10 +45,15 @@
                                 <h4 translate="windoctorApp.treatment.home.archives">Archives</h4>
                             </a>
                         </li>
+                        <li ng-class="{active : displayPrescriptionsTab}" ng-show="false">
+                            <a data-toggle="tab" data-target="#alltabs" ng-click="clickOnPrescriptions()">
+                                <h4 translate="windoctorApp.treatment.home.prescriptions">Prescriptions</h4>
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div id="alltabs" class="tab-pane fade in active">
-                            <div ng-show="!displayArchivesTab" class="row" style="padding-top: 10px">
+                            <div ng-show="!displayOthersTab" class="row" style="padding-top: 10px">
                                 <div ng-class="displayPlanTab===true ? 'form-group col-xs-6 col-md-2' : 'form-group col-xs-6 col-md-3'">
                                     <button class="btn btn-primary"
                                             ng-click="displayAllPatientTreatmentsFunction()"
@@ -161,7 +166,11 @@
                                     <ng-include
                                         src="'scripts/app/entities/calendar/calendar-treatments-archives.html'"></ng-include>
                                 </div>
-                                <div ng-class="firstClassTypeStructure" ng-show="!displayArchivesTab">
+                                <div id="prescriptions" ng-class="firstClassTypeStructure" ng-show="displayPrescriptionsTab">
+                                    <ng-include
+                                        src="'scripts/app/entities/calendar/calendar-treatments-prescriptions.html'"></ng-include>
+                                </div>
+                                <div ng-class="firstClassTypeStructure" ng-show="!displayOthersTab">
                                     <div class="panel panel-primary">
                                         <div class="panel-heading">
                                             <h3 ng-show="displayTreatments && displayAllPatientTreatments"

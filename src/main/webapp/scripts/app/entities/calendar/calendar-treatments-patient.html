@@ -11,6 +11,7 @@
                     <strong style="font-size: 20px">{{event.user.number}} - {{event.user.firstName}}
                         {{event.user.lastName}}
                     </strong>
+                    <span class="btn btn-primary" translate="entity.action.edit" >Edit</span>
                 </div>
             </div>
         </div>
@@ -117,6 +118,15 @@
                             <tr>
                                 <td>
                                     <strong
+                                        translate="windoctorApp.patient.consultationReason">Reason</strong>
+                                </td>
+                                <td>
+                                    <strong class="form-control-static" style="color: dodgerblue">{{event.user.consultationReason}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong
                                         translate="windoctorApp.patient.profession">Profession</strong>
                                 </td>
                                 <td>
@@ -193,11 +203,11 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <strong translate="windoctorApp.patient.workingHours">Working hours</strong>
+                                    <strong translate="windoctorApp.patient.remark">Remarks</strong>
                                 </td>
                                 <td>
                                     <strong class="form-control-static"
-                                            style="color: dodgerblue">{{event.user.workingHours}}</strong>
+                                            style="color: dodgerblue">{{event.user.remark}}</strong>
                                 </td>
                             </tr>
                             </tbody>

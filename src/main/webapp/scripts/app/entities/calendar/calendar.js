@@ -45,6 +45,7 @@ angular.module('windoctorApp')
                         $translatePartialLoader.addPart('calendar');
                         $translatePartialLoader.addPart('patient');
                         $translatePartialLoader.addPart('treatment');
+                        $translatePartialLoader.addPart('prescription');
                         $translatePartialLoader.addPart('attachment');
                         $translatePartialLoader.addPart('event_reason');
                         $translatePartialLoader.addPart('global');

@@ -81,6 +81,34 @@ public class PatientDTO {
     @Size(min = 0, max = 200)
     private String profession;
 
+    @Size(max = 14)
+    private String phoneNumber2;
+
+    @Size(max = 14)
+    private String phoneNumber3;
+
+    @Size(max = 250)
+    private String consultationReason;
+
+    @Size(max = 250)
+    private String remark;
+
+    public String getConsultationReason() {
+        return consultationReason;
+    }
+
+    public String getPhoneNumber2() {
+        return phoneNumber2;
+    }
+
+    public String getPhoneNumber3() {
+        return phoneNumber3;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
     public String getDiseases() {
         return diseases;
     }

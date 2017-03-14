@@ -194,6 +194,56 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToOne
     private Plan plan;
 
+    @Size(min = 0, max = 9)
+    @Pattern(regexp = "^[0-9]*$")
+    @Column(name = "PHONE_NUMBER2", length = 9, nullable = true)
+    private String phoneNumber2;
+
+    @Size(min = 0, max = 9)
+    @Pattern(regexp = "^[0-9]*$")
+    @Column(name = "PHONE_NUMBER3", length = 9, nullable = true)
+    private String phoneNumber3;
+
+    @Size(min = 0, max = 250)
+    @Column(name = "CONSULTATION_REASON", length = 250, nullable = true)
+    private String consultationReason;
+
+    @Size(min = 0, max = 250)
+    @Column(name = "remark", length = 250, nullable = true)
+    private String remark;
+
+    public String getConsultationReason() {
+        return consultationReason;
+    }
+
+    public void setConsultationReason(String consultationReason) {
+        this.consultationReason = consultationReason;
+    }
+
+    public String getPhoneNumber2() {
+        return phoneNumber2;
+    }
+
+    public void setPhoneNumber2(String phoneNumber2) {
+        this.phoneNumber2 = phoneNumber2;
+    }
+
+    public String getPhoneNumber3() {
+        return phoneNumber3;
+    }
+
+    public void setPhoneNumber3(String phoneNumber3) {
+        this.phoneNumber3 = phoneNumber3;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public Plan getPlan() {
         return plan;
     }

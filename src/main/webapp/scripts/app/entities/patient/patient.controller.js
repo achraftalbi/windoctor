@@ -59,6 +59,7 @@ angular.module('windoctorApp')
         $scope.addPatient = function () {
             //$scope.$emit('windoctorApp:eventUpdate');
             $scope.patient = {login: null, password: null, firstName: null, lastName: null, email: null, activated: true, blocked: false, picture: null,
+                phoneNumber2:'',phoneNumber3:'',consultationReason:'',remark:'',
                 phoneNumber: '', langKey:'fr', id: null,smoking: false, bleedingWhileBrushing: false, toothSensitivity: false};
             $scope.displayPatientPage= false;
             $scope.addPatientField= true;
@@ -192,9 +193,17 @@ angular.module('windoctorApp')
             $scope.displayPatientPage = false;
             $scope.displayChartPage = true;
             $scope.displayTreatments = true;
-            if($scope.event.user.phoneNumber===null || $scope.event.user.phoneNumber===undefined
-                || $scope.event.user.phoneNumber.length!==14){
-                $scope.event.user.phoneNumber = '00212' + $scope.event.user.phoneNumber;
+            if(patient.phoneNumber===null || patient.phoneNumber===undefined
+                || patient.phoneNumber.length!==14){
+                patient.phoneNumber = '00212' + patient.phoneNumber;
+            }
+            if(patient.phoneNumber2!==null && patient.phoneNumber2!==undefined
+                && patient.phoneNumber2.length!==14 && patient.phoneNumber2.length>0){
+                patient.phoneNumber2 = '00212' + patient.phoneNumber2;
+            }
+            if(patient.phoneNumber3!==null && patient.phoneNumber3!==undefined
+                && patient.phoneNumber3.length!==14 && patient.phoneNumber3.length>0){
+                patient.phoneNumber3 = '00212' + patient.phoneNumber3;
             }
             console.log('call displayManageTreatmentsPage'+$scope.displayManageTreatmentsPage);
             angular.module('windoctorApp').expandCalendarEventsControllerToTreatments

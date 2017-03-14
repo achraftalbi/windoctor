@@ -50,6 +50,9 @@
                 "internalManagement": "Gestion interne",
                 "type_structure": "Type_structure",
                 "plan": "Plan",
+                "prescription": "Prescription",
+                "medication": "Medication",
+                "prescription_medication": "Prescription_medication",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -135,6 +138,7 @@
             "cancel": "Annuler",
             "close": "Fermer",
             "edit": "Editer",
+            "modify": "Modifier",
             "execute": "Exécuter",
             "confirm": "Confirmer",
             "select": "Séléctionner",

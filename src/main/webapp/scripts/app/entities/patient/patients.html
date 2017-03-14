@@ -57,8 +57,10 @@
             <tr>
                 <th translate="windoctorApp.patient.patientName">Patient name</th>
                 <th translate="windoctorApp.patient.fileNumber">File number</th>
-                <th translate="windoctorApp.patient.login">Login</th>
+                <th translate="windoctorApp.patient.phoneNumber">Login</th>
                 <th translate="windoctorApp.patient.email">Email</th>
+                <th translate="windoctorApp.patient.care">Care</th>
+                <th translate="windoctorApp.patient.personalInformations">Personal informations</th>
                 <th></th>
             </tr>
             </thead>
@@ -74,15 +76,17 @@
                         </span>
                 </td>
                 <td>{{patient.number}}</td>
-                <td>{{patient.login}}</td>
-                <td>{{patient.email}}</td>
+                <td ng-show="patient.phoneNumber.length<14">00212 {{patient.phoneNumber}}</td>
+                <td ng-show="patient.phoneNumber.length>=14">{{patient.phoneNumber}}</td>
+                <td ><a href="mailto:{{patient.email}}" target="_blank">{{patient.email}}</a>
+                    </td>
+                <td><span class="btn btn-primary" ng-click="displayPatientChartPage(patient)"
+                          translate="entity.action.modify">modify</span>
+                </td>
+                <td><span class="btn btn-primary" ng-click="editPatient(patient)"
+                          translate="entity.action.edit">Edit</span>
+                </td>
                 <td>
-                    <button type="submit"
-                            ng-click="editPatient(patient)"
-                            class="btn btn-primary btn-sm">
-                        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span
-                        translate="entity.action.edit"> Edit</span>
-                    </button>
                     <button type="submit"
                             ng-click="delete(patient.id)"
                             class="btn btn-danger btn-sm">
