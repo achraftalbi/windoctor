@@ -1,0 +1,29 @@
+{
+    "windoctorApp": {
+        "prescription" : {
+            "home": {
+                "title": "Ordonnances",
+                "createLabel": "Créer un nouveau Prescription",
+                "createOrEditLabel": "Créer ou éditer un Prescription"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Prescription {{ id }} ?"
+            },
+            "detail": {
+                "title": "Prescription"
+            },
+            "description": "Description",
+            "archived": "Archived",
+            "filterPlaceHolder": "Commencez à taper pour filtrer les listes ci-dessous.",
+            "allMedications": "Tous les médicaments",
+            "selectedMedications": "Médicaments séléctionnés",
+            "deselectAll": "Tout déselectionner",
+            "selectAll": "Tout selectionner",
+            "helpMessage": "Cliquez sur les médicaments pour les ajouter à l'ordonnance.",
+            "medication_persist": "Medication_persist",
+            "creation_date": "Creation_date",
+            "update_date": "Update_date"
+        }
+    }
+}
+

@@ -1,0 +1,31 @@
+{
+    "windoctorApp": {
+        "prescription" : {
+            "home": {
+                "title": "Prescriptions",
+                "createLabel": "Create a new Prescription",
+                "createOrEditLabel": "Create or edit a Prescription"
+            },
+            "created": "A new Prescription is created with identifier {{ param }}",
+            "updated": "A Prescription is updated with identifier {{ param }}",
+            "deleted": "A Prescription is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Prescription {{ id }}?"
+            },
+            "detail": {
+                "title": "Prescription"
+            },
+            "description": "Description",
+            "archived": "Archived",
+            "filterPlaceHolder": "Start typing to filter the lists below.",
+            "allMedications": "All medications",
+            "selectedMedications": "Selected medications",
+            "deselectAll": "Tout déselectionner",
+            "selectAll": "Tout selectionner",
+            "helpMessage": "Click in medications to add them to prescription.",
+            "medication_persist": "Medication_persist",
+            "creation_date": "Creation_date",
+            "update_date": "Update_date"
+        }
+    }
+}

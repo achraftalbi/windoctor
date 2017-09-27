@@ -1,0 +1,24 @@
+{
+    "windoctorApp": {
+        "prescription_medication" : {
+            "home": {
+                "title": "Prescription_medications",
+                "createLabel": "Créer un nouveau Prescription_medication",
+                "createOrEditLabel": "Créer ou éditer un Prescription_medication"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Prescription_medication {{ id }} ?"
+            },
+            "detail": {
+                "title": "Prescription_medication"
+            },
+            "medication_name": "Medication_name",
+            "man_description": "Man_description",
+            "woman_description": "Woman_description",
+            "child_description": "Child_description",
+            "prescription_medication_r": "Prescription_medication_r",
+            "medication_prescription_r": "Medication_prescription_r"
+        }
+    }
+}
+

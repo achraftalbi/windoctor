@@ -1,0 +1,110 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myPrescription_medicationLabel" translate="windoctorApp.prescription_medication.home.createOrEditLabel">Create or edit a Prescription_medication</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="prescription_medication.id" readonly>
+        </div>
+
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.medication_name" for="field_medication_name">Medication_name</label>
+            <input type="text" class="form-control" name="medication_name" id="field_medication_name"
+                    ng-model="prescription_medication.medication_name"
+                    ng-minlength="1" ng-maxlength="800">
+
+            <div ng-show="editForm.medication_name.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.medication_name.$error.minlength" translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.medication_name.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="800">
+                    This field cannot be longer than 800 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.man_description" for="field_man_description">Man_description</label>
+            <input type="text" class="form-control" name="man_description" id="field_man_description"
+                    ng-model="prescription_medication.man_description"
+                    ng-minlength="1" ng-maxlength="800">
+
+            <div ng-show="editForm.man_description.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.man_description.$error.minlength" translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.man_description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="800">
+                    This field cannot be longer than 800 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.woman_description" for="field_woman_description">Woman_description</label>
+            <input type="text" class="form-control" name="woman_description" id="field_woman_description"
+                    ng-model="prescription_medication.woman_description"
+                    ng-minlength="1" ng-maxlength="800">
+
+            <div ng-show="editForm.woman_description.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.woman_description.$error.minlength" translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.woman_description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="800">
+                    This field cannot be longer than 800 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.child_description" for="field_child_description">Child_description</label>
+            <input type="text" class="form-control" name="child_description" id="field_child_description"
+                    ng-model="prescription_medication.child_description"
+                    ng-minlength="1" ng-maxlength="800">
+
+            <div ng-show="editForm.child_description.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.child_description.$error.minlength" translate="entity.validation.minlength" translate-value-min="1">
+                    This field is required to be at least 1 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.child_description.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="800">
+                    This field cannot be longer than 800 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.prescription_medication_r" for="field_prescription_medication_r">prescription_medication_r</label>
+            
+            <select class="form-control" id="field_prescription_medication_r" name="prescription_medication_r" ng-model="prescription_medication.prescription_medication_r" ng-options="prescription as prescription.id for prescription in prescriptions track by prescription.id">
+                <option value=""></option>
+            </select>
+            
+        </div>
+        <div class="form-group">
+            <label translate="windoctorApp.prescription_medication.medication_prescription_r" for="field_medication_prescription_r">medication_prescription_r</label>
+            
+            <select class="form-control" id="field_medication_prescription_r" name="medication_prescription_r" ng-model="prescription_medication.medication_prescription_r" ng-options="medication as medication.id for medication in medications track by medication.id">
+                <option value=""></option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || editForm.$submitted" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

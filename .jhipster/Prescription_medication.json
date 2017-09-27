@@ -1,0 +1,67 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "prescription_medication_r",
+            "otherEntityName": "prescription",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "medication_prescription_r",
+            "otherEntityName": "medication",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "medication_name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "800"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "man_description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "800"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "woman_description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "800"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "child_description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "1",
+            "fieldValidateRulesMaxlength": "800"
+        }
+    ],
+    "changelogDate": "20170219174209",
+    "dto": "no",
+    "pagination": "pagination"
+}

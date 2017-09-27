@@ -1,0 +1,22 @@
+{
+    "windoctorApp": {
+        "medication" : {
+            "home": {
+                "title": "Medications",
+                "createLabel": "Créer un nouveau Medication",
+                "createOrEditLabel": "Créer ou éditer un Medication"
+            },
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Medication {{ id }} ?"
+            },
+            "detail": {
+                "title": "Medication"
+            },
+            "name": "Name",
+            "man_description": "Man_description",
+            "woman_description": "Woman_description",
+            "child_description": "Child_description"
+        }
+    }
+}
+
